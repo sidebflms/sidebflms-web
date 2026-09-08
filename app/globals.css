@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   SIDEBFLMS — Sistema de diseño
+   Los tokens se declaran como variables propias en @theme. No se usan las
+   escalas de color por defecto de Tailwind (nada de bg-gray-900 en el código).
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   TIPOGRAFÍA DISPLAY — Akira Expanded Super Bold
+
+   Archivo instalado en `public/fonts/akira-expanded-super-bold.woff2`
+   (convertido del .otf con fontTools). Un solo peso (800).
+
+   ⚠️ TODO (cliente) — BLOQUEANTE ANTES DE PRODUCCIÓN: el .otf de origen es la
+   demo de Typologic, licencia "free for personal use only" — no cubre uso
+   comercial ni @font-face en un sitio en producción. Hace falta comprar la
+   licencia comercial/webfont en https://creativemarket.com/typologic/4868098
+   antes de publicar. El archivo actual sirve para maquetar y revisar, no para
+   shippear tal cual.
+
+   Se declara con CSS plano y no con next/font/local a propósito: si el archivo
+   desaparece, el navegador cae al fallback sin romper el build. El fallback
+   (Archivo con eje de anchura al 125% y peso 900) está calibrado para ocupar
+   un ancho parecido, de modo que al sustituir el archivo el layout no salte.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Akira Expanded";
+  src: url("/fonts/akira-expanded-super-bold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* --- Neutros: la escala de antracita --- */
+  --color-ink-900: #141414; /* secciones alternas, footer, letterbox */
+  --color-ink-800: #1e1e1e; /* ★ fondo base — antracita de marca */
+  --color-ink-700: #262626; /* superficies: cards, inputs, celdas */
+  --color-ink-600: #333130; /* hairlines, bordes, divisores */
+
+  /* --- Acento: un solo color, tres funciones --- */
+  --color-rust-900: #5c271a; /* relleno sutil, hover de superficie */
+  --color-rust-500: #ae4b2f; /* ★ acento de marca */
+  --color-rust-300: #c97a55; /* acento legible */
+
+  /* --- Texto --- */
+  --color-bone: #f2ece4; /* texto principal */
+  --color-smoke: #8f8a85; /* metadatos, captions, timecodes */
+
+  /* --- Familias --- */
+  --font-display: "Akira Expanded", var(--font-archivo), "Arial Black", sans-serif;
+  --font-sans: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* --- Curvas --- */
+  --ease-out-strong: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================================
+   CONTRASTE — medido sobre --color-ink-800 (WCAG 2.1). Regla obligatoria:
+
+     bone      14.2:1  ✅ todo
+     rust-300   5.1:1  ✅ links inline, énfasis, anillo de foco
+     smoke      4.9:1  ✅ texto pequeño — NUNCA con opacity (lo tira bajo AA)
+     rust-500   3.1:1  ⚠️  SOLO display ≥24px bold, fondos de botón, iconos
+                          y el playhead. Nunca texto corrido ni links de párrafo.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+
+    /* Ritmo de layout. En desktop el gutter izquierdo queda reservado para la
+       regleta: es la asimetría estructural permanente del sitio. */
+    --gutter: 1.25rem;
+    --edge: 1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --gutter: 4.5rem; /* 72px */
+      --edge: 3rem;
+    }
+  }
+
+  html {
+    background-color: var(--color-ink-800);
+    color: var(--color-bone);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Lenis controla el scroll; sin esto el scroll nativo pelea con el suave. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  /* Foco visible en rust-300 (5.1:1) en todo interactivo. */
+  :focus-visible {
+    outline: 2px solid var(--color-rust-300);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background-color: var(--color-rust-500);
+    color: var(--color-bone);
+  }
+}
+
+@layer components {
+  /* --------------------------------------------------------------------------
+     ESCALA TIPOGRÁFICA
+     ------------------------------------------------------------------------ */
+
+  /* Akira es extremadamente ancha: los titulares van en caja alta, con
+     interlineado apretado, y NUNCA más de 3-5 palabras por línea. Con más,
+     revientan a 390px. `font-stretch` no afecta a Akira (es estática) pero
+     activa el eje de anchura del fallback variable. */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    /* Red de seguridad: Akira (y su fallback calibrado) es extremadamente
+       ancha, y una sola palabra larga ("ELECTRÓNICA", "POSTPRODUCCIÓN") puede
+       superar el ancho disponible en móvil incluso respetando el límite de
+       3-5 palabras por línea. Medido en navegador contra el fallback real:
+       a 390px, "ELECTRÓNICA" excede el contenedor por encima de ~36px. Los
+       clamps de abajo ya se calibraron para no llegar a este límite, pero
+       esta regla es el último recurso: parte la palabra en vez de desbordar
+       la viewport si algún día el copy cambia y deja de caber. */
+    overflow-wrap: anywhere;
+  }
+
+  /* Headline del hero: "CAPTURE THE ENERGY." / "DELIVER THE STORY." — cada
+     frase tiene que caber en UNA línea, sin wrap interno (a diferencia del
+     resto de titulares del sitio, que se escriben ya partidos por línea a
+     mano). Con Akira real, "CAPTURE THE ENERGY." (la más ancha) mide ~16.08×
+     el font-size en px de ancho natural — un ratio que no cabe a 120px en
+     ningún desktop realista (a 1440px con el gutter de 72px ya haría falta
+     que el bloque de texto midiera >1900px). El techo de la versión anterior
+     (7.5rem) asumía titulares de 3-5 palabras cortas por línea; con frases de
+     3 palabras más largas en una sola línea, el techo tiene que bajar.
+     4.6vw deja ~13-15% de margen en todo el rango 390-1920px (verificado en
+     navegador, no solo calculado): a 390px ≈18.4px, a 1440px ≈66px, a
+     1920px ≈88px, ninguno parte la frase en dos líneas. */
+  .text-display-xl {
+    font-size: clamp(1rem, 4.6vw, 6rem);
+    line-height: 0.88;
+  }
+  .text-display-l {
+    font-size: clamp(1.75rem, 6vw, 4rem);
+    line-height: 0.92;
+  }
+  .text-display-m {
+    font-size: clamp(1.375rem, 4vw, 2.25rem);
+    line-height: 0.95;
+  }
+
+  /* La mono es material principal, no label secundario: todo metadato del
+     sitio (fechas, venue, disciplinas, filtros, timecodes) usa esta clase. */
+  .label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-smoke);
+  }
+
+  .text-lead {
+    font-size: clamp(1.0625rem, 1.4vw, 1.375rem);
+    line-height: 1.5;
+  }
+
+  /* Medida de lectura. Los bloques editoriales no se centran: se alinean a la
+     izquierda contra la rejilla y el media rompe el margen opuesto. */
+  .measure {
+    max-width: 34rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     SHELL — la asimetría estructural permanente.
+     ------------------------------------------------------------------------ */
+  .shell {
+    padding-left: var(--gutter);
+    padding-right: var(--edge);
+  }
+
+  /* Para bloques cuyo media sangra por la derecha hasta el borde. */
+  .shell-bleed-right {
+    padding-left: var(--gutter);
+    padding-right: 0;
+  }
+
+  /* --------------------------------------------------------------------------
+     GRANO — SVG feTurbulence estático, solo en secciones planas.
+     Nunca sobre vídeo: degrada justo el material que se está vendiendo.
+     ------------------------------------------------------------------------ */
+  .grain {
+    position: relative;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.14;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ============================================================================
+   MOVIMIENTO REDUCIDO — requisito, no extra.
+   Sin smooth scroll, sin pinning, sin traza animada, sin autoplay.
+   Las secciones pineadas comprueban esto en JS; aquí se neutraliza el resto.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

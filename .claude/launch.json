@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sideb-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "mockup-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8934", "--directory", "/private/tmp/claude-502/-Users-joan-Documents-PROYECTOS-PERSONALES-jota-hq-WEB-SIDEB/3cda86d6-a15c-419f-b098-2882ccdd19ac/scratchpad"],
+      "port": 8934
+    }
+  ]
+}
