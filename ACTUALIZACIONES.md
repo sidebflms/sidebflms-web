@@ -5,7 +5,158 @@ reciente arriba.
 
 ---
 
-## 2026-09-10 (8) — «CUÉNTANOS» se partía en «CUÉNTAN / OS»
+## 2026-09-10 (12) — El control del reel decía «Pausar» con el vídeo parado
+
+`toggle` en `components/sections/hero.tsx` hacía esto:
+
+```js
+void video.play();   // lanza la promesa y la tira
+setPlaying(true);    // afirma que reproduce, pase lo que pase
+```
+
+Cuando el navegador se niega —y se niega más de lo que parece: políticas de
+autoplay, pestaña en segundo plano, ahorro de energía— el botón pasaba a decir
+«Pausar el reel» con el vídeo quieto en el primer frame. **El control mentía**,
+y encima quedaba una promesa rechazada sin capturar ensuciando la consola.
+
+Ahora el estado lo dictan `onPlay` y `onPause` del propio elemento, así que el
+botón no puede decir otra cosa de la que está pasando, la arranque quien la
+arranque. Comprobado con las dos: con una reproducción rechazada el botón se
+queda en «Reproducir el reel» en vez de mentir; con una aceptada pasa a
+«Pausar» y el tiempo corre.
+
+**El fallo llevaba ahí desde el principio y no se veía**: sin reel, `hasVideo`
+era falso y ese control ni se pintaba. Ha salido a la luz al meter el material.
+
+### Lo que NO se cambió, y conviene saberlo
+
+Que con «reducir movimiento» activado el vídeo **no arranque solo**. Es
+deliberado: un vídeo de fondo en bucle es exactamente lo que esa preferencia
+del sistema pide evitar, y a quien tiene migrañas o vértigo le importa. El
+visitante conserva el control de «Reproducir el reel», que es la diferencia
+entre respetar la preferencia y esconderle el contenido.
+
+Efecto secundario que despista: como el póster ES el primer frame del vídeo,
+en un equipo con esa preferencia activada el hero se ve como una imagen fija.
+No está roto — está respetando el ajuste.
+
+---
+
+## 2026-09-10 (11) — La portada vuelve a cuatro destacados
+
+Al meter los proyectos reales quedaron **cinco** marcados como destacados donde
+antes había cuatro.
+
+La portada maqueta el showpiece más el resto como bloques editoriales
+alternados, así que eso metía un bloque de más y cambiaba el ritmo de la
+página. Y sobre todo dejaba el texto mintiendo: el titular de esa sección dice
+«Cuatro noches que no se repiten», y debajo salían cinco.
+
+`fitz-directos` sale de destacados —sigue en el portfolio— y queda anotado en
+su ficha por qué, para que el próximo que añada un proyecto no vuelva a subir
+la cuenta sin darse cuenta.
+
+---
+
+## 2026-09-10 (10) — Material real: se acabaron los proyectos inventados
+
+Entran 38 MB de vídeo y fotografía sacados de los 82 GB del archivo de la
+productora, y salen los ocho proyectos que estaban inventados.
+
+### Cómo se hizo, porque importa para repetirlo
+
+**El disco original NO se tocó.** `/Volumes/@SIDEB404L/` es material de
+producción: todo el trabajo se hizo leyendo y escribiendo en otro sitio.
+Comprobado al terminar: 84 ficheros, 82 GB, **cero modificados**.
+
+Tres agentes en paralelo, cada uno midiendo lo que entregaba en vez de
+estimarlo. Los intermedios y las hojas de contactos quedaron fuera del
+repositorio.
+
+### El reel de la portada
+
+`reel-1920.mp4` (5,17 MiB), `reel-720.mp4` (2,27 MiB, recorte **vertical**
+reencodeado, no el de escritorio escalado) y `reel-poster.jpg` (169 KiB).
+Ninguno lleva pista de audio: el hero arranca silenciado y el audio son megas
+tirados.
+
+Sale del aftermovie de Fabrik del 14 de marzo, del segundo 11,92 al 33,36. El
+tramo no se eligió a ojo: se midió la luminancia media de los cinco
+aftermovies y se buscó la ventana más oscura, porque encima va un titular
+blanco. Y **los dos extremos son cortes de plano reales**, así que el bucle se
+lee como un corte de montaje y no como un salto.
+
+El `poster` ya está conectado en `hero.tsx`. Es el LCP de la página: sin él el
+LCP pasa a ser el vídeo. Y es exactamente el primer frame del vídeo, así que
+al arrancar la reproducción no hay salto.
+
+### Nueve proyectos reales
+
+Siete de vídeo y dos de fotografía, con 16 fotos en tres tamaños cada una.
+
+**Lee la cabecera de `content/projects.ts` antes de tocarlo.** No todos los
+campos tienen el mismo grado de certeza, y mezclarlos es cómo se acaba
+publicando una credencial falsa:
+
+- `hardFact` y `media` salen de **medir** los ficheros. Comprobables con
+  `ffprobe`.
+- Los nombres y las fechas salen del nombre del fichero original o de rótulos
+  legibles dentro del metraje. Cada ficha lleva anotado de dónde sale el suyo.
+- `brief` describe **sólo lo que se ve en pantalla**.
+- `delivered` se titula «Qué entregamos» y **está sin confirmar**: es una
+  afirmación sobre un encargo real y sólo la puede escribir quien hizo el
+  trabajo. Lo que hay describe la pieza, no la entrega.
+
+**Tres fichas no llevan fecha a propósito.** Holika y Monegros porque el
+fichero no la lleva; Prospa porque el suyo se llama `31132026` — el 31 del mes
+13. Ese mes no existe, así que el nombre está mal puesto y no sirve de fuente.
+«Por confirmar» es mejor que un mes inventado en la ficha de un cliente.
+
+### `PlaceholderMedia` ya pinta el trabajo
+
+Antes pintaba **siempre** el bloque oscuro de «material pendiente», incluso si
+había fichero. Ahora enseña el material real cuando existe.
+
+Lo que decide **no es una prop**: es `project.media.poster`. Si hay fichero se
+enseña el trabajo, y si no lo hay se enseña el bloque con su marca. No existe
+el interruptor para pedir «lo real» en una pieza sin material ni para quitarle
+la marca a una que la necesita — que era exactamente el razonamiento con el
+que se escribió el componente original.
+
+### La franja de clientes, con nombres reales
+
+FABRIK, MONEGROS, HOLIKA, FITZ, GORDO y PROSPA, todos sacados del propio
+archivo. Se acabaron los inventados.
+
+**El rótulo de «pendiente de permiso de uso» se queda**, y no por inercia: lo
+que falta ya no es el dato, es el permiso. Publicar el nombre de una marca en
+una web comercial es usar su marca, aunque sea en texto y no en logotipo.
+
+### Un drone en la regleta
+
+La cabecera de `reglet.tsx` ya definía la línea como «timeline de edición y
+traza de vuelo de drone». El playhead era un círculo; ahora es un
+cuadricóptero de 16 px que recorre la línea con el scroll y **cabecea tres
+píxeles arriba y abajo**, porque un drone parado en el aire no está parado.
+
+Dos grupos anidados y no uno: el exterior lleva la posición sobre la línea
+(que cambia en cada fotograma de scroll) y el interior el cabeceo. Si
+compartieran `transform`, el scroll pisaría la animación.
+
+Hereda `--color-rust-500`, así que si cambia la paleta el drone cambia con
+ella.
+
+Con «reducir movimiento» activado **no cabecea**, pero se sigue viendo y sigue
+recorriendo la línea: eso es navegación, no decoración.
+
+### Peso
+
+`public/media/` son 38 MB en el repositorio. Es asumible, pero si el portfolio
+crece hay que plantearse sacarlo de git.
+
+---
+
+## 2026-09-10 (9) — «CUÉNTANOS» se partía en «CUÉNTAN / OS»
 
 Apareció comprobando en el navegador el arreglo de hidratación de la entrada
 (5). En la página de Contacto, en castellano, el titular no se leía
@@ -116,101 +267,27 @@ lo que de verdad estaba roto: la palabra partida por la mitad.
 
 ---
 
-## 2026-09-10 (8) — Material real: se acabaron los proyectos inventados
+## 2026-09-10 (8) — El servidor ya no se queda sin historia
 
-Entran 38 MB de vídeo y fotografía sacados de los 82 GB del archivo de la
-productora, y salen los ocho proyectos que estaban inventados.
+Tocado: `.github/workflows/deploy.yml`.
 
-### Cómo se hizo, porque importa para repetirlo
+El rsync del despliegue no excluye el `.git`, así que el que acaba en el
+servidor es el del runner. Con el `fetch-depth: 1` que trae `actions/checkout`
+por defecto, eso dejaba allí **un clon superficial de un solo commit**.
+Comprobado en nastos justo después del despliegue automático de hoy:
 
-**El disco original NO se tocó.** `/Volumes/@SIDEB404L/` es material de
-producción: todo el trabajo se hizo leyendo y escribiendo en otro sitio.
-Comprobado al terminar: 84 ficheros, 82 GB, **cero modificados**.
+```
+$ git rev-list --count HEAD
+1
+```
 
-Tres agentes en paralelo, cada uno midiendo lo que entregaba en vez de
-estimarlo. Los intermedios y las hojas de contactos quedaron fuera del
-repositorio.
+Que el servidor quede exactamente en el commit publicado es lo que se quiere
+—su `git status` vuelve a ser una señal y no ruido— pero sin historia no se
+puede mirar allí de dónde viene lo que está corriendo, que es justo lo que hace
+falta cuando algo va mal a las tres de la mañana.
 
-### El reel de la portada
-
-`reel-1920.mp4` (5,17 MiB), `reel-720.mp4` (2,27 MiB, recorte **vertical**
-reencodeado, no el de escritorio escalado) y `reel-poster.jpg` (169 KiB).
-Ninguno lleva pista de audio: el hero arranca silenciado y el audio son megas
-tirados.
-
-Sale del aftermovie de Fabrik del 14 de marzo, del segundo 11,92 al 33,36. El
-tramo no se eligió a ojo: se midió la luminancia media de los cinco
-aftermovies y se buscó la ventana más oscura, porque encima va un titular
-blanco. Y **los dos extremos son cortes de plano reales**, así que el bucle se
-lee como un corte de montaje y no como un salto.
-
-El `poster` ya está conectado en `hero.tsx`. Es el LCP de la página: sin él el
-LCP pasa a ser el vídeo. Y es exactamente el primer frame del vídeo, así que
-al arrancar la reproducción no hay salto.
-
-### Nueve proyectos reales
-
-Siete de vídeo y dos de fotografía, con 16 fotos en tres tamaños cada una.
-
-**Lee la cabecera de `content/projects.ts` antes de tocarlo.** No todos los
-campos tienen el mismo grado de certeza, y mezclarlos es cómo se acaba
-publicando una credencial falsa:
-
-- `hardFact` y `media` salen de **medir** los ficheros. Comprobables con
-  `ffprobe`.
-- Los nombres y las fechas salen del nombre del fichero original o de rótulos
-  legibles dentro del metraje. Cada ficha lleva anotado de dónde sale el suyo.
-- `brief` describe **sólo lo que se ve en pantalla**.
-- `delivered` se titula «Qué entregamos» y **está sin confirmar**: es una
-  afirmación sobre un encargo real y sólo la puede escribir quien hizo el
-  trabajo. Lo que hay describe la pieza, no la entrega.
-
-**Tres fichas no llevan fecha a propósito.** Holika y Monegros porque el
-fichero no la lleva; Prospa porque el suyo se llama `31132026` — el 31 del mes
-13. Ese mes no existe, así que el nombre está mal puesto y no sirve de fuente.
-«Por confirmar» es mejor que un mes inventado en la ficha de un cliente.
-
-### `PlaceholderMedia` ya pinta el trabajo
-
-Antes pintaba **siempre** el bloque oscuro de «material pendiente», incluso si
-había fichero. Ahora enseña el material real cuando existe.
-
-Lo que decide **no es una prop**: es `project.media.poster`. Si hay fichero se
-enseña el trabajo, y si no lo hay se enseña el bloque con su marca. No existe
-el interruptor para pedir «lo real» en una pieza sin material ni para quitarle
-la marca a una que la necesita — que era exactamente el razonamiento con el
-que se escribió el componente original.
-
-### La franja de clientes, con nombres reales
-
-FABRIK, MONEGROS, HOLIKA, FITZ, GORDO y PROSPA, todos sacados del propio
-archivo. Se acabaron los inventados.
-
-**El rótulo de «pendiente de permiso de uso» se queda**, y no por inercia: lo
-que falta ya no es el dato, es el permiso. Publicar el nombre de una marca en
-una web comercial es usar su marca, aunque sea en texto y no en logotipo.
-
-### Un drone en la regleta
-
-La cabecera de `reglet.tsx` ya definía la línea como «timeline de edición y
-traza de vuelo de drone». El playhead era un círculo; ahora es un
-cuadricóptero de 16 px que recorre la línea con el scroll y **cabecea tres
-píxeles arriba y abajo**, porque un drone parado en el aire no está parado.
-
-Dos grupos anidados y no uno: el exterior lleva la posición sobre la línea
-(que cambia en cada fotograma de scroll) y el interior el cabeceo. Si
-compartieran `transform`, el scroll pisaría la animación.
-
-Hereda `--color-rust-500`, así que si cambia la paleta el drone cambia con
-ella.
-
-Con «reducir movimiento» activado **no cabecea**, pero se sigue viendo y sigue
-recorriendo la línea: eso es navegación, no decoración.
-
-### Peso
-
-`public/media/` son 38 MB en el repositorio. Es asumible, pero si el portfolio
-crece hay que plantearse sacarlo de git.
+Con `fetch-depth: 0` el runner se trae la historia entera y el rsync la lleva.
+El repositorio es pequeño; el coste es de segundos.
 
 ---
 
@@ -232,30 +309,6 @@ retira las otras.
 
 Para retirarla algún día: borrar su línea de `~/.ssh/authorized_keys` en el
 VPS. Nada más.
-
----
-
-## 2026-09-10 (7) — El servidor ya no se queda sin historia
-
-Tocado: `.github/workflows/deploy.yml`.
-
-El rsync del despliegue no excluye el `.git`, así que el que acaba en el
-servidor es el del runner. Con el `fetch-depth: 1` que trae `actions/checkout`
-por defecto, eso dejaba allí **un clon superficial de un solo commit**.
-Comprobado en nastos justo después del despliegue automático de hoy:
-
-```
-$ git rev-list --count HEAD
-1
-```
-
-Que el servidor quede exactamente en el commit publicado es lo que se quiere
-—su `git status` vuelve a ser una señal y no ruido— pero sin historia no se
-puede mirar allí de dónde viene lo que está corriendo, que es justo lo que hace
-falta cuando algo va mal a las tres de la mañana.
-
-Con `fetch-depth: 0` el runner se trae la historia entera y el rsync la lleva.
-El repositorio es pequeño; el coste es de segundos.
 
 ---
 
