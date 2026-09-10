@@ -156,7 +156,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       <button
         type="submit"
         disabled={pending}
-        className="w-full bg-rust-500 px-6 py-4 font-mono text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:bg-rust-300 hover:text-ink-900 disabled:opacity-60 sm:w-auto"
+        className="w-full bg-rust-500 px-6 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:bg-rust-300 hover:text-ink-900 disabled:opacity-60 sm:w-auto"
       >
         {pending ? dict.contact.form.submitting : dict.contact.form.submit}
       </button>

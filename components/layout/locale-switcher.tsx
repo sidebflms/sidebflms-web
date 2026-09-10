@@ -41,7 +41,7 @@ export function LocaleSwitcher({
               hrefLang={target}
               aria-current={isCurrent ? "true" : undefined}
               className={cn(
-                "font-mono text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200",
+                "text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200",
                 isCurrent ? "text-bone" : "text-smoke hover:text-rust-300"
               )}
             >

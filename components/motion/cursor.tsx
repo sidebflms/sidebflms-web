@@ -108,7 +108,7 @@ export function Cursor() {
       }}
     >
       {state === "media" && label && (
-        <span className="font-mono text-[10px] font-medium tracking-[0.08em] text-bone uppercase">
+        <span className="text-[10px] font-medium tracking-[0.08em] text-bone uppercase">
           {label}
         </span>
       )}

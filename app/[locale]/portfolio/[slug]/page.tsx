@@ -145,7 +145,7 @@ export default async function ProjectDetailPage({
             </div>
             <div>
               <dt className="label text-ink-600">{dict.portfolio.detail.hardFact}</dt>
-              <dd className="mt-1 font-mono text-sm text-rust-300">
+              <dd className="mt-1 text-sm text-rust-300">
                 {project.hardFact[locale]}
               </dd>
             </div>

@@ -38,7 +38,7 @@ export function BrandStrip({ dict }: { dict: Dictionary }) {
             {CLIENTES.map((name) => (
               <li
                 key={name}
-                className="font-mono text-sm font-medium tracking-[0.04em] text-bone/50"
+                className="text-sm font-medium tracking-[0.04em] text-bone/50"
               >
                 {name}
               </li>

@@ -50,8 +50,15 @@
 
   /* --- Familias --- */
   --font-display: "Akira Expanded", var(--font-archivo), "Arial Black", sans-serif;
+  /* DOS FAMILIAS, no tres. La monoespaciada (JetBrains Mono) se retiró el
+     2026-09-10: Montserrat pasa a cubrir también rótulos, menú, botones,
+     fechas y timecodes.
+
+     Lo que se pierde y conviene saberlo: la mono alineaba las cifras por
+     columna sin ayuda. Montserrat las alinea igual PERO sólo donde haya
+     `tabular-nums`, que es por lo que esa clase pasa a ser obligatoria en
+     cualquier sitio donde los dígitos tengan que cuadrar. */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace;
 
   /* --- Curvas --- */
   --ease-out-strong: cubic-bezier(0.16, 1, 0.3, 1);
@@ -226,7 +233,7 @@
   /* La mono es material principal, no label secundario: todo metadato del
      sitio (fechas, venue, disciplinas, filtros, timecodes) usa esta clase. */
   .label {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-weight: 500;
     font-size: 0.75rem;
     line-height: 1.2;

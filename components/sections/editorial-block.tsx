@@ -42,7 +42,7 @@ export function EditorialBlock({
         <Link
           href={href}
           data-cursor="link"
-          className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors hover:text-bone"
+          className="mt-6 inline-flex items-center gap-2 text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors hover:text-bone"
         >
           {dict.featured.viewProject}
           <span aria-hidden="true">→</span>

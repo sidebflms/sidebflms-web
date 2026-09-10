@@ -201,7 +201,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       {/* Fila de timecode + controles. Se alinea con el estado horizontal de la
           regleta, que cruza el hero justo por encima. */}
       <div className="shell absolute inset-x-0 bottom-8 flex items-center justify-between gap-4">
-        <p className="font-mono text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
+        <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
           {timecode(elapsed)}
         </p>
 
@@ -213,20 +213,20 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               <button
                 type="button"
                 onClick={toggle}
-                className="font-mono text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
+                className="text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
               >
                 {playing ? dict.hero.pauseReel : dict.hero.playReel}
               </button>
               <button
                 type="button"
                 onClick={toggleSound}
-                className="font-mono text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
+                className="text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
               >
                 {muted ? dict.hero.unmute : dict.hero.mute}
               </button>
             </>
           )}
-          <p className="hidden font-mono text-xs font-medium tracking-[0.08em] text-smoke uppercase sm:block">
+          <p className="hidden text-xs font-medium tracking-[0.08em] text-smoke uppercase sm:block">
             {dict.hero.scrollHint}
           </p>
         </div>

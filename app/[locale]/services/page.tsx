@@ -50,7 +50,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           >
             <p
               aria-hidden="true"
-              className="font-mono text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2"
+              className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2"
             >
               {pad(index + 1)}
             </p>

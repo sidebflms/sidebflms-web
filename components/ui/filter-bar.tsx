@@ -55,7 +55,7 @@ export function FilterBar({
             aria-pressed={isActive}
             onClick={() => setCategory(option.key)}
             className={cn(
-              "border px-4 py-2 font-mono text-xs font-medium tracking-[0.08em] uppercase transition-colors duration-200",
+              "border px-4 py-2 text-xs font-medium tracking-[0.08em] uppercase transition-colors duration-200",
               isActive
                 ? "border-rust-500 bg-rust-500 text-bone"
                 : "border-ink-600 text-smoke hover:border-rust-300 hover:text-rust-300"

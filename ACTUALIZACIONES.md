@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (15) — Fuera la monoespaciada: Montserrat también en la interfaz
+
+El sitio tenía **tres** familias. Ahora tiene **dos**: Akira Expanded para los
+titulares y Montserrat para absolutamente todo lo demás.
+
+JetBrains Mono cubría el menú, los botones, los rótulos en mayúsculas, los
+filtros del portfolio, las fechas y los timecodes — unas 57 aplicaciones
+contando la clase `.label`. Por eso al cambiar sólo `--font-sans` en la entrada
+anterior **la interfaz no se movió**: el menú y los botones nunca dependieron de
+esa variable.
+
+### Se retira, no se disfraza
+
+La tentación era apuntar `--font-mono` a Montserrat y no tocar nada más: una
+línea. Se descartó porque dejaba 57 sitios diciendo `font-mono` sobre algo que
+no es monoespaciado, y eso muerde a quien venga después.
+
+Lo hecho: fuera la clase `font-mono` de los 15 componentes que la usaban (21
+usos), fuera el token `--font-mono` de `@theme`, `.label` pasa a `--font-sans`,
+y fuera JetBrains Mono de `lib/fonts.ts`.
+
+### Lo que se pierde, y qué se hizo al respecto
+
+**La monoespaciada alineaba las cifras por columna sin ayuda.** Montserrat las
+alinea igual, pero sólo con `tabular-nums`. Dos sitios ya la llevaban —el
+timecode del hero y la numeración de servicios—; los rótulos de la pieza
+destacada **no**, y muestran timecodes (`00:00`, `00:03`, `00:07`, `00:10`) uno
+debajo de otro. Se les añadió.
+
+A partir de ahora `tabular-nums` no es opcional en ningún sitio donde los
+dígitos tengan que cuadrar. Queda escrito en `app/globals.css`.
+
+Comprobado: sin scroll lateral ni desbordes a 375 ni a 1440, en portada,
+portfolio y ficha de proyecto.
+
+---
+
 ## 2026-09-10 (14) — El texto pasa a Montserrat
 
 Por decisión de Mario. **Los titulares NO cambian**: siguen en Akira Expanded.

@@ -81,7 +81,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         className="flex items-center gap-3 text-bone transition-colors hover:text-rust-300"
       >
         <LogoMark className="h-5 w-auto" />
-        <Wordmark className="font-mono text-xs font-medium tracking-[0.14em]" />
+        <Wordmark className="text-xs font-medium tracking-[0.14em]" />
       </Link>
 
       <div className="flex items-center gap-8">
@@ -94,7 +94,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "font-mono text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200",
+                  "text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200",
                   active ? "text-rust-300" : "text-bone hover:text-rust-300"
                 )}
               >
@@ -110,7 +110,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-expanded={open}
-          className="font-mono text-xs font-medium uppercase tracking-[0.08em] text-bone transition-colors hover:text-rust-300 md:hidden"
+          className="text-xs font-medium uppercase tracking-[0.08em] text-bone transition-colors hover:text-rust-300 md:hidden"
         >
           {nav.menu}
         </button>
@@ -128,7 +128,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
               ref={closeRef}
               type="button"
               onClick={() => setOpen(false)}
-              className="font-mono text-xs font-medium uppercase tracking-[0.08em] text-bone"
+              className="text-xs font-medium uppercase tracking-[0.08em] text-bone"
             >
               {nav.close}
             </button>

@@ -35,7 +35,7 @@ export function ProjectCard({
       </div>
 
       <div className="absolute inset-x-0 bottom-0 translate-y-full bg-ink-900/92 p-4 backdrop-blur-sm transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-focus-visible:translate-y-0">
-        <p className="font-mono text-xs font-medium tracking-[0.08em] text-bone uppercase">
+        <p className="text-xs font-medium tracking-[0.08em] text-bone uppercase">
           {project.title[locale]}
         </p>
         <p className="label mt-1">

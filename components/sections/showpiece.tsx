@@ -164,7 +164,7 @@ export function Showpiece({ dict }: { dict: Dictionary }) {
           <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:absolute lg:bottom-10 lg:left-0 lg:mt-0 lg:grid-cols-1 lg:gap-3">
             {dict.showpiece.cues.map((c) => (
               <li key={c.tag} className="border-l-2 border-rust-500 bg-ink-900/80 p-4">
-                <p className="label text-rust-300">
+                <p className="label text-rust-300 tabular-nums">
                   {c.tag} · {c.value}
                 </p>
                 <p className="mt-1 text-sm text-bone">{c.line}</p>
@@ -176,7 +176,7 @@ export function Showpiece({ dict }: { dict: Dictionary }) {
             className="lg:absolute lg:bottom-10 lg:left-0 mt-10 lg:mt-0 max-w-xs border-l-2 border-rust-500 bg-ink-900/80 p-4 backdrop-blur-sm"
             aria-live="polite"
           >
-            <p className="label text-rust-300">
+            <p className="label text-rust-300 tabular-nums">
               {cue.tag} · {cue.value}
             </p>
             <p className="mt-1 text-sm text-bone">{cue.line}</p>

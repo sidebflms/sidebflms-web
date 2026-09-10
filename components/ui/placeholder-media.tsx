@@ -86,7 +86,7 @@ export function PlaceholderMedia({
         {label}
       </p>
 
-      <span className="absolute top-4 left-4 border border-rust-500 px-2 py-1 font-mono text-[10px] font-medium tracking-[0.08em] text-rust-300 uppercase">
+      <span className="absolute top-4 left-4 border border-rust-500 px-2 py-1 text-[10px] font-medium tracking-[0.08em] text-rust-300 uppercase">
         {badge}
       </span>
     </div>

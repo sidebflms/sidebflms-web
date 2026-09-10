@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * el texto de un botón fantasma.
  */
 const base =
-  "group relative inline-flex items-center gap-3 font-mono text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200 px-6 py-4";
+  "group relative inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200 px-6 py-4";
 
 const variants = {
   primary: "bg-rust-500 text-bone hover:bg-rust-300 hover:text-ink-900",

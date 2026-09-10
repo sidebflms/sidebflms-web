@@ -290,7 +290,7 @@ export function Reglet() {
       {/* Readout de contexto: el nombre de la sección en curso, en vertical. */}
       <div
         ref={readoutRef}
-        className="absolute top-1/2 left-0 w-18 -translate-y-1/2 text-center font-mono text-[10px] font-medium tracking-[0.18em] text-smoke uppercase opacity-0 transition-opacity duration-300 [writing-mode:vertical-rl]"
+        className="absolute top-1/2 left-0 w-18 -translate-y-1/2 text-center text-[10px] font-medium tracking-[0.18em] text-smoke uppercase opacity-0 transition-opacity duration-300 [writing-mode:vertical-rl]"
       />
     </div>
   );

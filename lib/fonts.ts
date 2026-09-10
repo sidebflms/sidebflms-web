@@ -1,4 +1,4 @@
-import { Archivo, JetBrains_Mono, Montserrat } from "next/font/google";
+import { Archivo, Montserrat } from "next/font/google";
 
 /**
  * BODY — Montserrat (SIL Open Font License: libre también para uso comercial).
@@ -25,17 +25,6 @@ export const montserrat = Montserrat({
   display: "swap",
 });
 
-/**
- * MONO — JetBrains Mono. En este sitio la mono no es un label secundario: es
- * material principal. Todo metadato (fechas, venue, disciplinas, filtros,
- * contadores, el readout de la regleta) es un timecode.
- */
-export const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
 /**
  * DISPLAY FALLBACK — Archivo con el eje de anchura abierto.
@@ -55,6 +44,5 @@ export const archivoFallback = Archivo({
 
 export const fontVariables = [
   montserrat.variable,
-  jetBrainsMono.variable,
   archivoFallback.variable,
 ].join(" ");
