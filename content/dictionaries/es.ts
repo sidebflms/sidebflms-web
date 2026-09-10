@@ -19,7 +19,7 @@ export const es = {
     home: {
       title: "SIDEBFLMS — Cobertura audiovisual de festivales y clubes",
       description:
-        "Productora audiovisual especializada en música electrónica: aftermovies, multicámara en directo, drone y fotografía. Mallorca, Ibiza y donde haga falta.",
+        "Productora audiovisual de música electrónica: aftermovies, multicámara en directo, drone y fotografía. Madrid, Barcelona, Ibiza y donde haga falta.",
     },
     portfolio: {
       title: "Trabajo — SIDEBFLMS",
@@ -57,7 +57,7 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, multicámara en directo, drone y fotografía. Mallorca, Ibiza y donde haga falta.",
+    sub: "Aftermovies, multicámara en directo, drone y fotografía. Madrid, Barcelona, Ibiza y donde haga falta.",
     ctaReel: "Ver el reel",
     ctaContact: "Hablemos de tu evento",
     scrollHint: "Desplázate para ver el trabajo",
@@ -248,7 +248,14 @@ export const es = {
     social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
-    builtNote: "Mallorca, Islas Baleares",
+    // LA SEDE ESTÁ EN MADRID. Hasta el 2026-09-10 aquí ponía «Mallorca, Islas
+    // Baleares», que era del texto de relleno inicial y no correspondía con la
+    // realidad de la empresa: las oficinas principales están en Madrid, y
+    // Barcelona e Ibiza son plazas donde se cubre mucho trabajo, no sedes.
+    //
+    // Si vuelve a cambiar, son SEIS sitios y no uno: esta línea, `hero.sub` y
+    // `meta.home.description`, en los dos idiomas.
+    builtNote: "Madrid, España",
   },
 
   placeholder: {

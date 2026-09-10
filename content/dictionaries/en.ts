@@ -17,7 +17,7 @@ export const en: Dictionary = {
     home: {
       title: "SIDEBFLMS — Film crew for electronic music events",
       description:
-        "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Mallorca, Ibiza, wherever the show is.",
+        "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Madrid, Barcelona, Ibiza, wherever the show is.",
     },
     portfolio: {
       title: "Work — SIDEBFLMS",
@@ -55,7 +55,7 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, live multicam, aerial and stills. Mallorca, Ibiza, wherever the show is.",
+    sub: "Aftermovies, live multicam, aerial and stills. Madrid, Barcelona, Ibiza, wherever the show is.",
     ctaReel: "Watch the reel",
     ctaContact: "Tell us about your event",
     scrollHint: "Scroll to see the work",
@@ -228,7 +228,7 @@ export const en: Dictionary = {
     social: "Follow us",
     legalLinks: "Legal",
     rights: "All rights reserved.",
-    builtNote: "Mallorca, Balearic Islands",
+    builtNote: "Madrid, Spain",
   },
 
   placeholder: {

@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (17) — La empresa no está en Mallorca, está en Madrid
+
+El pie decía «Mallorca, Islas Baleares» y el hero «Mallorca, Ibiza y donde haga
+falta». **Las oficinas principales están en Madrid.** Mallorca venía del texto
+de relleno inicial y nadie lo había corregido.
+
+Corregido en los **seis** sitios donde estaba —no en uno—: `footer.builtNote`,
+`hero.sub` y `meta.home.description`, en los dos idiomas.
+
+| | Antes | Ahora |
+|---|---|---|
+| Pie | Mallorca, Islas Baleares | **Madrid, España** |
+| Hero y buscadores | Mallorca, Ibiza y donde haga falta | **Madrid, Barcelona, Ibiza y donde haga falta** |
+
+Barcelona e Ibiza entran porque son plazas donde se cubre mucho trabajo. **No
+son sedes**, y por eso no aparecen en el pie: ahí va dónde está la empresa, no
+dónde trabaja.
+
+### Un detalle de SEO que obligó a recortar
+
+La descripción para buscadores se corta a unos 160 caracteres. Añadir Barcelona
+la pasaba de largo, así que se acortó «Productora audiovisual **especializada
+en** música electrónica» a «Productora audiovisual **de** música electrónica».
+Queda en 147 caracteres; la inglesa, en 139.
+
+Comprobado en la página servida, no sólo en el fichero: subtítulo, pie y
+etiqueta `description` los tres correctos.
+
+Queda una nota en `es.ts` diciendo que son seis sitios, para que el día que
+cambie la sede no se corrija sólo el pie y el hero siga diciendo otra cosa.
+
+---
+
 ## 2026-09-10 (16) — El naranja de la web no era el naranja de la marca
 
 Lo cazó Mario mirándola. La web usaba `#ae4b2f`, un teja apagado que **no sale
