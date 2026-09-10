@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 type NavCopy = {
   portfolio: string;
   services: string;
+  about: string;
   contact: string;
   menu: string;
   close: string;
@@ -37,6 +38,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
   const links = [
     { href: path(locale, "portfolio"), label: nav.portfolio },
     { href: path(locale, "services"), label: nav.services },
+    { href: path(locale, "about"), label: nav.about },
     { href: path(locale, "contact"), label: nav.contact },
   ];
 

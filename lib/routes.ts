@@ -35,6 +35,10 @@ export function isLocale(value: string): value is Locale {
 export const ROUTES = {
   home: { es: "", en: "" },
   portfolio: { es: "portfolio", en: "portfolio" },
+  // `about` y `faq` en inglés en los dos idiomas, como el resto: los slugs son
+  // idénticos a propósito (ver la decisión escrita arriba en este mismo mapa).
+  about: { es: "about", en: "about" },
+  faq: { es: "faq", en: "faq" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
   legal: { es: "legal", en: "legal" },

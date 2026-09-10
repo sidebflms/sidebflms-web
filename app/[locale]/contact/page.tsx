@@ -64,12 +64,20 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
               </li>
               <li>
                 <a
-                  href="https://vimeo.com/sidebflms"
+                  href="https://www.linkedin.com/company/sidebflms"
                   target="_blank"
                   rel="noreferrer noopener"
                   className="text-bone transition-colors hover:text-rust-300"
                 >
-                  {dict.contact.vimeo}
+                  {dict.contact.linkedin}
+                </a>
+                <a
+                  href="https://www.youtube.com/@sidebflms"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-bone transition-colors hover:text-rust-300"
+                >
+                  {dict.contact.youtube}
                 </a>
               </li>
             </ul>

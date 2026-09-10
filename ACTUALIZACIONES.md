@@ -5,6 +5,75 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (18) — Dos páginas nuevas, sociales al día y títulos para buscar
+
+Sale de comparar la web con la de un competidor directo (ventour.co), que
+opera en las mismas plazas y con el mismo argumento.
+
+### Nosotros (`/about`)
+
+La web no decía **quién** está detrás. Para un servicio donde se contrata a
+gente para meterse en tu recinto a las cuatro de la mañana, era el hueco más
+grande que había.
+
+Once personas, de la lista de buzones de la empresa. **Los correos no se
+publican**: el contacto del sitio es uno solo.
+
+**Faltan los cargos**, y están a `null` en `content/team.ts` en vez de
+inventados: poner «cámara» a quien es productor se detecta en la primera
+llamada. La ficha se pinta sin cargo mientras tanto, y el rótulo de «pendiente»
+desaparece **solo** cuando se rellenen — no hay que acordarse de quitarlo.
+
+El apartado de «cómo trabajamos» **reutiliza** `dict.manifesto` en vez de
+reescribirlo. Duplicar ese texto es cómo se acaba con dos versiones que dicen
+cosas distintas.
+
+### Preguntas frecuentes (`/faq`)
+
+Nueve preguntas, y todas se responden con cosas que la empresa ya hace:
+entrega en 24-48 h, piloto certificado, cortes verticales desde máster abierto,
+qué hace falta para presupuestar.
+
+Lleva **JSON-LD `FAQPage`**, que es lo que permite que Google despliegue las
+preguntas en el resultado de búsqueda. Y sale del **mismo array** que se pinta
+en pantalla, no de una copia: un JSON-LD que dice algo distinto de lo que se ve
+es motivo de penalización, y es exactamente lo que pasa cuando son dos listas y
+alguien actualiza una.
+
+Sin acordeón, todas abiertas. Un acordeón esconde ocho de nueve respuestas y
+obliga a un clic por duda, cuando el visitante viene buscando una concreta.
+
+### Vimeo fuera, LinkedIn y YouTube dentro
+
+Quien contrata producción para una marca o un festival está en LinkedIn.
+
+**⚠️ Las tres URLs están sin confirmar**, incluida la de Instagram, que ya
+estaba deducida del nombre de la marca desde el principio y nunca se verificó.
+Están marcadas en `components/layout/footer.tsx`. Un enlace social roto en el
+pie es de lo más barato de arreglar y de lo que peor sienta.
+
+### Títulos de página orientados a búsqueda
+
+Eran de marca («Trabajo — SIDEBFLMS»). Ahora llevan delante lo que alguien
+teclearía, sin pasar de 62 caracteres:
+
+- «Portfolio de festivales y clubes — SIDEBFLMS»
+- «Aftermovies, multicámara, drone y fotografía — SIDEBFLMS»
+- «Pide presupuesto de cobertura audiovisual — SIDEBFLMS»
+
+### El pie dice el país y el hero las plazas
+
+`builtNote` pasa a «Con base en España». Es deliberado que no repita las
+ciudades: el pie responde a «¿dónde está esta empresa?» y el hero a «¿venís a
+mi evento?», y ahí lo útil son Madrid, Barcelona e Ibiza.
+
+### Pendiente
+
+Cargos y fotos del equipo. Y que cada persona sepa que aparece con su nombre —
+sobre todo quien sale con apodo.
+
+---
+
 ## 2026-09-10 (17) — La empresa no está en Mallorca, está en Madrid
 
 El pie decía «Mallorca, Islas Baleares» y el hero «Mallorca, Ibiza y donde haga

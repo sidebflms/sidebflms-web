@@ -17,24 +17,34 @@ export const es = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Cobertura audiovisual de festivales y clubes",
+      title: "SIDEBFLMS — Productora audiovisual de música electrónica",
       description:
         "Productora audiovisual de música electrónica: aftermovies, multicámara en directo, drone y fotografía. Madrid, Barcelona, Ibiza y donde haga falta.",
     },
     portfolio: {
-      title: "Trabajo — SIDEBFLMS",
+      title: "Portfolio de festivales y clubes — SIDEBFLMS",
       description:
         "Aftermovies, multicámara, drone y fotografía para festivales y clubes de música electrónica.",
     },
     services: {
-      title: "Servicios — SIDEBFLMS",
+      title: "Aftermovies, multicámara, drone y fotografía — SIDEBFLMS",
       description:
         "Preproducción, rodaje en directo, cobertura aérea y postproducción. Entrega en 24-48 horas.",
     },
     contact: {
-      title: "Contacto — SIDEBFLMS",
+      title: "Pide presupuesto de cobertura audiovisual — SIDEBFLMS",
       description:
         "Cuéntanos tu evento: aforo, escenarios y fechas. Respondemos con un presupuesto cerrado.",
+    },
+    about: {
+      title: "Quiénes somos · Madrid, Barcelona e Ibiza — SIDEBFLMS",
+      description:
+        "Productora audiovisual de música electrónica con base en España. Cómo trabajamos y dónde operamos: Madrid, Barcelona e Ibiza.",
+    },
+    faq: {
+      title: "Preguntas frecuentes sobre cobertura de eventos — SIDEBFLMS",
+      description:
+        "Plazos de entrega, permisos de vuelo, cortes verticales, qué hace falta para un presupuesto. Las dudas que salen antes de contratar.",
     },
     legal: { title: "Aviso legal — SIDEBFLMS", description: "Aviso legal de SIDEBFLMS." },
     privacy: {
@@ -46,6 +56,7 @@ export const es = {
   nav: {
     portfolio: "Trabajo",
     services: "Servicios",
+    about: "Nosotros",
     contact: "Contacto",
     menu: "Menú",
     close: "Cerrar",
@@ -201,7 +212,8 @@ export const es = {
     directLabel: "O directamente",
     email: "contact@sidebflms.com",
     instagram: "Instagram",
-    vimeo: "Vimeo",
+    linkedin: "LinkedIn",
+    youtube: "YouTube",
     form: {
       name: "Tu nombre",
       email: "Email",
@@ -248,14 +260,16 @@ export const es = {
     social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
-    // LA SEDE ESTÁ EN MADRID. Hasta el 2026-09-10 aquí ponía «Mallorca, Islas
-    // Baleares», que era del texto de relleno inicial y no correspondía con la
-    // realidad de la empresa: las oficinas principales están en Madrid, y
-    // Barcelona e Ibiza son plazas donde se cubre mucho trabajo, no sedes.
+    // DÓNDE ESTAMOS: el pie dice el país y el hero las plazas.
     //
-    // Si vuelve a cambiar, son SEIS sitios y no uno: esta línea, `hero.sub` y
+    // Es deliberado que sean dos cosas distintas. El pie responde a «¿dónde
+    // está esta empresa?» y la respuesta es España. El hero responde a «¿venís
+    // a mi evento?» y ahí lo útil son las plazas: Madrid, Barcelona e Ibiza.
+    // Meter tres ciudades en el pie sugeriría tres oficinas.
+    //
+    // Si cambia, son SEIS sitios y no uno: esta línea, `hero.sub` y
     // `meta.home.description`, en los dos idiomas.
-    builtNote: "Madrid, España",
+    builtNote: "Con base en España",
   },
 
   placeholder: {
@@ -328,6 +342,67 @@ export const es = {
       {
         heading: "Cookies",
         text: "Este sitio no usa cookies de analítica ni de publicidad. Solo las técnicas necesarias para recordar tu idioma.",
+      },
+    ],
+  },
+
+  about: {
+    label: "Nosotros",
+    // 3 líneas cortas — ver REGLAS DE REDACCIÓN arriba.
+    headline: ["Quién", "está detrás", "de esto"],
+    intro:
+      "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en la anterior es el que va a la siguiente, y eso se nota a las cuatro de la mañana.",
+    whereLabel: "Dónde operamos",
+    whereBody:
+      "Con base en España. La mayor parte del trabajo cae en Madrid, Barcelona e Ibiza, que es donde está el circuito, pero el material no entiende de provincias: si el evento está en otro sitio, se va.",
+    howLabel: "Cómo trabajamos",
+    teamLabel: "El equipo",
+    // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.
+    teamNote: "Cargos y fotos pendientes",
+    ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
+  },
+
+  faq: {
+    label: "Preguntas frecuentes",
+    headline: ["Lo que", "preguntan antes", "de contratar"],
+    intro:
+      "Las dudas que salen siempre en la primera llamada. Si la tuya no está, escríbenos y la añadimos.",
+    items: [
+      {
+        q: "¿Qué hacéis exactamente?",
+        a: "Cuatro cosas, normalmente juntas: aftermovie, multicámara en directo, cobertura aérea con drone y fotografía. El encargo típico es un evento entero cubierto por el mismo equipo, no una pieza suelta.",
+      },
+      {
+        q: "¿Dónde trabajáis?",
+        a: "Con base en España, y la mayor parte del trabajo en Madrid, Barcelona e Ibiza. Fuera de ahí también: lo que cambia es la logística y el presupuesto, no lo que se entrega.",
+      },
+      {
+        q: "¿Cuánto tardáis en entregar?",
+        a: "Entre 24 y 48 horas. No es un extra que se paga aparte: es el plazo con el que se planifica el rodaje, porque un aftermovie que llega dos semanas después llega cuando al evento ya no le importa a nadie.",
+      },
+      {
+        q: "¿Voláis drone? ¿Con permisos?",
+        a: "Sí, con piloto certificado y perímetro de seguridad coordinado con producción. Si tu recinto tiene restricciones de espacio aéreo, dínoslo al pedir presupuesto: condiciona el plan de vuelo y es mejor saberlo antes que el mismo día.",
+      },
+      {
+        q: "¿Entregáis cortes verticales para Reels y TikTok?",
+        a: "Sí, y no como recorte de última hora: los másters se ruedan en encuadre abierto precisamente para poder sacar el horizontal y el vertical del mismo material sin volver a montar.",
+      },
+      {
+        q: "¿Qué necesitáis para darme un presupuesto?",
+        a: "Aforo estimado, número de escenarios, fecha y qué tipo de cobertura quieres. Con eso sale un presupuesto cerrado. Sin eso solo sale una horquilla, que no le sirve a nadie.",
+      },
+      {
+        q: "¿Cuánto cuesta?",
+        a: "Depende del aforo, de cuántos escenarios haya que cubrir a la vez y de cuántas horas dura. El formulario tiene rangos de presupuesto para que nos digas por dónde te mueves y no perdamos el tiempo ninguno de los dos.",
+      },
+      {
+        q: "¿Cuánto tardáis en responder?",
+        a: "24 horas laborables.",
+      },
+      {
+        q: "¿Podéis cubrir varios escenarios a la vez?",
+        a: "Sí. Se resuelve en preproducción, no sobre la marcha: un plan por franjas horarias con prioridades por escenario, para que drone y cámara no estén los dos en el mismo sitio mientras en el otro pasa algo.",
       },
     ],
   },

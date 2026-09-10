@@ -15,24 +15,34 @@ export const en: Dictionary = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Film crew for electronic music events",
+      title: "SIDEBFLMS — Audiovisual production for electronic music",
       description:
         "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Madrid, Barcelona, Ibiza, wherever the show is.",
     },
     portfolio: {
-      title: "Work — SIDEBFLMS",
+      title: "Festival and club portfolio — SIDEBFLMS",
       description:
         "Aftermovies, multicam, aerial and stills for electronic music festivals and clubs.",
     },
     services: {
-      title: "Services — SIDEBFLMS",
+      title: "Aftermovies, multicam, aerial and stills — SIDEBFLMS",
       description:
         "Pre-production, live shoot, aerial coverage and post. Delivered in 24-48 hours.",
     },
     contact: {
-      title: "Contact — SIDEBFLMS",
+      title: "Request an audiovisual production quote — SIDEBFLMS",
       description:
         "Tell us about your event: capacity, stages and dates. We come back with a closed quote.",
+    },
+    about: {
+      title: "About us · Madrid, Barcelona and Ibiza — SIDEBFLMS",
+      description:
+        "Audiovisual production for electronic music, based in Spain. How we work and where we operate: Madrid, Barcelona and Ibiza.",
+    },
+    faq: {
+      title: "Frequently asked questions about event coverage — SIDEBFLMS",
+      description:
+        "Delivery times, flight permits, vertical cuts, what we need to quote. The questions that come up before hiring.",
     },
     legal: { title: "Legal notice — SIDEBFLMS", description: "SIDEBFLMS legal notice." },
     privacy: {
@@ -44,6 +54,7 @@ export const en: Dictionary = {
   nav: {
     portfolio: "Work",
     services: "Services",
+    about: "About",
     contact: "Contact",
     menu: "Menu",
     close: "Close",
@@ -185,7 +196,8 @@ export const en: Dictionary = {
     directLabel: "Or straight to us",
     email: "contact@sidebflms.com",
     instagram: "Instagram",
-    vimeo: "Vimeo",
+    linkedin: "LinkedIn",
+    youtube: "YouTube",
     form: {
       name: "Your name",
       email: "Email",
@@ -228,7 +240,7 @@ export const en: Dictionary = {
     social: "Follow us",
     legalLinks: "Legal",
     rights: "All rights reserved.",
-    builtNote: "Madrid, Spain",
+    builtNote: "Based in Spain",
   },
 
   placeholder: {
@@ -288,6 +300,65 @@ export const en: Dictionary = {
       {
         heading: "Cookies",
         text: "This site uses no analytics or advertising cookies. Only the technical ones needed to remember your language.",
+      },
+    ],
+  },
+
+  about: {
+    label: "About",
+    headline: ["Who", "is behind", "all this"],
+    intro:
+      "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last one works the next one, and that shows at four in the morning.",
+    whereLabel: "Where we operate",
+    whereBody:
+      "Based in Spain. Most of the work lands in Madrid, Barcelona and Ibiza, which is where the circuit is — but footage doesn't care about provinces: if the show is somewhere else, we go.",
+    howLabel: "How we work",
+    teamLabel: "The crew",
+    teamNote: "Roles and photos pending",
+    ctaTitle: ["Tell us", "what event", "you have"],
+  },
+
+  faq: {
+    label: "FAQ",
+    headline: ["What people", "ask before", "hiring us"],
+    intro:
+      "The questions that always come up on the first call. If yours isn't here, write to us and we'll add it.",
+    items: [
+      {
+        q: "What exactly do you do?",
+        a: "Four things, usually together: aftermovie, live multicam, aerial drone coverage and stills. The typical job is a whole event covered by the same crew, not a one-off piece.",
+      },
+      {
+        q: "Where do you work?",
+        a: "Based in Spain, with most of the work in Madrid, Barcelona and Ibiza. Elsewhere too: what changes is the logistics and the budget, not what gets delivered.",
+      },
+      {
+        q: "How fast do you deliver?",
+        a: "Between 24 and 48 hours. It isn't a rush fee: it's the deadline the shoot is planned around, because an aftermovie that lands two weeks later lands when nobody cares about the event any more.",
+      },
+      {
+        q: "Do you fly drones? With permits?",
+        a: "Yes, with a certified pilot and a safety perimeter coordinated with production. If your site has airspace restrictions, tell us when you ask for a quote: it shapes the flight plan and it is much better known in advance than on the day.",
+      },
+      {
+        q: "Do you deliver vertical cuts for Reels and TikTok?",
+        a: "Yes, and not as a last-minute crop: masters are shot open-matte precisely so the horizontal and the vertical come out of the same footage without re-editing.",
+      },
+      {
+        q: "What do you need to quote me?",
+        a: "Estimated capacity, number of stages, date and what kind of coverage you want. With that we can quote a fixed price. Without it all you get is a range, which helps nobody.",
+      },
+      {
+        q: "How much does it cost?",
+        a: "It depends on capacity, how many stages have to be covered at once, and how many hours it runs. The form has budget ranges so you can tell us where you sit and neither of us wastes time.",
+      },
+      {
+        q: "How long do you take to reply?",
+        a: "24 working hours.",
+      },
+      {
+        q: "Can you cover several stages at once?",
+        a: "Yes. It gets solved in pre-production, not on the fly: a plan broken down by time slots with priorities per stage, so drone and camera aren't both in the same place while something happens in the other.",
       },
     ],
   },

@@ -5,11 +5,19 @@ import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 
 /**
- * TODO (cliente): confirmar los handles reales de Instagram y Vimeo.
+ * ⚠️ TODO (cliente) — LAS TRES URLs ESTÁN SIN CONFIRMAR.
+ *
+ * Están deducidas del nombre de la marca, no verificadas. Un enlace social
+ * roto en el pie de una web comercial es de las cosas que más barato se
+ * arreglan y peor sientan, así que **confírmalas antes de abrir la web**.
+ *
+ * Vimeo se retiró el 2026-09-10 y entran LinkedIn y YouTube: quien contrata
+ * producción para una marca o un festival está en LinkedIn, no en Vimeo.
  */
 const SOCIAL = [
   { key: "instagram", href: "https://instagram.com/sidebflms" },
-  { key: "vimeo", href: "https://vimeo.com/sidebflms" },
+  { key: "linkedin", href: "https://www.linkedin.com/company/sidebflms" },
+  { key: "youtube", href: "https://www.youtube.com/@sidebflms" },
 ] as const;
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
