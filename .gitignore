@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Cerrojos del script de despliegue: se crean en el servidor, no se versionan
+.vigilante.lock/
+.operacion.lock/
+
+# Registros que genera el script en el servidor. Se ignoran para que
+# `git status` allí salga limpio: si algún día aparece algo modificado, que
+# sea una señal de verdad y no ruido de todos los días.
+/sidebflms-web.log
+/sidebflms-web.log.1
+/vigilante.log

@@ -34,7 +34,7 @@ export const es = {
     contact: {
       title: "Contacto — SIDEBFLMS",
       description:
-        "Contanos de tu evento: aforo, escenarios y fechas. Respondemos con un presupuesto cerrado.",
+        "Cuéntanos tu evento: aforo, escenarios y fechas. Respondemos con un presupuesto cerrado.",
     },
     legal: { title: "Aviso legal — SIDEBFLMS", description: "Aviso legal de SIDEBFLMS." },
     privacy: {
@@ -60,7 +60,7 @@ export const es = {
     sub: "Aftermovies, multicámara en directo, drone y fotografía. Mallorca, Ibiza y donde haga falta.",
     ctaReel: "Ver el reel",
     ctaContact: "Hablemos de tu evento",
-    scrollHint: "Desplazá para ver el trabajo",
+    scrollHint: "Desplázate para ver el trabajo",
     playReel: "Reproducir el reel",
     pauseReel: "Pausar el reel",
     unmute: "Activar sonido",
@@ -95,9 +95,15 @@ export const es = {
       {
         tag: "Aéreo",
         value: "—",
-        // TODO (cliente): redacción pendiente de verificar contra el papeleo de
-        // vuelo. Ninguna afirmación sobre permisos entra al sitio sin documento.
-        line: "Redacción pendiente de verificación",
+        // Describe el plano y NADA MÁS. La versión anterior era un hueco
+        // ("Redacción pendiente de verificación") porque el TODO original
+        // prohibía publicar afirmaciones sobre permisos de vuelo sin el
+        // papeleo delante. Esta redacción no afirma nada sobre permisos, así
+        // que no necesita respaldo documental.
+        //
+        // OJO: eso NO vale para `services.stages[02]`, que sigue diciendo
+        // "piloto certificado" y sigue pendiente de contrastar.
+        line: "Un drone por encima del aforo",
       },
       { tag: "Cierre", value: "04:30–06:00", line: "Aftermovie entregado en 48 horas" },
     ],
@@ -118,7 +124,7 @@ export const es = {
     label: "Servicios",
     headline: ["Cuatro etapas", "del mismo", "encargo"],
     intro:
-      "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subís a Instagram.",
+      "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subes a Instagram.",
     stages: [
       {
         number: "01",
@@ -137,16 +143,21 @@ export const es = {
       {
         number: "03",
         title: "Cobertura aérea",
-        // TODO (cliente) — BLOQUEANTE ANTES DE PUBLICAR:
-        // Este texto es deliberadamente genérico. La redacción exacta sobre
-        // permisos y categoría de vuelo NO se puede inventar: hay que
-        // contrastarla con el papeleo real (quién firmó, qué categoría, qué se
-        // coordinó con ENAIRE) y sustituir este cuerpo por la redacción
-        // verificada. Todo el posicionamiento del sitio es "somos los que sí
-        // tienen los permisos" — es el peor sitio para una imprecisión.
+        // CONFIRMADO (Mario, 2026-09-10): hay piloto certificado. Era el
+        // último TODO marcado como BLOQUEANTE, y con esto se quita el cartel
+        // de "Redacción pendiente de verificación" que se le enseñaba al
+        // visitante junto al título de esta etapa.
+        //
+        // La redacción se deja como está, GENÉRICA a propósito. Lo confirmado
+        // es que hay piloto certificado, y eso es exactamente lo que dice.
+        // Si algún día se quiere concretar más —la categoría de vuelo, el
+        // número de operador, qué se coordinó con ENAIRE— eso NO se puede
+        // escribir de memoria: hay que sacarlo del papeleo. Todo el
+        // posicionamiento del sitio es "somos los que sí tienen los
+        // permisos", y es el peor sitio para una imprecisión.
         body: "Planos aéreos con piloto certificado y perímetro de seguridad coordinado con producción.",
         items: ["Piloto certificado", "Hyperlapse y amanecer", "Planos de aforo", "Coordinación con producción"],
-        pending: true,
+        pending: false,
       },
       {
         number: "04",
@@ -157,7 +168,7 @@ export const es = {
       },
     ],
     pendingNote: "Redacción pendiente de verificación",
-    ctaTitle: ["Contanos", "qué evento", "tenés"],
+    ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
     cta: "Pedir presupuesto",
   },
 
@@ -165,7 +176,7 @@ export const es = {
     label: "Trabajo",
     headline: ["Festivales, clubes", "y todo lo", "que hay dentro"],
     intro:
-      "Filtrá por disciplina. Cada ficha lleva la fecha, el venue y el dato concreto de lo que se rodó.",
+      "Filtra por disciplina. Cada ficha lleva la fecha, el venue y el dato concreto de lo que se rodó.",
     filterLabel: "Filtrar por disciplina",
     all: "Todo",
     empty: "No hay proyectos en esta disciplina todavía.",
@@ -193,13 +204,11 @@ export const es = {
 
   contact: {
     label: "Contacto",
-    headline: ["Contanos", "qué evento", "tenés"],
+    headline: ["Cuéntanos", "qué evento", "tienes"],
     intro:
-      "Cuantos más datos nos des de aforo y escenarios, más ajustado sale el presupuesto. Respondemos en 24 horas laborables.",
-    // TODO (cliente): confirmar que el compromiso de 24 h laborables es real
-    // antes de publicar. Si no lo es, quitar la frase — no rebajarla.
+      "Cuantos más datos nos des de aforo y escenarios, más ajustado sale el presupuesto.",
     directLabel: "O directamente",
-    email: "hola@sidebflms.com",
+    email: "contact@sidebflms.com",
     instagram: "Instagram",
     vimeo: "Vimeo",
     form: {
@@ -210,7 +219,7 @@ export const es = {
       capacity: "Aforo estimado",
       stages: "Nº de escenarios",
       coverage: "Tipo de cobertura",
-      coverageHint: "Podés marcar varias",
+      coverageHint: "Puedes marcar varias",
       budget: "Rango de presupuesto",
       budgetOptions: [
         "Menos de 2.000 €",
@@ -219,8 +228,8 @@ export const es = {
         "Más de 10.000 €",
         "Todavía no lo sé",
       ],
-      message: "Contanos algo más",
-      messagePlaceholder: "Horarios, artistas confirmados, qué necesitás entregado y para cuándo.",
+      message: "Cuéntanos algo más",
+      messagePlaceholder: "Horarios, artistas confirmados, qué necesitas entregado y para cuándo.",
       consent:
         "He leído la política de privacidad y acepto que tratéis mis datos para responder a esta consulta.",
       consentLink: "política de privacidad",
@@ -228,20 +237,24 @@ export const es = {
       submitting: "Enviando…",
       required: "Obligatorio",
       optional: "Opcional",
-      select: "Elegí una opción",
-      errorRequired: "Completá este campo.",
-      errorEmail: "Revisá el email: falta algo.",
+      select: "Elige una opción",
+      errorRequired: "Completa este campo.",
+      errorEmail: "Revisa el email: falta algo.",
       errorConsent: "Necesitamos tu consentimiento para poder responderte.",
       successTitle: "Recibido",
-      successBody: "Te respondemos en 24 horas laborables. Si es urgente, escribinos directamente.",
+      // CONFIRMADO (Mario, 2026-09-10): el compromiso de 24 h laborables es
+      // real. Era el único punto pendiente del TODO original. Estaba además
+      // duplicado en el `intro` de arriba y se quitó de allí: se promete una
+      // vez, en el acuse de recibo, que es donde el visitante lo necesita.
+      successBody: "Te respondemos en 24 horas laborables. Si es urgente, escríbenos directamente.",
       errorTitle: "No se ha podido enviar",
-      errorBody: "Probá otra vez o escribinos a hola@sidebflms.com.",
+      errorBody: "Prueba otra vez o escríbenos a contact@sidebflms.com.",
     },
   },
 
   footer: {
     tagline: ["Cara B", "de cada", "noche"],
-    social: "Seguinos",
+    social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
     builtNote: "Mallorca, Islas Baleares",
@@ -257,12 +270,17 @@ export const es = {
 
   legal: {
     title: ["Aviso", "legal"],
-    // TODO (cliente): completar con la razón social, el CIF y el domicilio
-    // fiscal reales antes de publicar. Los corchetes son intencionales.
+    // DECISIÓN (Mario, 2026-09-10): aquí va sólo "SIDEBFLMS". Se quitaron los
+    // huecos del CIF y del domicilio fiscal en vez de rellenarlos.
+    //
+    // Que conste lo que eso implica: el art. 10 de la LSSI-CE obliga a que un
+    // sitio comercial publique el nombre, el NIF y el domicilio de quien lo
+    // opera. Sin ellos el aviso legal NO cumple. Si algún día se quiere que
+    // cumpla, es aquí y en `privacy.body[0]`, y en los mismos sitios de `en.ts`.
     body: [
       {
         heading: "Titular del sitio",
-        text: "[Razón social] · [CIF] · [Domicilio fiscal] · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Objeto",
@@ -281,12 +299,13 @@ export const es = {
 
   privacy: {
     title: ["Política de", "privacidad"],
-    // TODO (cliente): validar con asesoría antes de publicar. Los datos de
-    // responsable y plazo de conservación están sin cerrar.
+    // PENDIENTE: validar con asesoría antes de abrir la web al público. El
+    // responsable queda como "SIDEBFLMS" por decisión de Mario (ver la nota
+    // del aviso legal), sin NIF ni domicilio, que el RGPD también espera.
     body: [
       {
         heading: "Responsable",
-        text: "[Razón social] · [CIF] · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Finalidad",
@@ -298,15 +317,15 @@ export const es = {
       },
       {
         heading: "Conservación",
-        text: "Los datos se conservan mientras dure la relación comercial y, después, durante los plazos legales de prescripción. Si no hay encargo, se eliminan a los [12] meses.",
+        text: "Los datos se conservan mientras dure la relación comercial y, después, durante los plazos legales de prescripción. Si no hay encargo, se eliminan a los 12 meses.",
       },
       {
         heading: "Destinatarios",
-        text: "No se ceden datos a terceros salvo obligación legal. El sitio se aloja en Vercel Inc., que actúa como encargado del tratamiento.",
+        text: "No se ceden datos a terceros salvo obligación legal. El sitio y el correo del formulario se alojan en un servidor propio contratado a Contabo GmbH (Alemania), que actúa como encargado del tratamiento. Los datos no salen de la Unión Europea.",
       },
       {
         heading: "Tus derechos",
-        text: "Podés acceder, rectificar y suprimir tus datos, así como oponerte y limitar su tratamiento, escribiendo a hola@sidebflms.com. También podés reclamar ante la Agencia Española de Protección de Datos.",
+        text: "Puedes acceder, rectificar y suprimir tus datos, así como oponerte y limitar su tratamiento, escribiendo a contact@sidebflms.com. También puedes reclamar ante la Agencia Española de Protección de Datos.",
       },
       {
         heading: "Cookies",

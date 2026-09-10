@@ -1,0 +1,55 @@
+# Todo va a la aplicación Node, a través de proxy.php.
+#
+# Ojo: este fichero se llama `.htaccess` en el servidor. Aquí se guarda sin el
+# punto para que no se esconda en el repositorio.
+
+# ── La contraseña, mientras la web no sea pública ─────────────────────────
+#
+# Se activa sola: si existe `.htpasswd` al lado, pide usuario y contraseña; si
+# no existe, `AuthUserFile` apunta a un fichero que no está y Apache devuelve
+# 500 en TODA la web. Por eso el bloque va dentro de `<IfFile>`: sin fichero de
+# contraseñas, no hay bloque, y la web queda abierta a propósito.
+#
+# Para quitar la contraseña el día que se publique, basta con borrar el
+# `.htpasswd`. No hay que tocar este fichero ni reiniciar nada.
+<IfFile "/home/bote/web/sidebflms.com/public_html/.htpasswd">
+    AuthType Basic
+    AuthName "SIDEBFLMS - en construccion"
+    AuthUserFile /home/bote/web/sidebflms.com/public_html/.htpasswd
+
+    <RequireAny>
+        # Let's Encrypt renueva el certificado dejando un fichero en
+        # /.well-known/. Hoy eso lo contesta nginx antes de llegar aquí, así
+        # que esta excepción no hace falta — pero el día que cambie la
+        # plantilla, el certificado no se renovaría y el fallo aparecería
+        # meses después, caducado y sin relación aparente con esta línea.
+        Require expr %{REQUEST_URI} =~ m#^/\.well-known/#
+        Require valid-user
+    </RequireAny>
+</IfFile>
+
+RewriteEngine On
+
+# Let's Encrypt valida el dominio dejando un fichero aquí dentro. Si esto se
+# fuera a la aplicación, respondería 404 y el certificado no se emitiría.
+RewriteCond %{REQUEST_URI} ^/\.well-known/ [NC]
+RewriteRule ^ - [L]
+
+# El propio proxy, para no entrar en bucle.
+RewriteCond %{REQUEST_URI} ^/proxy\.php$
+RewriteRule ^ - [L]
+
+# Los ficheros que existen de verdad aquí dentro se sirven tal cual, sin pasar
+# por PHP ni por Node. Cuando la web es pública, el despliegue deja aquí una
+# copia de `.next/static` y de `public/`, y esta línea es lo que hace que se
+# aprovechen. Mientras hay contraseña no se copia nada, así que no se cumple
+# nunca y todo sigue yendo a la aplicación (que es lo que se quiere: si los
+# estáticos se sirvieran desde aquí, se saltarían la contraseña).
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Y todo lo demás. [QSA] conserva lo que va detrás de la ?, [L] para aquí.
+RewriteRule ^(.*)$ /proxy.php [QSA,L]
+
+# index.html vendría antes que la reescritura para la raíz del sitio.
+DirectoryIndex disabled
