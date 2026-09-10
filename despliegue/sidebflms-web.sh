@@ -15,18 +15,27 @@
 # Con eso, `vigilar` en el cron cada minuto hace el trabajo de systemd:
 # levanta la web tras un reinicio del servidor y la repone si se cae.
 #
-# ── UNA DIFERENCIA QUE IMPORTA frente a gear-inventario.sh ────────────
-# Aquel para la aplicación con `pkill -f next-server`. Eso valía cuando
-# era la única aplicación Next.js de la máquina, pero ahora hay DOS con
-# el mismo usuario: un `pkill` por nombre mataría también a la otra.
+# ── Se para por PUERTO, no por nombre de proceso ──────────────────────
+# En la máquina hay DOS aplicaciones Next con el mismo usuario, así que
+# un `pkill -f next-server` mataría también a la otra. Aquí se pregunta
+# quién escucha en el 3200 y se mata a ése y a nadie más. Da igual cómo
+# se llame el proceso y da igual cuántas aplicaciones Next haya al lado.
 #
-# Aquí se para por PUERTO: se pregunta quién escucha en el 3200 y se
-# mata a ése y a nadie más. Da igual cómo se llame el proceso y da igual
-# cuántas aplicaciones Next haya al lado.
+# (`gear-inventario.sh` hacía el `pkill` amplio y tumbaba esta web en
+# cada despliegue del inventario. Desde el 10-09-2026 para por puerto
+# también, así que eso ya no pasa.)
 #
-# (`gear-inventario.sh` sigue teniendo el `pkill` amplio, así que un
-# despliegue del inventario tumbará esta web unos segundos. El vigilante
-# la repone sola, pero conviene arreglarlo allí.)
+# ── Dos arranques a la vez sobre el mismo puerto ─────────────────────
+# El vigilante y una operación manual pueden coincidir. Si alguien lanza
+# `reiniciar` —o si lo lanza `publicar.sh`, que es lo habitual—, el
+# vigilante ve la web caída durante la ventana de `parar` y la levanta
+# él, a la vez que la levanta el propio `reiniciar`. Los dos lanzan
+# `npm start`, uno pierde la carrera por el puerto y muere con
+# EADDRINUSE. Se cura solo, pero deja en el registro un error que no es
+# un error y que tapa los que sí lo son.
+#
+# Por eso hay un segundo cerrojo, `.operacion.lock`, que se explica más
+# abajo: mientras alguien para o arranca, nadie más lo hace.
 # ---------------------------------------------------------------------
 set -uo pipefail
 
@@ -62,6 +71,102 @@ rotar_registro() {
     mv -f "$REGISTRO" "$REGISTRO.1"
   fi
 }
+
+# ── Los dos cerrojos ─────────────────────────────────────────────────
+# `.vigilante.lock` es el de siempre: impide que dos pasadas del cron se
+# solapen. Lo coge `vigilar` y lo tiene los 55 segundos que dura.
+#
+# `.operacion.lock` es el nuevo, y protege lo único que de verdad no puede
+# hacerse dos veces a la vez: parar o arrancar la web. Lo cogen
+# `arrancar`, `parar` y `reiniciar`, y también el vigilante cada vez que va a
+# levantarla — pero sólo mientras lo hace, no los 55 segundos.
+#
+# Hacen falta los dos y no vale con uno solo. Si las operaciones manuales
+# esperaran al cerrojo del vigilante, cada `reiniciar` se quedaría parado
+# hasta casi un minuto esperando a que el vigilante terminara su ronda.
+CERROJO_VIGILANTE="$RAIZ/.vigilante.lock"
+CERROJO_OPERACION="$RAIZ/.operacion.lock"
+VIGILANTE_TOMADO=0
+OPERACION_TOMADO=0
+
+# `mkdir` es atómico en cualquier sistema de ficheros: o lo crea uno, o lo
+# crea el otro, nunca los dos. Dentro se deja el PID de quien lo cogió, que
+# es lo que permite reconocer luego un cerrojo abandonado.
+coger() {
+  mkdir "$1" 2>/dev/null || return 1
+  echo $$ > "$1/pid" 2>/dev/null
+  return 0
+}
+
+# Un cerrojo que se queda puesto para siempre es PEOR que no tener cerrojo:
+# deja la web sin poder arrancar y nada lo dice. Los `trap` de abajo lo
+# sueltan casi siempre, pero no si al script lo matan con KILL o si la
+# máquina se apaga de golpe. Por eso: si el PID que hay dentro ya no existe,
+# el cerrojo es basura y se retira.
+#
+# Los 10 segundos de gracia son para no confundir un cerrojo recién creado,
+# al que aún no le ha dado tiempo a escribir su PID, con uno abandonado.
+huerfano() {
+  local pid nacido
+  nacido="$(stat -c%Y "$1" 2>/dev/null)" || return 1
+  [ $(( $(date +%s) - nacido )) -ge 10 ] || return 1
+  pid="$(cat "$1/pid" 2>/dev/null)"
+  [ -n "$pid" ] || return 0
+  kill -0 "$pid" 2>/dev/null && return 1
+  return 0
+}
+
+# Coge el cerrojo de operación esperando como mucho $1 segundos (0 = una sola
+# intentona y a otra cosa). Es REENTRANTE: si este mismo script ya lo tiene
+# —`reiniciar` llamando a `parar` y después a `arrancar`, o `vigilar`
+# llamando a `arrancar`— no lo vuelve a coger ni lo suelta antes de tiempo.
+tomar_operacion() {
+  local espera="${1:-90}" fin retirado=0
+  [ "$OPERACION_TOMADO" = 1 ] && return 0
+  fin=$(( $(date +%s) + espera ))
+  while :; do
+    if coger "$CERROJO_OPERACION"; then OPERACION_TOMADO=1; return 0; fi
+    # Una sola vez por intento, para no acabar en un bucle infinito si el
+    # cerrojo no se deja borrar.
+    if [ "$retirado" = 0 ] && huerfano "$CERROJO_OPERACION"; then
+      retirado=1
+      echo "cerrojo de operación abandonado (su proceso ya no existe): lo retiro"
+      rm -rf "$CERROJO_OPERACION"
+      continue
+    fi
+    [ "$(date +%s)" -lt "$fin" ] || return 1
+    sleep 1
+  done
+}
+
+soltar_operacion() {
+  [ "$OPERACION_TOMADO" = 1 ] || return 0
+  OPERACION_TOMADO=0
+  rm -rf "$CERROJO_OPERACION"
+}
+
+# Lo que hacen las operaciones manuales: o cogen el cerrojo, o no se hace
+# nada. Seguir adelante sin él es exactamente lo que lanzaba dos `npm start`
+# a la vez.
+exigir_operacion() {
+  tomar_operacion 90 && return 0
+  echo "hay otra operación en marcha que lleva más de 90 segundos sin soltar"
+  echo "el cerrojo. Quién es:            cat $CERROJO_OPERACION/pid"
+  echo "Si seguro que no corre nada:     rm -rf $CERROJO_OPERACION"
+  exit 1
+}
+
+# Los cerrojos se sueltan pase lo que pase: al terminar bien, al fallar, y al
+# recibir un Ctrl-C o un TERM, que sin esto se llevarían el script por delante
+# dejando el cerrojo puesto.
+soltar_todo() {
+  soltar_operacion
+  [ "$VIGILANTE_TOMADO" = 1 ] && { VIGILANTE_TOMADO=0; rm -rf "$CERROJO_VIGILANTE"; }
+  return 0
+}
+trap soltar_todo EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 arrancar() {
   if esta_viva; then echo "ya estaba en marcha"; return 0; fi
@@ -107,9 +212,9 @@ parar() {
 }
 
 case "${1:-}" in
-  arrancar|start)     arrancar ;;
-  parar|stop)         parar ;;
-  reiniciar|restart)  parar; arrancar ;;
+  arrancar|start)     exigir_operacion; arrancar ;;
+  parar|stop)         exigir_operacion; parar ;;
+  reiniciar|restart)  exigir_operacion; parar; arrancar ;;
   estado|status)
     if esta_viva; then
       echo "en marcha (escuchando en 127.0.0.1:$PUERTO, pid $(pids_del_puerto | tr '\n' ' '))"
@@ -124,14 +229,19 @@ case "${1:-}" in
     # baja del minuto, y hasta 60 segundos con la web de la empresa caída es
     # mucho cuando el enlace está en la bio de Instagram.
     #
-    # El cerrojo evita que dos pasadas se solapen. `mkdir` es atómico en
-    # cualquier sistema de ficheros: si existe, es que ya hay una vigilando, y
-    # dos a la vez podrían arrancar dos webs peleándose por el puerto.
-    CERROJO="$RAIZ/.vigilante.lock"
-    mkdir "$CERROJO" 2>/dev/null || exit 0
-    # Se borra pase lo que pase, incluso si el script muere: un cerrojo
-    # olvidado deja la web sin vigilancia y nada lo dice.
-    trap 'rmdir "$CERROJO" 2>/dev/null' EXIT
+    # El cerrojo del vigilante evita que dos pasadas del cron se solapen.
+    if ! coger "$CERROJO_VIGILANTE"; then
+      # Ya hay otra pasada mirando... o el cerrojo es de un vigilante que
+      # murió sin soltarlo, y entonces nadie estaría vigilando nunca más.
+      if huerfano "$CERROJO_VIGILANTE"; then
+        echo "[$(date '+%F %T')] cerrojo de vigilante abandonado: lo retiro"
+        rm -rf "$CERROJO_VIGILANTE"
+        coger "$CERROJO_VIGILANTE" || exit 0
+      else
+        exit 0
+      fi
+    fi
+    VIGILANTE_TOMADO=1
 
     # 55 y no 60: la pasada siguiente entra antes de que ésta termine, y así no
     # hay un hueco de unos segundos sin nadie mirando.
@@ -139,7 +249,23 @@ case "${1:-}" in
     while [ "$(date +%s)" -lt "$FIN" ]; do
       # Calla si todo va bien: un vigilante que escribe en cada pasada
       # convierte el registro en ruido y esconde el único mensaje que importa.
-      esta_viva || { echo "[$(date '+%F %T')] no respondía, levantándola"; arrancar; }
+      if ! esta_viva; then
+        # Antes de levantarla, el cerrojo de operación. Si no lo consigue a
+        # la primera es que hay un `parar`, un `arrancar` o un `reiniciar` en
+        # marcha: la web está caída a propósito y vuelve en un momento, así
+        # que el vigilante se retira y calla. Meterse aquí era justo lo que
+        # lanzaba un segundo `npm start` que moría con EADDRINUSE.
+        if tomar_operacion 0; then
+          echo "[$(date '+%F %T')] no respondía, levantándola"
+          arrancar
+          soltar_operacion
+        else
+          # Una línea, y sólo cuando de verdad ha coincidido. Sin esto, un
+          # hueco en el servicio durante un despliegue no lo explicaría nada
+          # y habría que adivinarlo.
+          echo "[$(date '+%F %T')] caída, pero hay una operación en marcha: no me meto"
+        fi
+      fi
       sleep 5
     done ;;
   registro|logs) tail -f "$REGISTRO" ;;

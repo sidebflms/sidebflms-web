@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Cerrojos del script de despliegue: se crean en el servidor, no se versionan
+.vigilante.lock/
+.operacion.lock/
