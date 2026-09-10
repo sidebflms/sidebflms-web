@@ -54,9 +54,21 @@ está, Apache devolvería **500 en toda la web**, no «sin contraseña».)
 Con un espacio delante, para que no quede en el historial del shell:
 
 ```bash
- htpasswd -bc ~/web/sidebflms.com/public_html/.htpasswd sideb 'LA_CONTRASEÑA'
-chmod 640 ~/web/sidebflms.com/public_html/.htpasswd
+htpasswd -c ~/web/sidebflms.com/public_html/.htpasswd sideb
+chmod 644 ~/web/sidebflms.com/public_html/.htpasswd
 ```
+
+Sin `-b`: así la pide por teclado y no queda en el historial del shell.
+
+**644 y no 640**, aunque chirríe: Apache corre como `www-data` y tiene que
+poder leerla. Lo correcto sería `chown :www-data` con 640, pero `bote` no está
+en ese grupo y meterlo ahí es cosa de root. Con 644 cualquier otro usuario de
+la máquina puede leer el hash — vale para una puerta temporal, no le pongas
+una contraseña que uses para otra cosa. Desde internet no se llega: nginx
+corta todo lo que empiece por punto y Apache deniega `.ht*` por defecto.
+
+Si se queda en 640, el síntoma es **500 en toda la web**, no «sin
+contraseña».
 
 ### Quitarla, el día de publicar
 

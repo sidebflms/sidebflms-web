@@ -62,9 +62,19 @@ fi
 
 # Apache y nginx leen esto como www-data; sin permiso de lectura, 403.
 chmod -R a+rX "$PUBLICO"
-# El fichero de contraseñas es la excepción: lo lee Apache (grupo www-data) y
-# nadie más. Que no lo lea todo el mundo en la máquina.
-[ "$CON_CONTRASENA" = "1" ] && chmod 640 "$PUBLICO/.htpasswd"
+# El fichero de contraseñas tiene que poder leerlo Apache, que en esta máquina
+# corre como `www-data`.
+#
+# Lo suyo sería `chown :www-data` y 640, para que no lo lea nadie más. No se
+# puede: `bote` no está en el grupo `www-data` y meterlo ahí es cosa de root.
+# Así que 644, y conviene saber lo que eso concede: cualquier otro usuario de
+# la máquina puede leer el hash. Es aceptable porque esto es una puerta
+# temporal mientras la web no es pública, no una credencial de valor — pero no
+# se le ponga aquí una contraseña que se use para otra cosa.
+#
+# Desde internet no se llega: nginx corta todo lo que empieza por punto
+# (`location ~ /\.`) y Apache deniega `.ht*` por defecto.
+[ "$CON_CONTRASENA" = "1" ] && chmod 644 "$PUBLICO/.htpasswd"
 
 echo "==> Reiniciando la aplicación"
 "$RAIZ/despliegue/sidebflms-web.sh" reiniciar \
