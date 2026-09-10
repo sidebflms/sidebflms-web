@@ -187,7 +187,7 @@ export const en: Dictionary = {
     intro:
       "The more you tell us about capacity and stages, the tighter the quote.",
     directLabel: "Or straight to us",
-    email: "hola@sidebflms.com",
+    email: "contact@sidebflms.com",
     instagram: "Instagram",
     vimeo: "Vimeo",
     form: {
@@ -223,7 +223,7 @@ export const en: Dictionary = {
       successTitle: "Got it",
       successBody: "We'll answer within 24 working hours. If it's urgent, write to us directly.",
       errorTitle: "That didn't send",
-      errorBody: "Try again, or write to hola@sidebflms.com.",
+      errorBody: "Try again, or write to contact@sidebflms.com.",
     },
   },
 
@@ -245,7 +245,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Site owner",
-        text: "SIDEBFLMS · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Purpose",
@@ -267,7 +267,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Controller",
-        text: "SIDEBFLMS · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Purpose",
@@ -287,7 +287,7 @@ export const en: Dictionary = {
       },
       {
         heading: "Your rights",
-        text: "You can access, correct and erase your data, and object to or restrict its processing, by writing to hola@sidebflms.com. You may also lodge a complaint with the Spanish Data Protection Agency.",
+        text: "You can access, correct and erase your data, and object to or restrict its processing, by writing to contact@sidebflms.com. You may also lodge a complaint with the Spanish Data Protection Agency.",
       },
       {
         heading: "Cookies",

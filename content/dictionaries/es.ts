@@ -203,7 +203,7 @@ export const es = {
     intro:
       "Cuantos más datos nos des de aforo y escenarios, más ajustado sale el presupuesto.",
     directLabel: "O directamente",
-    email: "hola@sidebflms.com",
+    email: "contact@sidebflms.com",
     instagram: "Instagram",
     vimeo: "Vimeo",
     form: {
@@ -237,14 +237,13 @@ export const es = {
       errorEmail: "Revisa el email: falta algo.",
       errorConsent: "Necesitamos tu consentimiento para poder responderte.",
       successTitle: "Recibido",
-      // PENDIENTE: éste es el único sitio donde queda el compromiso de 24 h
-      // laborables (estaba también en el `intro` de arriba, duplicado, y se
-      // quitó de allí). Sigue sin confirmarse que sea real. Si no lo es, hay
-      // que quitar la frase entera — no rebajarla a "lo antes posible", que es
-      // peor que no prometer nada.
+      // CONFIRMADO (Mario, 2026-09-10): el compromiso de 24 h laborables es
+      // real. Era el único punto pendiente del TODO original. Estaba además
+      // duplicado en el `intro` de arriba y se quitó de allí: se promete una
+      // vez, en el acuse de recibo, que es donde el visitante lo necesita.
       successBody: "Te respondemos en 24 horas laborables. Si es urgente, escríbenos directamente.",
       errorTitle: "No se ha podido enviar",
-      errorBody: "Prueba otra vez o escríbenos a hola@sidebflms.com.",
+      errorBody: "Prueba otra vez o escríbenos a contact@sidebflms.com.",
     },
   },
 
@@ -276,7 +275,7 @@ export const es = {
     body: [
       {
         heading: "Titular del sitio",
-        text: "SIDEBFLMS · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Objeto",
@@ -301,7 +300,7 @@ export const es = {
     body: [
       {
         heading: "Responsable",
-        text: "SIDEBFLMS · hola@sidebflms.com",
+        text: "SIDEBFLMS · contact@sidebflms.com",
       },
       {
         heading: "Finalidad",
@@ -321,7 +320,7 @@ export const es = {
       },
       {
         heading: "Tus derechos",
-        text: "Puedes acceder, rectificar y suprimir tus datos, así como oponerte y limitar su tratamiento, escribiendo a hola@sidebflms.com. También puedes reclamar ante la Agencia Española de Protección de Datos.",
+        text: "Puedes acceder, rectificar y suprimir tus datos, así como oponerte y limitar su tratamiento, escribiendo a contact@sidebflms.com. También puedes reclamar ante la Agencia Española de Protección de Datos.",
       },
       {
         heading: "Cookies",

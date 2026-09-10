@@ -2,21 +2,32 @@ import { Reveal } from "@/components/motion/reveal";
 import type { Dictionary } from "@/lib/dictionaries";
 
 /**
- * TODO (cliente): sustituir por los logos reales de festivales/clubes, en SVG
- * monocromo (`currentColor`) para que hereden el tratamiento en `bone`/60%.
- * Confirmar por escrito el permiso de uso de marca de cada uno antes de
- * publicar — el brief lo marca como condición, no como formalidad.
+ * LOS NOMBRES DE AQUÍ ABAJO SON INVENTADOS. NO SON CLIENTES.
  *
- * De momento se pintan como wordmarks de texto en mono: comunican "aquí va una
- * franja de logos" sin inventar una marca que no existe.
+ * No hay ni uno solo que corresponda a un festival, un club o una promotora
+ * que exista. Están puestos para poder juzgar cómo queda la franja —los
+ * anteriores ("Festival A", "Club B") eran tan sosos que no se veía si el
+ * diseño funcionaba— y para nada más.
+ *
+ * PUBLICARLOS COMO CLIENTES SERÍA MENTIR. Da igual que suenen creíbles: eso
+ * es precisamente lo que los hace peligrosos, porque un visitante no puede
+ * distinguirlos de los de verdad. Por eso el rótulo de abajo
+ * (`dict.brands.pending`) tiene que seguir visible mientras estén aquí: es lo
+ * único que le dice al visitante que esto todavía no es una lista real.
+ *
+ * QUÉ HACER: sustituirlos por los logos reales en SVG monocromo
+ * (`currentColor`, para que hereden el tratamiento en `bone`/60%), y sólo
+ * después de tener por escrito el permiso de uso de marca de cada cliente.
+ * El brief lo marca como condición, no como formalidad. Al ponerlos, quitar
+ * también el rótulo de "pendiente".
  */
-const PLACEHOLDER_BRANDS = [
-  "Festival A",
-  "Club B",
-  "Festival C",
-  "Promotora D",
-  "Club E",
-  "Festival F",
+const NOMBRES_INVENTADOS = [
+  "NOCTURNA",
+  "SALA VACÍA",
+  "TRAMUNTANA",
+  "COSTA NORTE",
+  "LEVANTE",
+  "WAREHOUSE 14",
 ];
 
 export function BrandStrip({ dict }: { dict: Dictionary }) {
@@ -29,7 +40,7 @@ export function BrandStrip({ dict }: { dict: Dictionary }) {
 
         <Reveal stagger>
           <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
-            {PLACEHOLDER_BRANDS.map((name) => (
+            {NOMBRES_INVENTADOS.map((name) => (
               <li
                 key={name}
                 className="font-mono text-sm font-medium tracking-[0.04em] text-bone/50"

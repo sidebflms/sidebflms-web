@@ -27,12 +27,14 @@ const HOST = process.env.SMTP_HOST ?? "127.0.0.1";
 const PUERTO = Number(process.env.SMTP_PORT ?? 25);
 
 /**
- * A dónde llega la consulta. `contact@sidebflms.com` existe como buzón.
+ * A dónde llega la consulta.
  *
- * OJO: la web anuncia `hola@sidebflms.com` en el pie y en los textos legales,
- * y ESE BUZÓN NO EXISTE — quien escriba ahí a mano recibe un rebote. Hay que
- * crearlo en Hestia o cambiar los textos; hasta entonces, el formulario
- * entrega en `contact@` a propósito, que sí lo lee alguien.
+ * `contact@sidebflms.com` es también la dirección que la web anuncia en el
+ * pie, en la página de contacto y en los textos legales, y existe como buzón
+ * en la propia máquina. Hasta el 2026-09-10 la web anunciaba
+ * `hola@sidebflms.com`, que NO existía: quien escribía ahí a mano recibía un
+ * rebote. Si algún día se cambia la dirección visible, hay que cambiarla en
+ * los dos sitios o vuelve a pasar lo mismo.
  */
 const DESTINO = process.env.CORREO_DESTINO ?? "contact@sidebflms.com";
 

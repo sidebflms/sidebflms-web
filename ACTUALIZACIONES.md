@@ -5,6 +5,52 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (3) — La dirección de correo, los logos y el compromiso de 24 h
+
+### `hola@` pasa a ser `contact@`
+
+La web anunciaba `hola@sidebflms.com` en el pie, en la página de contacto y en
+los dos textos legales. **Ese buzón no existe**: todo el que escribiera ahí a
+mano recibía un rebote, y nadie se enteraba de que había escrito.
+
+Cambiado a `contact@sidebflms.com`, que sí existe como buzón en la máquina —
+10 sitios entre `es.ts` y `en.ts`. Ahora coincide con el destinatario al que
+ya entregaba el formulario, así que hay una sola dirección en todo el sistema
+en vez de dos.
+
+Si algún día se cambia la dirección visible, hay que cambiarla **también** en
+`lib/correo.ts` (`CORREO_DESTINO`), o vuelve a haber dos y una de ellas
+vuelve a ser mentira.
+
+### Los nombres de la franja de clientes
+
+Eran «Festival A», «Club B», «Festival C»… Tan sosos que no dejaban juzgar si
+el diseño de la franja funcionaba. Sustituidos por nombres con la forma y la
+longitud de wordmarks reales.
+
+**Y son inventados. Ni uno corresponde a un cliente ni a un local que exista.**
+Están puestos para ver el diseño. Publicarlos como clientes sería mentir, y el
+que suenen creíbles es justo lo que los hace peligrosos: un visitante no puede
+distinguirlos de los de verdad.
+
+Por eso el rótulo «Logos pendientes de permiso de uso» **sigue visible debajo**
+y no se quita hasta que estén los logos reales. Sigue haciendo falta el
+permiso de uso de marca por escrito de cada cliente antes de publicar ninguno
+— el brief lo marca como condición, no como formalidad.
+
+### El compromiso de 24 h laborables: confirmado
+
+Era el TODO que quedaba desde el principio. Mario confirma que es real, así
+que la frase se queda. Sigue apareciendo una sola vez, en el acuse de recibo.
+
+### El aviso legal se queda como está
+
+Sin CIF ni domicilio, por decisión expresa. Queda incumpliendo el art. 10 de
+la LSSI-CE; los sitios donde habría que ponerlos siguen señalados en el código
+por si algún día se quiere arreglar.
+
+---
+
 ## 2026-09-10 (2) — Los textos, al castellano de España
 
 Todos los cambios son de copy y de textos legales; no se ha tocado nada del
