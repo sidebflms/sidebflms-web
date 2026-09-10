@@ -17,7 +17,7 @@ export const en: Dictionary = {
     home: {
       title: "SIDEBFLMS — Audiovisual production for electronic music",
       description:
-        "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Madrid, Barcelona, Ibiza, wherever the show is.",
+        "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Based in Spain.",
     },
     portfolio: {
       title: "Festival and club portfolio — SIDEBFLMS",
@@ -35,9 +35,9 @@ export const en: Dictionary = {
         "Tell us about your event: capacity, stages and dates. We come back with a closed quote.",
     },
     about: {
-      title: "About us · Madrid, Barcelona and Ibiza — SIDEBFLMS",
+      title: "About us · Audiovisual production in Spain — SIDEBFLMS",
       description:
-        "Audiovisual production for electronic music, based in Spain. How we work and where we operate: Madrid, Barcelona and Ibiza.",
+        "Audiovisual production for electronic music, based in Spain. Who we are, how we work and where we operate.",
     },
     faq: {
       title: "Frequently asked questions about event coverage — SIDEBFLMS",
@@ -66,7 +66,7 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, live multicam, aerial and stills. Madrid, Barcelona, Ibiza, wherever the show is.",
+    sub: "Aftermovies, live multicam, aerial and stills. Based in Spain.",
     ctaReel: "Watch the reel",
     ctaContact: "Tell us about your event",
     scrollHint: "Scroll to see the work",
@@ -311,7 +311,7 @@ export const en: Dictionary = {
       "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last one works the next one, and that shows at four in the morning.",
     whereLabel: "Where we operate",
     whereBody:
-      "Based in Spain. Most of the work lands in Madrid, Barcelona and Ibiza, which is where the circuit is — but footage doesn't care about provinces: if the show is somewhere else, we go.",
+      "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
     howLabel: "How we work",
     teamLabel: "The crew",
     teamNote: "Roles and photos pending",

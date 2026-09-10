@@ -19,7 +19,7 @@ export const es = {
     home: {
       title: "SIDEBFLMS — Productora audiovisual de música electrónica",
       description:
-        "Productora audiovisual de música electrónica: aftermovies, multicámara en directo, drone y fotografía. Madrid, Barcelona, Ibiza y donde haga falta.",
+        "Productora audiovisual de música electrónica: aftermovies, multicámara en directo, drone y fotografía. Con base en España.",
     },
     portfolio: {
       title: "Portfolio de festivales y clubes — SIDEBFLMS",
@@ -37,9 +37,9 @@ export const es = {
         "Cuéntanos tu evento: aforo, escenarios y fechas. Respondemos con un presupuesto cerrado.",
     },
     about: {
-      title: "Quiénes somos · Madrid, Barcelona e Ibiza — SIDEBFLMS",
+      title: "Quiénes somos · Productora audiovisual en España — SIDEBFLMS",
       description:
-        "Productora audiovisual de música electrónica con base en España. Cómo trabajamos y dónde operamos: Madrid, Barcelona e Ibiza.",
+        "Productora audiovisual de música electrónica con base en España. Quiénes somos, cómo trabajamos y dónde operamos.",
     },
     faq: {
       title: "Preguntas frecuentes sobre cobertura de eventos — SIDEBFLMS",
@@ -68,7 +68,7 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, multicámara en directo, drone y fotografía. Madrid, Barcelona, Ibiza y donde haga falta.",
+    sub: "Aftermovies, multicámara en directo, drone y fotografía. Con base en España.",
     ctaReel: "Ver el reel",
     ctaContact: "Hablemos de tu evento",
     scrollHint: "Desplázate para ver el trabajo",
@@ -260,15 +260,18 @@ export const es = {
     social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
-    // DÓNDE ESTAMOS: el pie dice el país y el hero las plazas.
+    // DÓNDE ESTAMOS: en todo el sitio, «con base en España» y nada más.
     //
-    // Es deliberado que sean dos cosas distintas. El pie responde a «¿dónde
-    // está esta empresa?» y la respuesta es España. El hero responde a «¿venís
-    // a mi evento?» y ahí lo útil son las plazas: Madrid, Barcelona e Ibiza.
-    // Meter tres ciudades en el pie sugeriría tres oficinas.
+    // DECISIÓN (Mario, 2026-09-10): las ciudades concretas —Madrid, Barcelona
+    // e Ibiza— van ÚNICAMENTE en la respuesta del FAQ «¿Dónde trabajáis?».
+    // No en la primera pantalla, no en el pie, no en las descripciones para
+    // buscadores.
     //
-    // Si cambia, son SEIS sitios y no uno: esta línea, `hero.sub` y
-    // `meta.home.description`, en los dos idiomas.
+    // El razonamiento: una lista de ciudades en la portada se lee como un
+    // límite («entonces no vais a mi festival de Huesca»), mientras que en el
+    // FAQ se lee como una respuesta a una pregunta que ya te hacías.
+    //
+    // Si alguien las vuelve a repartir por el sitio, que sea a propósito.
     builtNote: "Con base en España",
   },
 
@@ -354,7 +357,7 @@ export const es = {
       "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en la anterior es el que va a la siguiente, y eso se nota a las cuatro de la mañana.",
     whereLabel: "Dónde operamos",
     whereBody:
-      "Con base en España. La mayor parte del trabajo cae en Madrid, Barcelona e Ibiza, que es donde está el circuito, pero el material no entiende de provincias: si el evento está en otro sitio, se va.",
+      "Con base en España. El circuito no entiende de provincias: si el evento está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",
     howLabel: "Cómo trabajamos",
     teamLabel: "El equipo",
     // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.

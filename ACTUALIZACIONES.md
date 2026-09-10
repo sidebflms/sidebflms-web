@@ -5,6 +5,24 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (19) — Las ciudades, sólo en el FAQ
+
+Decisión de Mario. Madrid, Barcelona e Ibiza aparecían en seis sitios por
+idioma; ahora aparecen **en uno**: la respuesta del FAQ a «¿Dónde trabajáis?».
+
+Fuera de la primera pantalla, del pie, de las descripciones para buscadores y
+del título de Nosotros. En todos esos sitios queda **«Con base en España»**.
+
+El razonamiento, para que no se deshaga sin querer: una lista de ciudades en la
+portada se lee como un **límite** —«entonces no vais a mi festival de Huesca»—
+mientras que la misma lista en el FAQ se lee como la respuesta a una pregunta
+que el visitante ya se estaba haciendo. El mismo dato, leído al revés según
+dónde esté.
+
+Queda anotado en `es.ts`, junto a `builtNote`.
+
+---
+
 ## 2026-09-10 (18) — Dos páginas nuevas, sociales al día y títulos para buscar
 
 Sale de comparar la web con la de un competidor directo (ventour.co), que
