@@ -80,20 +80,15 @@ export const en: Dictionary = {
   showpiece: {
     label: "Featured piece",
     cues: [
-      { tag: "Load-in", value: "16:00", line: "Empty room shot before doors" },
+      { tag: "Take-off", value: "00:00", line: "Above the crowd, flame jets firing" },
+      { tag: "Bank", value: "00:03", line: "Pass over the stage" },
       {
-        tag: "Golden hour",
-        value: "20:30",
-        line: "Natural light through the window takes priority",
+        tag: "Portal",
+        value: "00:07",
+        // Ver la nota equivalente en es.ts.
+        line: "Through the ring without cutting",
       },
-      {
-        tag: "Aerial",
-        value: "—",
-        // Ver la nota equivalente en es.ts: describe el plano y no afirma
-        // nada sobre permisos de vuelo.
-        line: "A drone above the crowd",
-      },
-      { tag: "Close", value: "04:30–06:00", line: "Aftermovie delivered in 48 hours" },
+      { tag: "Booth", value: "00:10", line: "The artist, framed from inside the circle" },
     ],
   },
 

@@ -116,6 +116,104 @@ lo que de verdad estaba roto: la palabra partida por la mitad.
 
 ---
 
+## 2026-09-10 (8) — Material real: se acabaron los proyectos inventados
+
+Entran 38 MB de vídeo y fotografía sacados de los 82 GB del archivo de la
+productora, y salen los ocho proyectos que estaban inventados.
+
+### Cómo se hizo, porque importa para repetirlo
+
+**El disco original NO se tocó.** `/Volumes/@SIDEB404L/` es material de
+producción: todo el trabajo se hizo leyendo y escribiendo en otro sitio.
+Comprobado al terminar: 84 ficheros, 82 GB, **cero modificados**.
+
+Tres agentes en paralelo, cada uno midiendo lo que entregaba en vez de
+estimarlo. Los intermedios y las hojas de contactos quedaron fuera del
+repositorio.
+
+### El reel de la portada
+
+`reel-1920.mp4` (5,17 MiB), `reel-720.mp4` (2,27 MiB, recorte **vertical**
+reencodeado, no el de escritorio escalado) y `reel-poster.jpg` (169 KiB).
+Ninguno lleva pista de audio: el hero arranca silenciado y el audio son megas
+tirados.
+
+Sale del aftermovie de Fabrik del 14 de marzo, del segundo 11,92 al 33,36. El
+tramo no se eligió a ojo: se midió la luminancia media de los cinco
+aftermovies y se buscó la ventana más oscura, porque encima va un titular
+blanco. Y **los dos extremos son cortes de plano reales**, así que el bucle se
+lee como un corte de montaje y no como un salto.
+
+El `poster` ya está conectado en `hero.tsx`. Es el LCP de la página: sin él el
+LCP pasa a ser el vídeo. Y es exactamente el primer frame del vídeo, así que
+al arrancar la reproducción no hay salto.
+
+### Nueve proyectos reales
+
+Siete de vídeo y dos de fotografía, con 16 fotos en tres tamaños cada una.
+
+**Lee la cabecera de `content/projects.ts` antes de tocarlo.** No todos los
+campos tienen el mismo grado de certeza, y mezclarlos es cómo se acaba
+publicando una credencial falsa:
+
+- `hardFact` y `media` salen de **medir** los ficheros. Comprobables con
+  `ffprobe`.
+- Los nombres y las fechas salen del nombre del fichero original o de rótulos
+  legibles dentro del metraje. Cada ficha lleva anotado de dónde sale el suyo.
+- `brief` describe **sólo lo que se ve en pantalla**.
+- `delivered` se titula «Qué entregamos» y **está sin confirmar**: es una
+  afirmación sobre un encargo real y sólo la puede escribir quien hizo el
+  trabajo. Lo que hay describe la pieza, no la entrega.
+
+**Tres fichas no llevan fecha a propósito.** Holika y Monegros porque el
+fichero no la lleva; Prospa porque el suyo se llama `31132026` — el 31 del mes
+13. Ese mes no existe, así que el nombre está mal puesto y no sirve de fuente.
+«Por confirmar» es mejor que un mes inventado en la ficha de un cliente.
+
+### `PlaceholderMedia` ya pinta el trabajo
+
+Antes pintaba **siempre** el bloque oscuro de «material pendiente», incluso si
+había fichero. Ahora enseña el material real cuando existe.
+
+Lo que decide **no es una prop**: es `project.media.poster`. Si hay fichero se
+enseña el trabajo, y si no lo hay se enseña el bloque con su marca. No existe
+el interruptor para pedir «lo real» en una pieza sin material ni para quitarle
+la marca a una que la necesita — que era exactamente el razonamiento con el
+que se escribió el componente original.
+
+### La franja de clientes, con nombres reales
+
+FABRIK, MONEGROS, HOLIKA, FITZ, GORDO y PROSPA, todos sacados del propio
+archivo. Se acabaron los inventados.
+
+**El rótulo de «pendiente de permiso de uso» se queda**, y no por inercia: lo
+que falta ya no es el dato, es el permiso. Publicar el nombre de una marca en
+una web comercial es usar su marca, aunque sea en texto y no en logotipo.
+
+### Un drone en la regleta
+
+La cabecera de `reglet.tsx` ya definía la línea como «timeline de edición y
+traza de vuelo de drone». El playhead era un círculo; ahora es un
+cuadricóptero de 16 px que recorre la línea con el scroll y **cabecea tres
+píxeles arriba y abajo**, porque un drone parado en el aire no está parado.
+
+Dos grupos anidados y no uno: el exterior lleva la posición sobre la línea
+(que cambia en cada fotograma de scroll) y el interior el cabeceo. Si
+compartieran `transform`, el scroll pisaría la animación.
+
+Hereda `--color-rust-500`, así que si cambia la paleta el drone cambia con
+ella.
+
+Con «reducir movimiento» activado **no cabecea**, pero se sigue viendo y sigue
+recorriendo la línea: eso es navegación, no decoración.
+
+### Peso
+
+`public/media/` son 38 MB en el repositorio. Es asumible, pero si el portfolio
+crece hay que plantearse sacarlo de git.
+
+---
+
 ## 2026-09-10 (7) — Clave de despliegue propia para la web
 
 El despliegue automático iba a usar `~/.ssh/nastos_gear_inventario`, que es la

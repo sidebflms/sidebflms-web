@@ -30,7 +30,10 @@ import { timecode } from "@/lib/utils";
 const SOURCES = {
   desktop: "/media/reel-1920.mp4",
   mobile: "/media/reel-720.mp4",
-  poster: null as string | null, // TODO (cliente): "/media/reel-poster.jpg"
+  // El poster es el LCP de la página: sin él, el LCP pasa a ser el vídeo y se
+  // dispara. Es exactamente el primer frame de `reel-1920.mp4`, así que al
+  // arrancar la reproducción no hay salto visual.
+  poster: "/media/reel-poster.jpg" as string | null,
 };
 
 export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {

@@ -86,26 +86,17 @@ export const es = {
     // Los timecodes reales se calibran contra el montaje: ver TIMECODES en
     // components/sections/showpiece.tsx
     cues: [
-      { tag: "Llegada", value: "16:00", line: "Rodaje de sala vacía antes de puertas" },
+      { tag: "Despegue", value: "00:00", line: "Sobre el público, con los lanzallamas encendidos" },
+      { tag: "Giro", value: "00:03", line: "Pasada por encima del escenario" },
       {
-        tag: "Golden hour",
-        value: "20:30",
-        line: "Prioridad de luz natural sobre el ventanal",
+        tag: "Portal",
+        value: "00:07",
+        // Describe el plano y NADA MÁS. Se comprobó extrayendo los frames de
+        // `public/media/holika-portal.mp4` en estos segundos: el vuelo entra
+        // por el aro de verdad, no es una transición de montaje.
+        line: "Entra por el aro sin cortar",
       },
-      {
-        tag: "Aéreo",
-        value: "—",
-        // Describe el plano y NADA MÁS. La versión anterior era un hueco
-        // ("Redacción pendiente de verificación") porque el TODO original
-        // prohibía publicar afirmaciones sobre permisos de vuelo sin el
-        // papeleo delante. Esta redacción no afirma nada sobre permisos, así
-        // que no necesita respaldo documental.
-        //
-        // OJO: eso NO vale para `services.stages[02]`, que sigue diciendo
-        // "piloto certificado" y sigue pendiente de contrastar.
-        line: "Un drone por encima del aforo",
-      },
-      { tag: "Cierre", value: "04:30–06:00", line: "Aftermovie entregado en 48 horas" },
+      { tag: "Cabina", value: "00:10", line: "El artista, encuadrado desde dentro del círculo" },
     ],
   },
 

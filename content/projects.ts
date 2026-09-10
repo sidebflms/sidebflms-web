@@ -2,27 +2,45 @@ import type { Locale } from "@/lib/routes";
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- *  TODOS ESTOS PROYECTOS SON PLACEHOLDER. NINGUNO ES UN TRABAJO REAL.
+ *  MATERIAL REAL. Y NO TODOS LOS DATOS ESTÁN CONFIRMADOS.
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * Los nombres, venues, fechas y datos son inventados y deliberadamente
- * genéricos: no corresponden a ningún festival, club ni artista existente, para
- * que no puedan confundirse con credenciales reales si algo se publica sin
- * terminar de sustituir.
+ * El 2026-09-10 se sustituyeron los ocho proyectos inventados por nueve
+ * reales, montados con metraje y fotografía del disco de la productora. Lee
+ * esto entero antes de tocar nada, porque **no todos los campos tienen el
+ * mismo grado de certeza** y mezclarlos es cómo se acaba publicando una
+ * credencial falsa.
  *
- * CÓMO SUSTITUIRLOS (cliente):
- *   1. Cambiar `title`, `venue`, `date`, `hardFact`, `brief` y `delivered` por
- *      los datos reales, en los dos idiomas.
- *   2. Colocar el vídeo en `public/media/<slug>.mp4` y el poster en
- *      `public/media/<slug>.jpg`, y rellenar `media`.
- *   3. Poner `placeholder: false`. Mientras siga en `true`, la ficha se pinta
- *      con un bloque oscuro monocromo y la marca visible de material pendiente:
- *      es imposible que una pieza sin material real pase por trabajo entregado.
+ * ── QUÉ ESTÁ VERIFICADO ──────────────────────────────────────────────────
+ * `slug`, `categories`, `media` y `hardFact` salen de medir los ficheros:
+ * resolución, duración, número de cortes de plano, formato del máster. Son
+ * comprobables ejecutando `ffprobe` sobre el material.
  *
- * REGLA DE `hardFact`: cada proyecto lleva UN dato concreto que nadie podría
- * inventar (franja horaria, nº de cámaras, aforo, ventana de entrega). Aunque
- * ahora sea placeholder, la FORMA del dato tiene que ser la correcta para que
- * al sustituirlo no haya que rediseñar la ficha.
+ * Los nombres (`title`, `venue`) y las fechas salen del nombre del fichero
+ * original o de rótulos legibles dentro del propio metraje — cada uno está
+ * anotado en su ficha con de dónde sale.
+ *
+ * `brief` describe ÚNICAMENTE lo que se ve en pantalla. Ni una palabra sobre
+ * lo que pidió el cliente, porque eso no está en el metraje.
+ *
+ * ── QUÉ NO ESTÁ CONFIRMADO, Y HAY QUE CONFIRMAR ─────────────────────────
+ * `delivered` se titula «Qué entregamos» en la web: es una afirmación sobre
+ * un encargo real y **sólo la puede escribir quien hizo el trabajo**. Lo que
+ * hay ahora son afirmaciones sobre la PIEZA, verificables mirándola, no sobre
+ * la entrega. Sustitúyelas por lo que se entregó de verdad.
+ *
+ * Tres fichas no tienen fecha porque **no se puede saber**:
+ *   - `holika-portal` y `monegros-hora-dorada`: el nombre del fichero no
+ *     lleva fecha.
+ *   - `prospa-multicam`: el fichero se llama `31132026`, que sería el 31 del
+ *     mes 13. **Ese mes no existe**, así que el nombre está mal puesto y no
+ *     sirve como fuente.
+ * En esas tres, `date` dice «Por confirmar» a propósito. Es preferible a un
+ * mes inventado en la ficha de un cliente.
+ *
+ * ── REGLA DE `hardFact`, que se mantiene ─────────────────────────────────
+ * Un dato concreto que nadie podría inventar. Aquí todos salen de medir el
+ * material, así que cumplen la regla y además se pueden comprobar.
  */
 
 export const CATEGORIES = ["aftermovie", "multicam", "drone", "photo"] as const;
@@ -52,230 +70,254 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
-    slug: "nocturna-cala-blava",
-    placeholder: true,
-    categories: ["aftermovie", "multicam", "drone"],
+    // FUENTE DEL NOMBRE: `DRONE/@sidebflms_HOLIKA.mov`.
+    // FECHA: el fichero no lleva ninguna. Sin confirmar.
+    slug: "holika-portal",
+    placeholder: false,
+    categories: ["drone"],
     tone: 0,
     featured: true,
     showpiece: true,
-    year: "2025",
-    venue: "Cala Blava, Mallorca",
-    media: { video: null, poster: null },
-    title: { es: "Nocturna — Cala Blava", en: "Nocturna — Cala Blava" },
-    date: { es: "Julio 2025", en: "July 2025" },
+    year: "—",
+    venue: "Holika",
+    media: { video: "/media/holika-portal.mp4", poster: "/media/holika-portal.jpg" },
+    title: { es: "Holika — el portal", en: "Holika — the portal" },
+    date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {
-      es: "16:00 → 06:00 de cobertura continua",
-      en: "16:00 → 06:00 of continuous coverage",
+      // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
+      es: "Doce segundos, un solo vuelo, ni un corte",
+      en: "Twelve seconds, one flight, not a single cut",
     },
     brief: {
-      es: "Catorce horas seguidas en un recinto abierto al mar, con el cambio de luz como principal condicionante. El encargo era un aftermovie que se sostuviera sin locución y que sirviera también para vender la edición siguiente.",
-      en: "Fourteen straight hours in an open-air venue facing the sea, with the changing light as the main constraint. The brief was an aftermovie that stood up without voiceover and doubled as the sales piece for next year's edition.",
+      es: "Un FPV que arranca por encima del público con los lanzallamas encendidos, gira sobre el escenario y entra por el aro del portal hasta encuadrar la cabina desde dentro. Es un plano único: lo que se ve es el vuelo entero, sin montaje.",
+      en: "An FPV run that starts above the crowd with the flame jets firing, banks over the stage and flies through the portal ring to frame the booth from inside. It is a single take: what you see is the whole flight, no editing.",
     },
     delivered: {
-      es: [
-        "Aftermovie de 2:40 entregado a las 48 h",
-        "Tres cortes verticales para Reels y TikTok",
-        "Plano aéreo de aforo para el dossier de patrocinio",
-        "Selección de 60 fotos etalonadas",
-      ],
-      en: [
-        "2:40 aftermovie delivered within 48 h",
-        "Three vertical cuts for Reels and TikTok",
-        "Aerial crowd shot for the sponsorship deck",
-        "60 graded stills",
-      ],
+      // PENDIENTE (producción): esto describe la PIEZA, no la entrega.
+      es: ["Plano secuencia aéreo, sin cortes", "Máster de 39 s del que sale este corte"],
+      en: ["Single-take aerial, no cuts", "39 s master this cut comes from"],
     },
   },
   {
-    slug: "sala-vacia-palma",
-    placeholder: true,
-    categories: ["multicam", "photo"],
+    // FUENTE: `AFTERMOVIES/@sidebflms_17012026_FATIMA_HAJJI_FABRIK_Aftermovie.mp4`
+    // La fecha (17/01/2026) y el club salen del propio nombre del fichero.
+    slug: "fatima-hajji-fabrik",
+    placeholder: false,
+    categories: ["aftermovie"],
     tone: 1,
     featured: true,
-    year: "2025",
-    venue: "Palma, Mallorca",
-    media: { video: null, poster: null },
-    title: { es: "Sala vacía — Palma", en: "Empty room — Palma" },
-    date: { es: "Marzo 2025", en: "March 2025" },
+    year: "2026",
+    venue: "Fabrik",
+    media: { video: "/media/fatima-hajji-fabrik.mp4", poster: "/media/fatima-hajji-fabrik.jpg" },
+    title: { es: "Fátima Hajji — Fabrik", en: "Fátima Hajji — Fabrik" },
+    date: { es: "17 de enero de 2026", en: "17 January 2026" },
     hardFact: {
-      es: "4 cámaras · 1 sala · 2 sets seguidos",
-      en: "4 cameras · 1 room · 2 back-to-back sets",
+      // VERIFICADO con ffprobe sobre el máster del disco.
+      es: "Máster en 3840×2880 a 25p — encuadre abierto para recortar",
+      en: "3840×2880 master at 25p — open matte for reframing",
     },
     brief: {
-      es: "Un club pequeño donde la única opción era colocar las cámaras antes de que entrara nadie y no volver a tocarlas. Se rodó el montaje de sala y el llenado como parte de la pieza, no como extra.",
-      en: "A small club where the only option was to place the cameras before anyone came in and never touch them again. The room build and the fill-up were shot as part of the piece, not as an extra.",
+      es: "Aftermovie de una noche de techno en Fabrik. El máster se rodó en encuadre abierto 4:3, que es lo que permite sacar el horizontal de la web y el vertical de redes del mismo material sin volver a montar.",
+      en: "Aftermovie from a techno night at Fabrik. The master was shot open-matte 4:3, which is what lets the horizontal web cut and the vertical social cut come out of the same footage without re-editing.",
     },
     delivered: {
-      es: [
-        "Set completo a 4 cámaras, corte de 62 minutos",
-        "Vídeo corto de montaje de sala",
-        "40 fotos de directo entregadas la misma noche",
-      ],
-      en: [
-        "Full 4-camera set, 62-minute cut",
-        "Short film of the room build",
-        "40 live stills delivered the same night",
-      ],
+      // PENDIENTE (producción).
+      es: ["Aftermovie", "Máster 4K abierto, apto para corte vertical"],
+      en: ["Aftermovie", "Open-matte 4K master, ready for a vertical cut"],
     },
   },
   {
-    slug: "amanecer-tramuntana",
-    placeholder: true,
-    categories: ["drone", "photo"],
-    tone: 2,
-    featured: true,
-    year: "2025",
-    venue: "Serra de Tramuntana, Mallorca",
-    media: { video: null, poster: null },
-    title: { es: "Amanecer en la Tramuntana", en: "Sunrise over Tramuntana" },
-    date: { es: "Septiembre 2025", en: "September 2025" },
-    hardFact: {
-      es: "Ventana de vuelo de 34 minutos",
-      en: "34-minute flight window",
-    },
-    brief: {
-      es: "Una pieza de apertura rodada fuera del recinto, con permiso de vuelo acotado a la salida del sol. No había segunda oportunidad: la luz útil duraba poco más de media hora.",
-      en: "An opening sequence shot away from the venue, with a flight window limited to sunrise. There was no second chance: the usable light lasted a little over half an hour.",
-    },
-    delivered: {
-      es: [
-        "Secuencia aérea de apertura de 45 s",
-        "Hyperlapse de la salida del sol",
-        "12 fotos de paisaje en alta resolución",
-      ],
-      en: [
-        "45-second aerial opening sequence",
-        "Sunrise hyperlapse",
-        "12 high-resolution landscape stills",
-      ],
-    },
-  },
-  {
-    slug: "residencia-verano",
-    placeholder: true,
-    categories: ["multicam", "photo", "aftermovie"],
-    tone: 3,
-    featured: true,
-    year: "2024",
-    venue: "Ibiza",
-    media: { video: null, poster: null },
-    title: { es: "Residencia de verano", en: "Summer residency" },
-    date: { es: "Junio – Septiembre 2024", en: "June – September 2024" },
-    hardFact: {
-      es: "11 noches en 14 semanas, mismo equipo",
-      en: "11 nights across 14 weeks, same crew",
-    },
-    brief: {
-      es: "Una residencia larga pide lo contrario que un festival: no hay una noche que lo resuma, hay que construir un lenguaje que aguante repetido. Se fijó un tratamiento de color y un plan de planos que se repitieron toda la temporada.",
-      en: "A long residency needs the opposite of a festival: there's no single night that sums it up, so you build a language that survives repetition. We locked a colour treatment and a shot plan and reused them all season.",
-    },
-    delivered: {
-      es: [
-        "Recap mensual, tres entregas",
-        "Aftermovie de cierre de temporada",
-        "Banco de 400 fotos etalonadas",
-      ],
-      en: [
-        "Monthly recap, three deliveries",
-        "End-of-season aftermovie",
-        "A 400-image graded stills library",
-      ],
-    },
-  },
-  {
-    slug: "warehouse-nocturno",
-    placeholder: true,
-    categories: ["aftermovie", "multicam"],
-    tone: 1,
-    featured: false,
-    year: "2024",
-    venue: "Nave industrial, Barcelona",
-    media: { video: null, poster: null },
-    title: { es: "Warehouse nocturno", en: "Warehouse night" },
-    date: { es: "Noviembre 2024", en: "November 2024" },
-    hardFact: {
-      es: "Espacio sin luz de trabajo: todo a ISO alto",
-      en: "No work light in the space: everything shot at high ISO",
-    },
-    brief: {
-      es: "Una nave sin instalación de luz más allá del propio show. El reto era técnico antes que creativo: sostener el ruido a raya con la única fuente disponible moviéndose todo el rato.",
-      en: "A warehouse with no lighting beyond the show itself. The challenge was technical before it was creative: keeping noise under control with the only light source moving constantly.",
-    },
-    delivered: {
-      es: ["Aftermovie de 1:50", "Corte largo a 3 cámaras", "Dos teasers verticales"],
-      en: ["1:50 aftermovie", "Long-form 3-camera cut", "Two vertical teasers"],
-    },
-  },
-  {
-    slug: "costa-norte-aereo",
-    placeholder: true,
+    // FUENTE: `DRONE/@SIDEBFLMS_MONEGROS POSTCARD4.mp4`.
+    // FECHA: el fichero no lleva ninguna. Sin confirmar.
+    // OJO: no se puede saber por la imagen si es amanecer o atardecer, así que
+    // el título dice «hora dorada» y no una de las dos cosas.
+    slug: "monegros-hora-dorada",
+    placeholder: false,
     categories: ["drone"],
     tone: 2,
-    featured: false,
-    year: "2024",
-    venue: "Costa norte, Mallorca",
-    media: { video: null, poster: null },
-    title: { es: "Costa norte — aéreo", en: "North coast — aerial" },
-    date: { es: "Mayo 2024", en: "May 2024" },
+    featured: true,
+    year: "—",
+    venue: "Monegros",
+    media: { video: "/media/monegros-hora-dorada.mp4", poster: "/media/monegros-hora-dorada.jpg" },
+    title: { es: "Monegros — hora dorada", en: "Monegros — golden hour" },
+    date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {
-      es: "Perímetro de seguridad de 30 m con producción",
-      en: "30 m safety perimeter agreed with production",
+      es: "Una de doce postales aéreas rodadas en el mismo recinto",
+      en: "One of twelve aerial postcards shot at the same site",
     },
     brief: {
-      es: "Encargo solo de aéreo para un evento de terceros. Se trabajó con el equipo de producción para acotar el perímetro y encajar los vuelos entre cambios de artista.",
-      en: "Aerial-only commission for a third-party event. We worked with the production team to set the perimeter and fit the flights between artist changeovers.",
+      es: "Plano aéreo del recinto con el sol bajo, rodado como pieza suelta y no como parte de un montaje. La escala del público es lo que hace el plano: es lo que un dossier de patrocinio necesita enseñar y una cámara de tierra no puede.",
+      en: "Aerial of the site with the sun low, shot as a standalone piece rather than as part of an edit. The scale of the crowd is what makes the shot: it is what a sponsorship deck needs to show and a ground camera cannot.",
     },
     delivered: {
-      es: ["Seis planos aéreos etalonados", "Material bruto entregado en 24 h"],
-      en: ["Six graded aerial shots", "Raw footage handed over within 24 h"],
+      // PENDIENTE (producción).
+      es: ["Postal aérea de 12 s", "Serie de doce piezas del mismo recinto"],
+      en: ["12 s aerial postcard", "Series of twelve pieces from the same site"],
     },
   },
   {
-    slug: "set-de-cierre",
-    placeholder: true,
-    categories: ["aftermovie", "photo"],
+    // FUENTE: `MULTICAM/15082026 GORDO LEBANON HORIZONTA 1.mp4` → 15/08/2026.
+    slug: "gordo-lebanon",
+    placeholder: false,
+    categories: ["multicam"],
+    tone: 3,
+    featured: true,
+    year: "2026",
+    venue: "Por confirmar",
+    media: { video: "/media/gordo-lebanon.mp4", poster: "/media/gordo-lebanon.jpg" },
+    title: { es: "GORDO — Lebanon", en: "GORDO — Lebanon" },
+    date: { es: "15 de agosto de 2026", en: "15 August 2026" },
+    hardFact: {
+      es: "Máster en 3840×2160 a 25p, cabina y pantalla en el mismo plano",
+      en: "3840×2160 master at 25p, booth and screen in the same frame",
+    },
+    brief: {
+      es: "Multicámara de cabina al aire libre, de noche, con la pantalla LED de fondo. La dificultad de este tipo de plano es que la pantalla no reviente mientras el artista, mucho menos iluminado, sigue siendo visible.",
+      en: "Outdoor booth multicam at night with the LED wall behind. The difficulty in this kind of shot is keeping the screen from blowing out while the artist, far less lit, stays visible.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Corte multicámara", "Segunda cámara de la misma noche en el archivo"],
+      en: ["Multicam cut", "Second camera from the same night on file"],
+    },
+  },
+  {
+    // FUENTE: `AFTERMOVIES/@sidebflms_070326_ADRIAN MILLS ANL_AFTERMOVIE.mp4`
+    // → 07/03/2026. El club y el escenario NO salen del nombre: se leen dentro
+    // del propio vídeo (logo FABRIK en el segundo 4, rótulo «AREA 19»).
+    slug: "adrian-mills-area19",
+    placeholder: false,
+    categories: ["aftermovie"],
+    tone: 1,
+    featured: false,
+    year: "2026",
+    venue: "Fabrik · Area 19",
+    media: { video: "/media/adrian-mills-area19.mp4", poster: "/media/adrian-mills-area19.jpg" },
+    title: { es: "Adrián Mills — Area 19", en: "Adrián Mills — Area 19" },
+    date: { es: "7 de marzo de 2026", en: "7 March 2026" },
+    hardFact: {
+      es: "El nombre del escenario se lee en el propio metraje, no en la escaleta",
+      en: "The stage name is legible in the footage itself, not in the run sheet",
+    },
+    brief: {
+      es: "Aftermovie de una noche en el escenario Area 19 de Fabrik. Rodado en el mismo formato abierto que el resto de la serie del club.",
+      en: "Aftermovie from a night on Fabrik's Area 19 stage. Shot in the same open-matte format as the rest of the club series.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Aftermovie", "Máster 4K abierto"],
+      en: ["Aftermovie", "Open-matte 4K master"],
+    },
+  },
+  {
+    // FUENTE: `AFTERMOVIES/@sidebflms_21022026_150_FABRIK_Aftermovie.mp4`
+    // → 21/02/2026. El «150» sale del nombre del fichero.
+    slug: "fabrik-150",
+    placeholder: false,
+    categories: ["aftermovie"],
+    tone: 2,
+    featured: false,
+    year: "2026",
+    venue: "Fabrik",
+    media: { video: "/media/fabrik-150.mp4", poster: "/media/fabrik-150.jpg" },
+    title: { es: "Fabrik 150", en: "Fabrik 150" },
+    date: { es: "21 de febrero de 2026", en: "21 February 2026" },
+    hardFact: {
+      es: "Tercera noche de la misma serie rodada en el club",
+      en: "Third night of the same series shot at the club",
+    },
+    brief: {
+      es: "Aftermovie de la edición 150. Es la tercera pieza de una serie continuada en el mismo club, y eso se nota en el rodaje: el equipo ya sabe dónde ponerse antes de que abran.",
+      en: "Aftermovie for the 150th edition. It is the third piece in an ongoing series at the same club, and that shows on the shoot: the crew already knows where to stand before doors.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Aftermovie", "Máster 4K abierto"],
+      en: ["Aftermovie", "Open-matte 4K master"],
+    },
+  },
+  {
+    // FUENTE: `MULTICAM/@SIDEBFLMS_31132026_PROSPA_MULTICAM_1.mp4`.
+    // ⚠️ LA FECHA DEL NOMBRE ESTÁ MAL: «31132026» sería el 31 del mes 13. No
+    // se usa. Hay que preguntar a producción cuándo fue.
+    slug: "prospa-multicam",
+    placeholder: false,
+    categories: ["multicam"],
     tone: 0,
     featured: false,
-    year: "2024",
-    venue: "Mallorca",
-    media: { video: null, poster: null },
-    title: { es: "Set de cierre", en: "Closing set" },
-    date: { es: "Agosto 2024", en: "August 2024" },
+    year: "2026",
+    venue: "Por confirmar",
+    media: { video: "/media/prospa-multicam.mp4", poster: "/media/prospa-multicam.jpg" },
+    title: { es: "Prospa — multicámara", en: "Prospa — multicam" },
+    date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {
-      es: "04:30 – 06:15, con público en descenso",
-      en: "04:30 – 06:15, with the crowd thinning out",
+      es: "De día y a plena luz: el caso contrario al de cabina de noche",
+      en: "Daylight, wide open: the opposite case to a night booth",
     },
     brief: {
-      es: "La última hora y media, que es la que casi nunca se cubre porque el equipo ya está recogiendo. Es donde queda la gente que de verdad estaba ahí, y eso es lo que se rodó.",
-      en: "The last ninety minutes, which almost never get covered because the crew is already packing up. It's where the people who were really there end up, and that's what we shot.",
+      es: "Multicámara de cabina de día, en recinto arbolado y con el público delante. A plena luz no hay pantalla que ayude a separar al artista del fondo, así que el trabajo está en el encuadre y no en la iluminación.",
+      en: "Daytime booth multicam in a wooded venue with the crowd in front. In full daylight there is no screen helping to separate the artist from the background, so the work is in the framing, not the lighting.",
     },
     delivered: {
-      es: ["Pieza de cierre de 1:20", "25 fotos de las últimas dos horas"],
-      en: ["1:20 closing piece", "25 stills from the last two hours"],
+      // PENDIENTE (producción).
+      es: ["Corte multicámara"],
+      en: ["Multicam cut"],
     },
   },
   {
-    slug: "doble-escenario",
-    placeholder: true,
-    categories: ["multicam", "drone"],
+    // FUENTE: `FOTO/FITZ/` — los nombres de los ficheros llevan el artista.
+    // Qué es «FITZ» exactamente (sala, promotora, ciclo) NO consta: por eso el
+    // venue queda por confirmar en vez de dar por hecho que es una sala.
+    slug: "fitz-directos",
+    placeholder: false,
+    categories: ["photo"],
     tone: 3,
-    featured: false,
-    year: "2023",
-    venue: "Levante",
-    media: { video: null, poster: null },
-    title: { es: "Doble escenario", en: "Two stages" },
-    date: { es: "Julio 2023", en: "July 2023" },
+    featured: true,
+    year: "2026",
+    venue: "Por confirmar",
+    media: { video: null, poster: "/media/foto/fitz-rick-ross-1600.jpg" },
+    title: { es: "FITZ — directos", en: "FITZ — live shows" },
+    date: { es: "2026", en: "2026" },
     hardFact: {
-      es: "2 escenarios · 5 personas · radio abierta",
-      en: "2 stages · 5 crew · radio open",
+      es: "Ocho artistas distintos, doce fotos publicadas de un archivo mayor",
+      en: "Eight different artists, twelve published frames from a larger set",
     },
     brief: {
-      es: "Dos escenarios con solapamiento de horarios obliga a decidir antes qué se pierde. Se cerró un dossier por franjas con prioridad por colores y se respetó sin improvisar.",
-      en: "Two stages with overlapping running times forces you to decide in advance what you're going to miss. We closed a colour-coded slot sheet beforehand and stuck to it.",
+      es: "Fotografía de directo en una serie de conciertos: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye y After the Weekend. Casi todo a contraluz y con luz de espectáculo, que cambia de color cada pocos segundos y no espera a nadie.",
+      en: "Live photography across a run of shows: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye and After the Weekend. Almost all of it backlit and under show lighting, which changes colour every few seconds and waits for no one.",
     },
     delivered: {
-      es: ["Cobertura de los dos escenarios", "Plano aéreo de aforo por franja"],
-      en: ["Coverage of both stages", "Aerial crowd shot per time slot"],
+      // PENDIENTE (producción).
+      es: ["Doce fotos publicadas", "Selección hecha sobre un archivo mayor"],
+      en: ["Twelve published frames", "Selected from a larger set"],
+    },
+  },
+  {
+    // FUENTE: `FOTO/` — carpeta `MDF2026`, con nombres que incluyen al artista.
+    // «MDF» apunta a Monegros Desert Festival, pero eso es DEDUCCIÓN MÍA a
+    // partir de las siglas y del nombre de las piezas de drone. Confírmalo.
+    slug: "monegros-fotografia",
+    placeholder: false,
+    categories: ["photo"],
+    tone: 1,
+    featured: false,
+    year: "2026",
+    venue: "Monegros",
+    media: { video: null, poster: "/media/foto/mdf-indira-paganotto-1600.jpg" },
+    title: { es: "Monegros — fotografía", en: "Monegros — stills" },
+    date: { es: "Julio de 2026", en: "July 2026" },
+    hardFact: {
+      es: "Mismo recinto que las postales aéreas, desde el suelo",
+      en: "Same site as the aerial postcards, from the ground",
+    },
+    brief: {
+      es: "Fotografía de cabina y de recinto en el mismo festival del que salen las postales aéreas. Cubrir un sitio desde el aire y desde el suelo en la misma jornada es lo que permite contar la escala y la cara en el mismo entregable.",
+      en: "Booth and site photography at the same festival the aerial postcards come from. Covering a place from the air and from the ground on the same day is what lets scale and faces live in the same delivery.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Fotografía de cabina y de recinto", "Cobertura aérea del mismo recinto"],
+      en: ["Booth and site stills", "Aerial coverage of the same site"],
     },
   },
 ];
@@ -284,6 +326,7 @@ export function getProject(slug: string): Project | undefined {
   return PROJECTS.find((project) => project.slug === slug);
 }
 
+/** Los que salen en los destacados de la home, en el orden del array. */
 export function featuredProjects(): Project[] {
   return PROJECTS.filter((project) => project.featured);
 }

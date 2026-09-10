@@ -39,7 +39,8 @@ export function Reglet() {
   const svgRef = useRef<SVGSVGElement>(null);
   const lineRef = useRef<SVGLineElement>(null);
   const flowRef = useRef<SVGLineElement>(null);
-  const headRef = useRef<SVGCircleElement>(null);
+  const headRef = useRef<SVGGElement>(null);
+  const droneRef = useRef<SVGGElement>(null);
   const ticksRef = useRef<SVGGElement>(null);
   const readoutRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -49,9 +50,10 @@ export function Reglet() {
     const line = lineRef.current;
     const flow = flowRef.current;
     const head = headRef.current;
+    const drone = droneRef.current;
     const ticksGroup = ticksRef.current;
     const readout = readoutRef.current;
-    if (!svg || !line || !flow || !head || !ticksGroup || !readout) return;
+    if (!svg || !line || !flow || !head || !drone || !ticksGroup || !readout) return;
 
     registerGsap();
     const reduced = prefersReducedMotion();
@@ -111,9 +113,15 @@ export function Reglet() {
       }
 
       // El playhead recorre la línea en la fracción de scroll de la página.
+      //
+      // Va en un `translate` del grupo y no en `cx`/`cy` porque el playhead ya
+      // no es un círculo: es el drone, que son varias formas. El cabeceo vive
+      // en un grupo INTERIOR (`droneRef`) justo por esto — si compartieran
+      // transform, cada fotograma de scroll pisaría el del cabeceo.
       const t = state.progress;
-      head.setAttribute("cx", String(gsap.utils.interpolate(x1, x2, t)));
-      head.setAttribute("cy", String(gsap.utils.interpolate(y1, y2, t)));
+      const hx = gsap.utils.interpolate(x1, x2, t);
+      const hy = gsap.utils.interpolate(y1, y2, t);
+      head.setAttribute("transform", `translate(${hx} ${hy})`);
 
       // Los ticks solo tienen sentido anclada: aparecen con el giro.
       ticksGroup.setAttribute("opacity", String(state.dock));
@@ -149,6 +157,27 @@ export function Reglet() {
         ticksGroup.append(mark);
       }
     };
+
+    // ── El drone no se queda quieto ──────────────────────────────────────
+    // Un drone parado en el aire no está parado: corrige constantemente. Tres
+    // píxeles arriba y abajo, lento y con seno, es lo que hace que se lea como
+    // que vuela y no como que es un icono pegado a la línea.
+    //
+    // `yoyo` con `repeat: -1` y no una animación de ida y vuelta a mano: así
+    // el movimiento no tiene un punto de costura donde se note el reinicio.
+    //
+    // Con «reducir movimiento» activado no se mueve nada. El drone se sigue
+    // viendo, y sigue recorriendo la línea con el scroll — que es navegación,
+    // no decoración. Lo que se quita es el cabeceo, que es lo decorativo.
+    if (!reduced) {
+      gsap.to(drone, {
+        y: -3,
+        duration: 1.9,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+    }
 
     const ctx = gsap.context(() => {
       readLayout();
@@ -227,7 +256,35 @@ export function Reglet() {
           strokeLinecap="round"
         />
         <g ref={ticksRef} />
-        <circle ref={headRef} r="3" fill="var(--color-rust-500)" />
+        {/* ── EL DRONE ──────────────────────────────────────────────────
+            Sustituye al círculo que hacía de playhead. No es un adorno
+            añadido: la cabecera de este fichero ya define la regleta como
+            «timeline de edición y traza de vuelo de drone», y esto no hace
+            más que volver literal la segunda mitad.
+
+            Cuadricóptero visto desde arriba, en 16 px: dos brazos en aspa,
+            cuatro rotores y el cuerpo. A este tamaño un dibujo con más
+            detalle se convierte en una mancha, así que las formas son las
+            cuatro que se distinguen y ninguna más.
+
+            Hereda `--color-rust-500` como hacía el círculo, así que si cambia
+            la paleta el drone cambia con ella sin tocar nada aquí. */}
+        <g ref={headRef}>
+          <g ref={droneRef}>
+            {/* Brazos en aspa */}
+            <line x1="-4.6" y1="-4.6" x2="4.6" y2="4.6" stroke="var(--color-rust-500)" strokeWidth="1" strokeLinecap="round" />
+            <line x1="4.6" y1="-4.6" x2="-4.6" y2="4.6" stroke="var(--color-rust-500)" strokeWidth="1" strokeLinecap="round" />
+            {/* Rotores: sin relleno, para que se lean como hélices girando y
+                no como cuatro bolas. */}
+            <circle cx="-4.6" cy="-4.6" r="2.4" fill="none" stroke="var(--color-rust-500)" strokeWidth="1" opacity="0.75" />
+            <circle cx="4.6" cy="-4.6" r="2.4" fill="none" stroke="var(--color-rust-500)" strokeWidth="1" opacity="0.75" />
+            <circle cx="-4.6" cy="4.6" r="2.4" fill="none" stroke="var(--color-rust-500)" strokeWidth="1" opacity="0.75" />
+            <circle cx="4.6" cy="4.6" r="2.4" fill="none" stroke="var(--color-rust-500)" strokeWidth="1" opacity="0.75" />
+            {/* Cuerpo: es lo único macizo, y por eso es lo que marca la
+                posición exacta sobre la línea. */}
+            <circle r="2" fill="var(--color-rust-500)" />
+          </g>
+        </g>
       </svg>
 
       {/* Readout de contexto: el nombre de la sección en curso, en vertical. */}

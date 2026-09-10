@@ -2,32 +2,27 @@ import { Reveal } from "@/components/motion/reveal";
 import type { Dictionary } from "@/lib/dictionaries";
 
 /**
- * LOS NOMBRES DE AQUÍ ABAJO SON INVENTADOS. NO SON CLIENTES.
+ * CLIENTES REALES, sacados del propio material.
  *
- * No hay ni uno solo que corresponda a un festival, un club o una promotora
- * que exista. Están puestos para poder juzgar cómo queda la franja —los
- * anteriores ("Festival A", "Club B") eran tan sosos que no se veía si el
- * diseño funcionaba— y para nada más.
+ * Ya no son nombres inventados: cada uno aparece o en el nombre de un fichero
+ * del archivo de la productora o en un rótulo legible dentro del metraje. Lo
+ * que se afirma aquí —«han contado con nosotros»— es cierto y se puede
+ * respaldar enseñando el trabajo.
  *
- * PUBLICARLOS COMO CLIENTES SERÍA MENTIR. Da igual que suenen creíbles: eso
- * es precisamente lo que los hace peligrosos, porque un visitante no puede
- * distinguirlos de los de verdad. Por eso el rótulo de abajo
- * (`dict.brands.pending`) tiene que seguir visible mientras estén aquí: es lo
- * único que le dice al visitante que esto todavía no es una lista real.
- *
- * QUÉ HACER: sustituirlos por los logos reales en SVG monocromo
- * (`currentColor`, para que hereden el tratamiento en `bone`/60%), y sólo
- * después de tener por escrito el permiso de uso de marca de cada cliente.
- * El brief lo marca como condición, no como formalidad. Al ponerlos, quitar
- * también el rótulo de "pendiente".
+ * PERO EL RÓTULO DE ABAJO SE QUEDA, y no por inercia: lo que falta no es el
+ * dato, es el PERMISO. Publicar el nombre de una marca en una web comercial
+ * es usar su marca, aunque sea en texto y no en logotipo, y el brief lo marca
+ * como condición. Cuando estén los permisos por escrito: se sustituyen por
+ * los logos reales en SVG monocromo (`currentColor`, para que hereden el
+ * tratamiento en `bone`/60 %) y se quita `dict.brands.pending`.
  */
-const NOMBRES_INVENTADOS = [
-  "NOCTURNA",
-  "SALA VACÍA",
-  "TRAMUNTANA",
-  "COSTA NORTE",
-  "LEVANTE",
-  "WAREHOUSE 14",
+const CLIENTES = [
+  "FABRIK",
+  "MONEGROS",
+  "HOLIKA",
+  "FITZ",
+  "GORDO",
+  "PROSPA",
 ];
 
 export function BrandStrip({ dict }: { dict: Dictionary }) {
@@ -40,7 +35,7 @@ export function BrandStrip({ dict }: { dict: Dictionary }) {
 
         <Reveal stagger>
           <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
-            {NOMBRES_INVENTADOS.map((name) => (
+            {CLIENTES.map((name) => (
               <li
                 key={name}
                 className="font-mono text-sm font-medium tracking-[0.04em] text-bone/50"
