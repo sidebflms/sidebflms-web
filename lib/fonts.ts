@@ -1,22 +1,28 @@
-import localFont from "next/font/local";
-import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono, Montserrat } from "next/font/google";
 
 /**
- * BODY — General Sans (Fontshare, libre para uso comercial web).
- * Elegida porque tiene que desaparecer: esqueleto grotesco-geométrico neutro
- * con aperturas ligeramente abiertas, lo bastante sobrio para no competir con
- * una display tan dominante como Akira, y con cobertura completa de acentos
- * y ñ — innegociable en un sitio bilingüe.
+ * BODY — Montserrat (SIL Open Font License: libre también para uso comercial).
+ *
+ * Sustituye a General Sans el 2026-09-10 por decisión de Mario. Los cuatro
+ * pesos que usaba el sitio (400/500/600/700) existen igual, así que no hubo
+ * que tocar ni una clase.
+ *
+ * QUÉ CAMBIA DE VERDAD, más allá del dibujo de la letra: Montserrat es más
+ * ancha y de ojo más grande que General Sans al mismo tamaño, así que el mismo
+ * párrafo ocupa más líneas. Donde se nota es en los textos largos —el `brief`
+ * de cada ficha de portfolio, los legales, la entradilla de contacto—, no en
+ * los rótulos, que van en monoespaciada.
+ *
+ * Los titulares NO se ven afectados: van en `--font-display` (Akira).
+ *
+ * Se carga con `next/font`, autoalojada. Nada de `@import` de Google Fonts:
+ * bloquea el render y provoca salto de maquetación al cargar.
  */
-export const generalSans = localFont({
-  variable: "--font-general-sans",
+export const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  src: [
-    { path: "../app/fonts/GeneralSans-Regular.woff2", weight: "400", style: "normal" },
-    { path: "../app/fonts/GeneralSans-Medium.woff2", weight: "500", style: "normal" },
-    { path: "../app/fonts/GeneralSans-Semibold.woff2", weight: "600", style: "normal" },
-    { path: "../app/fonts/GeneralSans-Bold.woff2", weight: "700", style: "normal" },
-  ],
 });
 
 /**
@@ -48,7 +54,7 @@ export const archivoFallback = Archivo({
 });
 
 export const fontVariables = [
-  generalSans.variable,
+  montserrat.variable,
   jetBrainsMono.variable,
   archivoFallback.variable,
 ].join(" ");

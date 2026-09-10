@@ -50,7 +50,7 @@
 
   /* --- Familias --- */
   --font-display: "Akira Expanded", var(--font-archivo), "Arial Black", sans-serif;
-  --font-sans: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace;
 
   /* --- Curvas --- */

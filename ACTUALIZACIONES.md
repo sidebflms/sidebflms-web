@@ -5,6 +5,32 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (14) — El texto pasa a Montserrat
+
+Por decisión de Mario. **Los titulares NO cambian**: siguen en Akira Expanded.
+Lo que cambia es `--font-sans`, que es todo el texto corrido.
+
+Montserrat está bajo SIL Open Font License, así que cubre el uso comercial —
+al contrario que la Akira actual, que sigue siendo la demo y sigue pendiente.
+
+Los cuatro pesos que usaba el sitio (400/500/600/700) existen igual, así que no
+hubo que tocar ni una clase. Se retiran los cuatro `.woff2` de General Sans, que
+quedaban sin usar; siguen en el historial de git si hiciera falta volver.
+
+### Lo que hay que mirar al cambiar una fuente de texto
+
+Montserrat es **más ancha y de ojo más grande** que General Sans al mismo
+tamaño, así que el mismo párrafo ocupa más líneas. En la portada, el subtítulo
+del hero pasa de dos líneas a tres. Eso no es un fallo, pero conviene saberlo
+antes de asustarse.
+
+Comprobado que no rompe nada: sin scroll lateral **ni a 375 px ni a 1440**, en
+portada, contacto, privacidad y ficha de proyecto. Y el titular de contacto
+—«CUÉNTANOS QUÉ EVENTO TIENES», el que ya se partió una vez— sigue entero,
+porque va en Akira y no le afecta.
+
+---
+
 ## 2026-09-10 (13) — El hero se veía gris con el vídeo sonando por detrás
 
 Tocado: una palabra en `components/sections/hero.tsx`. La palabra es `isolate`.
