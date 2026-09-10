@@ -39,10 +39,15 @@
   --color-ink-700: #262626; /* superficies: cards, inputs, celdas */
   --color-ink-600: #333130; /* hairlines, bordes, divisores */
 
-  /* --- Acento: un solo color, tres funciones --- */
-  --color-rust-900: #5c271a; /* relleno sutil, hover de superficie */
-  --color-rust-500: #ae4b2f; /* ★ acento de marca */
-  --color-rust-300: #c97a55; /* acento legible */
+  /* --- Acento: EL NARANJA DE MARCA, del manual §02 ---------------------
+     Hasta el 2026-09-10 estos tres valores eran #5c271a / #ae4b2f / #c97a55,
+     un teja apagado que NO salía del manual de marca. Ahora son los de
+     verdad. Los nombres de token (`rust-*`) se mantienen para no tocar 68
+     sitios; lo que designan es `brand-*` del manual. */
+  --color-rust-900: #5c271a; /* relleno sutil, hover — no está en el manual */
+  --color-rust-500: #e8451d; /* ★ acento de marca — `brand-500` */
+  --color-rust-300: #ff6a3d; /* acento legible — `brand-400` */
+  --color-brand-600: #bb4223; /* fondo del botón primario — `brand-600` */
 
   /* --- Texto --- */
   --color-bone: #f2ece4; /* texto principal */
@@ -65,13 +70,31 @@
 }
 
 /* ============================================================================
-   CONTRASTE — medido sobre --color-ink-800 (WCAG 2.1). Regla obligatoria:
+   CONTRASTE — RECALCULADO el 2026-09-10 al entrar el naranja de marca.
+   Medido sobre --color-ink-800 (#1e1e1e) con WCAG 2.1. Regla obligatoria:
 
      bone      14.2:1  ✅ todo
-     rust-300   5.1:1  ✅ links inline, énfasis, anillo de foco
+     rust-300   5.9:1  ✅ links inline, énfasis, anillo de foco   (antes 5.1)
      smoke      4.9:1  ✅ texto pequeño — NUNCA con opacity (lo tira bajo AA)
-     rust-500   3.1:1  ⚠️  SOLO display ≥24px bold, fondos de botón, iconos
-                          y el playhead. Nunca texto corrido ni links de párrafo.
+     rust-500   4.2:1  ⚠️  SOLO display ≥24px bold, iconos y el playhead.
+                          Nunca texto corrido ni links de párrafo.  (antes 3.1)
+
+   El naranja de marca MEJORA el contraste respecto al teja que había, pero
+   sigue sin llegar a 4.5, así que la restricción de `rust-500` NO se levanta.
+
+   ── EL BOTÓN PRIMARIO VA EN `brand-600`, Y HAY UN NÚMERO DETRÁS ──────────
+   El fondo del botón primario NO puede ser `rust-500`. Medido, con `bone`
+   encima —que es el texto real del sitio, no blanco puro—:
+
+     bone sobre #bb4223 (brand-600)  4.57:1  ✅ cumple AA
+     bone sobre #e8451d (rust-500)   3.38:1  ❌ NO cumple
+
+   Al pasar el ratón SUBE a `rust-500`: se lee como «más claro» aunque el
+   contraste baje, porque el foco ya está en el elemento.
+
+   (El manual dice 5.4:1 para ese botón. Es cierto para BLANCO PURO. La web
+   usa `bone`, así que el número real es 4.57. Cumple, con menos margen del
+   que parece — si algún día se aclara el fondo del botón, recalcula.)
    ========================================================================== */
 
 @layer base {

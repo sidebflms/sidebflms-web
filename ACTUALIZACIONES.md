@@ -5,6 +5,58 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (16) — El naranja de la web no era el naranja de la marca
+
+Lo cazó Mario mirándola. La web usaba `#ae4b2f`, un teja apagado que **no sale
+del manual de marca**. Ahora usa el de verdad.
+
+| | Antes | Ahora | Manual |
+|---|---|---|---|
+| Acento | `#ae4b2f` | `#e8451d` | `brand-500` |
+| Acento legible | `#c97a55` | `#ff6a3d` | `brand-400` |
+| Fondo del botón primario | `#ae4b2f` | `#bb4223` | `brand-600` |
+
+**Los fondos NO se tocan.** Sigue todo sobre `#1e1e1e`. Esto es sólo la familia
+del acento, que es lo que estaba mal.
+
+### El contraste mejora, pero la restricción se queda
+
+Medido sobre el fondo actual, no estimado:
+
+```
+rust-500   3.05:1  →  4.21:1
+rust-300   5.08:1  →  5.86:1
+```
+
+Sube, pero **4,21 sigue por debajo de 4,5**, así que la regla de que `rust-500`
+no vale para texto corrido NO se levanta. La tabla de `app/globals.css` está
+recalculada con estos números.
+
+### El botón primario tenía que cambiar, y hay un número detrás
+
+El texto de los botones es `bone` (#f2ece4), no blanco puro:
+
+```
+bone sobre #bb4223 (brand-600)  4.57:1  cumple AA
+bone sobre #e8451d (rust-500)   3.38:1  NO cumple
+```
+
+Es decir: **el naranja de marca a pleno no vale como fondo de botón.** Si se
+hubiera puesto `rust-500` ahí sin mirar, el botón principal del sitio habría
+quedado por debajo de AA. Va en `brand-600` y al pasar el ratón sube a
+`rust-500`, que es lo que dice el manual y ahora también el porqué.
+
+*(El manual dice 5,4:1 para ese botón. Es cierto para blanco puro; con `bone`
+el número real es 4,57. Cumple, con menos margen del que parece.)*
+
+### Un detalle de nombres
+
+Los tokens se siguen llamando `rust-*` y no `brand-*`: renombrarlos eran 68
+sitios y ninguna ganancia visible. Queda anotado en `globals.css` que lo que
+designan es la familia `brand-*` del manual.
+
+---
+
 ## 2026-09-10 (15) — Fuera la monoespaciada: Montserrat también en la interfaz
 
 El sitio tenía **tres** familias. Ahora tiene **dos**: Akira Expanded para los
