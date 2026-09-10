@@ -136,7 +136,8 @@ export const en: Dictionary = {
         // flight category must be checked against the real paperwork.
         body: "Aerial shots with a certified pilot and a safety perimeter coordinated with production.",
         items: ["Certified pilot", "Hyperlapse and sunrise", "Crowd-scale shots", "Production liaison"],
-        pending: true,
+        // Ver la nota de es.ts: confirmado que hay piloto certificado.
+        pending: false,
       },
       {
         number: "04",

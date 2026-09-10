@@ -5,6 +5,30 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (4) — Cobertura aérea: confirmado, y fuera el cartel
+
+Mario confirma que **hay piloto certificado**. Era el último TODO marcado como
+BLOQUEANTE ANTES DE PUBLICAR.
+
+Lo que se veía hasta ahora: en la página de Servicios, junto al título
+«Cobertura aérea», se le pintaba al visitante un **cartel naranja que decía
+"Redacción pendiente de verificación"**. Una nota interna, en la web, a la
+vista de cualquiera. Ya no está: `pending` pasa a `false` en los dos idiomas.
+
+**La redacción se deja tal cual, genérica a propósito.** Lo confirmado es que
+hay piloto certificado, y eso es exactamente lo que el texto dice, ni más ni
+menos. Concretar más —la categoría de vuelo, el número de operador, qué se
+coordinó con ENAIRE— exigiría sacarlo del papeleo, y eso no se escribe de
+memoria: todo el argumento de venta del sitio es "somos los que sí tienen los
+permisos", así que es el peor sitio posible para una imprecisión.
+
+Con esto **no queda ningún TODO bloqueante** en el código. Lo que sigue
+pendiente es material, no texto: los logos reales de clientes (con su permiso
+de uso por escrito), las piezas de vídeo y foto de verdad, y el error de
+hidratación.
+
+---
+
 ## 2026-09-10 (3) — La dirección de correo, los logos y el compromiso de 24 h
 
 ### `hola@` pasa a ser `contact@`

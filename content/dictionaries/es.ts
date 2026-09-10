@@ -143,16 +143,21 @@ export const es = {
       {
         number: "03",
         title: "Cobertura aérea",
-        // TODO (cliente) — BLOQUEANTE ANTES DE PUBLICAR:
-        // Este texto es deliberadamente genérico. La redacción exacta sobre
-        // permisos y categoría de vuelo NO se puede inventar: hay que
-        // contrastarla con el papeleo real (quién firmó, qué categoría, qué se
-        // coordinó con ENAIRE) y sustituir este cuerpo por la redacción
-        // verificada. Todo el posicionamiento del sitio es "somos los que sí
-        // tienen los permisos" — es el peor sitio para una imprecisión.
+        // CONFIRMADO (Mario, 2026-09-10): hay piloto certificado. Era el
+        // último TODO marcado como BLOQUEANTE, y con esto se quita el cartel
+        // de "Redacción pendiente de verificación" que se le enseñaba al
+        // visitante junto al título de esta etapa.
+        //
+        // La redacción se deja como está, GENÉRICA a propósito. Lo confirmado
+        // es que hay piloto certificado, y eso es exactamente lo que dice.
+        // Si algún día se quiere concretar más —la categoría de vuelo, el
+        // número de operador, qué se coordinó con ENAIRE— eso NO se puede
+        // escribir de memoria: hay que sacarlo del papeleo. Todo el
+        // posicionamiento del sitio es "somos los que sí tienen los
+        // permisos", y es el peor sitio para una imprecisión.
         body: "Planos aéreos con piloto certificado y perímetro de seguridad coordinado con producción.",
         items: ["Piloto certificado", "Hyperlapse y amanecer", "Planos de aforo", "Coordinación con producción"],
-        pending: true,
+        pending: false,
       },
       {
         number: "04",
