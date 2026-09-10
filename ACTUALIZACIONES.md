@@ -26,6 +26,30 @@ VPS. Nada más.
 
 ---
 
+## 2026-09-10 (7) — El servidor ya no se queda sin historia
+
+Tocado: `.github/workflows/deploy.yml`.
+
+El rsync del despliegue no excluye el `.git`, así que el que acaba en el
+servidor es el del runner. Con el `fetch-depth: 1` que trae `actions/checkout`
+por defecto, eso dejaba allí **un clon superficial de un solo commit**.
+Comprobado en nastos justo después del despliegue automático de hoy:
+
+```
+$ git rev-list --count HEAD
+1
+```
+
+Que el servidor quede exactamente en el commit publicado es lo que se quiere
+—su `git status` vuelve a ser una señal y no ruido— pero sin historia no se
+puede mirar allí de dónde viene lo que está corriendo, que es justo lo que hace
+falta cuando algo va mal a las tres de la mañana.
+
+Con `fetch-depth: 0` el runner se trae la historia entera y el rsync la lleva.
+El repositorio es pequeño; el coste es de segundos.
+
+---
+
 ## 2026-09-10 (6) — Un reinicio ya no pelea con el vigilante por el puerto
 
 Tocado: `despliegue/sidebflms-web.sh`, `despliegue/README.md` y `.gitignore`.
