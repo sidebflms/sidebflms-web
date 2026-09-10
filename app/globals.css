@@ -174,6 +174,55 @@
     line-height: 0.95;
   }
 
+  /* Titular que NO ocupa el ancho de la página, sino una columna estrecha.
+     Contacto pone el suyo en `lg:col-span-5`.
+
+     El problema: `.text-display-l` mide el cuerpo contra la VIEWPORT (6vw),
+     pero a partir de `lg` esa columna pasa a valer un tercio escaso de la
+     viewport. A 1440px pedía 64px dentro de 506px de ancho y saltaba el
+     `overflow-wrap: anywhere` de `.font-display`: «CUÉNTANOS» se partía en
+     «CUÉNTAN / OS», que es el titular de marca partido a media palabra.
+
+     Calibrado con la Akira real, no a ojo: la línea más ancha de esta columna
+     es «qué evento», que ocupa 8.66× el cuerpo de letra, y la palabra más
+     ancha es «CUÉNTANOS», 8.25×. Con 3.4vw la columna va sobrada en todo el
+     rango — a 1024px, 35px de cuerpo contra 333px de columna (la línea pide
+     301); a 1920px lo corta el techo de 4rem y la columna ya da de sobra.
+
+     Por debajo de `lg` la columna es el ancho entero de la página y la escala
+     normal ya cabía: por eso esto vive dentro de la media query y no fuera.
+
+     POR QUÉ CON `vw` Y NO CON `cqw` Y CONSULTAS DE CONTENEDOR: `cqw` mediría
+     contra la columna de verdad y no habría que calibrar nada, que es más
+     limpio. Se descartó por dos motivos, y ninguno es que no funcione:
+       1. Aquí basta con `vw`. La columna es `lg:col-span-5` de una rejilla de
+          12 sobre `.shell`, así que su ancho ES una fracción fija de la
+          viewport (medido: 333px a 1024, 506px a 1440, 706px a 1920). Con esa
+          proporción, un `vw` calibrado da el mismo resultado sin introducir
+          nada nuevo en la hoja de estilos.
+       2. `cqw` en `font-size` mete una dependencia entre estilo y layout (el
+          cuerpo depende del ancho del contenedor, que se sabe después de
+          maquetar). El navegador la resuelve, pero es una pieza más delicada
+          que un `clamp` con `vw`, y aquí no hacía falta pagarla.
+
+     CADA SITIO TIENE SU NÚMERO, porque cada columna es de un ancho distinto.
+     El 3.4vw es el de Contacto y es sólo el valor por defecto; quien lo use en
+     otro sitio ajusta `--display-en-columna` y deja escrita la medida. El pie
+     lo hace: su columna no es de rejilla sino un ítem flex que se ciñe al
+     contenido, y lo que de verdad lo aprieta es el espacio que le deja la
+     tabla de enlaces (276px a 1024, 371px a 1280).
+
+     SI ALGÚN DÍA CAMBIA LA REJILLA de Contacto (otro `col-span`, u otro
+     contenedor), este 3.4vw deja de estar calibrado y hay que rehacerlo: se
+     mide el ancho natural de la línea más ancha dividido por el cuerpo de
+     letra, y se busca el `vw` que deje ese producto por debajo del ancho de
+     la columna en TODO el rango. Ahí sí valdría la pena pasarse a `cqw`. */
+  @media (width >= 64rem) {
+    .text-display-l.en-columna {
+      font-size: clamp(1.75rem, var(--display-en-columna, 3.4vw), 4rem);
+    }
+  }
+
   /* La mono es material principal, no label secundario: todo metadato del
      sitio (fechas, venue, disciplinas, filtros, timecodes) usa esta clase. */
   .label {

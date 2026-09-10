@@ -28,7 +28,10 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
         <div className="lg:col-span-5">
           <Reveal>
             <p className="label">{dict.contact.label}</p>
-            <h1 className="font-display text-display-l mt-4 text-bone">
+            {/* `en-columna`: este titular vive en `lg:col-span-5`, no en el
+                ancho de la página. Sin eso, a partir de `lg` pedía un cuerpo
+                que no cabe y «CUÉNTANOS» se partía. Ver app/globals.css. */}
+            <h1 className="font-display text-display-l en-columna mt-4 text-bone">
               {dict.contact.headline.map((line) => (
                 <span key={line} className="block">
                   {line}

@@ -5,6 +5,117 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (8) — «CUÉNTANOS» se partía en «CUÉNTAN / OS»
+
+Apareció comprobando en el navegador el arreglo de hidratación de la entrada
+(5). En la página de Contacto, en castellano, el titular no se leía
+«CUÉNTANOS / QUÉ EVENTO / TIENES» sino con la primera palabra rota por la
+mitad. Es el titular de marca, en la página a la que lleva el botón principal
+del sitio.
+
+### Qué pasaba
+
+Los titulares se escriben en los diccionarios como un **array de líneas**, y
+cada línea se pinta en su propio `<span class="block">`: la intención es que
+cada span ocupe UNA línea. Cuando no cabe, salta el `overflow-wrap: anywhere`
+de `.font-display` — que está puesto a propósito como última red de seguridad
+para no desbordar la viewport, y cuyo comentario decía que los `clamp` «ya se
+calibraron para no llegar a este límite».
+
+Pues se llegaba, por un motivo que no es del copy: **`.text-display-l` mide el
+cuerpo de letra contra la VIEWPORT (`6vw`), pero el titular no vive en el
+ancho de la página.** Contacto lo mete en `lg:col-span-5`, o sea un tercio
+escaso. A partir de `lg` la viewport crece y el cuerpo con ella, pero la
+columna no da para tanto:
+
+| viewport | ancho de la columna | cuerpo | resultado |
+|---|---|---|---|
+| 375 | 335 px | 28 px | bien, 3 líneas |
+| **1024** | 333 px | 61 px | **«CUÉNTAN / OS»** |
+| **1440** | 506 px | 64 px | **«CUÉNTAN / OS»** |
+| 1920 | 706 px | 64 px | bien, 3 líneas |
+
+Es decir: fallaba justo entre 1024 px y ~1900 px, que es donde está la mayoría
+de los portátiles — el 1440 de un MacBook incluido. Y no se veía ni en móvil ni
+en una pantalla grande, que es donde se suele mirar.
+
+El **pie** tenía lo mismo por otra vía: su lema no está en una columna de
+rejilla sino en un ítem flex, y lo que lo aprieta es el hueco que le deja la
+tabla de enlaces (276 px a 1024). Ahí se partía «NOCHE».
+
+### Cómo se ha arreglado
+
+Una clase nueva, `.en-columna`, para el titular que **no** ocupa el ancho de la
+página. A partir de `lg` le da un `clamp` calibrado contra el ancho real de su
+columna en vez del de la viewport. El número se ajusta por sitio con
+`--display-en-columna`, porque cada columna es de un ancho distinto: 3.4vw en
+Contacto, 4.4vw en el pie.
+
+**Calibrado midiendo, no a ojo.** La medida que importa es *ancho natural de la
+línea ÷ cuerpo de letra*, que con una tipografía dada es una constante. Con la
+Akira real: «qué evento» ocupa 8.66×, «CUÉNTANOS» 8.25×, «de cada» (pie)
+5.97×. De ahí salen los dos coeficientes, con margen para que un cambio de
+copy no lo rompa a la primera.
+
+En el pie hizo falta además `lg:shrink-0`. Sin eso había un lazo que no
+converge: el ítem flex encoge en proporción a su contenido, así que al bajar el
+cuerpo de letra encogía también la caja y el lema seguía sin caber.
+
+**Nada de lo que ya cabía ha cambiado de tamaño.** La regla vive dentro de
+`@media (width >= 64rem)` y sólo aplica a quien lleve `.en-columna`:
+comprobado que en portada, Trabajo, Servicios y ficha de proyecto los cuerpos
+siguen siendo exactamente los de antes (`l:64 m:36 xl:66` a 1440).
+
+### Qué hacer al traerte el repositorio
+
+**Nada.** No hay dependencias nuevas ni pasos extra.
+
+La regla, para no volver a romperlo:
+
+> Si metes un titular `text-display-l` en una columna que **no** es el ancho de
+> la página, ponle `.en-columna` y calibra su `--display-en-columna`. Si cambias
+> la rejilla de Contacto o el pie, los números de ahora dejan de valer y hay que
+> rehacerlos. Está explicado, con el método, en `app/globals.css`.
+
+### Comprobado
+
+Cargando limpio en 375, 768, 1024, 1280, 1440 y 1920 px, en `es` y en `en`, en
+portada, Trabajo, Servicios, Contacto, ficha de proyecto y aviso legal:
+**ninguna palabra partida por la mitad en ningún sitio**, y ningún desbordamiento
+horizontal.
+
+Dos avisos para quien vuelva a medir esto:
+
+- **Redimensionar la ventana del panel de pruebas NO recalcula los estilos.**
+  Da valores de la medida anterior y hace creer que algo está roto (o
+  arreglado) cuando no lo está. Hay que **recargar** en cada ancho. Pasa con
+  cualquier unidad relativa, `vw` incluida — se ve porque `.text-lead` también
+  se queda con el valor viejo.
+- Un `<span>` de titular que ocupa dos líneas **no siempre es un fallo**: los
+  títulos de proyecto («Amanecer en la Tramuntana») fluyen a propósito y no se
+  escriben como array. Sólo cuentan los que se pintan con `span.block`.
+
+### Lo que NO se ha tocado, y es una decisión tuya
+
+El titular del **manifiesto** de la portada («LLEGAMOS ANTES / DE QUE ABRAN /
+LAS PUERTAS») parte «Llegamos antes» en dos líneas — **entre palabras**, no por
+la mitad, así que se lee bien; simplemente no respeta el ritmo de 3 líneas que
+marca el diccionario.
+
+No es cuestión de anchos: pasa **también a 375 px**. La línea es más larga que
+su bloque a cualquier tamaño, porque Akira Expanded es muy ancha y «Llegamos
+antes» ocupa 12.72× el cuerpo de letra mientras el bloque (`max-w-3xl`) da para
+648 px. Las salidas son dos, y las dos son de diseño:
+
+1. **Bajar el cuerpo** del manifiesto a ~50 px (de 64). Cabe, pero encoge un 22%
+   la frase principal del sitio.
+2. **Acortar la línea** en los diccionarios, partiéndola distinto.
+
+Se deja como está a la espera de que se decida. Lo que se ha arreglado aquí es
+lo que de verdad estaba roto: la palabra partida por la mitad.
+
+---
+
 ## 2026-09-10 (7) — Clave de despliegue propia para la web
 
 El despliegue automático iba a usar `~/.ssh/nastos_gear_inventario`, que es la

@@ -19,9 +19,18 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     <footer className="grain border-t border-ink-600 bg-ink-900">
       <div className="shell relative z-1 pt-24 pb-12">
         <div className="flex flex-col gap-16 lg:flex-row lg:justify-between">
-          <div>
+          {/* `lg:shrink-0`: sin esto el ítem encoge en proporción a su
+              contenido, así que al bajar el cuerpo del lema la caja bajaba
+              también y el lema seguía sin caber — un lazo que no converge.
+              Con la base fija, la caja es la que pide el texto y ya está. */}
+          <div className="lg:shrink-0">
             <LogoMark className="h-6 w-auto" />
-            <p className="font-display text-display-l mt-8 text-bone">
+            {/* `en-columna` con su propio número: esto no ocupa el ancho de la
+                página, es un ítem flex al que la tabla de enlaces sólo le deja
+                276px a 1024 y 371px a 1280. Con la escala normal (61-64px) la
+                línea más ancha, «de cada», pedía 367-382px y «NOCHE» acababa
+                partida en dos. 4.4vw cabe en todo el rango. Ver globals.css. */}
+            <p className="font-display text-display-l en-columna [--display-en-columna:4.4vw] mt-8 text-bone">
               {dict.footer.tagline.map((line) => (
                 <span key={line} className="block">
                   {line}
