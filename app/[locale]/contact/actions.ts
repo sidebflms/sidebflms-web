@@ -1,5 +1,7 @@
 "use server";
 
+import { enviarConsulta } from "@/lib/correo";
+
 export type ContactState = {
   status: "idle" | "success" | "error";
   fieldErrors?: Partial<Record<"name" | "email" | "eventName" | "consent", string>>;
@@ -10,15 +12,11 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Server Action del formulario de contacto.
  *
- * TODO (cliente) — BLOQUEANTE ANTES DE PUBLICAR: esto valida y confirma, pero
- * NO envía ningún email todavía. No hay proveedor de correo transaccional
- * configurado (Resend, Postmark, SES…). Antes de producción hay que:
- *   1. Elegir proveedor y añadir su API key como variable de entorno.
- *   2. Sustituir el bloque marcado `// TODO: enviar email` por la llamada real.
- *   3. Decidir si además se guarda el lead en algún sitio (hoja de cálculo,
- *      CRM, base de datos) — de momento no se persiste en ningún lado.
- * Hasta entonces, el formulario valida correctamente pero el envío es un
- * placeholder que solo confirma en pantalla.
+ * El envío va por SMTP contra el Exim de la propia máquina; los detalles y el
+ * porqué están en `lib/correo.ts`. Si el correo no sale, esto devuelve
+ * `error` y el formulario enseña «no se ha podido enviar» con la dirección
+ * para escribir a mano — que es mejor que decir «recibido» y perder la
+ * consulta, que es lo que hacía la versión anterior.
  */
 export async function submitContact(
   _prevState: ContactState,
@@ -46,19 +44,26 @@ export async function submitContact(
     return { status: "error", fieldErrors };
   }
 
-  // TODO: enviar email (ver nota de arriba). De momento solo se registra en
-  // el log del servidor para poder verificar manualmente durante el desarrollo.
-  console.info("[contacto] nueva consulta", {
-    name,
+  const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
+
+  const enviado = await enviarConsulta({
+    nombre: name,
     email,
-    eventName,
-    eventDate: formData.get("eventDate"),
-    capacity: formData.get("capacity"),
-    stages: formData.get("stages"),
-    coverage: formData.getAll("coverage"),
-    budget: formData.get("budget"),
-    message: formData.get("message"),
+    evento: eventName,
+    fecha: texto("eventDate"),
+    aforo: texto("capacity"),
+    escenarios: texto("stages"),
+    // `coverage` son casillas: puede venir ninguna, una o varias.
+    cobertura: formData.getAll("coverage").map(String),
+    presupuesto: texto("budget"),
+    mensaje: texto("message"),
   });
+
+  if (!enviado) {
+    // Sin `fieldErrors`: el formulario distingue por eso entre «revisa este
+    // campo» y el aviso general de arriba. Ver components/ui/contact-form.tsx.
+    return { status: "error" };
+  }
 
   return { status: "success" };
 }
