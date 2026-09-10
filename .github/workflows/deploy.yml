@@ -33,6 +33,17 @@ jobs:
       # checkout de PRs de forks en `pull_request_target`, que aquí no se usa:
       # esto sólo hace checkout en empujones a `main`.
       - uses: actions/checkout@v7
+        with:
+          # Historia completa a propósito. El rsync de abajo NO excluye el
+          # `.git`, así que el que acaba en el servidor es éste: con el
+          # `fetch-depth: 1` que viene por defecto, allí quedaba un clon
+          # superficial de un solo commit —comprobado tras el despliegue del
+          # 10-09-2026— y el `git log` del servidor no servía para nada.
+          #
+          # Que el servidor quede exactamente en el commit publicado está bien
+          # y se queda así; lo que hacía falta es que además pueda contar de
+          # dónde viene.
+          fetch-depth: 0
 
       - name: Cargar la llave del VPS
         uses: webfactory/ssh-agent@v0.10.0
