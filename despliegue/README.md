@@ -181,10 +181,21 @@ Secretos en GitHub → Settings → Secrets and variables → Actions:
 |---|---|
 | `VPS_HOST` | `nastos.barrasa.dev` |
 | `VPS_USER` | `bote` |
-| `VPS_SSH_KEY` | La clave **privada** de `~/.ssh/nastos_gear_inventario` |
+| `VPS_SSH_KEY` | La clave **privada** de `~/.ssh/nastos_web` |
 
-Son los mismos tres que ya tiene el repositorio del inventario; los secretos
-no se comparten entre repositorios, hay que añadirlos también aquí.
+**Su propia clave, y no la del inventario.** Es un par ed25519 creado el
+2026-09-10 sólo para esto (`github-actions-deploy-web@20260910`, huella
+`SHA256:j4+merEy53h4O66PSeMVAq5ThMa+TIbgTvLaUbGz0R4`), con la pública dada de
+alta en `~/.ssh/authorized_keys` del VPS.
+
+Reutilizar `nastos_gear_inventario` habría sido un comando y ya está, pero
+entonces una sola clave abriría las dos aplicaciones y **revocarla las tumbaría
+las dos**. Con una por sitio, el día que haya que retirar una, la otra sigue
+desplegando. Es lo mismo que ya hacen `sidebfilms-studio-manager` y el
+inventario entre sí.
+
+Para retirarla: quitar la línea de `github-actions-deploy-web@20260910` de
+`~/.ssh/authorized_keys` en el VPS. Con eso deja de entrar, sin tocar nada más.
 
 A diferencia del inventario, el servidor **no** necesita deploy key: no lee de
 GitHub, es el runner quien le empuja el código.

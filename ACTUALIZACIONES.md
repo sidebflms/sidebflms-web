@@ -5,6 +5,27 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (7) — Clave de despliegue propia para la web
+
+El despliegue automático iba a usar `~/.ssh/nastos_gear_inventario`, que es la
+clave del inventario. Funcionaba, y estaba mal: una sola clave abriendo dos
+aplicaciones significa que **revocarla las tumba las dos**, justo lo que el
+README del inventario dice que hay que evitar.
+
+Ahora la web tiene la suya: `~/.ssh/nastos_web`, ed25519, creada el 2026-09-10
+como `github-actions-deploy-web@20260910`, con la pública dada de alta en el
+`~/.ssh/authorized_keys` del VPS (que **no** lo gestiona Hestia — comprobado —
+así que no lo va a sobrescribir).
+
+Comprobado que entra y que puede hacer lo que el despliegue necesita, y
+comprobado también que la del inventario sigue entrando: añadir una clave no
+retira las otras.
+
+Para retirarla algún día: borrar su línea de `~/.ssh/authorized_keys` en el
+VPS. Nada más.
+
+---
+
 ## 2026-09-10 (6) — Un reinicio ya no pelea con el vigilante por el puerto
 
 Tocado: `despliegue/sidebflms-web.sh`, `despliegue/README.md` y `.gitignore`.
