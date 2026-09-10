@@ -26,10 +26,16 @@ jobs:
   publicar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # v7 y no v4: las de la serie v4 corren sobre Node 20, que GitHub está
+      # retirando de los runners. Hoy sólo avisa; el día que lo quite del todo,
+      # el despliegue dejaría de funcionar por algo que no tiene nada que ver
+      # con lo que se acabe de tocar. Lo que v7 rompe frente a v4 es el
+      # checkout de PRs de forks en `pull_request_target`, que aquí no se usa:
+      # esto sólo hace checkout en empujones a `main`.
+      - uses: actions/checkout@v7
 
       - name: Cargar la llave del VPS
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
