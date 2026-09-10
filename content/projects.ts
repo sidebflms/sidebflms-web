@@ -272,7 +272,11 @@ export const PROJECTS: Project[] = [
     placeholder: false,
     categories: ["photo"],
     tone: 3,
-    featured: true,
+    // A PROPÓSITO fuera de destacados: la portada maqueta el showpiece + los
+    // demás como bloques editoriales alternados, y el titular de esa sección
+    // dice «Cuatro noches que no se repiten». Con cinco destacados salía un
+    // bloque de más y el titular dejaba de cuadrar con lo que se ve.
+    featured: false,
     year: "2026",
     venue: "Por confirmar",
     media: { video: null, poster: "/media/foto/fitz-rick-ross-1600.jpg" },
