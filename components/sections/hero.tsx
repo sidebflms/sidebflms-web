@@ -120,7 +120,22 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       // el "end" deja de tener espacio que redistribuir, así que todo arranca
       // pegado al borde superior, detrás del header fijo. El padding superior
       // garantiza el despeje del header pase lo que pase con la altura real.
-      className="relative flex min-h-dvh flex-col justify-end overflow-hidden pt-28 pb-28"
+      // `isolate` NO es decorativo, y quitarlo deja el hero en gris.
+      //
+      // El <video> de abajo va en `-z-10` para quedar por detrás del titular.
+      // Pero sin esto, esta sección no crea contexto de apilado —es
+      // `relative` con `z-index: auto`, que no basta—, así que ese -10 se
+      // escapa hasta el contexto raíz y el vídeo se pinta por debajo del
+      // FONDO DEL BODY (`bg-ink-800`). Por las reglas de pintado de CSS, los
+      // z-index negativos van antes que los fondos de los bloques
+      // descendientes.
+      //
+      // Lo traicionero es que con el póster parecía funcionar: un póster se
+      // pinta como el contenido de una imagen normal y se veía. En cuanto
+      // arranca la reproducción, el navegador promociona el vídeo a su propia
+      // capa de composición, y ahí el -10 sí se nota: el hero se queda en un
+      // gris liso con el vídeo sonando por detrás. Comprobado y reproducido.
+      className="isolate relative flex min-h-dvh flex-col justify-end overflow-hidden pt-28 pb-28"
     >
       {/* Capa de fondo procedural. Se ve mientras no exista el reel y también
           por detrás de él, para que el corte a negro nunca sea plano. */}

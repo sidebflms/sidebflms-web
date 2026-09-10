@@ -5,6 +5,51 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (13) — El hero se veía gris con el vídeo sonando por detrás
+
+Tocado: una palabra en `components/sections/hero.tsx`. La palabra es `isolate`.
+
+### El síntoma
+
+Al cargar, el hero se quedaba en un **gris liso**. Y no era que el vídeo
+fallara: el timecode corría, el botón decía «Pausar el reel» y el audio estaba
+ahí. Simplemente no se veía la imagen.
+
+### La causa
+
+El `<video>` va en `-z-10` para quedar por detrás del titular. Pero la sección
+que lo contiene era `relative` con `z-index: auto`, y **eso no crea contexto de
+apilado**. Ningún ancestro lo creaba tampoco. Así que ese `-10` se escapaba
+hasta el contexto raíz, y ahí se pintaba **por debajo del fondo del `<body>`**
+(`bg-ink-800`, que es exactamente ese gris).
+
+No es un fallo del navegador: por las reglas de pintado de CSS, dentro de un
+contexto de apilado los z-index negativos se dibujan **antes** que los fondos
+de los bloques descendientes. El fondo del body es uno de esos.
+
+### Por qué no se había visto antes
+
+Porque **con el póster funcionaba**. Un póster se pinta como el contenido de
+una imagen normal y se veía perfectamente. En cuanto arranca la reproducción,
+el navegador promociona el vídeo a su propia capa de composición, y ahí el
+`-10` sí se aplica: el hero se queda gris.
+
+Y en la máquina de desarrollo estaba **«reducir movimiento» activado**, así que
+el vídeo nunca arrancaba solo y siempre se veía el póster. El fallo era
+invisible justo donde se estaba mirando. Se reprodujo forzando `play()` a mano.
+
+### El arreglo
+
+`isolate` en la sección del hero: crea contexto de apilado, y con eso el `-10`
+se queda **dentro** de la sección en vez de escaparse al raíz.
+
+Comprobado con el vídeo reproduciéndose de verdad, no con el póster.
+
+**Si alguien quita ese `isolate` para «limpiar clases», el hero vuelve a ser
+gris.** Por eso lleva un comentario largo encima explicándolo.
+
+---
+
 ## 2026-09-10 (12) — El control del reel decía «Pausar» con el vídeo parado
 
 `toggle` en `components/sections/hero.tsx` hacía esto:
