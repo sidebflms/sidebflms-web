@@ -51,12 +51,13 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     const isMobile = window.matchMedia("(max-width: 767px)").matches;
     video.src = isMobile ? SOURCES.mobile : SOURCES.desktop;
 
+    // Con «reducir movimiento» activado NO se arranca solo, y es deliberado:
+    // un vídeo de fondo en bucle es justo lo que esa preferencia pide evitar.
+    // El visitante sigue teniendo el control de «Reproducir el reel», que es
+    // la diferencia entre respetar la preferencia y esconder el contenido.
     if (!prefersReducedMotion()) {
-      video.play().then(
-        () => setPlaying(true),
-        // Sin archivo (o con autoplay bloqueado) se queda la capa de fondo.
-        () => setPlaying(false)
-      );
+      // Sin `.then` que toque el estado: de eso se encargan `onPlay`/`onPause`.
+      video.play().catch(() => {});
     }
   }, []);
 
@@ -76,15 +77,29 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     return () => window.cancelAnimationFrame(frame);
   }, [hasVideo]);
 
+  /**
+   * Sólo pide. NO toca `playing`.
+   *
+   * Antes hacía `void video.play(); setPlaying(true)`: lanzaba la promesa, la
+   * tiraba, y daba por hecho que había funcionado. Cuando el navegador se
+   * negaba —que pasa más de lo que parece: políticas de autoplay, pestaña en
+   * segundo plano, ahorro de energía— el botón pasaba a decir «Pausar el reel»
+   * con el vídeo parado. El control mentía, y encima quedaba una promesa
+   * rechazada sin capturar.
+   *
+   * Ahora el estado lo dictan `onPlay` y `onPause` del propio elemento, así
+   * que el botón no puede decir otra cosa de la que está pasando: da igual
+   * quién lo arranque o lo pare.
+   */
   const toggle = () => {
     const video = videoRef.current;
     if (!video || !hasVideo) return;
     if (video.paused) {
-      void video.play();
-      setPlaying(true);
+      // El `catch` no es adorno: sin él, una negativa del navegador sale por
+      // consola como error no capturado y tapa los que sí importan.
+      video.play().catch(() => {});
     } else {
       video.pause();
-      setPlaying(false);
     }
   };
 
@@ -129,6 +144,9 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         tabIndex={-1}
         aria-hidden="true"
         onLoadedData={() => setHasVideo(true)}
+        // La verdad sobre si suena o no está aquí, no en quien pulsó el botón.
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
         onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)}
       />
 
