@@ -5,6 +5,98 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (6) — Un reinicio ya no pelea con el vigilante por el puerto
+
+Tocado: `despliegue/sidebflms-web.sh`, `despliegue/README.md` y `.gitignore`.
+Nada de la web en sí.
+
+### Qué cambia
+
+`arrancar`, `parar` y `reiniciar` cogen ahora un cerrojo antes de tocar nada, y
+el vigilante del cron lo respeta: mientras hay una operación en marcha no
+levanta la web por su cuenta, lo anota y espera al siguiente vistazo.
+
+### Por qué
+
+`publicar.sh` termina llamando a `reiniciar`, que hace `parar` y luego
+`arrancar`. Entre las dos cosas la web está caída unos cuatro segundos, y el
+vigilante mira cada cinco: en cada publicación había muchas papeletas de que
+mirase justo en esa ventana, viera la web caída —correcto— y la levantara
+—correcto— a la vez que la levantaba el propio `reiniciar`.
+
+Dos `npm start`, un solo puerto: el que llega tarde muere con
+`EADDRINUSE (errno -98)` en `sidebflms-web.log`. Se cura solo —queda un único
+árbol `npm` → `sh` → `next-server` escuchando—, así que no se cae nada; el daño
+es el registro, que se llena de un error rojo con pinta de grave que no lo es,
+justo donde hay que mirar cuando algo va mal de verdad.
+
+Aquí todavía no había pasado nunca (`sidebflms-web.log` tenía **cero**
+EADDRINUSE), pero es la misma carrera que sí se estaba viendo en el inventario,
+con el mismo código y el mismo cron. Era cuestión de publicar unas cuantas
+veces más.
+
+El razonamiento completo, con las medidas de antes y después, está en el
+`ACTUALIZACIONES.md` del repositorio del inventario, entrada
+«2026-09-10 (2)». El resumen de cómo funciona:
+
+- **Dos cerrojos, no uno.** `.vigilante.lock` es el de siempre y evita que dos
+  pasadas del cron se solapen, pero lo coge los 55 segundos que dura la ronda.
+  Si las operaciones manuales esperasen a ése, cada publicación se quedaría
+  plantada casi un minuto. El nuevo, `.operacion.lock`, protege sólo lo que de
+  verdad no puede hacerse dos veces: parar o arrancar.
+- Las operaciones manuales lo esperan hasta 90 segundos y, si no lo consiguen,
+  **avisan y no siguen**. El vigilante no lo espera nada: si no puede, se
+  aparta y lo dice.
+- Es reentrante (`reiniciar` lo coge una vez para `parar` y `arrancar`), se
+  suelta con `trap` al salir, al fallar y con Ctrl-C o TERM, y si aun así
+  quedara huérfano lleva dentro el PID de quien lo cogió: el siguiente
+  comprueba si ese proceso existe todavía y, si no, lo retira. Un cerrojo
+  eterno sería peor que ninguno.
+
+### El vigilante ahora dice cuándo se aparta
+
+Una línea en `vigilante.log`, y sólo cuando de verdad ha coincidido:
+
+```
+[2026-09-10 13:15:08] caída, pero hay una operación en marcha: no me meto
+```
+
+Sin ella no habría forma de distinguir *el vigilante se apartó* de *el
+vigilante no llegó a mirar*, ni de explicar un hueco de servicio durante una
+publicación.
+
+### Comprobado en nastos, no sólo que el script no da error
+
+Seis reinicios seguidos, escalonados para caer en puntos distintos del ciclo de
+cinco segundos del vigilante, con el cron corriendo:
+
+| | Resultado |
+|---|---|
+| EADDRINUSE nuevos en `sidebflms-web.log` | **0 de 6** |
+| El vigilante llegó a ver la caída | **2 veces, y se apartó las dos** |
+| Procesos escuchando en el 3200 al terminar | 1 |
+| `http://127.0.0.1:3200/es` al terminar | 200 |
+| `https://sidebflms.com/` por fuera | 401, o sea la contraseña sigue puesta |
+
+Los cerrojos se probaron además por separado, en un directorio de usar y tirar,
+contra los seis casos que importan (dos a la vez, reentrada, cerrojo de proceso
+muerto, cerrojo de proceso vivo, cerrojo recién puesto, y muerte por TERM).
+
+### El aviso sobre el inventario, que ya no era verdad
+
+La cabecera del script y el `despliegue/README.md` seguían diciendo que
+`gear-inventario.sh` mata por nombre de proceso y que **cada despliegue del
+inventario tumba esta web**. Eso se arregló allí el 10-09-2026: ahora para por
+puerto, igual que este script. Corregido en los dos sitios; un aviso falso en
+mayúsculas hace que dejen de leerse los que sí valen.
+
+### Qué hay que hacer al actualizar
+
+Nada. El cron no cambia. Los cerrojos son directorios que se crean solos en la
+raíz del repositorio en el servidor, y están en el `.gitignore`.
+
+---
+
 ## 2026-09-10 (5) — El error de hidratación: era la transición de ruta
 
 Era el último punto pendiente que quedaba del código (ver la entrada (4)). En

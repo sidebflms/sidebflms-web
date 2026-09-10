@@ -123,13 +123,29 @@ dos pasadas se solapen y arranquen dos procesos peleándose por el puerto.
 prescindir de él porque en esta máquina `KillUserProcesses` no está fijado: un
 proceso en segundo plano sobrevive al cierre de la sesión SSH.)*
 
-### CUIDADO con el inventario
+### Los dos cerrojos
 
-`gear-inventario.sh` para su aplicación con `pkill -f next-server`. Eso valía
-cuando era la única aplicación Next.js de la máquina; ahora hay dos con el
-mismo usuario, así que **cada despliegue del inventario también mata esta
-web**. El vigilante la repone en unos segundos, pero conviene arreglarlo allí:
-que pare por puerto, como hace `sidebflms-web.sh`.
+`.vigilante.lock` evita que dos pasadas del cron se solapen. `.operacion.lock`
+—el que se coge para parar o arrancar— evita lo otro: que el vigilante levante
+la web justo en el hueco en que la está reiniciando una publicación, y acaben
+los dos lanzando `npm start` sobre el mismo puerto. Cuando el vigilante se
+encuentra ese caso lo anota y se aparta:
+
+```
+[2026-09-10 13:15:08] caída, pero hay una operación en marcha: no me meto
+```
+
+Si un despliegue se queda parado diciendo que hay otra operación en marcha, el
+mensaje trae las dos órdenes: `cat .operacion.lock/pid` para ver quién lo tiene
+y `rm -rf .operacion.lock` si no corre nada.
+
+### El inventario ya no tumba esta web
+
+`gear-inventario.sh` paraba su aplicación con `pkill -f next-server`, que valía
+cuando era la única aplicación Next.js de la máquina pero mataba también a
+ésta. **Arreglado el 10-09-2026**: para por puerto, igual que este script. Si
+algún día se añade una tercera aplicación Node, mientras cada una tenga su
+puerto no hay nada que tocar.
 
 ---
 
