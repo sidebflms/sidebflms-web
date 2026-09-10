@@ -89,7 +89,9 @@ export const en: Dictionary = {
       {
         tag: "Aerial",
         value: "—",
-        line: "Wording pending verification",
+        // Ver la nota equivalente en es.ts: describe el plano y no afirma
+        // nada sobre permisos de vuelo.
+        line: "A drone above the crowd",
       },
       { tag: "Close", value: "04:30–06:00", line: "Aftermovie delivered in 48 hours" },
     ],
@@ -183,7 +185,7 @@ export const en: Dictionary = {
     label: "Contact",
     headline: ["Tell us", "what event", "you have"],
     intro:
-      "The more you tell us about capacity and stages, the tighter the quote. We answer within 24 working hours.",
+      "The more you tell us about capacity and stages, the tighter the quote.",
     directLabel: "Or straight to us",
     email: "hola@sidebflms.com",
     instagram: "Instagram",
@@ -243,7 +245,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Site owner",
-        text: "[Legal name] · [Tax ID] · [Registered address] · hola@sidebflms.com",
+        text: "SIDEBFLMS · hola@sidebflms.com",
       },
       {
         heading: "Purpose",
@@ -265,7 +267,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Controller",
-        text: "[Legal name] · [Tax ID] · hola@sidebflms.com",
+        text: "SIDEBFLMS · hola@sidebflms.com",
       },
       {
         heading: "Purpose",
@@ -277,11 +279,11 @@ export const en: Dictionary = {
       },
       {
         heading: "Retention",
-        text: "Data is kept for the duration of the commercial relationship and afterwards for the applicable statutory limitation periods. Where there is no job, it is deleted after [12] months.",
+        text: "Data is kept for the duration of the commercial relationship and afterwards for the applicable statutory limitation periods. Where there is no job, it is deleted after 12 months.",
       },
       {
         heading: "Recipients",
-        text: "Data is not shared with third parties except where legally required. The site is hosted by Vercel Inc., acting as data processor.",
+        text: "Data is not shared with third parties except where legally required. The site and the contact form\u2019s email are hosted on a dedicated server rented from Contabo GmbH (Germany), acting as data processor. Data does not leave the European Union.",
       },
       {
         heading: "Your rights",

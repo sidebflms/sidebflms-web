@@ -5,6 +5,80 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (2) — Los textos, al castellano de España
+
+Todos los cambios son de copy y de textos legales; no se ha tocado nada del
+despliegue ni del código.
+
+### El castellano estaba en voseo rioplatense
+
+«Contanos qué evento tenés», «Podés marcar varias», «Elegí una opción»,
+«Seguinos», «Filtrá por disciplina», «Probá otra vez»… La empresa es española
+y el grueso del tráfico llega de España, donde eso se lee como escrito por
+alguien de fuera. Pasado entero a castellano peninsular: 15 cadenas en
+`es.ts`.
+
+**Comprobado a 375 px**, que es donde importa: los titulares son arrays de
+líneas porque Akira Expanded es extremadamente ancha, y «Cuéntanos» es más
+largo que «Contanos». Encaja, y la fuente tiene la É acentuada — que era el
+riesgo de verdad, no el ancho.
+
+### El aviso legal: sólo SIDEBFLMS
+
+Tenía `[Razón social] · [CIF] · [Domicilio fiscal]` sin rellenar. Por decisión
+de Mario se queda **sólo «SIDEBFLMS»** y los otros dos se quitan *de momento*.
+
+**Que conste, porque no es gratis:** el art. 10 de la LSSI-CE obliga a que un
+sitio comercial publique nombre, NIF y domicilio de quien lo opera. Sin ellos
+el aviso legal **no cumple**. Cuando se quieran poner, están señalados con un
+comentario en `es.ts` y en `en.ts`, en el aviso legal y en el responsable de
+la política de privacidad.
+
+### La privacidad decía que la web está en Vercel, y ya no lo está
+
+Decía «El sitio se aloja en Vercel Inc., que actúa como encargado del
+tratamiento». Desde el despliegue de hoy eso es **falso**, y en un documento
+legal un dato falso es peor que un hueco.
+
+Comprobado quién es el proveedor real antes de escribirlo (RDAP de la IP
+161.97.179.70): **Contabo GmbH, Alemania**. Así que ahora dice eso, y que los
+datos no salen de la Unión Europea — que además es verdad y es información que
+al visitante le sirve.
+
+También se quitó el `[12]` de los corchetes del plazo de conservación: son 12
+meses.
+
+### La línea del aéreo ya dice algo
+
+En la pieza destacada, la fila «Aéreo» decía literalmente «Redacción pendiente
+de verificación» — visible en la web. Ahora dice **«Un drone por encima del
+aforo»**.
+
+Eso respeta el TODO original, que prohibía publicar afirmaciones sobre
+permisos de vuelo sin el papeleo delante: esta frase describe el plano y no
+afirma nada sobre categoría ni autorizaciones.
+
+**Sigue pendiente** el bloque de «Cobertura aérea» en Servicios, que sí dice
+«piloto certificado» y sigue sin contrastar.
+
+### La promesa de 24 h estaba dos veces
+
+Aparecía en la introducción de Contacto y otra vez en el acuse de recibo. Se
+queda sólo en el acuse, que es donde el visitante la necesita — acaba de
+enviar y quiere saber cuándo le contestan. Sigue **sin confirmarse que sea
+real**; hay una nota en el código junto a la frase.
+
+### Ojo, un fallo que ya venía de antes
+
+Las páginas dan un **error de hidratación** de React en el navegador.
+Comprobado que **no lo provocan estos cambios**: sale igual con el código
+original (probado apartando los cambios con `git stash`). No se ha tocado,
+pero está ahí y conviene mirarlo antes de abrir la web al público: en
+producción hace que React vuelva a dibujar en el cliente, y eso se ve como un
+parpadeo.
+
+---
+
 ## 2026-09-10 — La web se publica en nastos
 
 Hasta ahora esto era un proyecto que sólo corría en el portátil de quien lo
