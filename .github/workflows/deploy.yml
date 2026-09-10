@@ -1,0 +1,67 @@
+name: Publicar en nastos
+
+# Cada empujón a `main` sube el código al VPS, lo compila allí y reinicia el
+# proceso.
+#
+# ── En qué se diferencia del workflow del inventario ─────────────────────
+# Aquél hace `git pull` DENTRO del servidor, lo que obliga a que el servidor
+# tenga acceso de lectura a GitHub: una deploy key más que crear, que guardar
+# y que acordarse de rotar.
+#
+# Aquí no. El runner ya tiene el código (lo acaba de descargar) y ya tiene una
+# llave para entrar en el VPS. Con rsync se lo lleva directamente, y el
+# servidor no necesita saber que GitHub existe. Una credencial menos.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Dos despliegues a la vez dejarían el directorio a medias mientras uno
+# compila y el otro sobrescribe. Se encolan.
+concurrency:
+  group: publicar-web
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cargar la llave del VPS
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Subir el código
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          # `--delete` para que un fichero borrado en el repositorio
+          # desaparezca también del servidor. Las exclusiones son cosas que se
+          # generan allí y que borrar obligaría a recompilar de cero cada vez.
+          rsync -az --delete \
+            --exclude 'node_modules' \
+            --exclude '.next' \
+            --exclude '.env' \
+            --exclude '*.log' \
+            --exclude '.vigilante.lock' \
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/sidebflms-web/"
+
+      - name: Compilar y reiniciar
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd ~/sidebflms-web && ./despliegue/publicar.sh'
+
+      - name: Comprobar que responde de verdad desde fuera
+        # Que el proceso esté vivo no significa que sirva páginas. Se acepta
+        # 401 porque mientras la web esté con contraseña, eso es EXACTAMENTE
+        # lo que debe contestar a quien no la sabe: si un día contestara 200,
+        # es que la contraseña se ha caído y la web está abierta sin querer.
+        run: |
+          codigo=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://sidebflms.com/es)
+          echo "GET https://sidebflms.com/es -> $codigo"
+          case "$codigo" in
+            200|307|401) echo "correcto" ;;
+            *) echo "No responde como debería"; exit 1 ;;
+          esac
