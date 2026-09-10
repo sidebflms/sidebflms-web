@@ -246,3 +246,27 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================================
+   TRANSICIÓN DE RUTA CON MOVIMIENTO REDUCIDO — app/[locale]/template.tsx
+   Va aquí, y no en el componente, POR HIDRATACIÓN: el servidor no sabe qué
+   preferencia tiene el equipo, así que si el template decide el árbol mirando
+   `prefers-reduced-motion` manda una cosa y el cliente monta otra. El navegador
+   sí lo sabe, y además lo aplica en el primer pintado (sin esperar a hidratar,
+   sin parpadeo del barrido).
+
+   `!important` porque motion escribe `transform` y `opacity` en el `style` en
+   línea: sin él, el contenido se quedaría en opacidad 0 esperando una animación
+   que aquí no queremos.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* El barrido es lo único que se mueve de verdad: fuera. */
+  [data-route-sweep] {
+    display: none !important;
+  }
+
+  /* El contenido, visible desde el primer frame. */
+  [data-route-fade] {
+    opacity: 1 !important;
+  }
+}

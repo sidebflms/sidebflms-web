@@ -3,8 +3,6 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
-import { useMediaQuery } from "@/lib/use-media-query";
-
 /**
  * ★ ÚNICO USO DE MOTION (Framer Motion) EN TODO EL PROYECTO.
  *
@@ -17,45 +15,39 @@ import { useMediaQuery } from "@/lib/use-media-query";
  * `template.tsx` (y no `layout.tsx`) porque Next lo remonta en cada navegación:
  * es lo que dispara el barrido al entrar, por ejemplo, al detalle de proyecto.
  *
- * ─────────────────────────────────────────────────────────────────────────
- * OJO CON `prefers-reduced-motion` AQUÍ: NO uses `useReducedMotion()` de
- * motion. Ese hook lee `matchMedia` durante el PRIMER render de cliente
- * (`useState(prefersReducedMotion.current)`), mientras que en servidor vale
- * siempre `false`. En un equipo con "Reducir movimiento" activado eso hacía
- * que el servidor mandara el barrido y el cliente montara otro árbol, y React
- * reventaba con "Hydration failed…" en TODAS las páginas (el template envuelve
- * cada ruta). Ver ACTUALIZACIONES.md, 2026-09-10.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * MOVIMIENTO REDUCIDO: NO SE DECIDE AQUÍ. Está en app/globals.css, contra los
+ * atributos `data-route-sweep` y `data-route-fade` de más abajo.
  *
- * `useMediaQuery` (useSyncExternalStore) sí es seguro: su snapshot de servidor
- * se usa TAMBIÉN en el render de hidratación, así que servidor y cliente
- * coinciden y el ajuste llega en el render siguiente.
+ * Este componente NO puede llevar ni un hook que mire la preferencia del
+ * equipo (`useReducedMotion()` de motion, `matchMedia`, lo que sea): en
+ * servidor no hay preferencia que leer y en cliente sí, así que el árbol que
+ * manda el servidor y el que monta el cliente salen distintos y React revienta
+ * con "Hydration failed…" — y como el template envuelve TODAS las rutas, el
+ * error salía en todas las páginas. Ver ACTUALIZACIONES.md, 2026-09-10.
+ *
+ * Dicho de otro modo: aquí el árbol es siempre el mismo, pase lo que pase. Lo
+ * que cambia según la preferencia lo aplica el navegador con una media query,
+ * que además llega en el primer pintado y no espera a que hidrate nada.
  */
 export default function Template({ children }: { children: ReactNode }) {
-  const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
-
   return (
     <>
       {/* Barrido en rust que sube y desaparece. 0.4s: rápido y decidido. */}
-      {!reduced && (
-        <motion.div
-          aria-hidden="true"
-          initial={{ scaleY: 1 }}
-          animate={{ scaleY: 0 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          style={{ transformOrigin: "top" }}
-          className="pointer-events-none fixed inset-0 z-100 bg-rust-500"
-        />
-      )}
-      {/*
-       * El envoltorio del contenido se monta SIEMPRE, con o sin movimiento
-       * reducido: si apareciera y desapareciera, React desmontaría y volvería
-       * a montar la página entera en cuanto `reduced` pasa a `true`.
-       * Con movimiento reducido el fundido dura 0 → contenido visible ya.
-       */}
       <motion.div
+        data-route-sweep
+        aria-hidden="true"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        style={{ transformOrigin: "top" }}
+        className="pointer-events-none fixed inset-0 z-100 bg-rust-500"
+      />
+      <motion.div
+        data-route-fade
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={reduced ? { duration: 0 } : { duration: 0.3, delay: 0.15 }}
+        transition={{ duration: 0.3, delay: 0.15 }}
       >
         {children}
       </motion.div>

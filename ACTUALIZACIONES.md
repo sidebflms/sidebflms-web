@@ -5,6 +5,109 @@ reciente arriba.
 
 ---
 
+## 2026-09-10 (5) — El error de hidratación: era la transición de ruta
+
+Era el último punto pendiente que quedaba del código (ver la entrada (4)). En
+el navegador, **todas** las páginas soltaban el mismo error en consola:
+
+```
+Error: Hydration failed because the server rendered HTML didn't match the client
+```
+
+### Qué pasaba
+
+`app/[locale]/template.tsx` es el barrido en rust de las transiciones de ruta,
+y **envuelve todas las rutas**: por eso el error salía en todas las páginas y
+no en una.
+
+Ese componente empezaba mirando la preferencia del equipo:
+
+```tsx
+const reduced = useReducedMotion();     // de motion/react
+if (reduced) return <>{children}</>;    // ← árbol distinto
+```
+
+`useReducedMotion()` lee `matchMedia` **durante el primer render de cliente**
+(por dentro es `useState(prefersReducedMotion.current)`, ver
+`node_modules/framer-motion/…/use-reduced-motion.mjs`). En el servidor no hay
+`matchMedia` que leer, así que allí vale siempre `false`.
+
+Resultado, en un equipo con «Reducir movimiento» activado:
+
+| | Qué renderizaba |
+|---|---|
+| Servidor | el barrido + el envoltorio del fundido |
+| Cliente, primer render | `<main>` pelado |
+
+Dos árboles distintos donde React esperaba el mismo. El diagnóstico exacto lo
+daba el propio panel de Next: `+ <main id="main">` contra
+`- <div class="…fixed inset-0 …bg-rust-500">`.
+
+**Se reproduce sólo si tienes activado «Reducir movimiento»** (en macOS,
+Ajustes → Accesibilidad → Pantalla). Por eso a quien no lo tenga le parecerá
+que no pasa nada: no es que esté arreglado a medias, es que la condición no se
+da. El aviso *«You have Reduced Motion enabled on your device»* que salía en
+consola justo antes del error era la pista.
+
+No tenían nada que ver ni el `proxy.ts`, ni la cookie `sideb_locale`, ni el
+`Accept-Language`, ni GSAP, ni `lib/use-media-query.ts` — ese último, de
+hecho, está bien hecho: `useSyncExternalStore` usa su *snapshot* de servidor
+**también** en el render de hidratación, así que servidor y cliente coinciden.
+
+### Cómo se ha arreglado
+
+El template ya **no mira la preferencia**. Renderiza siempre el mismo árbol,
+pase lo que pase, y lo que cambia según «Reducir movimiento» lo aplica el
+navegador con una media query en `app/globals.css`, contra dos atributos
+nuevos:
+
+| | |
+|---|---|
+| `[data-route-sweep]` | el barrido en rust → `display: none` |
+| `[data-route-fade]` | el envoltorio del contenido → `opacity: 1` |
+
+Ambos con `!important`, que aquí no es pereza: motion escribe `transform` y
+`opacity` en el `style` en línea, y una regla de hoja de estilos sólo le gana
+así. Sin el `opacity: 1 !important` el contenido se quedaría **invisible**
+esperando una animación que no queremos que ocurra.
+
+Que lo decida el CSS y no el JavaScript arregla dos cosas de golpe:
+
+1. **El servidor no tiene que adivinar nada**, que era el origen del problema.
+2. **Ya no hay parpadeo.** Antes, aun con movimiento reducido, el barrido
+   venía en el HTML del servidor y no se iba hasta que hidrataba: una pantalla
+   naranja de cuerpo entero durante un instante. El navegador aplica la media
+   query en el primer pintado, así que ahora no llega a verse.
+
+### Qué hacer al traerte el repositorio
+
+**Nada.** No hay dependencias nuevas ni pasos extra: `npm ci` y `npm run dev`
+como siempre.
+
+Lo único que conviene saber es la regla, porque volver a romperlo es fácil:
+
+> En `template.tsx` —y en cualquier componente cliente que renderice el
+> servidor— **no se puede decidir qué se renderiza mirando algo que sólo
+> existe en el navegador**: `matchMedia`, `window`, `navigator`,
+> `localStorage`, la hora, un aleatorio. Si el aspecto depende de una media
+> query, va en CSS. Si de verdad hace falta en JavaScript, usa
+> `lib/use-media-query.ts` y no `useReducedMotion()` de motion.
+
+### Comprobado
+
+Con «Reducir movimiento» **activado**, que es la condición que lo rompía:
+portada, `/portfolio` y `/contact`, en `es` y en `en`, más navegación por
+enlace y cambio de idioma. Consola limpia en las seis, en `next dev` y contra
+`npm run build` + `npm start`. Y con la media query invertida a mano para
+simular un equipo sin la preferencia, para ver que el barrido sigue
+animándose: sube y desaparece como antes.
+
+Queda en consola un `404` de `/media/reel-720.mp4` en la portada. **No tiene
+que ver con esto**: es el vídeo del reel, que todavía no existe (está
+señalado como pendiente en `components/sections/hero.tsx`).
+
+---
+
 ## 2026-09-10 (4) — Cobertura aérea: confirmado, y fuera el cartel
 
 Mario confirma que **hay piloto certificado**. Era el último TODO marcado como
