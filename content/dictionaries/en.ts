@@ -15,9 +15,9 @@ export const en: Dictionary = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Audiovisual production for electronic music",
+      title: "SIDEBFLMS — Audiovisual production and drone specialists",
       description:
-        "Audiovisual production for electronic music: aftermovies, live multicam, aerial and stills. Based in Spain.",
+        "Live production, drone for film and advertising, cablecam, multicam, aftermovies and stills. Based in Spain.",
     },
     portfolio: {
       title: "Festival and club portfolio — SIDEBFLMS",
@@ -25,7 +25,7 @@ export const en: Dictionary = {
         "Aftermovies, multicam, aerial and stills for electronic music festivals and clubs.",
     },
     services: {
-      title: "Aftermovies, multicam, aerial and stills — SIDEBFLMS",
+      title: "Drone, cablecam, live and multicam — SIDEBFLMS",
       description:
         "Pre-production, live shoot, aerial coverage and post. Delivered in 24-48 hours.",
     },
@@ -43,6 +43,11 @@ export const en: Dictionary = {
       title: "Frequently asked questions about event coverage — SIDEBFLMS",
       description:
         "Delivery times, flight permits, vertical cuts, what we need to quote. The questions that come up before hiring.",
+    },
+    drone: {
+      title: "Drone for film, series, advertising and events — SIDEBFLMS",
+      description:
+        "Drone specialists based in Spain. The fleet, what can be done from the air, and how we fly safely.",
     },
     legal: { title: "Legal notice — SIDEBFLMS", description: "SIDEBFLMS legal notice." },
     privacy: {
@@ -66,7 +71,7 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, live multicam, aerial and stills. Based in Spain.",
+    sub: "Drone, live production, cablecam and multicam. Based in Spain.",
     ctaReel: "Watch the reel",
     ctaContact: "Tell us about your event",
     scrollHint: "Scroll to see the work",
@@ -119,6 +124,46 @@ export const en: Dictionary = {
     headline: ["Four stages", "of the same", "job"],
     intro:
       "The order isn't decorative: it's the actual process, from the moodboard to the file you post on Instagram.",
+    offerLabel: "What we do",
+    offer: [
+      {
+        key: "live",
+        title: "Live production",
+        body: "Live event direction with several cameras coordinated from a single control point.",
+      },
+      {
+        key: "drone",
+        title: "Drone",
+        body: "Our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
+      },
+      {
+        key: "cablecam",
+        title: "Cablecam",
+        body: "A cable-suspended camera that travels a venue above the crowd, with a movement neither a drone nor a crane can give you.",
+      },
+      {
+        key: "multicam",
+        title: "Multicam recording",
+        body: "Several synced operators, each on their own stage, with the cut plan locked before doors open.",
+      },
+      {
+        key: "aftermovie",
+        title: "Aftermovie",
+        body: "The piece that sums up a night and sells the next edition. Delivered within 24-48 hours, with vertical cuts for social.",
+      },
+      {
+        key: "ads",
+        title: "Advertising",
+        body: "Commercials and brand pieces, from script to final delivery.",
+      },
+      {
+        key: "photo",
+        title: "Photography",
+        body: "Booth, venue and artist photography, as part of the same coverage or as a separate job.",
+      },
+    ],
+    offerDroneLink: "See the fleet",
+    processLabel: "How we do it",
     stages: [
       {
         number: "01",
@@ -361,6 +406,24 @@ export const en: Dictionary = {
         a: "Yes. It gets solved in pre-production, not on the fly: a plan broken down by time slots with priorities per stage, so drone and camera aren't both in the same place while something happens in the other.",
       },
     ],
+  },
+
+  drone: {
+    label: "Drone",
+    headline: ["Drone", "specialists"],
+    intro:
+      "Drone isn't an add-on to the coverage: it's our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
+    fieldsLabel: "Who we fly for",
+    fields: ["Film", "Series", "Advertising", "Events"],
+    fleetLabel: "The fleet",
+    fleetNote:
+      "Taken from the metadata of our own archive, not from a catalogue: this is what has actually flown.",
+    actionLabel: "Action cameras",
+    capsLabel: "What can be done from the air",
+    safetyLabel: "How we fly",
+    safetyBody:
+      "With a certified pilot and a safety perimeter coordinated with production. Airspace restrictions at the location are dealt with in pre-production, not on the day of the shoot.",
+    ctaTitle: ["Tell us", "what you want", "to shoot"],
   },
 
   common: {

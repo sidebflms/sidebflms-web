@@ -17,9 +17,9 @@ export const es = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Productora audiovisual de música electrónica",
+      title: "SIDEBFLMS — Productora audiovisual y especialistas en drone",
       description:
-        "Productora audiovisual de música electrónica: aftermovies, multicámara en directo, drone y fotografía. Con base en España.",
+        "Producción en directo, drone para cine y publicidad, cablecam, multicámara, aftermovies y fotografía. Con base en España.",
     },
     portfolio: {
       title: "Portfolio de festivales y clubes — SIDEBFLMS",
@@ -27,7 +27,7 @@ export const es = {
         "Aftermovies, multicámara, drone y fotografía para festivales y clubes de música electrónica.",
     },
     services: {
-      title: "Aftermovies, multicámara, drone y fotografía — SIDEBFLMS",
+      title: "Drone, cablecam, directo y multicámara — SIDEBFLMS",
       description:
         "Preproducción, rodaje en directo, cobertura aérea y postproducción. Entrega en 24-48 horas.",
     },
@@ -45,6 +45,11 @@ export const es = {
       title: "Preguntas frecuentes sobre cobertura de eventos — SIDEBFLMS",
       description:
         "Plazos de entrega, permisos de vuelo, cortes verticales, qué hace falta para un presupuesto. Las dudas que salen antes de contratar.",
+    },
+    drone: {
+      title: "Drone para cine, series, publicidad y eventos — SIDEBFLMS",
+      description:
+        "Especialistas en drone con base en España. La flota, lo que se puede hacer desde el aire y cómo se vuela con seguridad.",
     },
     legal: { title: "Aviso legal — SIDEBFLMS", description: "Aviso legal de SIDEBFLMS." },
     privacy: {
@@ -68,7 +73,7 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Aftermovies, multicámara en directo, drone y fotografía. Con base en España.",
+    sub: "Drone, producción en directo, cablecam y multicámara. Con base en España.",
     ctaReel: "Ver el reel",
     ctaContact: "Hablemos de tu evento",
     scrollHint: "Desplázate para ver el trabajo",
@@ -127,6 +132,56 @@ export const es = {
     headline: ["Cuatro etapas", "del mismo", "encargo"],
     intro:
       "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subes a Instagram.",
+    // LO QUE OFRECEMOS — la lista de servicios. Va ANTES de las etapas: las
+    // etapas explican cómo se hace un encargo, pero quien llega a esta página
+    // quiere saber primero qué se puede encargar.
+    //
+    // DECISIÓN (Mario, 2026-09-11): la empresa no es sólo música electrónica.
+    // El drone en particular se hace para cine, series y publicidad, y tiene
+    // su propia página (/drone) con la flota.
+    //
+    // Nada de aquí nombra un rodaje concreto: son capacidades, no créditos.
+    // Los créditos van en el portfolio, con su material detrás.
+    offerLabel: "Qué hacemos",
+    offer: [
+      {
+        key: "live",
+        title: "Producción en directo",
+        body: "Realización de eventos en vivo con varias cámaras coordinadas desde un único punto de control.",
+      },
+      {
+        key: "drone",
+        title: "Drone",
+        body: "Nuestra especialidad. Para cine, series, publicidad y eventos, con piloto certificado y la flota adecuada a cada plano.",
+      },
+      {
+        key: "cablecam",
+        title: "Cablecam",
+        body: "Cámara suspendida por cable para recorrer un recinto por encima del público, con un movimiento que ni el drone ni la grúa consiguen.",
+      },
+      {
+        key: "multicam",
+        title: "Grabación multicámara",
+        body: "Varios operadores sincronizados, cada uno con su escenario, y el plan de cortes cerrado antes de que abran las puertas.",
+      },
+      {
+        key: "aftermovie",
+        title: "Aftermovie",
+        body: "La pieza que resume una noche y vende la siguiente edición. Entregada en 24-48 horas, con los cortes verticales para redes.",
+      },
+      {
+        key: "ads",
+        title: "Publicidad",
+        body: "Anuncios y piezas de marca, del guion a la entrega final.",
+      },
+      {
+        key: "photo",
+        title: "Fotografía",
+        body: "De cabina, de recinto y de artista, dentro de la misma cobertura o como encargo aparte.",
+      },
+    ],
+    offerDroneLink: "Ver la flota",
+    processLabel: "Cómo lo hacemos",
     stages: [
       {
         number: "01",
@@ -408,6 +463,24 @@ export const es = {
         a: "Sí. Se resuelve en preproducción, no sobre la marcha: un plan por franjas horarias con prioridades por escenario, para que drone y cámara no estén los dos en el mismo sitio mientras en el otro pasa algo.",
       },
     ],
+  },
+
+  drone: {
+    label: "Drone",
+    headline: ["Especialistas", "en drone"],
+    intro:
+      "El drone no es un extra de la cobertura: es nuestra especialidad. Para cine, series, publicidad y eventos, con piloto certificado y el aparato adecuado para cada plano.",
+    fieldsLabel: "Para quién volamos",
+    fields: ["Cine", "Series", "Publicidad", "Eventos"],
+    fleetLabel: "La flota",
+    fleetNote:
+      "Sacada de los metadatos de nuestro propio archivo, no de un catálogo: es lo que ha volado de verdad.",
+    actionLabel: "Cámaras de acción",
+    capsLabel: "Lo que se puede hacer desde el aire",
+    safetyLabel: "Cómo volamos",
+    safetyBody:
+      "Con piloto certificado y perímetro de seguridad coordinado con producción. Las restricciones de espacio aéreo del lugar se resuelven en preproducción, no el mismo día del rodaje.",
+    ctaTitle: ["Cuéntanos", "qué quieres", "grabar"],
   },
 
   common: {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
@@ -6,7 +7,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { pad } from "@/lib/utils";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
-import { isLocale } from "@/lib/routes";
+import { isLocale, path } from "@/lib/routes";
 
 export async function generateMetadata({
   params,
@@ -39,7 +40,41 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
         </Reveal>
       </header>
 
-      <div className="mt-20">
+      {/* QUÉ HACEMOS — los servicios, ANTES de las etapas. Quien llega aquí
+          quiere saber primero qué se puede encargar; cómo se hace, después. */}
+      <section className="shell mt-20">
+        <Reveal>
+          <p className="label">{dict.services.offerLabel}</p>
+        </Reveal>
+        <Reveal stagger>
+          <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2 lg:grid-cols-3">
+            {dict.services.offer.map((servicio) => (
+              <li key={servicio.key} className="flex flex-col gap-3 bg-ink-800 p-7">
+                <h2 className="font-display text-display-m text-bone">{servicio.title}</h2>
+                <p className="measure text-smoke">{servicio.body}</p>
+                {/* El drone es la especialidad y tiene página propia con la
+                    flota: es el único servicio que enlaza a más. */}
+                {servicio.key === "drone" && (
+                  <Link
+                    href={path(locale, "drone")}
+                    className="label mt-auto pt-2 text-rust-300 transition-colors hover:text-rust-500"
+                  >
+                    {dict.services.offerDroneLink} →
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </section>
+
+      <div className="shell mt-24">
+        <Reveal>
+          <p className="label">{dict.services.processLabel}</p>
+        </Reveal>
+      </div>
+
+      <div className="mt-8">
         {dict.services.stages.map((stage, index) => (
           <Reveal
             key={stage.number}

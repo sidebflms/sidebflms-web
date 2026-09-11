@@ -39,6 +39,7 @@ export const ROUTES = {
   // idénticos a propósito (ver la decisión escrita arriba en este mismo mapa).
   about: { es: "about", en: "about" },
   faq: { es: "faq", en: "faq" },
+  drone: { es: "drone", en: "drone" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
   legal: { es: "legal", en: "legal" },

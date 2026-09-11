@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { PROJECTS } from "@/content/projects";
 import { LOCALES, ROUTES, SITE_URL, type RouteKey } from "@/lib/routes";
 
-const STATIC_KEYS: RouteKey[] = ["home", "portfolio", "services", "about", "faq", "contact", "legal", "privacy"];
+const STATIC_KEYS: RouteKey[] = ["home", "portfolio", "services", "about", "faq", "drone", "contact", "legal", "privacy"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];

@@ -60,7 +60,17 @@ export type Project = {
   year: string;
   venue: string;
   /** Rutas al material real. `null` mientras no exista. */
-  media: { video: string | null; poster: string | null };
+  media: {
+    video: string | null;
+    poster: string | null;
+    /**
+     * Versión 4:5 recortada DEL MÁSTER ORIGINAL, no de la horizontal: los
+     * másters están en 4:3 con encuadre abierto, así que el vertical es un
+     * encuadre pensado y no un recorte de un recorte. Mismo tramo y mismo
+     * frame de póster que la horizontal. `undefined` si la pieza no la tiene.
+     */
+    vertical?: { video: string | null; poster: string };
+  };
   title: Record<Locale, string>;
   date: Record<Locale, string>;
   hardFact: Record<Locale, string>;
@@ -80,7 +90,11 @@ export const PROJECTS: Project[] = [
     showpiece: true,
     year: "—",
     venue: "Holika",
-    media: { video: "/media/holika-portal.mp4", poster: "/media/holika-portal.jpg" },
+    media: {
+      video: "/media/holika-portal.mp4",
+      poster: "/media/holika-portal.jpg",
+      vertical: { video: "/media/holika-portal-vertical.mp4", poster: "/media/holika-portal-vertical.jpg" },
+    },
     title: { es: "Holika — el portal", en: "Holika — the portal" },
     date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {
@@ -108,7 +122,11 @@ export const PROJECTS: Project[] = [
     featured: true,
     year: "2026",
     venue: "Fabrik",
-    media: { video: "/media/fatima-hajji-fabrik.mp4", poster: "/media/fatima-hajji-fabrik.jpg" },
+    media: {
+      video: "/media/fatima-hajji-fabrik.mp4",
+      poster: "/media/fatima-hajji-fabrik.jpg",
+      vertical: { video: "/media/fatima-hajji-fabrik-vertical.mp4", poster: "/media/fatima-hajji-fabrik-vertical.jpg" },
+    },
     title: { es: "Fátima Hajji — Fabrik", en: "Fátima Hajji — Fabrik" },
     date: { es: "17 de enero de 2026", en: "17 January 2026" },
     hardFact: {
@@ -138,7 +156,11 @@ export const PROJECTS: Project[] = [
     featured: true,
     year: "—",
     venue: "Monegros",
-    media: { video: "/media/monegros-hora-dorada.mp4", poster: "/media/monegros-hora-dorada.jpg" },
+    media: {
+      video: "/media/monegros-hora-dorada.mp4",
+      poster: "/media/monegros-hora-dorada.jpg",
+      vertical: { video: "/media/monegros-hora-dorada-vertical.mp4", poster: "/media/monegros-hora-dorada-vertical.jpg" },
+    },
     title: { es: "Monegros — hora dorada", en: "Monegros — golden hour" },
     date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {
@@ -164,7 +186,11 @@ export const PROJECTS: Project[] = [
     featured: true,
     year: "2026",
     venue: "Por confirmar",
-    media: { video: "/media/gordo-lebanon.mp4", poster: "/media/gordo-lebanon.jpg" },
+    media: {
+      video: "/media/gordo-lebanon.mp4",
+      poster: "/media/gordo-lebanon.jpg",
+      vertical: { video: "/media/gordo-lebanon-vertical.mp4", poster: "/media/gordo-lebanon-vertical.jpg" },
+    },
     title: { es: "GORDO — Lebanon", en: "GORDO — Lebanon" },
     date: { es: "15 de agosto de 2026", en: "15 August 2026" },
     hardFact: {
@@ -192,7 +218,11 @@ export const PROJECTS: Project[] = [
     featured: false,
     year: "2026",
     venue: "Fabrik · Area 19",
-    media: { video: "/media/adrian-mills-area19.mp4", poster: "/media/adrian-mills-area19.jpg" },
+    media: {
+      video: "/media/adrian-mills-area19.mp4",
+      poster: "/media/adrian-mills-area19.jpg",
+      vertical: { video: "/media/adrian-mills-area19-vertical.mp4", poster: "/media/adrian-mills-area19-vertical.jpg" },
+    },
     title: { es: "Adrián Mills — Area 19", en: "Adrián Mills — Area 19" },
     date: { es: "7 de marzo de 2026", en: "7 March 2026" },
     hardFact: {
@@ -219,7 +249,11 @@ export const PROJECTS: Project[] = [
     featured: false,
     year: "2026",
     venue: "Fabrik",
-    media: { video: "/media/fabrik-150.mp4", poster: "/media/fabrik-150.jpg" },
+    media: {
+      video: "/media/fabrik-150.mp4",
+      poster: "/media/fabrik-150.jpg",
+      vertical: { video: "/media/fabrik-150-vertical.mp4", poster: "/media/fabrik-150-vertical.jpg" },
+    },
     title: { es: "Fabrik 150", en: "Fabrik 150" },
     date: { es: "21 de febrero de 2026", en: "21 February 2026" },
     hardFact: {
@@ -247,7 +281,11 @@ export const PROJECTS: Project[] = [
     featured: false,
     year: "2026",
     venue: "Por confirmar",
-    media: { video: "/media/prospa-multicam.mp4", poster: "/media/prospa-multicam.jpg" },
+    media: {
+      video: "/media/prospa-multicam.mp4",
+      poster: "/media/prospa-multicam.jpg",
+      vertical: { video: "/media/prospa-multicam-vertical.mp4", poster: "/media/prospa-multicam-vertical.jpg" },
+    },
     title: { es: "Prospa — multicámara", en: "Prospa — multicam" },
     date: { es: "Por confirmar", en: "To confirm" },
     hardFact: {

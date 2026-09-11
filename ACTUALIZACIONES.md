@@ -5,6 +5,65 @@ reciente arriba.
 
 ---
 
+## 2026-09-11 (20) — Drone con página propia, siete servicios y un mosaico de prueba
+
+### La empresa ya no se presenta sólo como «música electrónica»
+
+Mario lo aclaró: se hace producción en directo, **drone para cine, series y
+publicidad**, cablecam, multicámara, aftermovie, publicidad y fotografía. El
+drone es la especialidad.
+
+Cambia el título de la portada («Productora audiovisual y especialistas en
+drone»), su descripción, la línea de la primera pantalla y el título de
+Servicios — que decía «Aftermovies, multicámara, drone y fotografía» y ahora
+se quedaba corto. **El lema «CAPTURE THE ENERGY» no se toca**: es la línea de
+marca y está marcado en el código como fijo.
+
+### Servicios: los siete, antes de las etapas
+
+La página listaba las cuatro etapas de un encargo, que es CÓMO se hace, no QUÉ
+se ofrece. Ahora van primero los siete servicios y debajo las etapas, bajo
+«Cómo lo hacemos». El de drone es el único que enlaza a más.
+
+Ningún servicio nombra un rodaje concreto: son capacidades, no créditos.
+
+### `/drone` — la especialidad, con la flota
+
+**La flota no la escribió nadie: sale de los metadatos de los propios ficheros.**
+Cada vídeo de un DJI lleva grabado el modelo del aparato, y se leyó con
+`ffprobe` sobre el archivo: Mavic 4 Pro (la plataforma principal), Mini 5 Pro,
+Mini 4 Pro, y dos cámaras de acción. Cada capacidad de la página —vertical
+nativo, RAW de 100 MP, FPV— apunta en `content/fleet.ts` al fichero que la
+respalda.
+
+**Y lo que falta está anotado, no inventado**: no aparece ningún dron de cine
+en el archivo, el FPV de Holika perdió la etiqueta al exportarse, y no hay nada
+de cablecam. Esta página se enseña a producciones que piden la ficha técnica.
+
+### El mosaico de portfolio, en prueba
+
+En `/portfolio-prueba`, **sin tocar `/portfolio`**, para comparar.
+
+Sale de medir el de un competidor: 15 piezas, todas vídeo, dos formatos a la
+misma altura alternando de lado. Aquí, además, cada pieza dice qué es, el
+showpiece abre a ancho entero, el vídeo arranca al pasar el ratón en vez de
+quince a la vez, y los verticales son de verdad.
+
+**Los verticales se recortaron del máster, no de la horizontal.** Los másters
+son 4:3 con encuadre abierto, así que de ahí sale un 4:5 con resolución de
+sobra; recortar la horizontal de 720 habría sido recortar un recorte. Mismo
+tramo y mismo póster que la horizontal, para que sean la misma pieza.
+
+`noindex` y fuera de rutas, menú y sitemap: si convence, pasa a `/portfolio` y
+esta página se borra.
+
+### Peso
+
+El material en git pasa de 38 a unos 60 MB con los verticales. Sigue lejos de
+donde conviene sacarlo del repositorio, pero crece rápido.
+
+---
+
 ## 2026-09-10 (19) — Las ciudades, sólo en el FAQ
 
 Decisión de Mario. Madrid, Barcelona e Ibiza aparecían en seis sitios por
