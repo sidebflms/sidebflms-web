@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# ---------------------------------------------------------------------
+# Prepara las fotos del equipo para la página de Nosotros.
+#
+#   ./scripts/fotos-equipo.sh /ruta/a/la/carpeta/con/las/fotos
+#
+# La carpeta de entrada tiene que tener los ficheros NOMBRADOS POR SLUG,
+# que es el que figura para cada persona en `content/team.ts`:
+#
+#   mario-bote.jpg   fernando.jpg   galoguin.jpg   ivan.jpg    jota.jpg
+#   kenny.jpg        maria.jpg      nacho-lopez.jpg natalia.jpg
+#   ruben.jpg        sergio.jpg
+#
+#   grupo.jpg        ← la foto de grupo
+#
+# Vale .jpg, .jpeg, .png o .heic (la del iPhone). Da igual el tamaño o
+# la orientación: el script recorta y escala todas igual.
+#
+# ── POR QUÉ UN SCRIPT Y NO A MANO ────────────────────────────────────
+# Once fotos hechas por gente distinta llegan con once tamaños, once
+# encuadres y once pesos. A mano se acaba con una a 8 MB y otra
+# pixelada. Aquí todas salen iguales: los retratos a 4:5 y 800×1000, la
+# de grupo a 21:9 y 2400 de ancho. `next/image` las convierte después a
+# WebP/AVIF según el navegador, así que basta con guardar JPG.
+#
+# NO toca `content/team.ts`: al terminar dice qué líneas cambiar.
+# ---------------------------------------------------------------------
+set -uo pipefail
+
+IN="${1:?uso: $0 /carpeta/con/las/fotos}"
+RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# OUT_EQUIPO permite probar el script sin escribir en el repositorio.
+OUT="${OUT_EQUIPO:-$RAIZ/public/media/equipo}"
+mkdir -p "$OUT"
+
+command -v ffmpeg >/dev/null || { echo "falta ffmpeg"; exit 1; }
+
+# La entrada nunca puede ser la propia salida: sobrescribiría los originales.
+case "$(cd "$IN" && pwd)" in "$OUT"*) echo "la carpeta de entrada no puede ser $OUT"; exit 1;; esac
+
+buscar() {
+  for ext in jpg jpeg png heic JPG JPEG PNG HEIC; do
+    [ -f "$IN/$1.$ext" ] && { echo "$IN/$1.$ext"; return; }
+  done
+}
+
+hechos=0; faltan=()
+SLUGS=(mario-bote fernando galoguin ivan jota kenny maria nacho-lopez natalia ruben sergio)
+
+for s in "${SLUGS[@]}"; do
+  f="$(buscar "$s")"
+  if [ -z "$f" ]; then faltan+=("$s"); continue; fi
+  # Recorte 4:5 centrado en horizontal y ANCLADO ARRIBA en vertical: en un
+  # retrato lo que importa es la cabeza, y centrar en vertical la corta
+  # cuando la foto viene de cuerpo entero.
+  ffmpeg -v error -y -i "$f" \
+    -vf "crop='min(iw,ih*4/5)':'min(ih,iw*5/4)':'(iw-min(iw,ih*4/5))/2':0,scale=800:1000:flags=lanczos" \
+    -q:v 3 "$OUT/$s.jpg" && hechos=$((hechos+1)) && echo "  ✓ $s"
+done
+
+g="$(buscar grupo)"
+if [ -n "$g" ]; then
+  ffmpeg -v error -y -i "$g" \
+    -vf "crop=iw:'min(ih,iw*9/21)':0:'(ih-min(ih,iw*9/21))/2',scale=2400:-2:flags=lanczos" \
+    -q:v 3 "$OUT/grupo.jpg" && echo "  ✓ grupo"
+fi
+
+echo
+echo "Retratos: $hechos de ${#SLUGS[@]}"
+if [ ${#faltan[@]} -gt 0 ]; then
+  echo "Faltan: ${faltan[*]}"
+  echo "(Mientras falte uno, la web NO enseña retratos: ver HAY_RETRATOS en content/team.ts.)"
+fi
+echo
+echo "Ahora, en content/team.ts, cambia 'foto: null' por la ruta en cada persona que tenga foto:"
+echo '  foto: "/media/equipo/<slug>.jpg"'
+[ -n "$g" ] && echo 'Y la de grupo:  FOTO_GRUPO = "/media/equipo/grupo.jpg"'

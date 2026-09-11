@@ -360,6 +360,7 @@ export const en: Dictionary = {
     howLabel: "How we work",
     teamLabel: "The crew",
     teamNote: "Roles and photos pending",
+    groupAlt: "The SIDEBFLMS crew",
     ctaTitle: ["Tell us", "what event", "you have"],
   },
 

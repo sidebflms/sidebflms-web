@@ -29,6 +29,12 @@
 export type Miembro = {
   /** Como quiere aparecer en la web. Apodo si es como se le conoce. */
   nombre: string;
+  /**
+   * Nombre del fichero de su foto, sin extensión, en `public/media/equipo/`.
+   * Es fijo aunque cambie cómo aparece el nombre: así renombrar a alguien no
+   * rompe su foto.
+   */
+  slug: string;
   /** `null` mientras no esté confirmado. NO se rellena a ojo. */
   role: { es: string; en: string } | null;
   /** Ruta en `public/media/equipo/`. `null` mientras no haya foto. */
@@ -36,15 +42,33 @@ export type Miembro = {
 };
 
 export const EQUIPO: Miembro[] = [
-  { nombre: "Mario Bote", role: null, foto: null },
-  { nombre: "Fernando", role: null, foto: null },
-  { nombre: "Galoguin", role: null, foto: null },
-  { nombre: "Iván", role: null, foto: null },
-  { nombre: "Jota", role: null, foto: null },
-  { nombre: "Kenny", role: null, foto: null },
-  { nombre: "María", role: null, foto: null },
-  { nombre: "Nacho López", role: null, foto: null },
-  { nombre: "Natalia", role: null, foto: null },
-  { nombre: "Rubén", role: null, foto: null },
-  { nombre: "Sergio", role: null, foto: null },
+  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: null },
+  { nombre: "Fernando", slug: "fernando", role: null, foto: null },
+  { nombre: "Galoguin", slug: "galoguin", role: null, foto: null },
+  { nombre: "Iván", slug: "ivan", role: null, foto: null },
+  { nombre: "Jota", slug: "jota", role: null, foto: null },
+  { nombre: "Kenny", slug: "kenny", role: null, foto: null },
+  { nombre: "María", slug: "maria", role: null, foto: null },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: null, foto: null },
+  { nombre: "Natalia", slug: "natalia", role: null, foto: null },
+  { nombre: "Rubén", slug: "ruben", role: null, foto: null },
+  { nombre: "Sergio", slug: "sergio", role: null, foto: null },
 ];
+
+/**
+ * La foto de grupo. Va a ancho completo encima de la rejilla.
+ * `null` mientras no exista: la página simplemente no la pinta.
+ */
+export const FOTO_GRUPO: string | null = null;
+
+/**
+ * ¿Se pintan los retratos individuales?
+ *
+ * Sólo si TODOS tienen foto. Con la mitad, la rejilla se ve a medio hacer —
+ * seis caras y cinco huecos—, que es peor que ninguna foto. Mientras falte una
+ * sola, se queda la versión de sólo nombres, que está completa.
+ *
+ * Así no hay que acordarse de nada: el día que entre la última foto, los
+ * retratos aparecen solos.
+ */
+export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== null);

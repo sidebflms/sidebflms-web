@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-09-11 (21) — Nosotros, preparada para fotos de equipo
+
+La página ya sabe pintar una **foto de grupo** a ancho completo y un **retrato**
+por persona. **No hay fotos todavía**: en el archivo no hay ninguna del
+equipo, sólo de eventos y artistas, y no se generan ni se toman prestadas —
+en una página de «quiénes somos» sería justo lo contrario de lo que tiene que
+transmitir.
+
+### Todos o ninguno
+
+Los retratos sólo se pintan si **todas** las personas tienen foto
+(`HAY_RETRATOS` en `content/team.ts`). Seis caras y cinco huecos se ven a medio
+hacer, y eso es peor que ninguna foto. Mientras falte una, se queda la rejilla
+de nombres, que está completa. El día que entre la última, aparecen solos.
+
+### En blanco y negro, con color al pasar el ratón
+
+Once fotos hechas en sitios distintos rara vez casan de color. En gris se leen
+como una serie aunque vengan de once cámaras.
+
+### `scripts/fotos-equipo.sh`
+
+Recorta y escala todas igual: retratos a 4:5 y 800×1000 **anclados arriba**
+(en un retrato importa la cabeza, y centrar en vertical la corta cuando la foto
+es de cuerpo entero), la de grupo a 21:9 y 2400 de ancho. Admite JPG, PNG y
+HEIC. Los ficheros de entrada van **nombrados por el slug** de cada persona,
+que está en `content/team.ts`.
+
+Probado con imágenes sintéticas en los cuatro casos —apaisada, vertical,
+cuadrada y de grupo— sin escribir en el repositorio (`OUT_EQUIPO` lo redirige).
+
+---
+
 ## 2026-09-11 (20) — Drone con página propia, siete servicios y un mosaico de prueba
 
 ### La empresa ya no se presenta sólo como «música electrónica»

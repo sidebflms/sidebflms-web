@@ -417,6 +417,7 @@ export const es = {
     teamLabel: "El equipo",
     // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.
     teamNote: "Cargos y fotos pendientes",
+    groupAlt: "El equipo de SIDEBFLMS",
     ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
   },
 

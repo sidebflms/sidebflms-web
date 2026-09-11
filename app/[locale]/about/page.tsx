@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
-import { EQUIPO } from "@/content/team";
+import Image from "next/image";
+
+import { EQUIPO, FOTO_GRUPO, HAY_RETRATOS } from "@/content/team";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -81,14 +83,48 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             </div>
           </Reveal>
 
+          {/* FOTO DE GRUPO — sólo si existe. Sin ella la sección no deja un hueco
+              ni un marco vacío: pasa directamente a los nombres. */}
+          {FOTO_GRUPO && (
+            <Reveal>
+              <div className="relative mt-8 aspect-[21/9] overflow-hidden bg-ink-900">
+                <Image
+                  src={FOTO_GRUPO}
+                  alt={dict.about.groupAlt}
+                  fill
+                  sizes="(max-width: 1440px) 100vw, 1440px"
+                  className="object-cover"
+                />
+              </div>
+            </Reveal>
+          )}
+
           <Reveal stagger>
             <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
               {EQUIPO.map((miembro) => (
-                <li key={miembro.nombre} className="border-t border-ink-600 pt-4">
-                  <p className="text-bone">{miembro.nombre}</p>
-                  {/* Sin cargo no se pinta nada. Ver la nota de content/team.ts:
-                      un cargo inventado se detecta en la primera llamada. */}
-                  {miembro.role && <p className="label mt-1">{miembro.role[locale]}</p>}
+                <li key={miembro.slug}>
+                  {/* RETRATO — sólo cuando TODOS tienen foto (ver HAY_RETRATOS en
+                      content/team.ts). Mientras falte uno, rejilla de nombres. */}
+                  {HAY_RETRATOS && miembro.foto && (
+                    <div className="relative mb-4 aspect-[4/5] overflow-hidden bg-ink-900">
+                      <Image
+                        src={miembro.foto}
+                        alt={miembro.nombre}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        // Retratos en blanco y negro que recuperan el color al pasar
+                        // el ratón: once fotos hechas en sitios distintos rara vez
+                        // casan de color, y en gris se leen como una serie.
+                        className="object-cover grayscale transition-[filter] duration-500 hover:grayscale-0"
+                      />
+                    </div>
+                  )}
+                  <div className="border-t border-ink-600 pt-4">
+                    <p className="text-bone">{miembro.nombre}</p>
+                    {/* Sin cargo no se pinta nada. Ver la nota de content/team.ts:
+                        un cargo inventado se detecta en la primera llamada. */}
+                    {miembro.role && <p className="label mt-1">{miembro.role[locale]}</p>}
+                  </div>
                 </li>
               ))}
             </ul>
