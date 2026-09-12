@@ -5,6 +5,58 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (25) — Mosaico v3: la página se mueve sola
+
+En `/portfolio-prueba-3`. Mario descartó la v2: **pedía algo al visitante**, y
+lo que quería era una página viva como la del competidor.
+
+### Todo reproduciéndose, pero sólo lo que se ve
+
+Allí los 15 vídeos de la página se reproducen a la vez, estén donde estén. En
+un móvil con datos eso es una página que no carga.
+
+Aquí un `IntersectionObserver` arranca la pieza al entrar en pantalla y la
+pausa al salir. Y el vídeo **ni se descarga** hasta que se acerca:
+`preload="none"` de partida, que sube a `auto` justo antes.
+
+Medido en la página ya montada, con 9 vídeos:
+
+```
+en pantalla:      3
+reproduciéndose:  5   (los 3 + 2 que entran, por el margen de 20 %)
+sin descargar:    4
+```
+
+Da igual que el portfolio crezca a cincuenta piezas: en marcha nunca hay más de
+las que caben en la ventana.
+
+### Paralaje, que ellos no tienen
+
+El metraje se desplaza dentro de su marco a distinta velocidad que la página.
+Es lo que da profundidad en vez de tablón de recortes. El marco recorta y la
+capa de dentro va un 12 % más alta, para que haya recorrido sin dejar hueco.
+
+Con GSAP ScrollTrigger, que es la herramienta que este sitio usa para todo lo
+que depende del scroll. Comprobado: el transform pasa de −4,5 px a +15,3 px al
+desplazarse.
+
+### Menos ficha, más pieza
+
+En reposo sólo el título. La disciplina, el recinto y la fecha aparecen al
+acercarse. El mosaico tiene que leerse como vídeo, no como un listado — que era
+lo que lastraba las dos versiones anteriores.
+
+### Pendiente antes de que esto sustituya al portfolio
+
+`prefers-reduced-motion` **no se comprueba** en esta página de prueba, porque
+si no se vería muerta justo en la máquina desde la que se está valorando. Pero
+un vídeo de fondo que arranca solo **sí** es lo que esa preferencia quiere
+evitar —al contrario que el rebobinado de la v2, que lo movía el visitante—,
+así que en producción lo honesto es enseñar el póster y un control a quien la
+tenga activada.
+
+---
+
 ## 2026-09-12 (24) — Los cuatro rótulos de la pieza destacada se salían
 
 Sólo lo veía quien tuviera **«reducir movimiento»** activado, que es
