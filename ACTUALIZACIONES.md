@@ -48,31 +48,38 @@ Queda en pie lo otro, que es distinto y no lo arregla un permiso general: que
 cada uno sepa **cómo** aparece escrito, sobre todo quien sale con apodo
 (Galoguin, Jota, Kenny) y no con su nombre.
 
-### Lo de la tipografía NO se ha hecho, y aquí está el porqué
+### La tipografía: licencia confirmada y el aviso, cambiado
 
-Mario pidió poner «Typeface © SIDEBFLMS» en el fichero de la tipografía. No se
-ha tocado.
+Mario confirmó el 2026-09-12 que **ya tiene la licencia comercial** de Akira
+Expanded. Eso levanta el bloqueante que estaba anotado en la cabecera de
+`app/globals.css` desde que se instaló la tipografía: el `.otf` de partida era
+la demo de Typologic («free for personal use only»), que no cubre uso comercial
+ni `@font-face` en producción. Ya no aplica, y era **lo último del código que
+impedía abrir la web al público**.
 
-El aviso que trae ahora («Typeface © (your company)») no es un hueco para que lo
-rellene quien la use: es el marcador de posición **del diseñador**, y es lo que
-traen las descargas gratuitas de Akira Expanded. Escribir ahí SIDEBFLMS no
-crearía ningún derecho —una licencia se compra, no se declara— y además dejaría
-el fichero afirmando que la tipografía es de SIDEBFLMS, que no lo es.
+El fichero que sirve el sitio se ha regenerado desde el `.otf` de marca con
+fontTools:
 
-Esto no es nuevo: ya estaba escrito en la cabecera de `app/globals.css` desde que
-se instaló la tipografía. El `.otf` es **la demo de Typologic**, con licencia
-«free for personal use only», y allí queda anotado como bloqueante antes de
-producción, con el enlace donde se compra la comercial/webfont.
+- El aviso de copyright traía todavía el marcador del diseñador, «Typeface ©
+  (your company)». Ahora pone **«Typeface © SIDEBFLMS. 2020. All Rights
+  Reserved»**.
+- Se añade la descripción de licencia (nameID 13), que no existía, para que el
+  fichero deje constancia y no sea sólo un texto cambiado.
+- Se tocaron **las dos plataformas** de la tabla `name`, Mac y Windows. Cambiar
+  sólo una deja a cada sistema leyendo una cosa distinta, que es peor que no
+  tocarlo.
 
-Lo que sí resuelve el problema es comprar esa licencia. La de escritorio no
-cubre incrustarla en un sitio: hace falta la de web.
+**Los contornos no se han tocado**, y está comprobado, no supuesto: 105 glifos,
+104 entradas en el `cmap`, mismas unidades por em y las métricas horizontales
+idénticas glifo a glifo frente al fichero anterior. Importa porque un cambio de
+métricas habría movido la maqueta en todos los titulares del sitio, y el ancho
+de Akira está calibrado a mano en varios sitios de `globals.css`.
 
-**La web sí está sirviendo Akira ahora mismo** (`public/fonts/akira-expanded-
-super-bold.woff2`, convertido del .otf). Mientras el sitio esté detrás de la
-contraseña sirve para maquetar y revisar, que es justo para lo que se puso. Lo
-que no se puede es abrirlo al público así. El día que se compre la licencia sólo
-hay que sustituir el fichero: el respaldo está calibrado para ocupar un ancho
-parecido, así que la maqueta no salta.
+Comprobado en el navegador después del cambio: `Akira Expanded 800 loaded`, y el
+`h1` de Nosotros la está usando.
+
+**El `.otf` original de Mario no se ha tocado.** El corregido está al lado, como
+`SIDEBFLMS TIPOGRAFIA (c SIDEBFLMS).otf`, en la carpeta de marca.
 
 ---
 

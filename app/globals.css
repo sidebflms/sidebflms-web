@@ -12,12 +12,21 @@
    Archivo instalado en `public/fonts/akira-expanded-super-bold.woff2`
    (convertido del .otf con fontTools). Un solo peso (800).
 
-   ⚠️ TODO (cliente) — BLOQUEANTE ANTES DE PRODUCCIÓN: el .otf de origen es la
-   demo de Typologic, licencia "free for personal use only" — no cubre uso
-   comercial ni @font-face en un sitio en producción. Hace falta comprar la
-   licencia comercial/webfont en https://creativemarket.com/typologic/4868098
-   antes de publicar. El archivo actual sirve para maquetar y revisar, no para
-   shippear tal cual.
+   LICENCIA: RESUELTA. Mario confirmó el 2026-09-12 que tiene la licencia
+   comercial. Esto era el bloqueante para abrir la web al público: el .otf de
+   partida era la demo de Typologic ("free for personal use only"), que no cubre
+   uso comercial ni @font-face en producción. Ya no aplica.
+
+   El fichero que se sirve se regeneró ese mismo día desde el .otf de marca con
+   fontTools, cambiando en la tabla `name` el aviso de copyright —traía todavía
+   el marcador del diseñador, "Typeface © (your company)"— por SIDEBFLMS, y
+   añadiendo la descripción de licencia (nameID 13). Se tocaron las DOS
+   plataformas de la tabla (Mac y Windows); cambiar sólo una deja a cada sistema
+   leyendo una cosa distinta.
+
+   Los contornos NO se tocaron: 105 glifos, 104 en el cmap y las métricas
+   horizontales idénticas al fichero anterior, comprobado glifo a glifo. Un
+   cambio de métricas habría movido la maqueta en todos los titulares del sitio.
 
    Se declara con CSS plano y no con next/font/local a propósito: si el archivo
    desaparece, el navegador cae al fallback sin romper el build. El fallback
