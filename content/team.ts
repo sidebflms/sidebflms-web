@@ -75,8 +75,18 @@ export const EQUIPO: Miembro[] = [
 /**
  * La foto de grupo. Va a ancho completo encima de la rejilla.
  * `null` mientras no exista: la página simplemente no la pinta.
+ *
+ * ORIGEN: la exportación de Fotos del 2026-09-12 (`SIDEBFLMS BTS - 49 of 64`),
+ * cuatro del equipo cruzando el campo con el escenario de DURO montándose
+ * detrás. Se eligió ésta entre las de grupo por lo mismo que se decidió arriba
+ * para los retratos: es una foto de trabajo, no una foto de posado, y además
+ * viene apaisada, que es lo que pide el hueco 21:9.
+ *
+ * La otra candidata era la del equipo entero en Monegros delante de las letras
+ * RAVE, pero es vertical y salen 18 personas, que no cuadra con las 11 de la
+ * lista de aquí abajo. Está guardada por si se aclara.
  */
-export const FOTO_GRUPO: string | null = null;
+export const FOTO_GRUPO: string | null = "/media/equipo/grupo.jpg";
 
 /**
  * ¿Se pintan los retratos individuales?
@@ -89,3 +99,78 @@ export const FOTO_GRUPO: string | null = null;
  * retratos aparecen solos.
  */
 export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== null);
+
+/**
+ * EL EQUIPO TRABAJANDO — la tira de fotos de la página de Nosotros.
+ *
+ * ── POR QUÉ ESTO EXISTE Y NO SON YA LOS RETRATOS ─────────────────────────
+ * Las fotos llegaron (2026-09-12) pero llegaron SIN NOMBRES: se ve quién está
+ * en cada una, pero no se sabe cuál de las once personas de `EQUIPO` es. Y un
+ * retrato con el nombre cambiado es peor que no poner retrato.
+ *
+ * Así que de momento van como tira, sin pie de foto y sin nombre. Enseñan lo
+ * que hay que enseñar —el equipo en faena, que es lo que se decidió arriba—
+ * sin afirmar quién es quién.
+ *
+ * ── QUÉ HACER CUANDO LLEGUEN LOS NOMBRES ─────────────────────────────────
+ * Renombrar cada fichero con el slug de la persona, volver a pasar
+ * `scripts/fotos-equipo.sh` y rellenar su `foto`. Cuando las once estén,
+ * `HAY_RETRATOS` se pone solo a `true` y la rejilla pasa a enseñar caras con
+ * nombre. Esta tira se puede quitar entonces, o dejarse: no estorba.
+ *
+ * El texto alternativo describe lo que se ve, no quién es. Es lo único que se
+ * puede escribir con verdad ahora mismo.
+ */
+export type FotoTrabajando = { src: string; alt: { es: string; en: string } };
+
+export const FOTOS_TRABAJANDO: FotoTrabajando[] = [
+  {
+    src: "/media/equipo/trabajando/camara-grada.jpg",
+    alt: {
+      es: "Operador con la cámara al hombro en la grada de un estadio",
+      en: "Operator shouldering a camera in a stadium stand",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/emisora-retrato.jpg",
+    alt: {
+      es: "Piloto con la emisora del dron en las manos",
+      en: "Pilot holding the drone controller",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/gafas-fpv.jpg",
+    alt: {
+      es: "Piloto con las gafas de FPV puestas junto al escenario",
+      en: "Pilot wearing FPV goggles beside the stage",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/piloto-inspire.jpg",
+    alt: {
+      es: "Piloto con el dron de cine posado en la carretera al atardecer",
+      en: "Pilot with the cinema drone on the road at sunset",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/emisora-humo.jpg",
+    alt: {
+      es: "Piloto de perfil entre el humo del escenario",
+      en: "Pilot in profile through stage haze",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/equipo-tres.jpg",
+    alt: {
+      es: "Tres del equipo en el recinto, con la cámara y la emisora",
+      en: "Three of the crew on site, with camera and controller",
+    },
+  },
+  {
+    src: "/media/equipo/trabajando/emisora-recinto.jpg",
+    alt: {
+      es: "Dos del equipo montando entre los contenedores del recinto",
+      en: "Two of the crew setting up among the site containers",
+    },
+  },
+];

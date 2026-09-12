@@ -13,6 +13,10 @@
 #
 #   grupo.jpg        ← la foto de grupo
 #
+# Y, si existe, una subcarpeta `trabajando/` con fotos del equipo en faena.
+# Esas NO van por slug: son de gente sin identificar todavía, así que se
+# procesan todas las que haya, con el nombre que traigan.
+#
 # Vale .jpg, .jpeg, .png o .heic (la del iPhone). Da igual el tamaño o
 # la orientación: el script recorta y escala todas igual.
 #
@@ -44,12 +48,32 @@ buscar() {
   done
 }
 
+# Los HEIC del iPhone hay que pasarlos antes por `sips`.
+#
+# ffmpeg los decodifica montando por dentro un filtergraph complejo (la imagen
+# viene en baldosas y hay que recomponerla), y entonces ya no deja poner un
+# `-vf` encima: «Simple and complex filtering cannot be used together». Así que
+# se convierte primero a JPG sin tocar nada más y se recorta después.
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+normalizar() {
+  case "$(echo "${1##*.}" | tr 'A-Z' 'a-z')" in
+    heic)
+      local o="$TMP/$(basename "${1%.*}").jpg"
+      sips -s format jpeg "$1" --out "$o" >/dev/null 2>&1 || { echo "$1"; return; }
+      echo "$o" ;;
+    *) echo "$1" ;;
+  esac
+}
+
 hechos=0; faltan=()
 SLUGS=(mario-bote fernando galoguin ivan jota kenny maria nacho-lopez natalia ruben sergio)
 
 for s in "${SLUGS[@]}"; do
   f="$(buscar "$s")"
   if [ -z "$f" ]; then faltan+=("$s"); continue; fi
+  f="$(normalizar "$f")"
   # Recorte 4:5 centrado en horizontal y ANCLADO ARRIBA en vertical: en un
   # retrato lo que importa es la cabeza, y centrar en vertical la corta
   # cuando la foto viene de cuerpo entero.
@@ -60,13 +84,32 @@ done
 
 g="$(buscar grupo)"
 if [ -n "$g" ]; then
+  g="$(normalizar "$g")"
   ffmpeg -v error -y -i "$g" \
     -vf "crop=iw:'min(ih,iw*9/21)':0:'(ih-min(ih,iw*9/21))/2',scale=2400:-2:flags=lanczos" \
     -q:v 3 "$OUT/grupo.jpg" && echo "  ✓ grupo"
 fi
 
+# ── Fotos de equipo trabajando ────────────────────────────────────────
+# Mismo recorte 4:5 que los retratos, para que la tira se lea como una serie
+# aunque las fotos vengan de sitios distintos. Anclado arriba por lo mismo:
+# lo que interesa es la persona, no el suelo.
+trabajando=0
+if [ -d "$IN/trabajando" ]; then
+  mkdir -p "$OUT/trabajando"
+  for f in "$IN"/trabajando/*; do
+    [ -f "$f" ] || continue
+    b="$(basename "${f%.*}")"
+    f="$(normalizar "$f")"
+    ffmpeg -v error -y -i "$f" \
+      -vf "crop='min(iw,ih*4/5)':'min(ih,iw*5/4)':'(iw-min(iw,ih*4/5))/2':0,scale=800:1000:flags=lanczos" \
+      -q:v 3 "$OUT/trabajando/$b.jpg" && trabajando=$((trabajando+1)) && echo "  ✓ trabajando/$b"
+  done
+fi
+
 echo
 echo "Retratos: $hechos de ${#SLUGS[@]}"
+[ "$trabajando" -gt 0 ] && echo "Fotos trabajando: $trabajando" 
 if [ ${#faltan[@]} -gt 0 ]; then
   echo "Faltan: ${faltan[*]}"
   echo "(Mientras falte uno, la web NO enseña retratos: ver HAY_RETRATOS en content/team.ts.)"

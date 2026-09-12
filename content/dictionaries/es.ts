@@ -418,6 +418,9 @@ export const es = {
     // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.
     teamNote: "Cargos y fotos pendientes",
     groupAlt: "El equipo de SIDEBFLMS",
+    workLabel: "En faena",
+    // TODO (cliente): quitar cuando cada foto tenga nombre. Ver content/team.ts.
+    workNote: "Sin identificar todavía",
     ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
   },
 

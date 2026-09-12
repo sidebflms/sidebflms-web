@@ -5,6 +5,77 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (27) — Las fotos del equipo, ya en Nosotros
+
+Llegaron las 64 fotos y vídeos exportados de Fotos. Venían con nombre
+`SIDEBFLMS BTS - N of 64`, que no dice nada, así que los he visto uno a uno y
+los he repartido en carpetas en `~/Desktop/PARA-LA-WEB`, con un `INDICE.md` que
+explica qué es cada número. **No he renombrado ningún original**: el número
+sigue siendo el de Fotos.
+
+### La foto de grupo
+
+`FOTO_GRUPO` ya apunta a `/media/equipo/grupo.jpg`: cuatro del equipo cruzando
+el campo con el escenario de DURO montándose detrás. Se eligió ésa entre las de
+grupo por lo mismo que se decidió para los retratos —es una foto de trabajo, no
+un posado— y porque viene apaisada, que es lo que pide el hueco 21:9.
+
+La otra candidata era el equipo entero en Monegros delante de las letras RAVE,
+pero es vertical y salen 18 personas frente a las 11 de la ficha. Está guardada.
+
+### Una tira nueva: «En faena»
+
+Las fotos de gente trabajando llegaron **sin nombres**: se ve quién está en cada
+una, pero no cuál de las once personas de `EQUIPO` es. Y un retrato con el
+nombre cambiado es peor que no poner retrato.
+
+Así que van como tira al final de la sección de equipo, sin pie y sin nombre
+(`FOTOS_TRABAJANDO` en `content/team.ts`). Enseñan lo que hay que enseñar sin
+afirmar quién es quién. El texto alternativo describe lo que se ve, que es lo
+único que ahora mismo se puede escribir con verdad.
+
+**Cuando lleguen los nombres**: renombrar cada fichero con el slug de la
+persona, volver a pasar `scripts/fotos-equipo.sh` y rellenar su `foto`. Con las
+once, `HAY_RETRATOS` se pone solo a `true` y la rejilla pasa a enseñar caras con
+nombre; la tira se puede quitar entonces o dejarse.
+
+### El script de fotos, arreglado y ampliado
+
+Decía que aceptaba `.heic` y **era mentira**: este ffmpeg decodifica los HEIC
+montando por dentro un filtergraph complejo (la imagen viene en baldosas), y
+entonces ya no admite un `-vf` encima — «Simple and complex filtering cannot be
+used together». Ahora los pasa antes por `sips` y luego recorta. Afectaba
+también a los retratos y a la foto de grupo, no sólo a lo nuevo.
+
+Y procesa una subcarpeta `trabajando/` si existe: mismo recorte 4:5 anclado
+arriba, pero sin exigir que el fichero se llame como un slug.
+
+### Comprobado en el navegador
+
+Las ocho imágenes salen con su texto alternativo; `next/image` sirve `w=750`
+para una caja de 317 px a doble densidad, que es lo correcto (el original es de
+800 px, así que no hay más que dar). En móvil, dos columnas y sin desbordamiento.
+
+### El naranja, confirmado contra el logo
+
+Con la carpeta de marca a mano he sacado el color directamente del fichero del
+logo: **#E8451D**, que es exactamente el `--color-rust-500` que ya tenía la web.
+Queda confirmado contra el original y no contra el manual.
+
+### La tipografía de marca es Akira Expanded Super Bold
+
+El fichero está en `00 Logos & Branding/LOGO_SIDEBFMLS/SIDEBFLMS TIPOGRAFIA.otf`.
+Leyendo la tabla `name`: familia «Akira Expanded», estilo «Super Bold», versión
+1.00 de 2020, 105 glifos. **El aviso de copyright viene sin rellenar** («Typeface
+© (your company)»), que es lo que traen las descargas gratuitas, no una licencia
+a nombre de nadie.
+
+Tener el fichero no es tener derecho a incrustarlo en una web: la licencia de
+escritorio y la de web son distintas. **Sigue pendiente** conseguir la licencia
+web antes de servir la tipografía desde el sitio.
+
+---
+
 ## 2026-09-12 (26) — Mosaico v4: pantallas que se recomponen enteras
 
 En `/portfolio-prueba-4`. La v3 gustó, pero lo que se pidió después fue otra

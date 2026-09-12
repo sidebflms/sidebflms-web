@@ -361,6 +361,8 @@ export const en: Dictionary = {
     teamLabel: "The crew",
     teamNote: "Roles and photos pending",
     groupAlt: "The SIDEBFLMS crew",
+    workLabel: "On the job",
+    workNote: "Not yet captioned",
     ctaTitle: ["Tell us", "what event", "you have"],
   },
 
