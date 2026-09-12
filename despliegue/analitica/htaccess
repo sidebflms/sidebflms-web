@@ -1,0 +1,35 @@
+# Subdominio de la analítica → GoatCounter en 127.0.0.1:3400
+#
+# Este fichero se llama `.htaccess` en el servidor. Aquí se guarda sin el punto
+# para que no se esconda en el repositorio.
+#
+# Mismo apaño que en sidebflms.com y que en el inventario, y por el mismo
+# motivo: lo correcto sería que nginx hablara directamente con el servicio, pero
+# la plantilla NodeJS de Hestia necesita un `node.conf` que vive en un
+# directorio de root. Ver despliegue/proxy-php/proxy.php.
+#
+# ── AQUÍ NO SE PONE CONTRASEÑA ───────────────────────────────────────────
+# Y no es un olvido. GoatCounter trae la suya: el panel pide usuario y clave, y
+# lo único abierto son `/count` y `/count.js`, que es justo lo que la web tiene
+# que poder llamar desde el navegador de cada visitante. Si se pusiera aquí una
+# contraseña de Apache, **la web dejaría de poder contar**, porque el navegador
+# del visitante no la tiene.
+
+RewriteEngine On
+
+# Let's Encrypt valida el dominio dejando un fichero aquí dentro.
+RewriteCond %{REQUEST_URI} ^/\.well-known/ [NC]
+RewriteRule ^ - [L]
+
+# El propio proxy, para no entrar en bucle.
+RewriteCond %{REQUEST_URI} ^/proxy\.php$
+RewriteRule ^ - [L]
+
+# Ficheros que existan de verdad aquí dentro.
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Y todo lo demás, al servicio.
+RewriteRule ^(.*)$ /proxy.php [QSA,L]
+
+DirectoryIndex disabled

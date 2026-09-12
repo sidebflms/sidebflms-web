@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import "@/app/globals.css";
+import { Analitica } from "@/components/layout/analitica";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Reglet } from "@/components/layout/reglet";
@@ -53,6 +54,8 @@ export default async function LocaleLayout({
         {children}
 
         <Footer locale={locale} dict={dict} />
+
+        <Analitica />
       </body>
     </html>
   );

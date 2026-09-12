@@ -5,6 +5,78 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (33) — Analítica propia, sin cookies y sin banner
+
+Montada en el servidor. Mide visitas, páginas más vistas, procedencia, país y
+dispositivo, **sin poner una sola cookie**.
+
+### No es Umami, y conviene saber por qué
+
+Se recomendó Umami y no se ha podido: **necesita un servidor de base de datos y
+en este VPS no se puede crear una**. El usuario no tiene `sudo`; las órdenes de
+Hestia le responden «permiso denegado» porque necesitan root; y el único rol de
+PostgreSQL disponible —el de la app de inventario, cuyas credenciales están en
+`~/gear-inventario/.env`— **no tiene permiso para crear bases** (`rolcreatedb`
+está a `f`, comprobado). Docker está instalado pero el usuario no puede usarlo.
+
+La única forma de meter Umami habría sido poner sus tablas DENTRO de la base del
+inventario. Se descartó: una restauración del inventario se llevaría por delante
+la analítica, y al revés.
+
+**GoatCounter** (v2.7.0) hace lo mismo para lo que hace falta y es un binario
+estático de Go con SQLite dentro: ni servidor de base de datos, ni root, ni
+Docker. Licencia libre, sin restricción para uso comercial autoalojado.
+
+### Sin cookies, y por qué eso importa más de lo que parece
+
+No es sólo ahorrarse el cartel. Con Google Analytics **no se cuenta a nadie
+hasta que acepta**, y la mayoría no acepta: se acaba midiendo peor. Aquí se
+cuenta a todo el mundo y no se guarda ningún dato personal —ni cookies, ni
+identificador por visitante, ni IP—, así que no hay consentimiento que pedir.
+
+### Cómo está montado
+
+    ~/analitica/bin/goatcounter      binario
+    ~/analitica/datos/…sqlite3       base de datos
+    ~/analitica/analitica.sh         arrancar / parar / estado / vigilar
+    ~/analitica/credenciales.txt     usuario y clave del panel (chmod 600)
+
+Escucha en `127.0.0.1:3400`. El gestor sigue el mismo patrón que la web: **para
+por puerto y no por nombre**, porque en esta máquina conviven varios procesos del
+mismo usuario. Y un vigilante en el cron cada minuto que comprueba que
+CONTESTA, no sólo que el proceso exista — ya son cuatro servicios con el mismo
+apaño, que es el que haría systemd si alguien pudiera activar `enable-linger`.
+
+**Un fallo que costó encontrar:** la primera versión del script se quedaba
+colgada para siempre en la segunda orden. El demonio heredaba el descriptor del
+cerrojo (`flock`) y no lo soltaba nunca, así que el siguiente `flock` esperaba a
+un proceso que no iba a terminar. Se cierra con `9>&-` al lanzarlo. Merece la
+pena mirar si `sidebflms-web.sh` tiene lo mismo.
+
+### Lo que falta, y sólo lo puede hacer Mario
+
+Crear el subdominio `analitica.sidebflms.com` en el panel de Hestia: crear
+dominios necesita root y el usuario no lo tiene. Los dos ficheros del proxy
+—mismo apaño que en la web— están listos en `despliegue/analitica/`, con las
+órdenes exactas en su README.
+
+Hasta entonces el servicio funciona pero sólo se llega por dentro del servidor.
+Comprobado con `curl`: la página de acceso responde y `/count.js` devuelve 200.
+
+**En el `.htaccess` del subdominio NO se pone contraseña, y no es un olvido.**
+GoatCounter trae la suya para el panel, y `/count` y `/count.js` tienen que
+quedar abiertos: son los que llama el navegador de cada visitante. Una
+contraseña de Apache ahí dejaría la web sin contar nada.
+
+### El script, apagado hasta que haya URL
+
+`components/layout/analitica.tsx` sólo pinta algo si existe
+`NEXT_PUBLIC_ANALITICA`. Sin esa variable no se carga nada: en local ensuciaría
+las cifras, y mientras el subdominio no exista daría un fallo de red en la
+consola de cada visita.
+
+---
+
 ## 2026-09-12 (32) — Tres versiones más: índice, rollo y columnas
 
 Mario pidió mirar cómo lo resuelven otras productoras y hacer tres versiones más
