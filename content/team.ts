@@ -57,20 +57,38 @@ export type Miembro = {
   role: { es: string; en: string } | null;
   /** Ruta en `public/media/equipo/`. `null` mientras no haya foto. */
   foto: string | null;
+  /**
+   * `true` = la foto NO es de esta persona, es un relleno para ver la rejilla.
+   *
+   * Existe para que una foto de otro NUNCA pueda salir publicada como si fuera
+   * suya sin que se note: la ficha la pinta en gris y con la marca «ejemplo»
+   * encima mientras esto esté a `true`.
+   */
+  fotoEsEjemplo?: boolean;
 };
 
+/**
+ * ── OJO: AHORA MISMO TODAS LAS FOTOS SON DE RELLENO ──────────────────────
+ * Mario pidió el 2026-09-12 ver la rejilla con fotos, aunque no fueran de cada
+ * uno. Así que están puestas las siete de `trabajando/` repartidas entre los
+ * once, **y las once llevan `fotoEsEjemplo: true`**.
+ *
+ * Falta el dato que no se puede deducir de un fichero: quién es quién. En
+ * cuanto se sepa, se quita `fotoEsEjemplo` de esa persona y su foto pasa a
+ * pintarse en color y sin marca. No hay que tocar nada más.
+ */
 export const EQUIPO: Miembro[] = [
-  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: null },
-  { nombre: "Fernando", slug: "fernando", role: null, foto: null },
-  { nombre: "Galoguin", slug: "galoguin", role: null, foto: null },
-  { nombre: "Iván", slug: "ivan", role: null, foto: null },
-  { nombre: "Jota", slug: "jota", role: null, foto: null },
-  { nombre: "Kenny", slug: "kenny", role: null, foto: null },
-  { nombre: "María", slug: "maria", role: null, foto: null },
-  { nombre: "Nacho López", slug: "nacho-lopez", role: null, foto: null },
-  { nombre: "Natalia", slug: "natalia", role: null, foto: null },
-  { nombre: "Rubén", slug: "ruben", role: null, foto: null },
-  { nombre: "Sergio", slug: "sergio", role: null, foto: null },
+  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
+  { nombre: "Fernando", slug: "fernando", role: null, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
+  { nombre: "Galoguin", slug: "galoguin", role: null, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  { nombre: "Iván", slug: "ivan", role: null, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
+  { nombre: "Jota", slug: "jota", role: null, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },
+  { nombre: "Kenny", slug: "kenny", role: null, foto: "/media/equipo/trabajando/emisora-recinto.jpg", fotoEsEjemplo: true },
+  { nombre: "María", slug: "maria", role: null, foto: "/media/equipo/trabajando/equipo-tres.jpg", fotoEsEjemplo: true },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: null, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
+  { nombre: "Natalia", slug: "natalia", role: null, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
+  { nombre: "Rubén", slug: "ruben", role: null, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  { nombre: "Sergio", slug: "sergio", role: null, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
 ];
 
 /**
@@ -113,6 +131,15 @@ export const FOTO_AMPLIACION: string | null = "/media/equipo/monegros.jpg";
  * retratos aparecen solos.
  */
 export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== null);
+
+/**
+ * ¿Queda alguna foto de relleno?
+ *
+ * **Esto es un freno, no un adorno.** Mientras sea `true` hay caras publicadas
+ * bajo un nombre que no es el suyo, y eso no puede salir de detrás de la
+ * contraseña. La página lo avisa arriba y marca cada ficha afectada.
+ */
+export const HAY_EJEMPLOS = EQUIPO.some((m) => m.fotoEsEjemplo === true);
 
 /**
  * EL EQUIPO TRABAJANDO — la tira de fotos de la página de Nosotros.

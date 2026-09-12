@@ -418,6 +418,9 @@ export const es = {
     // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.
     teamNote: "Cargos y fotos pendientes",
     groupAlt: "El equipo de SIDEBFLMS",
+    // TODO (cliente): fuera en cuanto cada foto sea de quien dice ser.
+    photoExample: "Ejemplo",
+    photoExampleNote: "Fotos de ejemplo: todavía no son de cada persona",
     scaleLabel: "Cuando hace falta más equipo",
     scaleBody:
       "El núcleo son once personas, pero no todos los trabajos caben en once. Para Monegros ampliamos el equipo hasta dieciocho y lo dirigimos como uno solo: mismo plan de rodaje, mismo flujo de trabajo y el mismo plazo de entrega. Montar un equipo grande y que funcione es parte de lo que hacemos.",

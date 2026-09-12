@@ -5,6 +5,45 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (29) — La rejilla de retratos, con fotos de relleno marcadas
+
+Mario pidió ver la rejilla de equipo **con fotos**, aunque no fueran de cada uno:
+las suyas y las de Fernando de verdad, y el resto de ejemplo.
+
+### El problema, y lo que se ha hecho con él
+
+Las siete fotos de `trabajando/` no vienen con nombre, así que **no se sabe cuál
+es Mario y cuál es Fernando**. Se buscó en el historial la foto que él pasó en su
+día diciendo que era la suya y no está recuperable.
+
+Así que están las siete repartidas entre los once, y **las once llevan
+`fotoEsEjemplo: true`**. En cuanto se sepa quién es quién, se quita esa marca
+de esa persona y su foto pasa a color y sin aviso. No hay que tocar nada más.
+
+### Cómo se ve que son de relleno
+
+Tres avisos, porque una cara publicada bajo un nombre que no es el suyo no puede
+colarse en producción por descuido:
+
+1. Encima de la rejilla, un aviso en naranja de marca —no en gris como el de
+   cargos pendientes—: «Fotos de ejemplo: todavía no son de cada persona».
+2. En cada ficha, una marca «EJEMPLO» en la esquina.
+3. La foto va en gris y apagada (`brightness-75`). Se probó `brightness-50` y se
+   descartó: dejaba la rejilla tan oscura que no se podía juzgar la maqueta, que
+   es justo para lo que está puesta. Lo que de verdad avisa es la marca.
+
+Y una cuarta que no se ve pero cuenta: **el texto alternativo de una foto de
+ejemplo NO lleva el nombre** de la persona. Si lo llevara, un lector de pantalla
+estaría afirmando que esa cara es esa persona.
+
+### El freno
+
+`HAY_EJEMPLOS` en `content/team.ts`. Mientras sea `true` hay caras publicadas
+bajo un nombre que no es el suyo, y **eso no puede salir de detrás de la
+contraseña**. Está escrito ahí mismo.
+
+---
+
 ## 2026-09-12 (28) — El Inspire 3, el equipo ampliado y las caras
 
 Tres respuestas de Mario del 2026-09-12 que cierran tres cosas que estaban

@@ -10,6 +10,7 @@ import {
   FOTOS_TRABAJANDO,
   FOTO_AMPLIACION,
   FOTO_GRUPO,
+  HAY_EJEMPLOS,
   HAY_RETRATOS,
 } from "@/content/team";
 import { getDictionary } from "@/lib/dictionaries";
@@ -85,7 +86,14 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
               {/* El rótulo de pendiente sólo aparece si de verdad falta algo.
                   Cuando se rellenen los cargos en content/team.ts desaparece
                   solo: no hay que acordarse de quitarlo. */}
-              {faltanCargos && <p className="label text-ink-600">{dict.about.teamNote}</p>}
+              {/* El aviso de fotos de ejemplo va aquí arriba, en rojo de marca y no
+                  en gris como el de cargos: no es una pendiente cualquiera, es
+                  que hay caras bajo un nombre que no es el suyo. */}
+              {HAY_EJEMPLOS ? (
+                <p className="label text-rust-300">{dict.about.photoExampleNote}</p>
+              ) : (
+                faltanCargos && <p className="label text-ink-600">{dict.about.teamNote}</p>
+              )}
             </div>
           </Reveal>
 
@@ -114,15 +122,33 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
                   {HAY_RETRATOS && miembro.foto && (
                     <div className="relative mb-4 aspect-[4/5] overflow-hidden bg-ink-900">
                       <Image
+                        // Con `fotoEsEjemplo` el texto alternativo NO dice el
+                        // nombre: un lector de pantalla estaría afirmando que esa
+                        // cara es esa persona, y no lo es.
                         src={miembro.foto}
-                        alt={miembro.nombre}
+                        alt={miembro.fotoEsEjemplo ? dict.about.photoExample : miembro.nombre}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         // Retratos en blanco y negro que recuperan el color al pasar
                         // el ratón: once fotos hechas en sitios distintos rara vez
                         // casan de color, y en gris se leen como una serie.
-                        className="object-cover grayscale transition-[filter] duration-500 hover:grayscale-0"
+                        //
+                        // Las de ejemplo se quedan en gris SIEMPRE y apagadas: tienen
+                        // que verse de relleno de un vistazo. Apagadas, no negras
+                        // —se probó a `brightness-50` y no dejaba juzgar la maqueta,
+                        // que es justo para lo que están puestas—; lo que de verdad
+                        // avisa es la marca de la esquina.
+                        className={
+                          miembro.fotoEsEjemplo
+                            ? "object-cover grayscale brightness-75"
+                            : "object-cover grayscale transition-[filter] duration-500 hover:grayscale-0"
+                        }
                       />
+                      {miembro.fotoEsEjemplo && (
+                        <span className="label absolute top-3 left-3 bg-ink-900/80 px-2 py-1 text-rust-300">
+                          {dict.about.photoExample}
+                        </span>
+                      )}
                     </div>
                   )}
                   <div className="border-t border-ink-600 pt-4">
