@@ -5,6 +5,61 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (31) — Mosaico v5: la maqueta de la v3, pero sólo corre lo que tocas
+
+En `/portfolio-prueba-5`. Lo pidió Mario: la v3 le valía de maqueta, pero quería
+que **el vídeo no arranque hasta que el cursor se pone encima**.
+
+Misma maqueta que la v3 —filas que alternan apaisado y vertical, cambiando de
+lado, con el paralaje del metraje dentro de su marco— y lo único que cambia es
+cuándo arranca el vídeo. En reposo no se mueve nada; al salir el ratón, para y
+vuelve al principio, así que el mosaico siempre vuelve al mismo sitio.
+
+### Tres cosas que había que resolver para que no quedara peor que la v3
+
+**1. Que se note que hay vídeo debajo.** Una pieza parada es indistinguible de
+una foto, y nadie descubre solo que hay que pasar el ratón. Cada pieza con vídeo
+lleva un ▶ discreto arriba a la derecha, que desaparece en cuanto arranca.
+
+**2. Que el primer segundo no sea un parón.** Si el vídeo empezara a descargarse
+en el `mouseenter`, la primera pasada de cada pieza se vería a tirones. Un
+`IntersectionObserver` sube el `preload` a `auto` cuando la pieza se acerca a la
+ventana, **pero no la reproduce**: al llegar el ratón ya hay metraje listo, y lo
+que está a cinco pantallas sigue sin descargarse.
+
+**3. El póster, como capa y no como atributo `poster`.** Esto no se vio venir: el
+atributo sólo se ve hasta que el vídeo arranca la primera vez, y después ya no
+vuelve — al rebobinar a 0 lo que queda es el primer fotograma del clip. Se
+midieron los once con ffmpeg: ninguno es negro, pero varios empiezan mucho más
+flojos que su póster (el de Fátima arranca a 26 de brillo sobre 255), así que el
+mosaico se habría ido apagando según lo recorres. Con el póster como capa que se
+desvanece al reproducir, en reposo se ve siempre el fotograma elegido, y de paso
+desaparece el parpadeo de la primera carga. No cuesta una descarga de más: es la
+misma imagen.
+
+### El teléfono no tiene cursor
+
+Dejarlo tal cual convertiría la página en una pared de fotos fijas. Con
+`matchMedia("(hover: hover)")`, en puntero grueso se vuelve al comportamiento de
+la v3: arranca lo que está en pantalla y para lo que sale.
+
+Se descartó «arrancar al tocar» porque la pieza es un enlace: el toque ya
+significa entrar en el proyecto y no puede significar dos cosas.
+
+### Comprobado con ratón de verdad, no simulado
+
+Un `mouseenter` sintético no llega a React (lo deriva de `mouseover`), así que se
+probó moviendo el puntero: al entrar, `play` y a los cuatro segundos el vídeo va
+por el segundo 4; al salir, `pause` y `currentTime` de vuelta a 0. En reposo,
+0 de 9 vídeos en marcha y los 11 pósters visibles.
+
+### También con el teclado
+
+`onFocus`/`onBlur` además del ratón. La pieza es un enlace, y quien la recorre
+tabulando merece ver lo mismo.
+
+---
+
 ## 2026-09-12 (30) — Mario y Fernando ya tienen su retrato
 
 La pista fue de Mario: «Mario es el rapado y Fernando es el que tiene pelo».
