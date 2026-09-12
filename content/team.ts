@@ -68,18 +68,24 @@ export type Miembro = {
 };
 
 /**
- * ── OJO: AHORA MISMO TODAS LAS FOTOS SON DE RELLENO ──────────────────────
- * Mario pidió el 2026-09-12 ver la rejilla con fotos, aunque no fueran de cada
- * uno. Así que están puestas las siete de `trabajando/` repartidas entre los
- * once, **y las once llevan `fotoEsEjemplo: true`**.
+ * ── DOS FOTOS SON DE VERDAD; LAS OTRAS NUEVE, DE RELLENO ─────────────────
+ * Mario y Fernando ya tienen la suya. Se identificaron el 2026-09-12 con la
+ * pista que dio Mario —«Mario es el rapado y Fernando es el que tiene pelo»—
+ * cruzándola con la foto de los tres del recinto, donde salen los dos juntos:
+ * el de la izquierda es el mismo que aparece en el retrato con la emisora, y el
+ * del medio el mismo que lleva las gafas de FPV.
  *
- * Falta el dato que no se puede deducir de un fichero: quién es quién. En
- * cuanto se sepa, se quita `fotoEsEjemplo` de esa persona y su foto pasa a
- * pintarse en color y sin marca. No hay que tocar nada más.
+ * A Fernando NO se le puso la de las gafas aunque sea la suya: le tapan la cara
+ * y la condición escrita arriba es que se le vea. Su retrato está recortado de
+ * la foto de los tres (`crop=660:825:1130:672` sobre el original de 2728×1830).
+ *
+ * Las otras nueve siguen siendo fotos de OTRAS personas puestas de relleno para
+ * poder ver la rejilla, y llevan `fotoEsEjemplo: true`. En cuanto se sepa quién
+ * es quién, se quita esa marca y la foto pasa a color y sin aviso.
  */
 export const EQUIPO: Miembro[] = [
-  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
-  { nombre: "Fernando", slug: "fernando", role: null, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
+  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: "/media/equipo/mario-bote.jpg" },
+  { nombre: "Fernando", slug: "fernando", role: null, foto: "/media/equipo/fernando.jpg" },
   { nombre: "Galoguin", slug: "galoguin", role: null, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
   { nombre: "Iván", slug: "ivan", role: null, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
   { nombre: "Jota", slug: "jota", role: null, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },

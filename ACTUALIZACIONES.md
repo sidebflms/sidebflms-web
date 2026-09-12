@@ -5,6 +5,37 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (30) — Mario y Fernando ya tienen su retrato
+
+La pista fue de Mario: «Mario es el rapado y Fernando es el que tiene pelo».
+
+### Cómo se resolvió quién es quién
+
+Cruzando esa frase con **la foto de los tres del recinto**, que es la única donde
+los dos salen juntos y se les ve la cara: el de la izquierda lleva el pelo muy
+corto y es el mismo que aparece en el retrato con la emisora entre el humo; el
+del medio tiene más pelo y es el mismo que sale con las gafas de FPV. Con eso
+quedan atados dos rostros a dos nombres sin tener que adivinar nada.
+
+### A Fernando no se le puso la de las gafas, siendo suya
+
+Le tapan la cara, y la condición escrita en `content/team.ts` desde el principio
+es que en una página de equipo hay que reconocer a la persona. Su retrato sale
+recortado de la foto de los tres: `crop=660:825:1130:672` sobre el original de
+2728×1830, y de ahí a los 800×1000 de siempre. Queda centrado, con la camiseta
+de SIDEBFLMS y la emisora en la mano.
+
+Se probó antes un recorte más ancho (880×1100) y se descartó: entraban los otros
+dos por los lados y no se leía como un retrato suyo.
+
+### Estado
+
+Dos de once con foto de verdad, en color y sin marca. Las otras nueve siguen con
+`fotoEsEjemplo: true`, en gris y con el aviso. `HAY_EJEMPLOS` sigue en `true`, o
+sea que **el freno para abrir la web sigue puesto**.
+
+---
+
 ## 2026-09-12 (29) — La rejilla de retratos, con fotos de relleno marcadas
 
 Mario pidió ver la rejilla de equipo **con fotos**, aunque no fueran de cada uno:
