@@ -5,7 +5,13 @@ import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
 import Image from "next/image";
 
-import { EQUIPO, FOTOS_TRABAJANDO, FOTO_GRUPO, HAY_RETRATOS } from "@/content/team";
+import {
+  EQUIPO,
+  FOTOS_TRABAJANDO,
+  FOTO_AMPLIACION,
+  FOTO_GRUPO,
+  HAY_RETRATOS,
+} from "@/content/team";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -129,6 +135,31 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
               ))}
             </ul>
           </Reveal>
+
+          {/* EL EQUIPO AMPLIADO.
+              Va justo detrás de la lista de once por un motivo concreto: en esa
+              foto salen dieciocho, y sin la explicación al lado se lee como un
+              descuadre en vez de como lo que es — que el equipo se amplía y se
+              dirige cuando el trabajo lo pide. Foto y texto no se separan. */}
+          {FOTO_AMPLIACION && (
+            <Reveal>
+              <div className="mt-20 grid items-center gap-8 border-t border-ink-600 pt-14 lg:grid-cols-12 lg:gap-6">
+                <div className="relative aspect-[4/3] overflow-hidden bg-ink-900 lg:col-span-7">
+                  <Image
+                    src={FOTO_AMPLIACION}
+                    alt={dict.about.scaleAlt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="lg:col-span-4 lg:col-start-9">
+                  <p className="label">{dict.about.scaleLabel}</p>
+                  <p className="measure mt-4 text-bone">{dict.about.scaleBody}</p>
+                </div>
+              </div>
+            </Reveal>
+          )}
 
           {/* EL EQUIPO EN FAENA.
               Va DESPUÉS de la rejilla de nombres, no antes: mientras no haya

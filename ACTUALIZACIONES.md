@@ -5,6 +5,77 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (28) — El Inspire 3, el equipo ampliado y las caras
+
+Tres respuestas de Mario del 2026-09-12 que cierran tres cosas que estaban
+abiertas.
+
+### El dron de cine: DJI Inspire 3
+
+Estaba escrito en `content/fleet.ts` que faltaba por confirmar si había dron de
+cine, porque en los metadatos del archivo no aparecía ninguno. Ya está: es un
+**DJI Inspire 3**, y encabeza la flota en `/drone`.
+
+Es **el único aparato de la lista que no sale de los metadatos**, y eso queda
+escrito en el fichero para que nadie lo dé por comprobado igual que el resto. No
+aparece por lo mismo que ya se explicaba allí: lo que se monta en DaVinci y se
+exporta pierde la etiqueta del aparato. Lo respalda, además, la foto del piloto
+con él posado en la carretera, que es la que está publicada en Nosotros.
+
+Por eso cambia también el texto de la flota. Decía «sacada de los metadatos de
+nuestro propio archivo», y con el Inspire dentro eso ya no era cierto del todo.
+Ahora dice que no es un catálogo de alquiler y que **casi todo** se puede
+rastrear en los metadatos, que es la verdad y sigue siendo el argumento fuerte.
+
+**Sigue faltando la óptica del Inspire 3.** Se sabe el aparato, no con qué
+objetivos vuela, y en una ficha técnica de cine eso es justo lo que preguntan.
+
+### Los 18 de Monegros no eran un descuadre
+
+En la ficha hay once personas y en la foto de Monegros salen dieciocho. Para ese
+trabajo **se amplió el equipo temporalmente**, y Mario quiere que se vea, porque
+es una capacidad: la productora sabe montar y dirigir un equipo grande.
+
+Así que la foto va en Nosotros con su propio texto al lado, justo detrás de la
+lista de once. Foto y texto **no se separan**: sin la explicación, dieciocho
+caras encima de una lista de once se leen como un error.
+
+### Caras: se pueden publicar
+
+Confirmado. Se quita esa reserva de `content/team.ts`.
+
+Queda en pie lo otro, que es distinto y no lo arregla un permiso general: que
+cada uno sepa **cómo** aparece escrito, sobre todo quien sale con apodo
+(Galoguin, Jota, Kenny) y no con su nombre.
+
+### Lo de la tipografía NO se ha hecho, y aquí está el porqué
+
+Mario pidió poner «Typeface © SIDEBFLMS» en el fichero de la tipografía. No se
+ha tocado.
+
+El aviso que trae ahora («Typeface © (your company)») no es un hueco para que lo
+rellene quien la use: es el marcador de posición **del diseñador**, y es lo que
+traen las descargas gratuitas de Akira Expanded. Escribir ahí SIDEBFLMS no
+crearía ningún derecho —una licencia se compra, no se declara— y además dejaría
+el fichero afirmando que la tipografía es de SIDEBFLMS, que no lo es.
+
+Esto no es nuevo: ya estaba escrito en la cabecera de `app/globals.css` desde que
+se instaló la tipografía. El `.otf` es **la demo de Typologic**, con licencia
+«free for personal use only», y allí queda anotado como bloqueante antes de
+producción, con el enlace donde se compra la comercial/webfont.
+
+Lo que sí resuelve el problema es comprar esa licencia. La de escritorio no
+cubre incrustarla en un sitio: hace falta la de web.
+
+**La web sí está sirviendo Akira ahora mismo** (`public/fonts/akira-expanded-
+super-bold.woff2`, convertido del .otf). Mientras el sitio esté detrás de la
+contraseña sirve para maquetar y revisar, que es justo para lo que se puso. Lo
+que no se puede es abrirlo al público así. El día que se compre la licencia sólo
+hay que sustituir el fichero: el respaldo está calibrado para ocupar un ancho
+parecido, así que la maqueta no salta.
+
+---
+
 ## 2026-09-12 (27) — Las fotos del equipo, ya en Nosotros
 
 Llegaron las 64 fotos y vídeos exportados de Fotos. Venían con nombre

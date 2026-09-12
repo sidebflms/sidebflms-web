@@ -14,12 +14,21 @@
  *     exportado y no dice con qué se rodó), y lo que no se haya grabado en
  *     ese disco no aparece.
  *
+ * ── LA EXCEPCIÓN: EL INSPIRE 3 ───────────────────────────────────────────
+ * Es el único aparato de esta lista que NO sale de los metadatos. Se añadió el
+ * 2026-09-12 porque Mario lo confirmó, y porque hay una foto del archivo que lo
+ * enseña posado en la carretera con el piloto al lado (la que está publicada en
+ * Nosotros como `piloto-inspire.jpg`).
+ *
+ * No aparece en los metadatos por lo que ya se explicó arriba: lo que se ha
+ * montado en DaVinci y exportado pierde la etiqueta del aparato.
+ *
  * ── LO QUE FALTA POR CONFIRMAR, Y NO SE INVENTA ─────────────────────────
- *   · Si hay DRON DE CINE (tipo Inspire). El servicio se ofrece para cine,
- *     series y publicidad, pero en el archivo no aparece ninguno.
  *   · El MODELO DEL FPV. Hay FPV —se ve en Holika— pero no consta cuál.
  *   · El sistema de CABLECAM.
  *   · La CATEGORÍA de vuelo y las certificaciones concretas del piloto.
+ *   · La ÓPTICA del Inspire 3. Se sabe el aparato, no con qué objetivos vuela,
+ *     y para una ficha técnica de cine eso es justo lo que se pregunta.
  *
  * Añadir un aparato que no se tiene es de las cosas que una producción de
  * cine detecta al pedir la ficha técnica, y es la especialidad que se está
@@ -33,6 +42,13 @@ export type Aparato = {
 };
 
 export const DRONES: Aparato[] = [
+  {
+    modelo: "DJI Inspire 3",
+    uso: {
+      es: "El aparato de cine: sensor de fotograma completo y flujo de trabajo de rodaje, para cine, series y publicidad.",
+      en: "The cinema aircraft: full-frame sensor and a film workflow, for features, series and commercials.",
+    },
+  },
   {
     modelo: "DJI Mavic 4 Pro",
     uso: {

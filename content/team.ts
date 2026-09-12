@@ -37,10 +37,11 @@
  *
  * Faltan las fotos. La cuadrícula funciona sin ellas.
  *
- * ── ANTES DE ABRIR LA WEB AL PÚBLICO ─────────────────────────────────────
- * Publicar el nombre de una persona en una web comercial es publicar un dato
- * suyo. Conviene que cada uno sepa que aparece y cómo — sobre todo quien sale
- * con apodo (Galoguin, Jota, Kenny) y no con su nombre.
+ * ── CARAS: CONFIRMADO ────────────────────────────────────────────────────
+ * Mario confirmó el 2026-09-12 que se pueden publicar las caras del equipo.
+ * Queda en pie lo otro, que es distinto: que cada uno sepa CÓMO aparece
+ * escrito, sobre todo quien sale con apodo (Galoguin, Jota, Kenny) y no con su
+ * nombre. Eso no lo arregla un permiso general.
  */
 
 export type Miembro = {
@@ -87,6 +88,19 @@ export const EQUIPO: Miembro[] = [
  * lista de aquí abajo. Está guardada por si se aclara.
  */
 export const FOTO_GRUPO: string | null = "/media/equipo/grupo.jpg";
+
+/**
+ * LA FOTO DE MONEGROS — el equipo ampliado.
+ *
+ * Aquí salen 18 personas y en `EQUIPO` hay 11. No es un descuadre: para
+ * Monegros **se amplió el equipo temporalmente**, y Mario quiere que eso se
+ * vea, porque es una capacidad y no una nota al pie — dice que la productora
+ * sabe montar y dirigir un equipo grande cuando el trabajo lo pide.
+ *
+ * Por eso va con su propio texto al lado y no mezclada con las de grupo: sin
+ * explicación, dieciocho caras encima de una lista de once se lee como un error.
+ */
+export const FOTO_AMPLIACION: string | null = "/media/equipo/monegros.jpg";
 
 /**
  * ¿Se pintan los retratos individuales?

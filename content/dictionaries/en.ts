@@ -361,6 +361,10 @@ export const en: Dictionary = {
     teamLabel: "The crew",
     teamNote: "Roles and photos pending",
     groupAlt: "The SIDEBFLMS crew",
+    scaleLabel: "When the job needs more crew",
+    scaleBody:
+      "The core is eleven people, but not every job fits into eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery date. Building a large crew and making it work is part of what we do.",
+    scaleAlt: "The scaled-up SIDEBFLMS crew at Monegros",
     workLabel: "On the job",
     workNote: "Not yet captioned",
     ctaTitle: ["Tell us", "what event", "you have"],
@@ -420,7 +424,7 @@ export const en: Dictionary = {
     fields: ["Film", "Series", "Advertising", "Events"],
     fleetLabel: "The fleet",
     fleetNote:
-      "Taken from the metadata of our own archive, not from a catalogue: this is what has actually flown.",
+      "Not a rental catalogue: it is what flies with us, and nearly all of it can be traced in the metadata of our own archive.",
     actionLabel: "Action cameras",
     capsLabel: "What can be done from the air",
     safetyLabel: "How we fly",

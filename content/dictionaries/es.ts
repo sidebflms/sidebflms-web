@@ -418,6 +418,10 @@ export const es = {
     // TODO (cliente): falta el cargo de cada uno. Ver content/team.ts.
     teamNote: "Cargos y fotos pendientes",
     groupAlt: "El equipo de SIDEBFLMS",
+    scaleLabel: "Cuando hace falta más equipo",
+    scaleBody:
+      "El núcleo son once personas, pero no todos los trabajos caben en once. Para Monegros ampliamos el equipo hasta dieciocho y lo dirigimos como uno solo: mismo plan de rodaje, mismo flujo de trabajo y el mismo plazo de entrega. Montar un equipo grande y que funcione es parte de lo que hacemos.",
+    scaleAlt: "El equipo ampliado de SIDEBFLMS en Monegros",
     workLabel: "En faena",
     // TODO (cliente): quitar cuando cada foto tenga nombre. Ver content/team.ts.
     workNote: "Sin identificar todavía",
@@ -478,7 +482,7 @@ export const es = {
     fields: ["Cine", "Series", "Publicidad", "Eventos"],
     fleetLabel: "La flota",
     fleetNote:
-      "Sacada de los metadatos de nuestro propio archivo, no de un catálogo: es lo que ha volado de verdad.",
+      "No es un catálogo de alquiler: es lo que vuela con nosotros, y casi todo se puede rastrear en los metadatos de nuestro propio archivo.",
     actionLabel: "Cámaras de acción",
     capsLabel: "Lo que se puede hacer desde el aire",
     safetyLabel: "Cómo volamos",
