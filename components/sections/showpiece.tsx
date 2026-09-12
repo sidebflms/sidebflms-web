@@ -159,9 +159,18 @@ export function Showpiece({ dict }: { dict: Dictionary }) {
         </h2>
 
         {/* Tarjeta de datos — esquina inferior izquierda, sincronizada a
-            timeupdate. En reduced-motion se listan los 4 a la vez. */}
+            timeupdate. En reduced-motion se listan los 4 a la vez.
+            ────────────────────────────────────────────────────────────────
+            Y ESOS CUATRO NO VAN ENCIMA DEL VÍDEO, aunque el de uno solo sí.
+            Iban apilados en vertical y en `absolute` sobre el metraje, y
+            cuatro tarjetas de dos líneas miden más que el hueco: la última se
+            salía por debajo del borde y se veía cortada. Además tapaban el
+            centro del plano, que es justo lo que la sección quiere enseñar.
+            Aquí van en flujo normal, debajo del vídeo y en fila de cuatro: no
+            pueden desbordar porque los limita el ancho, no el alto.
+            (Sólo lo ve quien tenga «reducir movimiento» activado.) */}
         {reduced ? (
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:absolute lg:bottom-10 lg:left-0 lg:mt-0 lg:grid-cols-1 lg:gap-3">
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {dict.showpiece.cues.map((c) => (
               <li key={c.tag} className="border-l-2 border-rust-500 bg-ink-900/80 p-4">
                 <p className="label text-rust-300 tabular-nums">

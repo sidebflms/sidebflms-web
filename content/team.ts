@@ -18,7 +18,24 @@
  * que un cliente detecta en la primera llamada. La ficha se pinta sin cargo
  * mientras esté en `null`, que es feo pero no es mentira.
  *
- * Faltan también las fotos. La cuadrícula funciona sin ellas.
+ * ── QUÉ FOTO, DECIDIDO ───────────────────────────────────────────────────
+ * DECISIÓN (Mario, 2026-09-12): **de cada uno TRABAJANDO**, no de carnet.
+ *
+ * Dos motivos, y el segundo es el que zanja:
+ *   1. Es lo que la empresa vende. Un retrato de estudio dice «directorio de
+ *      empleados»; una foto en el recinto, con el equipo en las manos, dice lo
+ *      que se hace.
+ *   2. El sitio es casi negro. Once retratos sobre fondo blanco serían once
+ *      agujeros de luz en la rejilla. Los fondos de recinto encajan solos.
+ *
+ * CONDICIÓN: **que se le vea la cara**. La primera prueba que llegó era un
+ * perfil mirando por el visor, y en una página de equipo hay que reconocer a
+ * la persona. De tres cuartos, con la cámara o el mando, pero de cara.
+ *
+ * Si algún día se cambia a retratos de estudio, habrá que recortarlos sobre
+ * fondo oscuro: tal cual no pegan.
+ *
+ * Faltan las fotos. La cuadrícula funciona sin ellas.
  *
  * ── ANTES DE ABRIR LA WEB AL PÚBLICO ─────────────────────────────────────
  * Publicar el nombre de una persona en una web comercial es publicar un dato

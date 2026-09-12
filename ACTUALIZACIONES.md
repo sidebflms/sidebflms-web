@@ -5,6 +5,35 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (24) — Los cuatro rótulos de la pieza destacada se salían
+
+Sólo lo veía quien tuviera **«reducir movimiento»** activado, que es
+precisamente el caso de Mario.
+
+Sin esa preferencia, la sección destacada enseña **un** rótulo que va cambiando
+con el vídeo. Con ella, no puede: enseña **los cuatro a la vez**. Y esos cuatro
+iban apilados en vertical y en `absolute` sobre el metraje — cuatro tarjetas de
+dos líneas miden más que el hueco, así que la última se veía cortada por abajo,
+y de paso tapaban el centro del plano, que es lo que la sección quiere enseñar.
+
+Ahora, en ese modo, van **debajo del vídeo y en fila de cuatro**. No pueden
+desbordar porque los limita el ancho y no el alto. El modo de un solo rótulo
+—el que ve todo el mundo— se queda como estaba, encima del vídeo.
+
+Comprobado a 1440: los cuatro a la misma altura, repartidos a lo ancho, y
+ninguno se sale de la sección.
+
+### Decidido: las fotos de equipo, trabajando
+
+Anotado en `content/team.ts`. Retrato de estudio sobre blanco descartado por
+dos razones: dice «directorio de empleados» en vez de lo que se hace, y en un
+sitio casi negro once fondos blancos son once agujeros de luz.
+
+Condición: **que se le vea la cara**. La primera prueba era un perfil mirando
+por el visor.
+
+---
+
 ## 2026-09-12 (23) — DURO y Metropolitano: dos piezas que estaban descartadas
 
 Mario enseñó fotos de esos dos trabajos, y resultó que **el material ya estaba
