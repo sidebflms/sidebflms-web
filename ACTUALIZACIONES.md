@@ -5,6 +5,91 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (32) — Tres versiones más: índice, rollo y columnas
+
+Mario pidió mirar cómo lo resuelven otras productoras y hacer tres versiones más
+con criterio propio. Salen tres patrones que **no** estaban cubiertos por la
+v3/v4/v5, que son las tres variantes de lo mismo: una parrilla de vídeo.
+
+### v6 — Índice (`/portfolio-prueba-6`)
+
+Una lista de títulos en tipografía grande; al pasar el ratón, el metraje aparece
+en un panel que persigue al cursor y las demás filas se apagan. Es el patrón de
+A24 y de varias distribuidoras.
+
+**Por qué aquí tiene sentido:** las otras versiones enseñan imagen y esconden el
+dato —quién, dónde, cuándo—. Ésta hace lo contrario, y con once piezas cabe
+entera de un vistazo. Quien busca a alguien para un recinto o una fecha concreta
+lee una lista mucho más rápido que un collage.
+
+**Es la más ligera de todas con diferencia:** no hay once elementos de vídeo,
+hay **uno**, al que se le cambia la fuente según la fila. La v3 llega a tener
+seis a la vez.
+
+El panel persigue al cursor con `gsap.quickTo` y medio segundo de retraso: sin
+ese retraso parece un tooltip; con él, parece que arrastra el metraje.
+
+### v7 — Rollo (`/portfolio-prueba-7`)
+
+El portfolio se recorre de lado, como una bobina.
+
+**Lo que se ha hecho distinto:** esa clase de páginas casi siempre secuestra el
+scroll —capturan la rueda y mueven un `transform`—, y entonces desaparece la
+barra, el teclado deja de funcionar y el navegador ya no sabe por dónde vas.
+Aquí el contenedor se desplaza de verdad, con anclajes nativos; lo único que se
+añade es traducir la rueda vertical en avance horizontal, porque un ratón normal
+no tiene eje lateral. Y **se suelta en los extremos**, para que la página siga
+bajando y no se quede uno atrapado.
+
+El `IntersectionObserver` mira contra el PROPIO contenedor, no contra la
+ventana: aquí «estar a la vista» es estar dentro del rollo.
+
+**Un fallo que hubo que corregir:** el ancho de cada panel se decidía mirando si
+la pieza tenía máster vertical, y como casi todas lo tienen salían ocho paneles
+idénticos seguidos. Ahora se decide por posición, alternando estrecho y ancho.
+Medido: 992, 352, 640, 352, 640… Sin esa alternancia el ojo no tiene dónde
+agarrarse para saber cuánto ha avanzado.
+
+**El riesgo, dicho claro:** moverse de lado no es lo que la gente espera.
+Compensa con once piezas; deja de compensar en cuanto sean cuarenta.
+
+### v8 — Columnas a distinta velocidad (`/portfolio-prueba-8`)
+
+Tres columnas que bajan a ritmos distintos al hacer scroll. A diferencia de la
+v3 —donde el marco está quieto y el metraje se desliza por dentro— aquí se mueve
+**la columna entera**, así que la composición cambia constantemente: las piezas
+de una columna y otra nunca se alinean dos veces igual.
+
+**Es la única de las seis que aguanta crecer.** Con treinta piezas se reparten
+entre las tres columnas y ya está; la v4 tendría que inventar plantillas nuevas y
+la v7 se haría interminable.
+
+Dos trampas de la técnica, resueltas: al desplazar las columnas quedan huecos en
+los extremos, así que cada columna lleva un margen propio del tamaño exacto de su
+recorrido; y por debajo de `lg` no se desplaza nada, porque con una sola columna
+no se cruza con nada y sólo se vería raro.
+
+**`prefers-reduced-motion`:** ésta es la versión que más lo necesita en
+producción, porque lo que se mueve es la página y no un vídeo. Se escribió
+comprobándolo, y **se quitó a propósito**: este Mac tiene «Reducir movimiento»
+puesto y con la comprobación la página se veía idéntica a una parrilla normal, o
+sea que no se podía valorar. La línea está comentada en el componente con la
+nota de devolverla al pasar a producción. Es la misma decisión ya tomada en la
+v3, la v4 y la v5.
+
+### Cómo se comprobó
+
+Con medidas del DOM, no con capturas: el panel del navegador va oculto y ahí
+Chromium congela `requestAnimationFrame` y suspende los vídeos, así que una
+captura en negro no prueba nada. Lo verificado: en la v6, once filas y **un solo
+vídeo** en la página, el panel a opacidad 0 en reposo y la fuente cambiando al
+señalar cada fila; en la v7, ancho total 6360 px contra 1353 de ventana, anclaje
+nativo activo, el desplazamiento funcionando y el observador subiendo a
+`preload: auto` sólo las cinco piezas que había alcanzado; en la v8, tres
+columnas de 4/4/3 piezas con un desplazamiento distinto cada una.
+
+---
+
 ## 2026-09-12 (31) — Mosaico v5: la maqueta de la v3, pero sólo corre lo que tocas
 
 En `/portfolio-prueba-5`. Lo pidió Mario: la v3 le valía de maqueta, pero quería
