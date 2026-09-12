@@ -5,6 +5,83 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (26) — Mosaico v4: pantallas que se recomponen enteras
+
+En `/portfolio-prueba-4`. La v3 gustó, pero lo que se pidió después fue otra
+cosa: **pasar de pantalla y que el mosaico se rehaga de golpe**, como en la web
+del competidor, «no lo mismo pero algo parecido sí».
+
+### El portfolio deja de ser un scroll y pasa a ser una baraja
+
+Cada pantalla son cuatro piezas que ocupan la ventana entera. Se pasa con las
+flechas del teclado, con los botones o con las rayitas del pie.
+
+### Lo que hace que no canse: cada pantalla lleva una composición distinta
+
+Si todas repartieran las piezas igual, pasar de pantalla sería cambiar las fotos
+de sitio y nada más. Las plantillas están escritas como mapas de celdas al
+principio de `components/sections/portfolio-mosaic-v4.tsx`:
+
+    4: [
+      { mapa: ["a a b", "c d b"], altas: ["b"] },
+      { mapa: ["a b b", "a c d"], altas: ["a"] },
+      { mapa: ["a b c", "a b d"], altas: ["a", "b"] },
+    ]
+
+`altas` no es decorativo: de cada pieza hay dos recortes —el apaisado y el 4:5
+sacado del máster— y en un hueco alto hay que servir el vertical, porque con el
+apaisado `object-cover` recorta los lados y se come el encuadre. **Qué hueco es
+alto cambia con la plantilla**, así que no se puede dar por fijo.
+
+Comprobado en el navegador con las 11 piezas: salen 3 pantallas (4 + 4 + 3) y
+las tres rejillas son distintas entre sí.
+
+### Entran todas a la vez
+
+Barrido desde el centro con `clip-path`, `stagger: 0`. Escalonarlas construiría
+la pantalla «pieza a pieza», que es justo lo contrario de lo que se pidió.
+
+### Y pesa menos que la v3
+
+Sólo existen en la página las piezas de la pantalla actual: las demás **ni están
+en el DOM**. Cuatro vídeos como mucho, siempre, sin nada que vigilar.
+
+### Dos trampas que costaron encontrar
+
+**El estilo en línea gana a las media queries.** La composición se pasaba como
+`style={{gridTemplateAreas: ...}}` y por tanto se habría aplicado también en
+móvil, donde no hay rejilla de áreas. Ahora va como variables CSS (`--areas`,
+`--cols`, `--rows`, y `--ga` para cada pieza) que sólo se usan a partir de `lg:`.
+Verificado a 390 px: `grid-template-areas: none`, una sola columna y sin
+desbordamiento horizontal.
+
+**Un `push` dentro del render dejaba fuera al compilador de React.** La lista de
+pantallas se construía mutando un array, y eso hace que el compilador no pueda
+conservar la memoización manual y **se salte el componente entero** — justo
+donde hay cuatro vídeos a la vez. Ahora se construye con `Array.from` y el `ir`
+no lleva `useCallback`: el compilador ya lo memoiza solo, y ponerlo a mano con
+una lista de dependencias que no coincide con la que él deduce era precisamente
+lo que le hacía renunciar. `npx eslint` sale limpio, sin avisos.
+
+### Qué hay que decidir antes de que esto sustituya al portfolio de verdad
+
+`prefers-reduced-motion`, igual que en la v3. Aquí no se comprueba a propósito,
+porque si se comprobara la página de prueba se vería muerta justo en el Mac
+desde el que se está valorando. Pero cuatro vídeos que arrancan solos **sí** son
+lo que esa preferencia quiere evitar: en producción hay que enseñar el póster y
+un botón de reproducir, y cambiar de pantalla sin el barrido.
+
+### Aviso para quien verifique esto en el panel del navegador
+
+Con el panel oculto, `requestAnimationFrame` va a **0 fotogramas por segundo** y
+Chromium suspende todos los vídeos menos uno. Se ve como si la animación no
+existiera y como si los vídeos no arrancaran, y no es verdad: los cuatro
+`play()` resuelven bien. Y el primer fotograma tarda en pintarse, así que una
+pieza puede salir negra en una captura y verse perfecta en la siguiente. Medir
+el DOM, no fiarse de la captura.
+
+---
+
 ## 2026-09-12 (25) — Mosaico v3: la página se mueve sola
 
 En `/portfolio-prueba-3`. Mario descartó la v2: **pedía algo al visitante**, y
