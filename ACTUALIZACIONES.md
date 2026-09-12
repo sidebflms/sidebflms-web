@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (23) — DURO y Metropolitano: dos piezas que estaban descartadas
+
+Mario enseñó fotos de esos dos trabajos, y resultó que **el material ya estaba
+en el disco**. Se habían descartado en la primera pasada por tamaño —el máster
+de DURO son 634 MB y hay otro de 8,3 GB— sin mirar lo que tenían dentro. Eran
+de lo mejor del archivo.
+
+El portfolio pasa de 9 a 11 piezas. La categoría de drone, de 2 a 4.
+
+### Un detalle del máster de DURO que habría estropeado el corte
+
+`DURO PYROSHOW 2 HORIZONTAL.mp4` **mezcla planos horizontales con insertos
+verticales pillarboxed**. Cortar por donde pareciera bonito habría metido
+bandas negras en la pieza.
+
+El tramo se eligió midiendo con `cropdetect`: 168-171 s da 3226 px de ancho
+—hay bandas— y 171-183 da 3840 en todo el tramo. De ahí sale el corte.
+
+### Las dos son plano único
+
+Verificado con detección de escena sobre las piezas ya publicadas: **cero
+cortes** en las dos. El Metropolitano es un descenso continuo desde fuera del
+estadio hasta el césped; DURO aguanta el abanico de pirotecnia entero en la
+misma toma.
+
+### Lo que sigue sin saberse
+
+Ninguna de las dos lleva fecha en el nombre del fichero, así que las dos dicen
+«Por confirmar». Y el `delivered` sigue pendiente, como en todas.
+
+### Material que queda sin usar y merece la pena
+
+- `@sidebflms_DURO_FESTIVAL-11.jpg` — **10095×8076, 81 megapíxeles**. Es una de
+  las que Mario enseñó por el chat. Da para la ficha de fotografía de DURO.
+- `DURO BOMBA 1 V2.mp4` — **vertical nativo** 2160×3840, no recortado.
+- `CLIP CIERRE DURO.mp4` — 4K, 2:28.
+- `06 VENDEX DURO FESTIVAL.mp4` — 8,3 GB, casi una hora: parece la grabación
+  entera del evento, no una pieza.
+
+---
+
 ## 2026-09-12 (22) — Mosaico v2: rebobinar la pieza con el ratón
 
 En `/portfolio-prueba-2`. Conviven las tres para comparar: `/portfolio` (el de

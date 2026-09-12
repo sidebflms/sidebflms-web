@@ -178,6 +178,75 @@ export const PROJECTS: Project[] = [
     },
   },
   {
+    // FUENTE: `DRONE/DURO PYROSHOW 2 HORIZONTAL.mp4`, tramo 171-183 s.
+    // El tramo no se eligió a ojo: el máster mezcla planos horizontales con
+    // insertos VERTICALES pillarboxed, y `cropdetect` confirmó que 168-171
+    // llevaba bandas (3226 px de ancho) mientras que 171-183 está limpio
+    // (3840 en todo el tramo). Cortar sin mirar eso mete bandas negras.
+    // FECHA: el fichero no lleva ninguna.
+    slug: "duro-pyroshow",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 0,
+    featured: false,
+    year: "—",
+    venue: "DURO",
+    media: {
+      video: "/media/duro-pyroshow.mp4",
+      poster: "/media/duro-pyroshow.jpg",
+      vertical: { video: "/media/duro-pyroshow-vertical.mp4", poster: "/media/duro-pyroshow-vertical.jpg" },
+    },
+    title: { es: "DURO — el show de fuego", en: "DURO — the pyro show" },
+    date: { es: "Por confirmar", en: "To confirm" },
+    hardFact: {
+      // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
+      es: "Doce segundos de un máster de 4:22, y ni un corte dentro",
+      en: "Twelve seconds out of a 4:22 master, and not a cut inside",
+    },
+    brief: {
+      es: "Aéreo nocturno sobre el escenario mientras suben los fuegos. El plano aguanta entero: el abanico de pirotecnia, el público iluminado por la pantalla y las luces de la ciudad al fondo, en la misma toma y sin cortar.",
+      en: "Night aerial over the stage as the fireworks go up. The shot holds throughout: the fan of pyrotechnics, the crowd lit by the screen and the city lights behind, all in one take and never cutting.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Aéreo del show de fuego", "Máster de 4:22 en 4K del que sale este corte"],
+      en: ["Pyro show aerial", "4K 4:22 master this cut comes from"],
+    },
+  },
+  {
+    // FUENTE: `DRONE/@sidebflms_METROPOLITANO.mp4`, 3840×2880 (4:3 abierto).
+    // El recinto sale del nombre del fichero y se reconoce en el propio
+    // metraje. FECHA: el fichero no lleva ninguna.
+    slug: "metropolitano",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 2,
+    featured: false,
+    year: "—",
+    venue: "Metropolitano",
+    media: {
+      video: "/media/metropolitano.mp4",
+      poster: "/media/metropolitano.jpg",
+      vertical: { video: "/media/metropolitano-vertical.mp4", poster: "/media/metropolitano-vertical.jpg" },
+    },
+    title: { es: "Metropolitano", en: "Metropolitano" },
+    date: { es: "Por confirmar", en: "To confirm" },
+    hardFact: {
+      // VERIFICADO: 0 cortes de escena en la pieza publicada.
+      es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
+      en: "From outside the stadium down to the pitch in one flight, no cuts",
+    },
+    brief: {
+      es: "Un descenso continuo: entra desde fuera con la ciudad detrás, pasa por encima del anillo y baja hasta el campo, con el estadio entero encendido en magenta. Un recinto de este tamaño sólo se entiende desde el aire.",
+      en: "One continuous descent: it comes in from outside with the city behind, crosses the rim and drops to the pitch, the whole stadium lit magenta. A venue this size only reads from the air.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Plano aéreo de descenso, sin cortes"],
+      en: ["Single-take descending aerial"],
+    },
+  },
+  {
     // FUENTE: `MULTICAM/15082026 GORDO LEBANON HORIZONTA 1.mp4` → 15/08/2026.
     slug: "gordo-lebanon",
     placeholder: false,
