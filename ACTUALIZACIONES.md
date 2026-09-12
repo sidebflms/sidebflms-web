@@ -5,6 +5,62 @@ reciente arriba.
 
 ---
 
+## 2026-09-12 (22) — Mosaico v2: rebobinar la pieza con el ratón
+
+En `/portfolio-prueba-2`. Conviven las tres para comparar: `/portfolio` (el de
+verdad, intacto), `/portfolio-prueba` (v1) y esta.
+
+### Qué cambia
+
+En la v1 pasar el ratón **reproducía** el clip. Aquí lo **rebobina**: la
+posición horizontal del cursor es la posición en la pieza, con cabezal, barra
+de progreso y el timecode corriendo en naranja.
+
+Por qué, y no simplemente «más animación»:
+
+- **Lo hace el visitante.** Un autoplay se ignora a los dos segundos; un clip
+  que responde al ratón se recorre entero, que es lo que quiere un portfolio.
+- **Es el oficio.** Son montadores y la regleta del sitio ya es una línea de
+  tiempo: rascar un clip para ver qué tiene dentro es su gesto.
+- **No pesa.** Sólo se descarga el clip que se está tocando.
+
+### Dos decisiones que se apartan de lo que hace el resto del sitio
+
+**`prefers-reduced-motion` NO se comprueba aquí**, y es deliberado. En el resto
+del sitio esa preferencia apaga movimiento que ocurre sin que nadie lo pida —el
+reel de la portada, el cabeceo del drone—. Esto es lo contrario: cada fotograma
+lo pone el visitante con su propio ratón, igual que la barra de un reproductor,
+que nadie desactiva por esa preferencia. Apagarlo sólo dejaría la página muerta
+para quien la tenga activada, que es mucha gente que la puso por la batería.
+
+**No se llama a `load()`** al entrar: reiniciaría el elemento y provocaría un
+parpadeo. Basta con subir `preload` a `auto`; al saltar a un punto el navegador
+pide por rango el trozo que necesita, que es justo para lo que los mp4 se
+generaron con `faststart`.
+
+### Un fallo encontrado al probarlo
+
+Al principio, quien pasaba el ratón y lo dejaba quieto se quedaba mirando el
+**fotograma 0**, que no tiene nada que ver con dónde apunta: el clip parecía
+roto hasta que movías. Ahora se salta al punto de entrada en el mismo
+`mouseenter`, usando su `clientX`.
+
+De paso, el manejador de movimiento estaba conectado sólo cuando la ficha ya
+estaba activa, así que **el primer movimiento se perdía**. Ahora escucha
+siempre.
+
+Comprobado con el cursor de verdad: entrando por el 80,7 % del ancho salta a
+9,68 s de 12; moviendo al 13,4 %, a 1,61 s. El cabezal cae en el mismo
+porcentaje.
+
+### Con teclado
+
+`onFocus` tiene su propio manejador: no hay cursor, así que no hay punto al que
+saltar y la pieza se enseña desde el principio. Rebobinar necesita ratón, pero
+al menos quien navega con tabulador ve la pieza y no se queda con el póster.
+
+---
+
 ## 2026-09-11 (21) — Nosotros, preparada para fotos de equipo
 
 La página ya sabe pintar una **foto de grupo** a ancho completo y un **retrato**
