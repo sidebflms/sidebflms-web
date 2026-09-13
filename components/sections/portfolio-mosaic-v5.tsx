@@ -298,8 +298,12 @@ export function PortfolioMosaicV5({
     <div className="flex flex-col gap-3">
       {filas(projects).map((fila, i) => (
         <div key={i} className="flex flex-col gap-3 md:flex-row">
-          {fila.map((hueco) => (
-            <Pieza key={hueco.project.slug} hueco={hueco} locale={locale} dict={dict} />
+          {/* La clave va por POSICIÓN y no por slug: la página de prueba
+              repite las mismas piezas para ver la maqueta llena, y ahí el slug
+              deja de ser único. La lista es fija y nunca se reordena, así que
+              la posición es una clave válida. */}
+          {fila.map((hueco, j) => (
+            <Pieza key={`${i}-${j}`} hueco={hueco} locale={locale} dict={dict} />
           ))}
         </div>
       ))}

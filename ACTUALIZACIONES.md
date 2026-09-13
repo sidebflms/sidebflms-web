@@ -12,6 +12,26 @@ sólo corre bajo el ratón). Pero pedía «más vídeos, tipo collage»: con dos
 fila cabían tres piezas en pantalla y el portfolio parecía más corto de lo que
 es.
 
+### Añadido después: la prueba, con las piezas repetidas
+
+Mario pidió verla «más llena». La página de prueba repite la lista tres veces:
+**once filas y 31 huecos** en vez de cuatro filas y once. (Son 31 y no 33 porque
+la pieza destacada es el mismo objeto repetido, y al apartarla se van las tres
+copias — no importa, es una página para mirar.)
+
+Sólo ocurre en `/portfolio-prueba-5`: **no toca `content/projects.ts`**. Y lo
+avisa en pantalla, no sólo en un comentario, porque si no la página da a
+entender que hay treinta y tres trabajos.
+
+La clave de React pasa de ser el slug a ser la posición: con piezas repetidas el
+slug deja de ser único.
+
+**Lo que enseña esta prueba y conviene no olvidar:** a mitad de página los 25
+vídeos han pasado ya a `preload: auto`. El observador sube la precarga al
+acercarse y nunca la vuelve a bajar. Con once piezas reales eso son ocho o nueve
+vídeos y no pasa nada; con treinta y una sería mucha descarga. Si algún día el
+portfolio crece de verdad, hay que hacer que la precarga se baje al alejarse.
+
 ### De dos por fila a tres
 
 Y la destacada deja de ir sola a todo lo ancho: comparte fila con una vertical.
