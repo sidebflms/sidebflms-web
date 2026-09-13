@@ -5,6 +5,72 @@ reciente arriba.
 
 ---
 
+## 2026-09-13 (36) — Tres piezas más, cargos provisionales y la óptica del Inspire
+
+Cuatro encargos de Mario del 2026-09-13, resueltos con el mismo criterio de
+siempre: lo comprobable se comprueba, lo que no se sabe se marca.
+
+### Tres piezas nuevas: el portfolio pasa de 11 a 14
+
+Del material que Mario fue pasando y que está en `~/Desktop/PARA-LA-WEB/`:
+
+| Pieza | De dónde sale | Fecha |
+|---|---|---|
+| **MITT MOTORS** | anuncio de la marca de motos | 16 jul 2026 |
+| **Madrid desde el aire** | postales de dron sobre la ciudad | 17 may 2026 |
+| **La costa desde el aire** | bahía con barcos fondeados | 21 may 2026 |
+
+**Las fechas son fiables**, y eso es nuevo: tres de las nueve fichas anteriores
+tienen «Por confirmar» porque el nombre del fichero no daba fecha. Estos másters
+conservan la etiqueta `creation_time` del aparato, que es la del rodaje y no la
+de una copia. Leída con `ffprobe`.
+
+**Lo que no se sabe, no se escribe:** dónde es exactamente esa costa —se ve una
+bahía con barcos, y poner «Ibiza» o «Mallorca» a ojo en la ficha de un cliente es
+justo lo que este fichero no hace— y dónde se rodó el anuncio. Las dos van con
+`venue: "Por confirmar"`.
+
+### Categoría nueva: Publicidad
+
+El anuncio de la moto no encajaba en ninguna de las cuatro que había. Se añade
+`ads` a `CATEGORIES` y a los dos diccionarios; el filtro la recoge solo, porque
+se construye a partir de esa lista. El recuento queda: Todo 14, Aftermovie 3,
+Multicámara 2, Drone 7, Fotografía 2, Publicidad 1.
+
+### Un script para preparar el metraje
+
+`scripts/pieza-web.sh` saca de un máster los cuatro ficheros que necesita una
+pieza: apaisado 1280×720, vertical 1080×1350 y sus dos pósters, con las mismas
+medidas y el mismo bitrate que las piezas que ya había, para que el portfolio
+pese y se vea igual de una a otra.
+
+**La trampa que costó encontrar:** los HEVC de DJI declaran DOS flujos de vídeo.
+Sin `-map 0:v:0`, ffmpeg falla con «Error reinitializing filters», que no dice
+nada de la causa. Queda escrito en la cabecera del script.
+
+### Cargos: puestos, y marcados
+
+Mario pidió ponerlos «igual que las fotos, y ya te diré». Están repartidos a ojo
+entre los servicios que la empresa ofrece de verdad, y **todos llevan
+`roleEsEjemplo: true`**: se pintan apagados y con un «Cargo por confirmar» al
+lado. `HAY_EJEMPLOS` ahora mira las dos cosas —fotos y cargos—, así que el freno
+para abrir la web sigue puesto hasta que se confirmen.
+
+Poner «cámara» a alguien que es productor es de las cosas que un cliente detecta
+en la primera llamada; por eso se marcan en vez de escribirlos a secas.
+
+### La óptica del Inspire 3
+
+Comprobada en dji.com: cámara **X9-8K Air** de fotograma completo, hasta 8K
+(8192×4320), montura DL con ópticas de **18, 24, 35, 50 y 75 mm**.
+
+Ojo a la distinción, que está escrita en `content/fleet.ts`: eso es lo que
+EXISTE para el aparato, que es lo comprobable y lo que pidió Mario. **Cuáles
+están de verdad en el maletín sigue sin confirmar.** Si una producción pide el
+75 mm y no está, el problema sale el día del rodaje.
+
+---
+
 ## 2026-09-13 (35) — El mosaico ya es la página de Trabajo
 
 Mario aprobó la v5. Pasa a ser `/portfolio` de verdad, y **se borran las ocho

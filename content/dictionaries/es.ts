@@ -244,6 +244,7 @@ export const es = {
       multicam: "Multicámara",
       drone: "Drone",
       photo: "Fotografía",
+      ads: "Publicidad",
     },
     detail: {
       backToAll: "Volver al trabajo",
@@ -420,6 +421,7 @@ export const es = {
     groupAlt: "El equipo de SIDEBFLMS",
     // TODO (cliente): fuera en cuanto cada foto sea de quien dice ser.
     photoExample: "Ejemplo",
+    roleExample: "Cargo por confirmar",
     photoExampleNote: "Fotos de ejemplo: todavía no son de cada persona",
     scaleLabel: "Cuando hace falta más equipo",
     scaleBody:

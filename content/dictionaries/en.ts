@@ -218,6 +218,7 @@ export const en: Dictionary = {
       multicam: "Multicam",
       drone: "Aerial",
       photo: "Stills",
+      ads: "Commercials",
     },
     detail: {
       backToAll: "Back to the work",
@@ -362,6 +363,7 @@ export const en: Dictionary = {
     teamNote: "Roles and photos pending",
     groupAlt: "The SIDEBFLMS crew",
     photoExample: "Placeholder",
+    roleExample: "Role to confirm",
     photoExampleNote: "Placeholder photos: not yet the right person",
     scaleLabel: "When the job needs more crew",
     scaleBody:

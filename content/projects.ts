@@ -38,12 +38,29 @@ import type { Locale } from "@/lib/routes";
  * En esas tres, `date` dice «Por confirmar» a propósito. Es preferible a un
  * mes inventado en la ficha de un cliente.
  *
+ * ── AMPLIACIÓN DEL 2026-09-13: TRES PIEZAS MÁS ──────────────────────────
+ * Salen del material que Mario fue pasando por el chat y que está en
+ * `~/Desktop/PARA-LA-WEB/`. Mismo criterio que las nueve primeras: lo medible
+ * se mide, lo que no se sabe pone «Por confirmar».
+ *
+ * Lo medible aquí incluye la FECHA, que en estas tres sí es fiable: los
+ * másters conservan la etiqueta `creation_time` del aparato, que es la del
+ * rodaje y no la de una copia. Se leyó con `ffprobe`:
+ *   · `madrid-aereo`  → 2026-05-17
+ *   · `costa-aerea`   → 2026-05-21
+ *   · `mitt-motors`   → 2026-07-16
+ *
+ * Lo que NO se sabe y por eso no se escribe: dónde es exactamente la costa
+ * —se ve una bahía con barcos fondeados, y poner «Ibiza» o «Mallorca» a ojo
+ * en la ficha de un cliente es justo lo que este fichero no hace— y dónde se
+ * rodó el anuncio de la moto.
+ *
  * ── REGLA DE `hardFact`, que se mantiene ─────────────────────────────────
  * Un dato concreto que nadie podría inventar. Aquí todos salen de medir el
  * material, así que cumplen la regla y además se pueden comprobar.
  */
 
-export const CATEGORIES = ["aftermovie", "multicam", "drone", "photo"] as const;
+export const CATEGORIES = ["aftermovie", "multicam", "drone", "photo", "ads"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export type Project = {
@@ -429,6 +446,93 @@ export const PROJECTS: Project[] = [
       // PENDIENTE (producción).
       es: ["Fotografía de cabina y de recinto", "Cobertura aérea del mismo recinto"],
       en: ["Booth and site stills", "Aerial coverage of the same site"],
+    },
+  },
+  {
+    slug: "mitt-motors",
+    placeholder: false,
+    categories: ["ads", "drone"],
+    tone: 1,
+    featured: true,
+    year: "2026",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/mitt-motors.mp4",
+      poster: "/media/mitt-motors.jpg",
+      vertical: { video: "/media/mitt-motors-vertical.mp4", poster: "/media/mitt-motors-vertical.jpg" },
+    },
+    title: { es: "MITT MOTORS", en: "MITT MOTORS" },
+    date: { es: "16 de julio de 2026", en: "16 July 2026" },
+    hardFact: {
+      es: "Once planos rodados el mismo día, todos en 4:3 abierto para poder entregar apaisado y vertical",
+      en: "Eleven shots filmed the same day, all in open-matte 4:3 so both landscape and vertical could be delivered",
+    },
+    brief: {
+      es: "La moto rodando por carreteras de montaña, seguida desde el aire y desde tierra. El plano frontal con el faro encendido es el que sostiene la pieza: la carretera vacía a los lados da la escala que un plano cerrado no daría.",
+      en: "The bike running mountain roads, followed from the air and from the ground. The head-on shot with the headlight on is what holds the piece together: the empty road on either side gives a sense of scale a tight shot could not.",
+    },
+    delivered: {
+      // PENDIENTE (producción): esto describe la PIEZA, no la entrega.
+      es: ["Pieza de marca", "Versión vertical para redes", "Seguimiento aéreo y desde coche"],
+      en: ["Brand film", "Vertical cut for social", "Aerial and car-to-car tracking"],
+    },
+  },
+  {
+    slug: "madrid-aereo",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 3,
+    featured: false,
+    year: "2026",
+    venue: "Madrid",
+    media: {
+      video: "/media/madrid-aereo.mp4",
+      poster: "/media/madrid-aereo.jpg",
+      vertical: { video: "/media/madrid-aereo-vertical.mp4", poster: "/media/madrid-aereo-vertical.jpg" },
+    },
+    title: { es: "Madrid desde el aire", en: "Madrid from the air" },
+    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
+    hardFact: {
+      es: "Una de ocho postales de Madrid rodadas en dos tardes, todas de once segundos",
+      en: "One of eight Madrid postcards shot over two evenings, all eleven seconds long",
+    },
+    brief: {
+      es: "El skyline con Torrespaña recortada contra el cielo del atardecer. Rodado como plano de recurso: es el tipo de plano que una productora necesita tener hecho antes de que un cliente lo pida con dos días de margen.",
+      en: "The skyline with the Torrespaña tower cut against the evening sky. Shot as stock: the kind of shot a production company needs to already have when a client asks for it at two days' notice.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Postal aérea de 11 s", "Serie de ocho planos de Madrid", "Apaisado y vertical"],
+      en: ["11 s aerial postcard", "Series of eight Madrid shots", "Landscape and vertical"],
+    },
+  },
+  {
+    slug: "costa-aerea",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 0,
+    featured: false,
+    year: "2026",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/costa-aerea.mp4",
+      poster: "/media/costa-aerea.jpg",
+      vertical: { video: "/media/costa-aerea-vertical.mp4", poster: "/media/costa-aerea-vertical.jpg" },
+    },
+    title: { es: "La costa desde el aire", en: "The coast from the air" },
+    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
+    hardFact: {
+      es: "Rodado en la misma salida que las postales de Madrid, cuatro días después",
+      en: "Shot on the same run as the Madrid postcards, four days later",
+    },
+    brief: {
+      es: "Una bahía con los barcos fondeados y el agua cambiando de color con la profundidad. El plano se sostiene sobre esa transición de turquesa a azul, que es exactamente lo que se pierde rodando desde tierra.",
+      en: "A bay with boats at anchor and the water changing colour with depth. The shot rests on that turquoise-to-blue transition, which is exactly what gets lost when you shoot from the ground.",
+    },
+    delivered: {
+      // PENDIENTE (producción).
+      es: ["Postal aérea de 11 s", "Apaisado y vertical"],
+      en: ["11 s aerial postcard", "Landscape and vertical"],
     },
   },
 ];

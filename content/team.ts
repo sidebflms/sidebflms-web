@@ -14,9 +14,15 @@
  * lista de nombres; con cargos se lee como una productora que sabe quién hace
  * qué. Es lo que separa esta página de un directorio.
  *
- * NO SE INVENTAN. Poner «cámara» a alguien que es productor es de las cosas
- * que un cliente detecta en la primera llamada. La ficha se pinta sin cargo
- * mientras esté en `null`, que es feo pero no es mentira.
+ * PROVISIONALES DESDE EL 2026-09-13. Mario pidió ponerlos «igual que las
+ * fotos, y ya te diré»: están repartidos a ojo entre los servicios que la
+ * empresa ofrece de verdad (dirección, producción, cámara, dron, montaje,
+ * color, foto, sonido), y **todos llevan `roleEsEjemplo: true`**.
+ *
+ * Marcados por lo mismo que las fotos: poner «cámara» a alguien que es
+ * productor es de las cosas que un cliente detecta en la primera llamada. La
+ * ficha los pinta apagados y con la marca mientras la bandera esté puesta, y
+ * `HAY_EJEMPLOS` frena la apertura de la web igual que con las fotos.
  *
  * ── QUÉ FOTO, DECIDIDO ───────────────────────────────────────────────────
  * DECISIÓN (Mario, 2026-09-12): **de cada uno TRABAJANDO**, no de carnet.
@@ -53,8 +59,10 @@ export type Miembro = {
    * rompe su foto.
    */
   slug: string;
-  /** `null` mientras no esté confirmado. NO se rellena a ojo. */
+  /** `null` mientras no haya ninguno. Si es provisional, ver `roleEsEjemplo`. */
   role: { es: string; en: string } | null;
+  /** `true` = puesto a ojo para ver la página; falta que lo confirme Mario. */
+  roleEsEjemplo?: boolean;
   /** Ruta en `public/media/equipo/`. `null` mientras no haya foto. */
   foto: string | null;
   /**
@@ -84,17 +92,17 @@ export type Miembro = {
  * es quién, se quita esa marca y la foto pasa a color y sin aviso.
  */
 export const EQUIPO: Miembro[] = [
-  { nombre: "Mario Bote", slug: "mario-bote", role: null, foto: "/media/equipo/mario-bote.jpg" },
-  { nombre: "Fernando", slug: "fernando", role: null, foto: "/media/equipo/fernando.jpg" },
-  { nombre: "Galoguin", slug: "galoguin", role: null, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
-  { nombre: "Iván", slug: "ivan", role: null, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
-  { nombre: "Jota", slug: "jota", role: null, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },
-  { nombre: "Kenny", slug: "kenny", role: null, foto: "/media/equipo/trabajando/emisora-recinto.jpg", fotoEsEjemplo: true },
-  { nombre: "María", slug: "maria", role: null, foto: "/media/equipo/trabajando/equipo-tres.jpg", fotoEsEjemplo: true },
-  { nombre: "Nacho López", slug: "nacho-lopez", role: null, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
-  { nombre: "Natalia", slug: "natalia", role: null, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
-  { nombre: "Rubén", slug: "ruben", role: null, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
-  { nombre: "Sergio", slug: "sergio", role: null, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
+  { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Dirección", en: "Direction" }, roleEsEjemplo: true, foto: "/media/equipo/mario-bote.jpg" },
+  { nombre: "Fernando", slug: "fernando", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/fernando.jpg" },
+  { nombre: "Galoguin", slug: "galoguin", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  { nombre: "Iván", slug: "ivan", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
+  { nombre: "Jota", slug: "jota", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },
+  { nombre: "Kenny", slug: "kenny", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-recinto.jpg", fotoEsEjemplo: true },
+  { nombre: "María", slug: "maria", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/equipo-tres.jpg", fotoEsEjemplo: true },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Montaje", en: "Editing" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
+  { nombre: "Natalia", slug: "natalia", role: { es: "Fotografía", en: "Stills" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
+  { nombre: "Rubén", slug: "ruben", role: { es: "Etalonaje", en: "Colour" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
 ];
 
 /**
@@ -145,7 +153,9 @@ export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== 
  * bajo un nombre que no es el suyo, y eso no puede salir de detrás de la
  * contraseña. La página lo avisa arriba y marca cada ficha afectada.
  */
-export const HAY_EJEMPLOS = EQUIPO.some((m) => m.fotoEsEjemplo === true);
+export const HAY_EJEMPLOS = EQUIPO.some(
+  (m) => m.fotoEsEjemplo === true || m.roleEsEjemplo === true
+);
 
 /**
  * EL EQUIPO TRABAJANDO — la tira de fotos de la página de Nosotros.

@@ -27,8 +27,10 @@
  *   · El MODELO DEL FPV. Hay FPV —se ve en Holika— pero no consta cuál.
  *   · El sistema de CABLECAM.
  *   · La CATEGORÍA de vuelo y las certificaciones concretas del piloto.
- *   · La ÓPTICA del Inspire 3. Se sabe el aparato, no con qué objetivos vuela,
- *     y para una ficha técnica de cine eso es justo lo que se pregunta.
+ *   · CUÁLES de las ópticas DL están de verdad en el maletín. La ficha dice
+ *     qué ópticas EXISTEN para el aparato —comprobado en dji.com el 2026-09-13,
+ *     que es lo que pidió Mario—, no cuáles se llevan a rodar. Si una
+ *     producción pide el 75 mm y no está, el problema sale el día del rodaje.
  *
  * Añadir un aparato que no se tiene es de las cosas que una producción de
  * cine detecta al pedir la ficha técnica, y es la especialidad que se está
@@ -45,8 +47,8 @@ export const DRONES: Aparato[] = [
   {
     modelo: "DJI Inspire 3",
     uso: {
-      es: "El aparato de cine: sensor de fotograma completo y flujo de trabajo de rodaje, para cine, series y publicidad.",
-      en: "The cinema aircraft: full-frame sensor and a film workflow, for features, series and commercials.",
+      es: "El aparato de cine. Cámara X9-8K Air de fotograma completo, hasta 8K (8192×4320), y montura DL con ópticas de 18, 24, 35, 50 y 75 mm.",
+      en: "The cinema aircraft. Full-frame X9-8K Air camera, up to 8K (8192×4320), and DL mount with 18, 24, 35, 50 and 75 mm lenses.",
     },
   },
   {

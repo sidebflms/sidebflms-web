@@ -155,7 +155,18 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
                     <p className="text-bone">{miembro.nombre}</p>
                     {/* Sin cargo no se pinta nada. Ver la nota de content/team.ts:
                         un cargo inventado se detecta en la primera llamada. */}
-                    {miembro.role && <p className="label mt-1">{miembro.role[locale]}</p>}
+                    {/* El cargo provisional se pinta apagado y con su aviso.
+                        Un cargo inventado se detecta en la primera llamada, así
+                        que mientras no lo confirme Mario tiene que verse que no
+                        está confirmado — igual que con las fotos. */}
+                    {miembro.role && (
+                      <p className={`label mt-1 ${miembro.roleEsEjemplo ? "text-ink-600" : ""}`}>
+                        {miembro.role[locale]}
+                        {miembro.roleEsEjemplo && (
+                          <span className="text-rust-300"> · {dict.about.roleExample}</span>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </li>
               ))}
