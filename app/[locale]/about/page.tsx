@@ -124,19 +124,29 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           </Reveal>
 
           <Reveal stagger>
-            {/* CINCO POR FILA, NO CUATRO.
-                Con once personas, a cuatro por fila salían tres filas y la
-                última con tres huecos vacíos. A cinco salen 5+5+1 y los
-                retratos bajan de tamaño, que es lo que se pedía: el equipo se
-                lee de un vistazo en vez de ocupar media pantalla.
+            {/* FILAS CENTRADAS, Y POR ESO NO ES UNA REJILLA.
+                **Once personas no se reparten en partes iguales**: once es
+                primo. Cualquier número de columnas deja la última fila coja, y
+                con una rejilla esa fila queda pegada a la izquierda con el
+                hueco a la derecha — que es como se veía y era lo que chirriaba.
 
-                Más aire vertical que horizontal (`gap-y` mayor que `gap-x`):
-                entre dos retratos pegados de lado la separación se entiende
-                sola, pero entre filas hace falta más para que no parezca una
-                cuadrícula continua. */}
-            <ul className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+                Con `flex-wrap` y `justify-center`, la fila incompleta se centra
+                y el bloque se lee simétrico. A seis por fila salen 6 + 5: sólo
+                falta un sitio, y centrado parece decidido y no un descuadre.
+
+                El ancho de cada ficha se fija con `basis`, restando la parte de
+                hueco que le toca; si no, `flex` las estiraría para rellenar la
+                fila y la última quedaría gigante.
+
+                Más aire vertical que horizontal: entre dos retratos pegados de
+                lado la separación se entiende sola; entre filas hace falta más
+                para que no parezca una cuadrícula continua. */}
+            <ul className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-10">
               {EQUIPO.map((miembro) => (
-                <li key={miembro.slug}>
+                <li
+                  key={miembro.slug}
+                  className="basis-[calc(50%-0.625rem)] sm:basis-[calc(33.333%-0.834rem)] lg:basis-[calc(16.666%-1.042rem)]"
+                >
                   {/* RETRATO — sólo cuando TODOS tienen foto (ver HAY_RETRATOS en
                       content/team.ts). Mientras falte uno, rejilla de nombres. */}
                   {HAY_RETRATOS && miembro.foto && (

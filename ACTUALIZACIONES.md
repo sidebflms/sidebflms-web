@@ -38,6 +38,26 @@ Más aire vertical que horizontal, y fuera la línea de separación que llevaba
 cada ficha: a cinco por fila, once líneas horizontales cortas convertían el
 bloque en una reja.
 
+### Y después: las filas, centradas
+
+A cinco por fila quedaba 5 + 5 + **1**, y esa última suelta pegada a la
+izquierda es lo que Mario dijo que quedaba mal.
+
+**Once no se reparte en partes iguales**: once es primo, así que cualquier
+número de columnas deja la última fila coja. Lo que se puede arreglar no es el
+reparto, es **dónde queda el hueco**.
+
+Se cambia la rejilla por `flex-wrap` con `justify-center`: la fila incompleta se
+centra y el bloque se lee simétrico. A seis por fila sale **6 + 5**, o sea falta
+un solo sitio, y centrado parece decidido en vez de un descuadre.
+
+El ancho de cada ficha va fijado con `basis` restando la parte de hueco que le
+toca. Sin eso, `flex` estiraría las de la última fila para rellenarla y saldrían
+cinco retratos gigantes debajo de seis pequeños.
+
+Comprobado: 6 y 5, ficha de 201 px, la segunda fila empieza en x=182 contra los
+72 de la primera —o sea centrada— y sin desbordamiento horizontal.
+
 ### El aviso de «cargo por confirmar», reducido a un asterisco
 
 Esto salió de mirarlo, no de pensarlo: a cinco por fila la columna mide 245 px y
