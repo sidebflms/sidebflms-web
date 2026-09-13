@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-09-13 (35) — El mosaico ya es la página de Trabajo
+
+Mario aprobó la v5. Pasa a ser `/portfolio` de verdad, y **se borran las ocho
+páginas de prueba** y sus siete componentes. Están en el historial de git si
+hicieran falta.
+
+### El filtro sigue mandando
+
+La página de Trabajo no era sólo una rejilla: tenía filtro por categoría y
+recuento de resultados, y eso se conserva entero. Lo que llega al mosaico es la
+lista YA filtrada, y el mosaico se recompone con lo que haya. Comprobado los
+cuatro: aftermovie 3, multicámara 2, drone 4, fotografía 2. Con cuatro piezas
+salen dos filas de dos; con once, cuatro filas (2, 3, 3, 3).
+
+### Ahora sí se respeta «Reducir movimiento»
+
+En las pruebas no se comprobaba a propósito, porque el Mac desde el que se
+valoraba la tiene puesta y las páginas se habrían visto muertas. En producción
+sí, y esto es lo que se quita:
+
+- El **paralaje**, que se mueve solo con el scroll.
+- El **arranque automático en pantallas táctiles**, que es lo que suple al ratón
+  en el teléfono.
+
+Y esto NO se toca: **pasar el ratón por encima sigue arrancando el vídeo**. Eso
+es una respuesta a un gesto del visitante, no movimiento que se le impone; quien
+no quiera ver nada moverse, sencillamente no pasa por encima.
+
+### Código que se va
+
+`components/ui/project-card.tsx` se borra: era la ficha de la rejilla antigua y
+ya no la usaba nadie. Comprobado con `grep` en todo el proyecto antes de
+tocarla.
+
+Los componentes `portfolio-mosaic-v2` a `-v8` también. El elegido pasa a
+llamarse `portfolio-mosaic.tsx` a secas, con la historia de las ocho versiones
+escrita en su cabecera para quien llegue nuevo.
+
+---
+
 ## 2026-09-13 (34) — La v5 elegida, y más densa
 
 Mario se queda con la **v5** (la maqueta en filas con paralaje, donde el vídeo

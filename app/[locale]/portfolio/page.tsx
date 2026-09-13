@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { PortfolioMosaic } from "@/components/sections/portfolio-mosaic";
 import { Reveal } from "@/components/motion/reveal";
 import { FilterBar } from "@/components/ui/filter-bar";
-import { ProjectCard } from "@/components/ui/project-card";
 import { CATEGORIES, PROJECTS, type Category } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
@@ -68,14 +68,14 @@ export default async function PortfolioPage({
       </header>
 
       <div className="shell mt-14">
+        {/* El mosaico sustituye a la rejilla de fichas desde el 2026-09-13.
+            El FILTRO de arriba sigue mandando: lo que llega aquí es la lista ya
+            filtrada, y el mosaico se recompone con lo que haya. Con una sola
+            pieza sale una fila de una, sin huecos. */}
         {projects.length === 0 ? (
           <p className="text-smoke">{dict.portfolio.empty}</p>
         ) : (
-          <Reveal stagger className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectCard key={project.slug} project={project} locale={locale} dict={dict} />
-            ))}
-          </Reveal>
+          <PortfolioMosaic projects={projects} locale={locale} dict={dict} />
         )}
       </div>
     </main>
