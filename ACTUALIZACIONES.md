@@ -5,6 +5,45 @@ reciente arriba.
 
 ---
 
+## 2026-09-13 (34) — La v5 elegida, y más densa
+
+Mario se queda con la **v5** (la maqueta en filas con paralaje, donde el vídeo
+sólo corre bajo el ratón). Pero pedía «más vídeos, tipo collage»: con dos por
+fila cabían tres piezas en pantalla y el portfolio parecía más corto de lo que
+es.
+
+### De dos por fila a tres
+
+Y la destacada deja de ir sola a todo lo ancho: comparte fila con una vertical.
+Sigue mandando —ocupa casi el triple— pero ya no se come una pantalla entera
+ella sola, que era parte del problema.
+
+Con las once piezas salen **cuatro filas: 2, 3, 3, 3**. Medido en el navegador,
+los anchos de cada fila: 963+330, luego 523+235+523, luego 303+674+303, y
+523+523+235. Alturas iguales dentro de cada fila sin calcular nada, porque el
+ancho sale de `flex: <aspecto> 1 0%` y la altura de `aspect-ratio`.
+
+### Tres patrones que se turnan
+
+Si todas las filas fueran «apaisado, vertical, apaisado» esto sería una
+cuadrícula con dos anchos, no un collage. Con tres patrones alternándose,
+ninguna fila se parece a la de arriba. Es la misma corrección que hubo que hacer
+en la v7 con los ocho paneles iguales seguidos.
+
+### Los títulos, a dos líneas
+
+Con tres por fila el hueco más estrecho ronda los 235 px, y `truncate` dejaba
+cosas como «DURO — el show d…». Cortar el nombre de un trabajo en una página de
+trabajos es justo lo que no puede pasar: ahora `line-clamp-2`. Comprobado: de
+los once títulos, ninguno se queda cortado.
+
+### Permisos de marca: concedidos
+
+Mario confirmó el 2026-09-13 que **están todos**. Se puede publicar DURO,
+Monegros, MITT MOTORS, HEAD, UNVRS y Fabrik. Deja de ser un bloqueante.
+
+---
+
 ## 2026-09-12 (33) — Analítica propia, sin cookies y sin banner
 
 Montada en el servidor. Mide visitas, páginas más vistas, procedencia, país y

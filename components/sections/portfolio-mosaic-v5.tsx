@@ -42,28 +42,59 @@ import { path, type Locale } from "@/lib/routes";
  * a cinco pantallas de distancia sigue sin descargarse.
  */
 
-const H = 16 / 9;
-const V = 4 / 5;
+const H = 16 / 9; // apaisado
+const V = 4 / 5; // vertical, del máster recortado
+const P = 21 / 9; // la pieza destacada
 
 type Hueco = { project: Project; aspecto: number };
+
+/**
+ * ── POR QUÉ TRES POR FILA Y NO DOS ───────────────────────────────────────
+ * La primera versión ponía dos por fila y una destacada a todo lo ancho. Se
+ * veía poco: cabían tres piezas en pantalla y el portfolio parecía corto.
+ * Mario pidió «más vídeos, tipo collage», así que las filas pasan a tres.
+ *
+ * ── CÓMO SE REPARTE EL ANCHO ─────────────────────────────────────────────
+ * Cada pieza es `flex: <aspecto> 1 0%` dentro de su fila, así que **el ancho
+ * sale de la proporción**: un 16:9 ocupa el doble que un 4:5 de la misma fila.
+ * Y como la altura la fija `aspect-ratio`, todas las de una fila acaban
+ * midiendo lo mismo de alto sin tener que calcular nada. Esa es la pieza que
+ * hace que esto funcione: sin ella habría que cuadrar alturas a mano.
+ *
+ * ── POR QUÉ LOS PATRONES, Y NO TODO IGUAL ────────────────────────────────
+ * Si todas las filas fueran «apaisado, vertical, apaisado» sería una
+ * cuadrícula con dos anchos, no un collage. Con tres patrones que se van
+ * turnando, ninguna fila se parece a la de arriba y el bloque se lee como algo
+ * compuesto. Es lo mismo que hubo que corregir en la v7 —ocho paneles iguales
+ * seguidos— y por el mismo motivo.
+ */
+const PATRONES = [
+  [H, V, H],
+  [V, H, V],
+  [H, H, V],
+];
 
 function filas(projects: Project[]): Hueco[][] {
   const lider = projects.find((p) => p.showpiece);
   const resto = projects.filter((p) => p !== lider);
   const out: Hueco[][] = [];
-  if (lider) out.push([{ project: lider, aspecto: 21 / 9 }]);
-  for (let i = 0; i < resto.length; i += 2) {
-    const par = resto.slice(i, i + 2);
-    const invertida = (i / 2) % 2 === 1;
-    if (par.length === 1) {
-      out.push([{ project: par[0], aspecto: H }]);
-    } else {
-      out.push(
-        invertida
-          ? [{ project: par[0], aspecto: V }, { project: par[1], aspecto: H }]
-          : [{ project: par[0], aspecto: H }, { project: par[1], aspecto: V }]
-      );
-    }
+
+  // La destacada ya no va sola a todo lo ancho: comparte fila con una
+  // vertical. Sigue mandando —ocupa casi el triple— pero deja de comerse una
+  // pantalla entera ella sola, que era parte del problema.
+  if (lider) {
+    const acompana = resto.shift();
+    out.push(
+      acompana
+        ? [{ project: lider, aspecto: P }, { project: acompana, aspecto: V }]
+        : [{ project: lider, aspecto: P }]
+    );
+  }
+
+  for (let i = 0; i < resto.length; i += 3) {
+    const trio = resto.slice(i, i + 3);
+    const patron = PATRONES[(i / 3) % PATRONES.length];
+    out.push(trio.map((project, j) => ({ project, aspecto: patron[j] })));
   }
   return out;
 }
@@ -231,7 +262,15 @@ function Pieza({ hueco, locale, dict }: { hueco: Hueco; locale: Locale; dict: Di
       )}
 
       <div className="absolute inset-x-0 bottom-0 p-5">
-        <p className="truncate text-lg font-semibold text-bone">{project.title[locale]}</p>
+        {/* Dos líneas, no recorte de una.
+            Con tres piezas por fila hay huecos estrechos —el más angosto ronda
+            los 235 px— y `truncate` dejaba títulos como «DURO — el show d…».
+            Cortar el nombre de un trabajo en una página de trabajos es
+            justamente lo que no puede pasar. `line-clamp-2` los deja respirar
+            y sigue poniendo tope. */}
+        <p className="line-clamp-2 text-base font-semibold text-balance text-bone">
+          {project.title[locale]}
+        </p>
         <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr]">
           <div className="overflow-hidden">
             <p className="label pt-1 text-rust-300">
