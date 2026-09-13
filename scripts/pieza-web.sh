@@ -31,16 +31,28 @@ set -euo pipefail
 
 MASTER="${1:?uso: $0 master.mp4 nombre [segundo-del-poster]}"
 NOMBRE="${2:?falta el nombre de la pieza}"
+
+# ── CUÁNTO SE QUEDA ──────────────────────────────────────────────────
+# 12 segundos como mucho, y desde DESDE (por defecto el 20 % del clip,
+# para saltarse el arranque, que en metraje de dron suele ser el
+# despegue o la corrección de encuadre).
+#
+# No es un capricho: las piezas que ya había duran 9-12 s y pesan 2-3 MB.
+# Sin este tope, un máster de 65 s salía a 14 MB — cinco veces el resto—,
+# y en un mosaico donde puede haber ocho vídeos cargados eso se nota.
+MAX="${MAX_SEG:-12}"
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="${OUT_MEDIA:-$RAIZ/public/media}"
 mkdir -p "$OUT"
 
 DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MASTER" | cut -d. -f1)
-POSTER_EN="${3:-$(( ${DUR:-4} * 45 / 100 ))}"
+DUR=${DUR:-12}
+if [ "$DUR" -gt "$MAX" ]; then DESDE=$(( DUR * 20 / 100 )); else DESDE=0; fi
+POSTER_EN="${3:-$(( MAX * 45 / 100 ))}"
 
-comun=(-map 0:v:0 -an -c:v libx264 -profile:v high -pix_fmt yuv420p -r 25 -b:v 1700k -maxrate 2200k -bufsize 4000k -movflags +faststart)
+comun=(-ss "$DESDE" -t "$MAX" -map 0:v:0 -an -c:v libx264 -profile:v high -pix_fmt yuv420p -r 25 -b:v 1700k -maxrate 2200k -bufsize 4000k -movflags +faststart)
 
-echo "==> $NOMBRE  (máster: $(basename "$MASTER"), ${DUR}s, póster en el segundo $POSTER_EN)"
+echo "==> $NOMBRE  (máster: $(basename "$MASTER"), ${DUR}s -> desde ${DESDE}s, ${MAX}s; póster en el ${POSTER_EN})"
 
 # 16:9 — se recorta arriba y abajo del 4:3.
 ffmpeg -v error -y -i "$MASTER" "${comun[@]}" \

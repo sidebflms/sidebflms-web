@@ -5,6 +5,59 @@ reciente arriba.
 
 ---
 
+## 2026-09-13 (37) — El portfolio, de 14 a 23 piezas
+
+«Usa todas las piezas», dijo Mario. Se han usado, pero **agrupando por asunto**:
+de las ocho postales de Madrid rodadas la misma tarde salen dos fichas, no ocho.
+Ocho puestas de sol casi idénticas como ocho trabajos distintos empeorarían el
+portfolio en vez de llenarlo.
+
+### Las nueve nuevas
+
+| Pieza | Categoría | Fecha |
+|---|---|---|
+| DURO — el recinto de noche | drone | 14 sep 2025 |
+| Cabina y público | aftermovie | 19 oct 2025 |
+| Sala llena | aftermovie | 29 oct 2025 |
+| El recinto lleno, desde el aire | drone | 9 nov 2025 |
+| Sala en rojo | aftermovie | 2 ene 2026 |
+| En cabina | multicámara | 18 ene 2026 |
+| Madrid — las Cuatro Torres | drone | 17 may 2026 |
+| El pueblo sobre el mar | drone | 21 may 2026 |
+| Monegros — el recinto | drone | 8 sep 2026 |
+
+Reparto por categoría: drone 12, aftermovie 6, multicámara 3, fotografía 2,
+publicidad 1. En pantalla: **ocho filas**, 2 + 3×7.
+
+### Los nombres que SÍ se ponen y los que no
+
+`DURO` y `Monegros` se nombran porque **las letras del escenario se leen en el
+propio metraje** —que es la fuente que la cabecera de este fichero admite— y
+`Madrid` porque las Cuatro Torres son inconfundibles. Las seis restantes van con
+`venue: "Por confirmar"`: se ve una sala llena, no se ve en qué sala. Poner un
+nombre a ojo en la ficha de un cliente es exactamente lo que este fichero no
+hace.
+
+Las fechas, en cambio, son todas fiables: salen del `creation_time` del máster.
+
+### El tope de duración del script
+
+`scripts/pieza-web.sh` ahora corta a **12 segundos** y arranca al 20 % del clip,
+para saltarse el despegue o la corrección de encuadre del principio.
+
+No es cosmético. Los másters de esta tanda llegan a 69 segundos, y sin tope una
+pieza salía a **14 MB** — cinco veces lo que pesan las demás. En un mosaico
+donde puede haber ocho vídeos precargados eso se nota de verdad. Con el tope,
+las nueve quedan entre 2,1 y 2,8 MB, igual que el resto.
+
+### Comprobado
+
+23 fichas, las nueve rutas nuevas responden 200, los cinco filtros cuadran, y
+las ocho filas se pintan con 21 vídeos y 2 pósters (las dos piezas de fotografía
+no tienen vídeo).
+
+---
+
 ## 2026-09-13 (36) — Tres piezas más, cargos provisionales y la óptica del Inspire
 
 Cuatro encargos de Mario del 2026-09-13, resueltos con el mismo criterio de

@@ -535,6 +535,267 @@ export const PROJECTS: Project[] = [
       en: ["11 s aerial postcard", "Landscape and vertical"],
     },
   },
+  {
+    slug: "escenario-de-noche",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 2,
+    featured: true,
+    year: "2025",
+    venue: "DURO",
+    media: {
+      video: "/media/escenario-de-noche.mp4",
+      poster: "/media/escenario-de-noche.jpg",
+      vertical: { video: "/media/escenario-de-noche-vertical.mp4", poster: "/media/escenario-de-noche-vertical.jpg" },
+    },
+    title: { es: "DURO — el recinto de noche", en: "DURO — the site at night" },
+    date: { es: "14 de septiembre de 2025", en: "14 September 2025" },
+    hardFact: {
+      es: "Máster vertical nativo de 2160×3840: el plano se rodó en vertical, no se recortó después",
+      en: "Native vertical master at 2160×3840: the shot was filmed vertical, not cropped afterwards",
+    },
+    brief: {
+      es: "Las tres torres del escenario encendidas sobre el campo a oscuras, con las luces del pueblo al fondo. El plano funciona porque enseña a la vez la instalación y el sitio donde está: a ras de suelo no se puede contar esa relación.",
+      en: "The three stage towers lit over a dark field, with the town lights behind. The shot works because it shows the rig and the place it sits in at once: from the ground you cannot tell that relationship.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano aéreo nocturno", "Vertical nativo"],
+      en: ["Night aerial", "Native vertical"],
+    },
+  },
+  {
+    slug: "recinto-desde-el-aire",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 1,
+    featured: true,
+    year: "2025",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/recinto-desde-el-aire.mp4",
+      poster: "/media/recinto-desde-el-aire.jpg",
+      vertical: { video: "/media/recinto-desde-el-aire-vertical.mp4", poster: "/media/recinto-desde-el-aire-vertical.jpg" },
+    },
+    title: { es: "El recinto lleno, desde el aire", en: "The site at capacity, from the air" },
+    date: { es: "9 de noviembre de 2025", en: "9 November 2025" },
+    hardFact: {
+      es: "Máster 4:3 abierto de 3840×2880, que permite entregar apaisado y vertical del mismo vuelo",
+      en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
+    },
+    brief: {
+      es: "El público entero en un solo plano, con el escenario a un lado y la montaña detrás. Es el plano que pide un dossier de patrocinio: la cifra de asistentes se discute, una imagen del recinto lleno no.",
+      en: "The whole crowd in a single shot, stage to one side and the mountain behind. It is the shot a sponsorship deck asks for: attendance figures get argued over, a picture of a full site does not.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano aéreo del recinto", "Apaisado y vertical"],
+      en: ["Aerial of the site", "Landscape and vertical"],
+    },
+  },
+  {
+    slug: "cabina-y-publico",
+    placeholder: false,
+    categories: ["aftermovie"],
+    tone: 0,
+    featured: false,
+    year: "2025",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/cabina-y-publico.mp4",
+      poster: "/media/cabina-y-publico.jpg",
+      vertical: { video: "/media/cabina-y-publico-vertical.mp4", poster: "/media/cabina-y-publico-vertical.jpg" },
+    },
+    title: { es: "Cabina y público", en: "The booth and the floor" },
+    date: { es: "19 de octubre de 2025", en: "19 October 2025" },
+    hardFact: {
+      es: "Recortado de un máster de 65 s: la pieza se queda con 12, que es lo que dura el gesto",
+      en: "Cut from a 65 s master: the piece keeps 12, which is how long the gesture lasts",
+    },
+    brief: {
+      es: "El artista de espaldas con el público delante, en contraluz. El encuadre pone al que mira en el sitio del que pincha, que es lo que diferencia un aftermovie de un vídeo de móvil.",
+      en: "The artist from behind with the crowd in front, backlit. The framing puts the viewer where the DJ stands, which is what separates an aftermovie from a phone video.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano de cabina", "Versión vertical"],
+      en: ["Booth shot", "Vertical cut"],
+    },
+  },
+  {
+    slug: "sala-llena",
+    placeholder: false,
+    categories: ["aftermovie"],
+    tone: 3,
+    featured: false,
+    year: "2025",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/sala-llena.mp4",
+      poster: "/media/sala-llena.jpg",
+      vertical: { video: "/media/sala-llena-vertical.mp4", poster: "/media/sala-llena-vertical.jpg" },
+    },
+    title: { es: "Sala llena", en: "Room at capacity" },
+    date: { es: "29 de octubre de 2025", en: "29 October 2025" },
+    hardFact: {
+      es: "Rodado a 3840×2880, diez días después de la pieza anterior y en el mismo circuito",
+      en: "Filmed at 3840×2880, ten days after the previous piece and on the same circuit",
+    },
+    brief: {
+      es: "Manos arriba bajo la luz azul, con el público ocupando todo el cuadro. No hay escenario ni cabina: sólo la reacción, que es la mitad de lo que un promotor quiere enseñar.",
+      en: "Hands up under blue light, the crowd filling the frame. No stage, no booth: just the reaction, which is half of what a promoter wants to show.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano de público", "Versión vertical"],
+      en: ["Crowd shot", "Vertical cut"],
+    },
+  },
+  {
+    slug: "sala-en-rojo",
+    placeholder: false,
+    categories: ["aftermovie"],
+    tone: 2,
+    featured: false,
+    year: "2026",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/sala-en-rojo.mp4",
+      poster: "/media/sala-en-rojo.jpg",
+      vertical: { video: "/media/sala-en-rojo-vertical.mp4", poster: "/media/sala-en-rojo-vertical.jpg" },
+    },
+    title: { es: "Sala en rojo", en: "Room in red" },
+    date: { es: "2 de enero de 2026", en: "2 January 2026" },
+    hardFact: {
+      es: "Un solo plano abierto de la sala entera, sin cortes",
+      en: "A single wide of the whole room, no cuts",
+    },
+    brief: {
+      es: "La sala entera bañada en rojo desde el fondo, con el techo y el público en el mismo plano. Es el plano que sitúa: después de éste, cualquier primer plano se entiende.",
+      en: "The whole room washed in red from the back, ceiling and crowd in the same frame. It is the establishing shot: after it, any close-up makes sense.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano general de sala", "Versión vertical"],
+      en: ["Room wide", "Vertical cut"],
+    },
+  },
+  {
+    slug: "en-cabina",
+    placeholder: false,
+    categories: ["multicam"],
+    tone: 1,
+    featured: false,
+    year: "2026",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/en-cabina.mp4",
+      poster: "/media/en-cabina.jpg",
+      vertical: { video: "/media/en-cabina-vertical.mp4", poster: "/media/en-cabina-vertical.jpg" },
+    },
+    title: { es: "En cabina", en: "In the booth" },
+    date: { es: "18 de enero de 2026", en: "18 January 2026" },
+    hardFact: {
+      es: "Recortado de un máster de 69 s, el más largo de la tanda",
+      en: "Cut from a 69 s master, the longest of the batch",
+    },
+    brief: {
+      es: "Plano lateral desde dentro de la cabina, con el público asomando por detrás. La posición es la que sólo se consigue estando dentro, y es la que distingue una cobertura con acceso de una grabada desde la valla.",
+      en: "A side angle from inside the booth, the crowd showing behind. It is a position you only get from inside, and it is what tells apart coverage with access from coverage shot at the barrier.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano de cabina", "Versión vertical"],
+      en: ["Booth angle", "Vertical cut"],
+    },
+  },
+  {
+    slug: "madrid-cuatro-torres",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 0,
+    featured: false,
+    year: "2026",
+    venue: "Madrid",
+    media: {
+      video: "/media/madrid-cuatro-torres.mp4",
+      poster: "/media/madrid-cuatro-torres.jpg",
+      vertical: { video: "/media/madrid-cuatro-torres-vertical.mp4", poster: "/media/madrid-cuatro-torres-vertical.jpg" },
+    },
+    title: { es: "Madrid — las Cuatro Torres", en: "Madrid — the four towers" },
+    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
+    hardFact: {
+      es: "Segunda de las ocho postales de Madrid de esa tarde",
+      en: "Second of the eight Madrid postcards from that evening",
+    },
+    brief: {
+      es: "Las cuatro torres recortadas contra la sierra con el cielo todavía naranja. Rodado como plano de recurso, que es material que hay que tener hecho antes de que alguien lo pida.",
+      en: "The four towers cut against the mountains with the sky still orange. Shot as stock, which is material you need to already have before anyone asks.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Postal aérea de 12 s", "Apaisado y vertical"],
+      en: ["12 s aerial postcard", "Landscape and vertical"],
+    },
+  },
+  {
+    slug: "pueblo-sobre-el-mar",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 3,
+    featured: false,
+    year: "2026",
+    venue: "Por confirmar",
+    media: {
+      video: "/media/pueblo-sobre-el-mar.mp4",
+      poster: "/media/pueblo-sobre-el-mar.jpg",
+      vertical: { video: "/media/pueblo-sobre-el-mar-vertical.mp4", poster: "/media/pueblo-sobre-el-mar-vertical.jpg" },
+    },
+    title: { es: "El pueblo sobre el mar", en: "The town above the sea" },
+    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
+    hardFact: {
+      es: "Misma salida que la otra pieza de costa, cuatro días después de las de Madrid",
+      en: "Same run as the other coastal piece, four days after the Madrid ones",
+    },
+    brief: {
+      es: "Las casas bajando hacia el agua con el cabo al fondo y el cielo encendido. El plano se sostiene sobre la profundidad: tres planos de distancia en una sola imagen.",
+      en: "Houses stepping down towards the water with the headland behind and the sky alight. The shot rests on depth: three distances in a single image.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Postal aérea de 12 s", "Apaisado y vertical"],
+      en: ["12 s aerial postcard", "Landscape and vertical"],
+    },
+  },
+  {
+    slug: "monegros-recinto",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 2,
+    featured: false,
+    year: "2026",
+    venue: "Monegros",
+    media: {
+      video: "/media/monegros-recinto.mp4",
+      poster: "/media/monegros-recinto.jpg",
+      vertical: { video: "/media/monegros-recinto-vertical.mp4", poster: "/media/monegros-recinto-vertical.jpg" },
+    },
+    title: { es: "Monegros — el recinto", en: "Monegros — the site" },
+    date: { es: "8 de septiembre de 2026", en: "8 September 2026" },
+    hardFact: {
+      es: "La pieza más reciente del archivo",
+      en: "The most recent piece in the archive",
+    },
+    brief: {
+      es: "El recinto entero desde arriba, con la noria, los escenarios y el público repartido por el llano. Enseña de un vistazo la escala de la producción, que es lo que no cabe en ningún plano de tierra.",
+      en: "The whole site from above, with the wheel, the stages and the crowd spread across the plain. It shows the scale of the production at a glance, which no ground shot can hold.",
+    },
+    delivered: {
+      // PENDIENTE (producción): describe la PIEZA, no la entrega.
+      es: ["Plano aéreo del recinto", "Apaisado y vertical"],
+      en: ["Aerial of the site", "Landscape and vertical"],
+    },
+  },
 ];
 
 export function getProject(slug: string): Project | undefined {
