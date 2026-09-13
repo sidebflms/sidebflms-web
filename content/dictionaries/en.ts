@@ -364,7 +364,7 @@ export const en: Dictionary = {
     groupAlt: "The SIDEBFLMS crew",
     photoExample: "Placeholder",
     roleExample: "Role to confirm",
-    photoExampleNote: "Placeholder photos: not yet the right person",
+    photoExampleNote: "Provisional: marked photos are not that person, and roles with * are unconfirmed",
     scaleLabel: "When the job needs more crew",
     scaleBody:
       "The core is eleven people, but not every job fits into eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery date. Building a large crew and making it work is part of what we do.",

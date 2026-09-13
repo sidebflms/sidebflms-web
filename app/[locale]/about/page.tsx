@@ -39,18 +39,44 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
 
   return (
     <main id="main" className="pt-40 pb-28">
+      {/* CABECERA A DOS COLUMNAS.
+          La foto de grupo estaba más abajo, a todo lo ancho sobre la rejilla de
+          nombres. Sube aquí porque el titular de esta página es corto y dejaba
+          medio ancho vacío a la derecha: la foto llena ese hueco y además dice
+          quiénes somos ANTES de la lista de nombres, que es el orden en que se
+          lee la pregunta.
+
+          En móvil no hay dos columnas: la foto pasa debajo del texto, porque a
+          375 px partir la cabecera deja las dos mitades ilegibles. */}
       <header data-reglet={dict.about.label} className="shell">
-        <Reveal>
-          <p className="label">{dict.about.label}</p>
-          <h1 className="font-display text-display-l mt-4 text-bone">
-            {dict.about.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h1>
-          <p className="text-lead measure mt-6 text-smoke">{dict.about.intro}</p>
-        </Reveal>
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+          <Reveal className="lg:col-span-6">
+            <p className="label">{dict.about.label}</p>
+            <h1 className="font-display text-display-l mt-4 text-bone">
+              {dict.about.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h1>
+            <p className="text-lead measure mt-6 text-smoke">{dict.about.intro}</p>
+          </Reveal>
+
+          {FOTO_GRUPO && (
+            <Reveal className="lg:col-span-6">
+              <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-ink-900">
+                <Image
+                  src={FOTO_GRUPO}
+                  alt={dict.about.groupAlt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 46vw"
+                  priority
+                  className="object-cover"
+                />
+              </div>
+            </Reveal>
+          )}
+        </div>
       </header>
 
       {/* Dónde operamos y cómo trabajamos, en dos columnas.
@@ -97,30 +123,24 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             </div>
           </Reveal>
 
-          {/* FOTO DE GRUPO — sólo si existe. Sin ella la sección no deja un hueco
-              ni un marco vacío: pasa directamente a los nombres. */}
-          {FOTO_GRUPO && (
-            <Reveal>
-              <div className="relative mt-8 aspect-[21/9] overflow-hidden bg-ink-900">
-                <Image
-                  src={FOTO_GRUPO}
-                  alt={dict.about.groupAlt}
-                  fill
-                  sizes="(max-width: 1440px) 100vw, 1440px"
-                  className="object-cover"
-                />
-              </div>
-            </Reveal>
-          )}
-
           <Reveal stagger>
-            <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+            {/* CINCO POR FILA, NO CUATRO.
+                Con once personas, a cuatro por fila salían tres filas y la
+                última con tres huecos vacíos. A cinco salen 5+5+1 y los
+                retratos bajan de tamaño, que es lo que se pedía: el equipo se
+                lee de un vistazo en vez de ocupar media pantalla.
+
+                Más aire vertical que horizontal (`gap-y` mayor que `gap-x`):
+                entre dos retratos pegados de lado la separación se entiende
+                sola, pero entre filas hace falta más para que no parezca una
+                cuadrícula continua. */}
+            <ul className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
               {EQUIPO.map((miembro) => (
                 <li key={miembro.slug}>
                   {/* RETRATO — sólo cuando TODOS tienen foto (ver HAY_RETRATOS en
                       content/team.ts). Mientras falte uno, rejilla de nombres. */}
                   {HAY_RETRATOS && miembro.foto && (
-                    <div className="relative mb-4 aspect-[4/5] overflow-hidden bg-ink-900">
+                    <div className="relative mb-3 aspect-[4/5] overflow-hidden rounded-lg bg-ink-900">
                       <Image
                         // Con `fotoEsEjemplo` el texto alternativo NO dice el
                         // nombre: un lector de pantalla estaría afirmando que esa
@@ -128,7 +148,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
                         src={miembro.foto}
                         alt={miembro.fotoEsEjemplo ? dict.about.photoExample : miembro.nombre}
                         fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 19vw"
                         // Retratos en blanco y negro que recuperan el color al pasar
                         // el ratón: once fotos hechas en sitios distintos rara vez
                         // casan de color, y en gris se leen como una serie.
@@ -145,26 +165,35 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
                         }
                       />
                       {miembro.fotoEsEjemplo && (
-                        <span className="label absolute top-3 left-3 bg-ink-900/80 px-2 py-1 text-rust-300">
+                        <span className="label absolute top-2 left-2 bg-ink-900/80 px-1.5 py-0.5 text-[0.5rem] text-rust-300">
                           {dict.about.photoExample}
                         </span>
                       )}
                     </div>
                   )}
-                  <div className="border-t border-ink-600 pt-4">
-                    <p className="text-bone">{miembro.nombre}</p>
+                  {/* Sin la línea de separación que había antes: a cinco por
+                      fila, once líneas horizontales cortas convertían el bloque
+                      en una reja. El aire entre filas ya separa. */}
+                  <div>
+                    <p className="text-sm font-semibold text-bone">{miembro.nombre}</p>
                     {/* Sin cargo no se pinta nada. Ver la nota de content/team.ts:
                         un cargo inventado se detecta en la primera llamada. */}
                     {/* El cargo provisional se pinta apagado y con su aviso.
                         Un cargo inventado se detecta en la primera llamada, así
                         que mientras no lo confirme Mario tiene que verse que no
                         está confirmado — igual que con las fotos. */}
+                    {/* Un asterisco, no la coletilla entera.
+                        A cinco por fila la columna mide 245 px y «Dirección ·
+                        CARGO POR CONFIRMAR» partía en dos líneas y se comía la
+                        ficha. El aviso completo va UNA vez, arriba de la
+                        sección; aquí basta la marca. */}
                     {miembro.role && (
-                      <p className={`label mt-1 ${miembro.roleEsEjemplo ? "text-ink-600" : ""}`}>
+                      <p
+                        className={`label mt-0.5 ${miembro.roleEsEjemplo ? "text-ink-600" : ""}`}
+                        title={miembro.roleEsEjemplo ? dict.about.roleExample : undefined}
+                      >
                         {miembro.role[locale]}
-                        {miembro.roleEsEjemplo && (
-                          <span className="text-rust-300"> · {dict.about.roleExample}</span>
-                        )}
+                        {miembro.roleEsEjemplo && <span className="text-rust-300">&nbsp;*</span>}
                       </p>
                     )}
                   </div>

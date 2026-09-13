@@ -5,6 +5,53 @@ reciente arriba.
 
 ---
 
+## 2026-09-13 (38) — Nosotros: la foto de grupo arriba y los retratos más pequeños
+
+Mario pasó de referencia la página de equipo de Ventour y pidió dos cosas:
+retratos más pequeños con más aire y más por fila, y la foto de grupo arriba, a
+la derecha del titular, «para completar ese hueco».
+
+### La foto de grupo sube a la cabecera
+
+Estaba a todo lo ancho encima de la rejilla de nombres. Ahora va en la cabecera,
+en media columna al lado del titular. Dos motivos:
+
+- El titular de esta página es corto y dejaba **medio ancho vacío** a la derecha.
+- Y la foto responde a la pregunta —«quién está detrás de esto»— **antes** que la
+  lista de nombres, que es el orden en que se lee.
+
+En móvil no hay dos columnas: la foto pasa debajo. A 375 px, partir la cabecera
+deja las dos mitades ilegibles.
+
+**Y hubo que regenerar la foto.** Estaba recortada a 21:9, que es lo que pedía
+ir a todo lo ancho; en media columna eso queda como un sello. Ahora es 3:2, que
+además recorta menos: el original es 3578×2433, o sea casi 3:2 ya. El cambio
+está hecho en `scripts/fotos-equipo.sh`, no a mano, para que se pueda repetir.
+
+### Cinco por fila en vez de cuatro
+
+Con once personas, a cuatro por fila salían tres filas y la última con tres
+huecos. A cinco salen 5+5+1 y el retrato baja de 306 px de alto a 245 de ancho:
+el equipo se lee de un vistazo en vez de ocupar media pantalla.
+
+Más aire vertical que horizontal, y fuera la línea de separación que llevaba
+cada ficha: a cinco por fila, once líneas horizontales cortas convertían el
+bloque en una reja.
+
+### El aviso de «cargo por confirmar», reducido a un asterisco
+
+Esto salió de mirarlo, no de pensarlo: a cinco por fila la columna mide 245 px y
+«Dirección · CARGO POR CONFIRMAR» partía en dos líneas y se comía la ficha.
+
+Ahora la ficha lleva sólo un `*` en naranja, y el aviso completo va **una vez**,
+arriba de la sección: «Provisional: las fotos marcadas no son de esa persona y
+los cargos con * están sin confirmar». Misma información, una sola vez, y las
+fichas vuelven a medir 14 px de alto en esa línea.
+
+El texto largo sigue estando en el `title` del elemento, para quien pase el ratón.
+
+---
+
 ## 2026-09-13 (37) — El portfolio, de 14 a 23 piezas
 
 «Usa todas las piezas», dijo Mario. Se han usado, pero **agrupando por asunto**:

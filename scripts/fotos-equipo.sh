@@ -85,8 +85,15 @@ done
 g="$(buscar grupo)"
 if [ -n "$g" ]; then
   g="$(normalizar "$g")"
+  # 3:2, no 21:9.
+  #
+  # Era 21:9 cuando la foto iba a todo lo ancho encima de la rejilla de
+  # nombres. Desde el 2026-09-13 va en la cabecera, en media columna al
+  # lado del titular, y ahí una franja de 21:9 quedaría como un sello.
+  # Además el original es 3578×2433, que ya es casi 3:2: así se recorta
+  # lo mínimo y no se pierde gente por los lados.
   ffmpeg -v error -y -i "$g" \
-    -vf "crop=iw:'min(ih,iw*9/21)':0:'(ih-min(ih,iw*9/21))/2',scale=2400:-2:flags=lanczos" \
+    -vf "crop='min(iw,ih*3/2)':'min(ih,iw*2/3)',scale=1800:1200:flags=lanczos" \
     -q:v 3 "$OUT/grupo.jpg" && echo "  ✓ grupo"
 fi
 
