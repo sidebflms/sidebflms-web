@@ -55,10 +55,27 @@ Aplicada al mismo periodo que el resto:
                                                           ────────
                                                            1.246 h
 
-**Se publica «1.200+» y no «1.246».** 1.246 aparenta una precisión que no
-tiene; un número redondo con un «+» dice lo que es, un orden de magnitud. Y se
-redondea HACIA ABAJO a propósito: si alguien la discute, que la realidad esté
-por encima y no por debajo.
+Después Mario añadió que **también cuenta el simulador**, y que la cifra son
+2.000. La diferencia cuadra con su propia regla: 754 h más son unas 5 h de
+simulador por piloto y semana, el mismo ritmo que la práctica en campo.
+
+    simulador  4 pilotos × ~5 h/sem × 36,3 sem ........   754 h
+                                                        ────────
+                                                         2.026 h
+
+**Se publica «+2.000»**, redondeando HACIA ABAJO a propósito: si alguien la
+discute, que la realidad esté por encima y no por debajo. Y un número redondo
+con un «+» dice lo que es —un orden de magnitud— en vez de aparentar la
+precisión que una estimación no tiene.
+
+**Un apunte que queda escrito en `content/cifras.ts` por si un cliente
+pregunta:** en aviación tripulada las horas de simulador se anotan APARTE de
+las de vuelo, no se suman. Aquí van sumadas porque así se pidió, y en trabajo
+con drone ese criterio no está reglado igual. Si algún día una productora o una
+aseguradora pide el desglose, hay que poder darlo — por eso la cuenta está
+entera en el fichero. Y si se prefiere cerrar la discusión antes de empezarla,
+basta con cambiar la etiqueta a «Horas de vuelo y simulador»: la cifra no
+cambia.
 
 **Es la única estimada de las cinco**, y está escrito en `content/cifras.ts`
 con la cuenta entera, para que se pueda rehacer si cambia el número de pilotos

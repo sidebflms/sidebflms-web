@@ -70,29 +70,45 @@ export const CIFRAS: Cifra[] = [
     /**
      * LA ÚNICA ESTIMADA DE LAS CINCO. Conviene saberlo antes de defenderla.
      *
-     * No sale de un registro de vuelos: sale de la regla que dio Mario el
-     * 2026-09-14 —unas 5 h de vuelo por cada trabajo de drone, más 5 h
-     * semanales de práctica por piloto, y son 4 pilotos— aplicada al mismo
-     * periodo que las demás cifras:
+     * No sale de un registro de vuelos: sale de la regla que dio Mario y de un
+     * ajuste suyo posterior, los dos del 2026-09-14.
      *
-     *   rodajes   104 × 5 h ................................  520 h
-     *   práctica  4 pilotos × 5 h/sem × 36,3 semanas ........  726 h
-     *                                                        ────────
-     *                                                        1.246 h
+     * Primero dio: unas 5 h de vuelo por cada trabajo de drone, más 5 h
+     * semanales de práctica por piloto, y son 4 pilotos. Con eso salían 1.246 h
+     * en lo que va de 2026:
+     *
+     *   rodajes          104 × 5 h ..........................   520 h
+     *   práctica campo   4 pilotos × 5 h/sem × 36,3 sem ......   726 h
+     *
+     * Luego dijo que **también cuenta el simulador**, y que la cifra son 2.000.
+     * La diferencia cuadra con su propia regla:
+     *
+     *   simulador        4 pilotos × ~5 h/sem × 36,3 sem .....   754 h
+     *                                                          ────────
+     *                                                           2.026 h
      *
      * (36,3 semanas = del 1 de enero al 12 de septiembre de 2026.)
      *
-     * SE PUBLICA «1.200+» Y NO «1.246», por dos motivos:
-     *   · 1.246 aparenta una precisión que no tiene. Un número redondo con un
-     *     «+» dice lo que es: un orden de magnitud.
-     *   · Y se redondea HACIA ABAJO. Si alguien la discute, que la realidad
-     *     esté por encima y no por debajo.
+     * SE PUBLICA «+2.000», redondeando HACIA ABAJO. Si alguien la discute, que
+     * la realidad esté por encima y no por debajo. Y un número redondo con un
+     * «+» dice lo que es —un orden de magnitud— en vez de aparentar una
+     * precisión que una estimación no tiene.
      *
-     * Si algún día hay registro de vuelos de verdad, se sustituye. Y si cambia
-     * el número de pilotos o el periodo, hay que rehacer la cuenta: está aquí
-     * escrita entera para que se pueda.
+     * ── UNA COSA QUE CONVIENE SABER SI UN CLIENTE PREGUNTA ──────────────
+     * En aviación tripulada, las horas de simulador se anotan APARTE de las de
+     * vuelo: no son lo mismo y un piloto no las suma. Aquí van sumadas porque
+     * Mario lo pidió así, y en trabajo con drone el criterio no está reglado
+     * como allí. Pero si algún día una productora o una aseguradora pide el
+     * desglose, hay que poder darlo — por eso está escrito arriba.
+     *
+     * Si se prefiere cerrar la discusión antes de que empiece, basta con
+     * cambiar la etiqueta a «Horas de vuelo y simulador». La cifra no cambia.
+     *
+     * Si algún día hay registro de verdad, se sustituye. Y si cambia el número
+     * de pilotos o el periodo, hay que rehacer la cuenta: está aquí entera para
+     * que se pueda.
      */
-    valor: "1.200+",
+    valor: "+2.000",
     etiqueta: { es: "Horas de vuelo", en: "Flight hours" },
   },
 ];
