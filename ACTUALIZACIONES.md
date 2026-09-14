@@ -44,6 +44,42 @@ En su lugar van dos que sí se pueden contar y dicen algo. Sobre todo la de
 drone: **104 de 329 es un tercio del trabajo**, o sea que el drone no es un
 extra de la cobertura, que es exactamente lo que la web afirma en la portada.
 
+### Después: las horas de vuelo, estimadas
+
+Mario dio la regla el 2026-09-14: unas **5 h de vuelo por cada trabajo de
+drone**, más **5 h semanales de práctica por piloto**, y son **4 pilotos**.
+Aplicada al mismo periodo que el resto:
+
+    rodajes   104 × 5 h ................................   520 h
+    práctica  4 pilotos × 5 h/sem × 36,3 semanas ........   726 h
+                                                          ────────
+                                                           1.246 h
+
+**Se publica «1.200+» y no «1.246».** 1.246 aparenta una precisión que no
+tiene; un número redondo con un «+» dice lo que es, un orden de magnitud. Y se
+redondea HACIA ABAJO a propósito: si alguien la discute, que la realidad esté
+por encima y no por debajo.
+
+**Es la única estimada de las cinco**, y está escrito en `content/cifras.ts`
+con la cuenta entera, para que se pueda rehacer si cambia el número de pilotos
+o el periodo. Las otras cuatro salen de contar filas.
+
+### «Años rodando» se descarta por decisión de Mario
+
+Dijo que no se ponga. Queda anotado, porque importa para lo de arriba:
+**SIDEBFLMS empezó en marzo de 2022**, así que el histórico real de la empresa
+es mucho mayor que lo que hay en la exportación, y confirma que el rótulo «En
+lo que va de 2026» es lo correcto.
+
+### Y la fila, centrada
+
+Al pasar de cuatro cifras a cinco volvía a quedar una suelta con cuatro
+columnas. Mismo arreglo que en la rejilla del equipo: `flex-wrap` con
+`justify-center`, así que sobren las que sobren la última fila queda centrada.
+
+El número baja de `text-display-l` a `-m`: con `-l`, «1.200+» no cabía en una
+columna de cinco y el «+» se caía él solo a la línea de abajo.
+
 ### Lo que NO se ha publicado del fichero
 
 Presupuestos, facturación, quién trabajó en cada proyecto y los nombres de los

@@ -90,10 +90,26 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             <p className="label">{dict.about.figuresLabel}</p>
           </Reveal>
           <Reveal stagger>
-            <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+            {/* Mismo centrado que la rejilla del equipo, y por lo mismo: el
+                número de cifras no tiene por qué cuadrar con el de columnas.
+                Ahora son cinco y con cuatro columnas quedaba una suelta a la
+                izquierda. Con `flex-wrap` y `justify-center`, sobren las que
+                sobren, la última fila queda centrada. */}
+            <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-10">
               {CIFRAS_CON_DATO.map((cifra) => (
-                <li key={cifra.etiqueta.es}>
-                  <p className="font-display text-display-l text-bone tabular-nums">{cifra.valor}</p>
+                <li
+                  key={cifra.etiqueta.es}
+                  className="basis-[calc(50%-0.75rem)] sm:basis-[calc(33.333%-1rem)] lg:basis-[calc(20%-1.2rem)]"
+                >
+                  {/* `text-display-m` y no `-l`, y sin partir.
+                      Con `-l`, «1.200+» no cabía en una columna de cinco y el
+                      «+» se caía a la línea de abajo él solo. `whitespace-nowrap`
+                      es el cinturón: si algún día entra una cifra más larga,
+                      preferimos verla desbordar en desarrollo a que se parta en
+                      producción sin que nadie se entere. */}
+                  <p className="font-display text-display-m whitespace-nowrap text-bone tabular-nums">
+                    {cifra.valor}
+                  </p>
                   <p className="label mt-2">{cifra.etiqueta[locale]}</p>
                 </li>
               ))}

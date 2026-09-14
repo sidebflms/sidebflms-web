@@ -27,15 +27,16 @@
  * Mario pidió «eventos cubiertos, países, horas de vuelo, años rodando». Dos
  * salen del fichero y dos no:
  *
- *   · HORAS DE VUELO no está en la exportación. Es la más potente de todas
- *     para una productora que se vende como especialista en drone, así que
- *     merece la pena pedirla: la sabe el piloto.
- *   · AÑOS RODANDO tampoco: con datos que empiezan el 1 de enero de 2026,
- *     saldría «0,7 años», que es falso y además ridículo.
+ *   · AÑOS RODANDO: **Mario dijo el 2026-09-14 que no se ponga.** (Para que
+ *     conste: SIDEBFLMS empezó en marzo de 2022, o sea que el histórico real
+ *     de la empresa es mucho mayor que lo que hay en la exportación.)
+ *   · HORAS DE VUELO no está en la exportación, así que va ESTIMADA. Ver
+ *     abajo, en su propia entrada, cómo se calcula y por qué se redondea a la
+ *     baja.
  *
- * En su lugar van dos que sí se pueden contar y dicen algo: los rodajes con
- * drone (104 de 329, o sea que el drone no es un extra, es un tercio del
- * trabajo) y las ciudades.
+ * Además van dos que sí se pueden contar y dicen algo: los rodajes con drone
+ * (104 de 329, o sea que el drone no es un extra, es un tercio del trabajo) y
+ * las ciudades.
  */
 export type Cifra = {
   /** El número, ya formateado como se quiera leer: "329", "6". */
@@ -66,8 +67,32 @@ export const CIFRAS: Cifra[] = [
     etiqueta: { es: "Países", en: "Countries" },
   },
   {
-    // PENDIENTE: la sabe el piloto, no está en la exportación.
-    valor: null,
+    /**
+     * LA ÚNICA ESTIMADA DE LAS CINCO. Conviene saberlo antes de defenderla.
+     *
+     * No sale de un registro de vuelos: sale de la regla que dio Mario el
+     * 2026-09-14 —unas 5 h de vuelo por cada trabajo de drone, más 5 h
+     * semanales de práctica por piloto, y son 4 pilotos— aplicada al mismo
+     * periodo que las demás cifras:
+     *
+     *   rodajes   104 × 5 h ................................  520 h
+     *   práctica  4 pilotos × 5 h/sem × 36,3 semanas ........  726 h
+     *                                                        ────────
+     *                                                        1.246 h
+     *
+     * (36,3 semanas = del 1 de enero al 12 de septiembre de 2026.)
+     *
+     * SE PUBLICA «1.200+» Y NO «1.246», por dos motivos:
+     *   · 1.246 aparenta una precisión que no tiene. Un número redondo con un
+     *     «+» dice lo que es: un orden de magnitud.
+     *   · Y se redondea HACIA ABAJO. Si alguien la discute, que la realidad
+     *     esté por encima y no por debajo.
+     *
+     * Si algún día hay registro de vuelos de verdad, se sustituye. Y si cambia
+     * el número de pilotos o el periodo, hay que rehacer la cuenta: está aquí
+     * escrita entera para que se pueda.
+     */
+    valor: "1.200+",
     etiqueta: { es: "Horas de vuelo", en: "Flight hours" },
   },
 ];
