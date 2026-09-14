@@ -419,7 +419,7 @@ export const en: Dictionary = {
     headline: ["Who", "is behind", "all this"],
     intro:
       "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last one works the next one, and that shows at four in the morning.",
-    figuresLabel: "In numbers",
+    figuresLabel: "So far in 2026",
     whereLabel: "Where we operate",
     whereBody:
       "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",

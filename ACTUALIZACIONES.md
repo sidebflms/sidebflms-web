@@ -5,6 +5,52 @@ reciente arriba.
 
 ---
 
+## 2026-09-14 (40) — Las cifras, contadas de la exportación del Studio Manager
+
+Mario pasó `sidebflms-proyectos-2026-09-14.csv`, la exportación de proyectos del
+Studio Manager: 387 filas. La sección de «Nosotros» ya tiene números, y no son
+estimaciones — están contados del fichero y se pueden volver a contar.
+
+| Cifra | De dónde sale |
+|---|---|
+| **329** proyectos | filas en estado «Completado» (de 387) |
+| **104** rodajes con drone | tipo «Drone» entre los completados |
+| **26** ciudades | ubicaciones distintas, sin contar el propio estudio |
+| **6** países | España, Italia, Francia, Líbano, Reino Unido y Costa Rica |
+
+### Sólo lo completado
+
+329 de 387. Los 54 «Próximo» son trabajos que aún no se han hecho —hay fechas
+hasta mayo de 2027— y contarlos sería dar por hecho lo que está firmado.
+
+### El matiz que cambia cómo se enuncian
+
+**La exportación empieza el 1 de enero de 2026** y no hay ni un proyecto
+anterior: esto no es el histórico de la empresa, es lo que va de 2026. Por eso
+el rótulo dice **«En lo que va de 2026»** y no «En números».
+
+Sin esa fecha, «329 proyectos» se lee como todo lo que se ha hecho nunca — y
+además de no ser cierto, **se queda corto**: la cifra real del histórico es
+mayor, sólo que no está en este fichero.
+
+### Dos de las cuatro que se pidieron no se podían sacar
+
+- **Horas de vuelo** no está en la exportación. Sigue pedida, y es la más
+  potente de todas para quien se vende como especialista en drone.
+- **Años rodando** tampoco: con datos que arrancan el 1 de enero de 2026 saldría
+  «0,7 años», que es falso y además ridículo.
+
+En su lugar van dos que sí se pueden contar y dicen algo. Sobre todo la de
+drone: **104 de 329 es un tercio del trabajo**, o sea que el drone no es un
+extra de la cobertura, que es exactamente lo que la web afirma en la portada.
+
+### Lo que NO se ha publicado del fichero
+
+Presupuestos, facturación, quién trabajó en cada proyecto y los nombres de los
+77 clientes. Están en la exportación y no pintan nada en una web pública.
+
+---
+
 ## 2026-09-14 (39) — La lista de Mario: marcas, servicios, formularios y fotos
 
 Siete apuntes de Mario. Seis hechos, uno aplazado por él mismo y dos que se

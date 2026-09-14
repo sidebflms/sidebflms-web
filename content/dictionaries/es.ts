@@ -473,7 +473,7 @@ export const es = {
     headline: ["Quién", "está detrás", "de esto"],
     intro:
       "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en la anterior es el que va a la siguiente, y eso se nota a las cuatro de la mañana.",
-    figuresLabel: "En números",
+    figuresLabel: "En lo que va de 2026",
     whereLabel: "Dónde operamos",
     whereBody:
       "Con base en España. El circuito no entiende de provincias: si el evento está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",
