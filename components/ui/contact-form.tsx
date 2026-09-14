@@ -92,6 +92,25 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
               {dict.portfolio.categories[category]}
             </label>
           ))}
+
+          {/* «Otros», y NO como una categoría más del portfolio.
+              Las casillas salen de `CATEGORIES`, que es la lista con la que se
+              clasifican los trabajos publicados. Meter «otros» ahí crearía un
+              filtro «Otros» en la página de Trabajo que no clasifica nada.
+
+              Aquí hace falta porque lo que se pregunta es otra cosa: qué
+              quiere el que escribe, no cómo archivamos lo que ya hicimos. Una
+              boda o un podcast no encajan en ninguna de las cinco, y sin esta
+              casilla esa consulta llega sin decir de qué va. */}
+          <label className="flex items-center gap-2 text-sm text-bone">
+            <input
+              type="checkbox"
+              name="coverage"
+              value="otros"
+              className="h-4 w-4 border-ink-600 accent-rust-500"
+            />
+            {dict.contact.form.coverageOther}
+          </label>
         </div>
       </fieldset>
 

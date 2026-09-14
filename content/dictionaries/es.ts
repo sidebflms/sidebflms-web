@@ -31,6 +31,11 @@ export const es = {
       description:
         "Preproducción, rodaje en directo, cobertura aérea y postproducción. Entrega en 24-48 horas.",
     },
+    jobs: {
+      title: "Trabaja con nosotros — SIDEBFLMS",
+      description:
+        "Filmmakers, fotografía, edición, piloto de drone, 3D y producción. El formulario está siempre abierto.",
+    },
     contact: {
       title: "Pide presupuesto de cobertura audiovisual — SIDEBFLMS",
       description:
@@ -63,6 +68,7 @@ export const es = {
     services: "Servicios",
     about: "Nosotros",
     contact: "Contacto",
+    jobs: "Trabaja con nosotros",
     menu: "Menú",
     close: "Cerrar",
     skipToContent: "Saltar al contenido",
@@ -85,9 +91,6 @@ export const es = {
 
   brands: {
     label: "Han contado con nosotros",
-    // TODO (cliente): sustituir por los logos reales y confirmar por escrito el
-    // permiso de uso de marca de cada cliente antes de publicar.
-    pending: "Logos pendientes de permiso de uso",
   },
 
   featured: {
@@ -175,6 +178,16 @@ export const es = {
         body: "Anuncios y piezas de marca, del guion a la entrega final.",
       },
       {
+        key: "vj",
+        title: "VJ",
+        body: "Contenido para las pantallas del propio evento: visuales preparados y operados en directo, al ritmo de la sesión.",
+      },
+      {
+        key: "podcast",
+        title: "Podcast",
+        body: "Grabación en plató o en localización, con varias cámaras y sonido cuidado, lista para publicar en vídeo y en audio.",
+      },
+      {
         key: "photo",
         title: "Fotografía",
         body: "De cabina, de recinto y de artista, dentro de la misma cobertura o como encargo aparte.",
@@ -260,6 +273,50 @@ export const es = {
     },
   },
 
+  jobs: {
+    label: "Trabaja con nosotros",
+    headline: ["Buscamos", "gente que", "sepa hacerlo"],
+    intro:
+      "No hacemos convocatorias cada cierto tiempo: el formulario está siempre abierto y lo miramos cuando entra un trabajo que encaja con lo que sabes hacer. Cuanto más concreto seas, más fácil es que nos acordemos de ti.",
+    formLabel: "Cuéntanos quién eres",
+    form: {
+      name: "Nombre completo",
+      age: "Edad",
+      nationality: "Nacionalidad",
+      city: "Localidad donde vives",
+      email: "Correo electrónico",
+      phone: "Teléfono",
+      speciality: "Especialidad",
+      specialityHint: "Puedes marcar varias",
+      specialityOptions: ["Filmmaker", "Fotografía", "Edición", "Piloto de drone", "3D", "Producción"],
+      experience: "¿Cuánto tiempo llevas en esto?",
+      experiencePlaceholder: "Por ejemplo: tres años, o desde 2019.",
+      events: "¿En qué eventos te gustaría trabajar?",
+      eventsHint: "Puedes marcar varias",
+      eventsOptions: ["Clubs", "Festivales", "Publicidad", "Todo"],
+      licence: "¿Tienes carnet de conducir?",
+      licenceOptions: ["Sí", "No"],
+      languages: "¿Qué idiomas hablas?",
+      portfolio: "Portfolio",
+      portfolioHint: "Un enlace: web, Vimeo, Drive, lo que tengas.",
+      instagram: "Instagram",
+      consent:
+        "He leído la política de privacidad y acepto que tratéis mis datos para valorar mi candidatura.",
+      consentLink: "política de privacidad",
+      submit: "Enviar candidatura",
+      submitting: "Enviando…",
+      required: "Obligatorio",
+      optional: "Opcional",
+      errorRequired: "Completa este campo.",
+      errorEmail: "Revisa el correo: falta algo.",
+      errorConsent: "Necesitamos tu consentimiento para poder guardar tu candidatura.",
+      successTitle: "Recibido",
+      successBody:
+        "Guardamos tu candidatura. No respondemos a todas, pero la miramos: si entra algo que encaja, te escribimos.",
+      errorTitle: "No se ha podido enviar",
+      errorBody: "Prueba otra vez o escríbenos a contact@sidebflms.com.",
+    },
+  },
   contact: {
     label: "Contacto",
     headline: ["Cuéntanos", "qué evento", "tienes"],
@@ -274,11 +331,12 @@ export const es = {
       name: "Tu nombre",
       email: "Email",
       eventName: "Nombre del evento",
-      eventDate: "Fecha",
+      eventDate: "Fecha prevista del evento",
       capacity: "Aforo estimado",
       stages: "Nº de escenarios",
       coverage: "Tipo de cobertura",
       coverageHint: "Puedes marcar varias",
+      coverageOther: "Otros",
       budget: "Rango de presupuesto",
       budgetOptions: [
         "Menos de 2.000 €",
@@ -380,7 +438,11 @@ export const es = {
       },
       {
         heading: "Finalidad",
-        text: "Responder a las consultas enviadas a través del formulario de contacto y, si hay encargo, gestionar la relación comercial. No se usan los datos para envíos comerciales no solicitados.",
+        text: "Dos cosas, según el formulario que uses. Con el de contacto: responder a tu consulta y, si hay encargo, gestionar la relación comercial. Con el de «trabaja con nosotros»: valorar tu candidatura y tenerte en cuenta para futuros trabajos. No se usan los datos para envíos comerciales no solicitados.",
+      },
+      {
+        heading: "Qué datos se recogen",
+        text: "En el formulario de contacto: nombre, email y los datos del evento que quieras darnos. En el de «trabaja con nosotros»: nombre, edad, nacionalidad, localidad, correo, teléfono, especialidad, experiencia, idiomas, carnet de conducir y los enlaces a tu portfolio e Instagram. De esos, sólo el nombre, el correo y la especialidad son obligatorios: el resto lo das si quieres.",
       },
       {
         heading: "Base jurídica",
@@ -388,7 +450,7 @@ export const es = {
       },
       {
         heading: "Conservación",
-        text: "Los datos se conservan mientras dure la relación comercial y, después, durante los plazos legales de prescripción. Si no hay encargo, se eliminan a los 12 meses.",
+        text: "Las consultas se conservan mientras dure la relación comercial y, después, durante los plazos legales de prescripción; si no hay encargo, se eliminan a los 12 meses. Las candidaturas se conservan 12 meses desde que se envían, salvo que pidas antes que las borremos.",
       },
       {
         heading: "Destinatarios",
@@ -411,6 +473,7 @@ export const es = {
     headline: ["Quién", "está detrás", "de esto"],
     intro:
       "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en la anterior es el que va a la siguiente, y eso se nota a las cuatro de la mañana.",
+    figuresLabel: "En números",
     whereLabel: "Dónde operamos",
     whereBody:
       "Con base en España. El circuito no entiende de provincias: si el evento está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",

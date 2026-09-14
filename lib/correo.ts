@@ -131,3 +131,93 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  CANDIDATURAS — «trabaja con nosotros»
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Mismo transporte que las consultas, distinto asunto y distinto cuerpo.
+ *
+ * ── OJO: AQUÍ HAY MÁS DATO PERSONAL QUE EN UNA CONSULTA ─────────────────
+ * Una consulta trae nombre, email y de qué va el evento. Una candidatura trae
+ * además edad, nacionalidad, dónde vive y el teléfono. Eso es otra categoría
+ * de dato y por eso:
+ *
+ *   · El asunto NO lleva el nombre de la persona. El de las consultas sí lleva
+ *     el del evento, porque un evento no es nadie; una lista de asuntos en el
+ *     buzón con nombres y apellidos de gente que busca trabajo es otra cosa.
+ *   · La política de privacidad tuvo que decir que esto se recoge y para qué.
+ *     Si se añade o quita un campo de este formulario, hay que tocarla.
+ */
+export type Candidatura = {
+  nombre: string;
+  edad: string;
+  nacionalidad: string;
+  localidad: string;
+  email: string;
+  telefono: string;
+  especialidad: string[];
+  experiencia: string;
+  eventos: string[];
+  carnet: string;
+  idiomas: string;
+  portfolio: string;
+  instagram: string;
+};
+
+function cuerpoCandidatura(c: Candidatura): string {
+  const lista = (v: string[]) => (v.length ? v.join(", ") : "—");
+  const o = (v: string) => v || "—";
+  return [
+    `Nombre:        ${o(c.nombre)}`,
+    `Edad:          ${o(c.edad)}`,
+    `Nacionalidad:  ${o(c.nacionalidad)}`,
+    `Localidad:     ${o(c.localidad)}`,
+    `Email:         ${o(c.email)}`,
+    `Teléfono:      ${o(c.telefono)}`,
+    "",
+    `Especialidad:  ${lista(c.especialidad)}`,
+    `Experiencia:   ${o(c.experiencia)}`,
+    `Eventos:       ${lista(c.eventos)}`,
+    `Carnet:        ${o(c.carnet)}`,
+    `Idiomas:       ${o(c.idiomas)}`,
+    "",
+    `Portfolio:     ${o(c.portfolio)}`,
+    `Instagram:     ${o(c.instagram)}`,
+  ].join("\n");
+}
+
+/** Igual que `enviarConsulta`: devuelve booleano y NO lanza. */
+export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
+  try {
+    const transporte = nodemailer.createTransport({
+      host: HOST,
+      port: PUERTO,
+      secure: false,
+      ignoreTLS: true,
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
+    });
+
+    await transporte.sendMail({
+      from: `"Web SIDEBFLMS" <${REMITENTE}>`,
+      to: DESTINO,
+      replyTo: `"${c.nombre}" <${c.email}>`,
+      // Sin nombre en el asunto, a propósito: ver la nota de arriba.
+      subject: `Candidatura: ${c.especialidad[0] ?? "sin especialidad"}`,
+      text: cuerpoCandidatura(c),
+    });
+
+    return true;
+  } catch (error) {
+    console.error("[candidatura] no se pudo enviar el correo", {
+      host: HOST,
+      puerto: PUERTO,
+      destino: DESTINO,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return false;
+  }
+}

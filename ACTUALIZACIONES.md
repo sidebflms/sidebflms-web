@@ -5,6 +5,102 @@ reciente arriba.
 
 ---
 
+## 2026-09-14 (39) — La lista de Mario: marcas, servicios, formularios y fotos
+
+Siete apuntes de Mario. Seis hechos, uno aplazado por él mismo y dos que se
+quedan a la espera de un dato que sólo él tiene.
+
+### Marcas: tres más, y fuera el cartel de «pendiente de permiso»
+
+Añadidas **NICO MORENO, RICHIE HAWTIN y BRESH**. Y como los permisos están
+concedidos desde el 2026-09-13, desaparece el rótulo «Logos pendientes de
+permiso de uso» que había debajo de la tira.
+
+Queda anotado en el componente algo que conviene no perder: los seis primeros
+nombres salen del propio archivo —cada uno aparece en el nombre de un fichero o
+en un rótulo del metraje— y **estos tres no**. Se publican porque Mario lo pide
+y responde de ellos, pero no se pueden respaldar enseñando el trabajo.
+
+«Richie Hawtin» va con la grafía correcta del artista, no con la de la nota.
+
+**Faltan más:** la lista venía con un «etc.».
+
+### Servicios: VJ y Podcast
+
+Dos servicios nuevos en «Qué hacemos». El ejemplo de Podimo que Mario mencionó
+**no se ha puesto**: dijo «que tendremos», o sea que todavía no existe, y una
+web no puede enseñar un trabajo que no se ha hecho.
+
+### Fotos en «Cómo lo hacemos»
+
+Una por etapa, que era el motivo: «se hace más visible y no tanto texto».
+
+Tres de las cuatro tienen foto, y **no son fotos de relleno**: en cada una se
+está haciendo lo que dice la etiqueta. La cuarta, Postproducción, está a `null`
+porque **no hay ninguna foto del equipo montando o etalonando**; poner ahí un
+plano de festival sería ilustrar con lo que haya. Mientras falte, esa etapa se
+pinta como siempre, sin hueco ni marco vacío.
+
+Hubo que reequilibrar las columnas: con la foto dentro, el texto se quedaba en
+tres y «PREPRODUCCIÓN» se partía a media palabra. El número baja a una columna
+—de sobra para dos cifras— y el texto sube a cinco. Comprobado: los cuatro
+títulos en una sola línea.
+
+### Contacto: la fecha y el «otros»
+
+«Fecha» pasa a **«Fecha prevista del evento»**. Mario tenía razón en que no se
+entendía: parecía la fecha de envío de la consulta.
+
+Y se añade **«Otros»** a los tipos de cobertura. Ojo al detalle: las casillas
+salen de `CATEGORIES`, que es la lista con la que se clasifican los trabajos
+publicados, y meter «otros» ahí crearía un filtro «Otros» en la página de
+Trabajo que no clasificaría nada. Así que la casilla se añade sólo en el
+formulario. Hace falta porque lo que se pregunta es otra cosa: una boda o un
+podcast no encajan en ninguna de las cinco.
+
+### Página nueva: «Trabaja con nosotros»
+
+En `/work-with-us`, con los trece campos que pidió Mario y su propia Server
+Action y su propio correo.
+
+**Sólo cuatro campos son obligatorios**: nombre, correo, especialidad y el
+consentimiento. Trece preguntas obligatorias no son un formulario, son un
+interrogatorio, y la gente abandona a la quinta. Cada campo lleva a la vista si
+es obligatorio u opcional.
+
+El carnet va con botones de radio y no con una casilla: con una casilla sin
+marcar no se sabe si es un «no» o si no la ha visto.
+
+El enlace va **en el pie y no en el menú de arriba**: el menú es para quien
+viene a contratar, que es a quien la web tiene que atender primero.
+
+El asunto del correo **no lleva el nombre** de quien escribe, al revés que el de
+las consultas. Una lista de asuntos en el buzón con nombres y apellidos de gente
+buscando trabajo es otra cosa que una lista de nombres de eventos.
+
+### Y por tanto, la política de privacidad
+
+Esto no es opcional: el formulario nuevo recoge **edad, nacionalidad, localidad
+y teléfono**, que es dato personal de otra categoría que el de una consulta. Se
+añade un apartado nuevo, «Qué datos se recogen», y se actualizan la finalidad y
+los plazos de conservación (las candidaturas, 12 meses).
+
+**Si se añade o se quita un campo del formulario, hay que volver a tocarla.**
+Queda escrito en `lib/correo.ts`.
+
+### Lo que NO se ha hecho, y por qué
+
+**El showreel al entrar.** El propio Mario lo marcó como «plan a futuro».
+
+**Las cifras de «Nosotros»** (eventos cubiertos, países). La sección está hecha
+en `content/cifras.ts` pero con todos los valores a `null`, así que **no se
+pinta**. No se pueden deducir de nada: el portfolio tiene 23 piezas, pero son
+los trabajos publicados, no los hechos, y contarlos y llamarlo «23 eventos
+cubiertos» es el tipo de cifra que un cliente comprueba en la primera reunión.
+Una cifra en una web es una afirmación y sólo la sabe quien hizo el trabajo.
+
+---
+
 ## 2026-09-13 (38) — Nosotros: la foto de grupo arriba y los retratos más pequeños
 
 Mario pasó de referencia la página de equipo de Ventour y pidió dos cosas:

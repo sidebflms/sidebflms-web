@@ -42,6 +42,9 @@ export const ROUTES = {
   drone: { es: "drone", en: "drone" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
+  // Formulario para quien quiere trabajar con nosotros. Slug igual en los dos
+  // idiomas, como todos los demás.
+  jobs: { es: "work-with-us", en: "work-with-us" },
   legal: { es: "legal", en: "legal" },
   privacy: { es: "privacy", en: "privacy" },
 } as const satisfies Record<string, Record<Locale, string>>;

@@ -101,6 +101,19 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     {dict.nav.contact}
                   </Link>
                 </li>
+                {/* «Trabaja con nosotros» va en el pie y NO en el menú de
+                    arriba: el menú es para quien viene a contratar, que es a
+                    quien la web tiene que atender primero. Quien busca trabajo
+                    baja hasta el pie, que es donde se busca eso en cualquier
+                    web. */}
+                <li>
+                  <Link
+                    href={path(locale, "jobs")}
+                    className="text-bone transition-colors hover:text-rust-300"
+                  >
+                    {dict.nav.jobs}
+                  </Link>
+                </li>
               </ul>
             </div>
 

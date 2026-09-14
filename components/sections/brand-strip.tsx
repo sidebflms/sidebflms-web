@@ -9,12 +9,27 @@ import type { Dictionary } from "@/lib/dictionaries";
  * que se afirma aquí —«han contado con nosotros»— es cierto y se puede
  * respaldar enseñando el trabajo.
  *
- * PERO EL RÓTULO DE ABAJO SE QUEDA, y no por inercia: lo que falta no es el
- * dato, es el PERMISO. Publicar el nombre de una marca en una web comercial
- * es usar su marca, aunque sea en texto y no en logotipo, y el brief lo marca
- * como condición. Cuando estén los permisos por escrito: se sustituyen por
- * los logos reales en SVG monocromo (`currentColor`, para que hereden el
- * tratamiento en `bone`/60 %) y se quita `dict.brands.pending`.
+ * PERMISOS: CONCEDIDOS (Mario, 2026-09-13). Era la condición para publicar
+ * estos nombres, y con ella se quita el rótulo de «pendientes de permiso» que
+ * había debajo.
+ *
+ * Siguiente paso cuando haya material: sustituir el texto por los logos reales
+ * en SVG monocromo (`currentColor`, para que hereden el tratamiento en
+ * `bone`/60 %).
+ *
+ * ── LOS SEIS PRIMEROS Y LOS TRES ÚLTIMOS ─────────────────────────────────
+ * Los seis primeros salen del propio archivo: cada uno aparece en el nombre de
+ * un fichero o en un rótulo legible dentro del metraje.
+ *
+ * Los tres últimos los dio Mario de viva voz el 2026-09-14 y **no hay material
+ * suyo en el archivo**. Se publican porque él lo pide y responde de ellos, pero
+ * conviene saber que estos tres no se pueden respaldar enseñando el trabajo,
+ * que es lo que sí se podía hacer con los otros seis.
+ *
+ * «Richie Hawtin» va con la grafía correcta del artista, no con la que se
+ * escribió en la nota.
+ *
+ * FALTAN MÁS: la lista venía con un «etc.». No se inventan.
  */
 const CLIENTES = [
   "FABRIK",
@@ -23,6 +38,9 @@ const CLIENTES = [
   "FITZ",
   "GORDO",
   "PROSPA",
+  "NICO MORENO",
+  "RICHIE HAWTIN",
+  "BRESH",
 ];
 
 export function BrandStrip({ dict }: { dict: Dictionary }) {
@@ -34,7 +52,7 @@ export function BrandStrip({ dict }: { dict: Dictionary }) {
         </Reveal>
 
         <Reveal stagger>
-          <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
+          <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
             {CLIENTES.map((name) => (
               <li
                 key={name}
@@ -46,7 +64,6 @@ export function BrandStrip({ dict }: { dict: Dictionary }) {
           </ul>
         </Reveal>
 
-        <p className="label mt-8 text-ink-600">{dict.brands.pending}</p>
       </div>
     </section>
   );

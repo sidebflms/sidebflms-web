@@ -3,7 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
+import Image from "next/image";
+
 import { Reveal } from "@/components/motion/reveal";
+import { FOTO_ETAPA } from "@/content/etapas-fotos";
 import { pad } from "@/lib/utils";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
@@ -85,12 +88,32 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           >
             <p
               aria-hidden="true"
-              className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2"
+              className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-1"
             >
               {pad(index + 1)}
             </p>
 
-            <div className="lg:col-span-6">
+            {/* LA FOTO. Sólo si la hay: ver content/etapas-fotos.ts.
+                Cuando falta, el texto ocupa las seis columnas de siempre y no
+                queda ni hueco ni marco vacío. */}
+            {FOTO_ETAPA[stage.number] && (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-ink-900 lg:col-span-3">
+                <Image
+                  src={FOTO_ETAPA[stage.number]!}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 24vw"
+                  className="object-cover grayscale"
+                />
+              </div>
+            )}
+
+            {/* Con foto, el texto se queda en cinco columnas y no en tres.
+                Con tres, «PREPRODUCCIÓN» y «COBERTURA» se partían a media
+                palabra: Akira Expanded es muy ancha y `.font-display` lleva
+                `overflow-wrap: anywhere` de red de seguridad. El número baja a
+                una columna, que es de sobra para dos cifras. */}
+            <div className={FOTO_ETAPA[stage.number] ? "lg:col-span-5" : "lg:col-span-6"}>
               <h2 className="font-display text-display-m text-bone">{stage.title}</h2>
               {stage.pending && (
                 <span className="label mt-3 inline-block border border-rust-500 px-2 py-1 text-rust-300">
@@ -100,7 +123,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
               <p className="measure mt-4 text-smoke">{stage.body}</p>
             </div>
 
-            <ul className="mt-2 space-y-2 lg:col-span-4 lg:mt-0">
+            <ul className="mt-2 space-y-2 lg:col-span-3 lg:mt-0">
               {stage.items.map((item) => (
                 <li key={item} className="label flex gap-3 text-bone">
                   <span aria-hidden="true" className="text-rust-500">

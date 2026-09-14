@@ -13,6 +13,7 @@ import {
   HAY_EJEMPLOS,
   HAY_RETRATOS,
 } from "@/content/team";
+import { CIFRAS_CON_DATO } from "@/content/cifras";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -78,6 +79,28 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           )}
         </div>
       </header>
+
+      {/* LAS CIFRAS.
+          No se pinta nada mientras no haya ni una: ver content/cifras.ts, donde
+          está explicado por qué están todas a `null` y no se deducen del
+          portfolio. */}
+      {CIFRAS_CON_DATO.length > 0 && (
+        <section className="shell mt-24 border-t border-ink-600 pt-14">
+          <Reveal>
+            <p className="label">{dict.about.figuresLabel}</p>
+          </Reveal>
+          <Reveal stagger>
+            <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+              {CIFRAS_CON_DATO.map((cifra) => (
+                <li key={cifra.etiqueta.es}>
+                  <p className="font-display text-display-l text-bone tabular-nums">{cifra.valor}</p>
+                  <p className="label mt-2">{cifra.etiqueta[locale]}</p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
+      )}
 
       {/* Dónde operamos y cómo trabajamos, en dos columnas.
           El manifiesto NO se reescribe aquí: se reutiliza `dict.manifesto`,

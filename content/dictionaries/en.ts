@@ -29,6 +29,11 @@ export const en: Dictionary = {
       description:
         "Pre-production, live shoot, aerial coverage and post. Delivered in 24-48 hours.",
     },
+    jobs: {
+      title: "Work with us — SIDEBFLMS",
+      description:
+        "Filmmakers, stills, editing, drone pilots, 3D and production. The form is always open.",
+    },
     contact: {
       title: "Request an audiovisual production quote — SIDEBFLMS",
       description:
@@ -61,6 +66,7 @@ export const en: Dictionary = {
     services: "Services",
     about: "About",
     contact: "Contact",
+    jobs: "Work with us",
     menu: "Menu",
     close: "Close",
     skipToContent: "Skip to content",
@@ -83,7 +89,6 @@ export const en: Dictionary = {
 
   brands: {
     label: "They've had us on site",
-    pending: "Logos pending usage permission",
   },
 
   featured: {
@@ -155,6 +160,16 @@ export const en: Dictionary = {
         key: "ads",
         title: "Advertising",
         body: "Commercials and brand pieces, from script to final delivery.",
+      },
+      {
+        key: "vj",
+        title: "VJ",
+        body: "Content for the event's own screens: visuals prepared and run live, in time with the set.",
+      },
+      {
+        key: "podcast",
+        title: "Podcast",
+        body: "Recorded in studio or on location, multi-camera and with sound done properly, ready to publish as video and as audio.",
       },
       {
         key: "photo",
@@ -234,6 +249,50 @@ export const en: Dictionary = {
     },
   },
 
+  jobs: {
+    label: "Work with us",
+    headline: ["We're looking", "for people", "who can do it"],
+    intro:
+      "We don't run occasional call-outs: this form is always open and we go through it when a job comes in that matches what you do. The more specific you are, the easier it is for us to remember you.",
+    formLabel: "Tell us who you are",
+    form: {
+      name: "Full name",
+      age: "Age",
+      nationality: "Nationality",
+      city: "Where you live",
+      email: "Email",
+      phone: "Phone",
+      speciality: "What you do",
+      specialityHint: "Tick as many as apply",
+      specialityOptions: ["Filmmaker", "Stills", "Editing", "Drone pilot", "3D", "Production"],
+      experience: "How long have you been doing this?",
+      experiencePlaceholder: "For example: three years, or since 2019.",
+      events: "What kind of events would you like to work on?",
+      eventsHint: "Tick as many as apply",
+      eventsOptions: ["Clubs", "Festivals", "Commercials", "Everything"],
+      licence: "Do you have a driving licence?",
+      licenceOptions: ["Yes", "No"],
+      languages: "What languages do you speak?",
+      portfolio: "Portfolio",
+      portfolioHint: "A link: website, Vimeo, Drive, whatever you have.",
+      instagram: "Instagram",
+      consent:
+        "I have read the privacy policy and agree to my data being processed to consider my application.",
+      consentLink: "privacy policy",
+      submit: "Send application",
+      submitting: "Sending…",
+      required: "Required",
+      optional: "Optional",
+      errorRequired: "Please fill this in.",
+      errorEmail: "Check the email: something is missing.",
+      errorConsent: "We need your consent to be able to keep your application.",
+      successTitle: "Received",
+      successBody:
+        "We've kept your application. We don't reply to all of them, but we do read them: if something that fits comes in, we'll write.",
+      errorTitle: "Could not be sent",
+      errorBody: "Try again or write to us at contact@sidebflms.com.",
+    },
+  },
   contact: {
     label: "Contact",
     headline: ["Tell us", "what event", "you have"],
@@ -248,11 +307,12 @@ export const en: Dictionary = {
       name: "Your name",
       email: "Email",
       eventName: "Event name",
-      eventDate: "Date",
+      eventDate: "Expected event date",
       capacity: "Estimated capacity",
       stages: "Number of stages",
       coverage: "Coverage type",
       coverageHint: "Pick as many as you need",
+      coverageOther: "Other",
       budget: "Budget range",
       budgetOptions: [
         "Under €2,000",
@@ -328,12 +388,16 @@ export const en: Dictionary = {
         text: "To answer enquiries sent through the contact form and, where there is a job, to manage the commercial relationship. Your data is never used for unsolicited marketing.",
       },
       {
+        heading: "What data is collected",
+        text: "Contact form: name, email and whatever event details you choose to give us. «Work with us» form: name, age, nationality, town, email, phone, speciality, experience, languages, driving licence and the links to your portfolio and Instagram. Of those, only name, email and speciality are required — the rest is up to you.",
+      },
+      {
         heading: "Legal basis",
         text: "Your explicit consent, given by ticking the box on the form (art. 6.1.a GDPR), and pre-contractual steps taken at your request (art. 6.1.b GDPR).",
       },
       {
         heading: "Retention",
-        text: "Data is kept for the duration of the commercial relationship and afterwards for the applicable statutory limitation periods. Where there is no job, it is deleted after 12 months.",
+        text: "Enquiries are kept for as long as the commercial relationship lasts and, afterwards, for the statutory limitation periods; if there is no commission, they are deleted after 12 months. Applications are kept for 12 months from the date they are sent, unless you ask us to delete them sooner.",
       },
       {
         heading: "Recipients",
@@ -355,6 +419,7 @@ export const en: Dictionary = {
     headline: ["Who", "is behind", "all this"],
     intro:
       "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last one works the next one, and that shows at four in the morning.",
+    figuresLabel: "In numbers",
     whereLabel: "Where we operate",
     whereBody:
       "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
