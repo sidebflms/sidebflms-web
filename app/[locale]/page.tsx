@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { BrandStrip } from "@/components/sections/brand-strip";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Hero } from "@/components/sections/hero";
 import { Reveal } from "@/components/motion/reveal";
@@ -32,7 +31,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   return (
     <main id="main">
       <Hero locale={locale} dict={dict} />
-      <BrandStrip dict={dict} />
       {/* LOS TRABAJOS, DIRECTAMENTE.
           Hasta el 2026-09-15 aquí había dos cosas: el `Showpiece` —una sección
           fijada que contaba UNA pieza plano a plano, con fichas de texto

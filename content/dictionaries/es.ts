@@ -374,6 +374,10 @@ export const es = {
     social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
+    // Era «Con base en España» hasta el 2026-09-15; Mario lo cambió por el
+    // usuario de Instagram. La decisión de abajo sobre las ciudades SIGUE EN
+    // PIE para el resto del sitio, que es donde importa.
+    //
     // DÓNDE ESTAMOS: en todo el sitio, «con base en España» y nada más.
     //
     // DECISIÓN (Mario, 2026-09-10): las ciudades concretas —Madrid, Barcelona
@@ -386,7 +390,7 @@ export const es = {
     // FAQ se lee como una respuesta a una pregunta que ya te hacías.
     //
     // Si alguien las vuelve a repartir por el sitio, que sea a propósito.
-    builtNote: "Con base en España",
+    builtNote: "@sidebflms",
   },
 
   placeholder: {

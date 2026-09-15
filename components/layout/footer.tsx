@@ -146,7 +146,19 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <p className="label">
             © {year} SIDEBFLMS · {dict.footer.rights}
           </p>
-          <p className="label">{dict.footer.builtNote}</p>
+          {/* Antes ponía «Con base en España». Mario lo cambió por el usuario
+              el 2026-09-15. Va enlazado a Instagram: si se pone un arroba y no
+              se puede pinchar, el que lo lee tiene que ir a buscarlo a mano.
+              La URL sale de la misma lista que los enlaces de arriba, así que
+              no hay dos sitios donde cambiarla. */}
+          <a
+            href={SOCIAL[0].href}
+            target="_blank"
+            rel="noreferrer"
+            className="label transition-colors hover:text-rust-300"
+          >
+            {dict.footer.builtNote}
+          </a>
         </div>
       </div>
     </footer>

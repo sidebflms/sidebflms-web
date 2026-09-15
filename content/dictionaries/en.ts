@@ -346,7 +346,7 @@ export const en: Dictionary = {
     social: "Follow us",
     legalLinks: "Legal",
     rights: "All rights reserved.",
-    builtNote: "Based in Spain",
+    builtNote: "@sidebflms",
   },
 
   placeholder: {

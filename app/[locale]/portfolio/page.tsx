@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BrandStrip } from "@/components/sections/brand-strip";
 import { PortfolioMosaic } from "@/components/sections/portfolio-mosaic";
 import { Reveal } from "@/components/motion/reveal";
 import { FilterBar } from "@/components/ui/filter-bar";
@@ -77,6 +78,14 @@ export default async function PortfolioPage({
         ) : (
           <PortfolioMosaic projects={projects} locale={locale} dict={dict} />
         )}
+      </div>
+
+      {/* LA TIRA DE MARCAS, aquí y no en la portada.
+          Mario la movió el 2026-09-15. Tiene su lógica: «han contado con
+          nosotros» es una credencial, y una credencial se enseña justo después
+          del trabajo que la respalda, no antes de que se haya visto nada. */}
+      <div className="mt-24">
+        <BrandStrip dict={dict} />
       </div>
     </main>
   );

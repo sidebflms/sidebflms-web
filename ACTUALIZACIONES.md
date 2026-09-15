@@ -5,6 +5,48 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (46) — La portada se aprieta: marcas a Trabajo, dos bloques a la mitad
+
+### La tira de marcas se va a Trabajo
+
+«Han contado con nosotros» sale de la portada y entra en la página de Trabajo,
+debajo del mosaico.
+
+Tiene su lógica además de ser lo que se pidió: es una **credencial**, y una
+credencial se enseña justo después del trabajo que la respalda, no antes de que
+el visitante haya visto nada.
+
+### El manifiesto y la llamada de contacto, a la mitad
+
+Mario: «la de llegamos antes es demasiado grande, ocupa mucha pantalla y es muy
+vacía, y pasa lo mismo con cuéntanos qué evento tienes».
+
+Los dos tenían el mismo defecto: titular a `text-display-l`, mucho aire vertical
+y el texto en una columna estrecha, así que ocupaban una pantalla entera para
+decir cuatro frases y sobraba la mitad derecha.
+
+- **Manifiesto**: pasa a dos columnas —titular a la izquierda, las cuatro
+  frases a la derecha— y baja a `display-m` con `py-20`. De ~900 px de alto a
+  **359**.
+- **Contacto**: el reparto en dos columnas ya estaba bien; lo que sobraba era el
+  tamaño. `display-m` y `py-16`. De ~900 a **297**.
+
+La portada entera queda en 3.111 px. Antes de empezar a recortar, con el
+showpiece y los seis bloques editoriales, pasaba de 7.000.
+
+### El pie: @sidebflms
+
+Donde ponía «Con base en España» ahora va el usuario, **enlazado a Instagram**:
+un arroba que no se puede pinchar obliga a ir a buscarlo a mano. La URL sale de
+la misma lista que los enlaces sociales de arriba, así que no hay dos sitios
+donde cambiarla.
+
+La decisión de 2026-09-10 sobre las ciudades —Madrid, Barcelona e Ibiza sólo en
+el FAQ— **sigue en pie** para el resto del sitio; queda anotado en el
+diccionario para que no se malinterprete este cambio.
+
+---
+
 ## 2026-09-15 (45) — Cuatro retratos más: van nueve de once
 
 Iván, Jota, María y Natalia. Faltan **Galoguin y Rubén**, y con ellos cae el

@@ -16,17 +16,24 @@ export function ContactCta({
   intro: string;
 }) {
   return (
-    <section data-reglet={dict.contact.label} className="relative bg-ink-800 py-28">
+    // Más corto, por el mismo motivo que el manifiesto: el titular a
+    // `display-l` con `py-28` se comía una pantalla para decir una frase y
+    // poner un botón. Mario: «pasa lo mismo con cuéntanos qué evento tienes».
+    //
+    // El titular baja a `display-m` y el aire vertical a la mitad. La maqueta
+    // de dos columnas —texto a la izquierda, botón a la derecha— ya estaba
+    // bien: no era el reparto lo que sobraba, era el tamaño.
+    <section data-reglet={dict.contact.label} className="relative bg-ink-800 py-16">
       <div className="shell flex flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between">
         <Reveal>
-          <h2 className="font-display text-display-l text-bone">
+          <h2 className="font-display text-display-m text-bone">
             {headline.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </h2>
-          <p className="text-lead measure mt-4 text-smoke">{intro}</p>
+          <p className="measure mt-3 text-smoke">{intro}</p>
         </Reveal>
 
         <Reveal>
