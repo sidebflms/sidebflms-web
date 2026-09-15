@@ -5,6 +5,73 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (58) — El sonido: qué se puede hacer y qué hace falta para hacerlo
+
+Mario: «vuelve a codificar todo, pero el reel de portada que no lleve sonido, no
+pasa nada». Antes de tocar nada hubo que comprobar de dónde sale cada pieza, y
+la comprobación cambió el plan.
+
+### De qué máster sale cada pieza (averiguado, no supuesto)
+
+Nueve fichas de `content/projects.ts` tienen anotada su `FUENTE:` en el disco
+de producción. Las otras doce no, así que **se identificaron comparando
+fotogramas**: se saca el primer fotograma de la pieza publicada y se busca el
+que encaja en cada máster candidato, aplicando antes el mismo recorte a 16:9
+que hizo el script (sin ese recorte no encaja ninguno, que es lo que pasó en el
+primer intento). Las doce dieron una coincidencia de diferencia casi cero.
+
+### El hallazgo: los másters que hay en este Mac son mudos
+
+Los doce másters que están en `~/Desktop/PARA-LA-WEB/` **no tienen pista de
+audio**: son postales de dron, planos de recinto y el anuncio de MITT, grabados
+sin sonido o exportados sin él. De los 41 ficheros de esa carpeta sólo nueve
+llevan audio, y ninguno de esos nueve es una pieza del portfolio: son clips del
+equipo trabajando.
+
+O sea que **recodificar lo que hay en este ordenador no produciría un solo
+segundo de sonido**. Lo que sí tendría música son los aftermovies y los
+multicámara —Fátima Hajji, Adrián Mills, Fabrik 150, GORDO, Prospa— y sus
+másters viven en el disco de producción, que no está conectado.
+
+### `scripts/audio-a-las-piezas.sh`
+
+Queda listo para lanzarlo en cuanto se conecte el disco:
+
+```
+./scripts/audio-a-las-piezas.sh
+```
+
+**No recodifica el vídeo, le añade el audio.** Copia el vídeo publicado tal
+cual (`-c:v copy`) y le mete la pista del máster. Dos motivos:
+
+1. **No se pierde calidad.** Recomprimir lo ya comprimido siempre resta.
+2. **No cambia lo que se ve.** Volver a pasar el máster por `pieza-web.sh` no
+   reproduce el mismo corte: el script arranca al 20 % de la duración, pero
+   varias piezas se cortaron a mano antes de que el script existiera —la de
+   DURO sale del segundo 171 de un máster de 4:22—. Recodificar movería el
+   corte de esas piezas.
+
+**Encuentra solo el segundo del máster del que sacar el audio**, con la misma
+comparación de fotogramas: primero de segundo en segundo, luego afinando de 40
+en 40 ms. Si no encuentra un encaje claro avisa y deja la pieza muda: antes eso
+que un audio desplazado.
+
+**Probado de punta a punta** el 2026-09-15 con material local, montando un
+máster de mentira con audio: encontró el punto (segundo 3, diferencia 0,31),
+añadió el AAC de 12 s y **el MD5 del flujo de vídeo salió idéntico al
+original** — la imagen no se toca. El fichero pasó de 2,42 a 2,62 MB.
+
+### El reel de la portada se queda mudo
+
+Por decisión de Mario, y además arranca solo, así que iría `muted` de todas
+formas.
+
+### Lo que falta
+
+Conectar `@SIDEB404L` y lanzar el script. Son ocho piezas × dos recortes.
+
+---
+
 ## 2026-09-15 (57) — Las cintas ya no dejan hueco, y por qué no suena ningún vídeo
 
 ### El hueco de la fila de multicámara
