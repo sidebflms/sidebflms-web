@@ -5,6 +5,70 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (41) — La regleta en diagonal: un fallo de verdad, y tres retratos
+
+### El fallo
+
+Mario: «la barra del drone hace una animación rara, se queda como de lateral».
+Tenía razón, y no era cosa de su Mac.
+
+La regleta está pensada para el hero: empieza horizontal cruzando la parte baja
+del vídeo —hace de scrubber del reel— y al scrollear bascula hasta quedar
+vertical en el margen izquierdo. Eso está bien **en la portada**.
+
+**Pero el giro se ejecutaba en todas las páginas**, y en las demás no hay hero.
+Así que la línea empezaba cruzada en horizontal por encima del contenido y
+tardaba en enderezarse el 70 % de una pantalla.
+
+Lo que lo convierte en un fallo grave es la aritmética: el giro necesita
+**630 px** de scroll y la página de contacto tiene **767 px en total**. O sea
+que te recorres la página entera mirando una línea en diagonal cruzada sobre el
+formulario. Medido, no supuesto:
+
+    scroll   0 → horizontal  (y1=812, y2=812)
+    scroll 300 → DIAGONAL    (y1=471, y2=831)
+    scroll 600 → DIAGONAL    (y1=130, y2=850)
+    scroll 760 → vertical     ← justo al final del scroll
+
+### El arreglo
+
+El hero se marca con `data-hero`, y la regleta mira si existe. Si no hay hero,
+**arranca ya anclada** y no se crea el disparador del giro. Es lo mismo que ya
+se hacía con «reducir movimiento».
+
+**Una trampa al hacerlo:** el flujo naranja continuo —lo único que se mueve sin
+parar en el sitio— estaba dentro del MISMO `if` que el giro. Sacarlo era
+obligatorio: si no, al dejar de girar en las páginas interiores se habrían
+quedado también sin flujo, y el arreglo habría roto otra cosa sin que nadie lo
+notara hasta semanas después.
+
+Comprobado con las dos condiciones:
+- `/es/contact` (sin hero): vertical en 0, 200, 400, 700 y 760 px. Y el flujo
+  animándose (`stroke-dashoffset` pasa de −225 a −27 en segundo y medio).
+- `/es` (con hero): horizontal en 0, girando en 300, vertical en 700 y 2000.
+
+Para lo segundo hizo falta despertar el panel del navegador: con el panel oculto
+`requestAnimationFrame` va a 0 fps y ScrollTrigger no puede actualizar, así que
+la portada parecía rota cuando no lo estaba.
+
+### Tres retratos más
+
+Mario identificó cuatro por sus fotos: «colores rojo es kenny, la de foto
+colorida es sergio, la de la naturaleza es jota y la del fondo blanco es nacho».
+
+**Kenny, Sergio y Nacho ya están puestos** con su cara y sin la marca de
+ejemplo. Van cinco de once.
+
+**La de Jota no**: es la única de las cuatro que no se guardó en el disco, así
+que hay que volver a pasarla.
+
+Y un apunte sobre la de Kenny: está de espaldas, con la cara fuera de cuadro,
+así que incumple la condición escrita en `content/team.ts` de que se le vea la
+cara. Se pone porque es la que eligió Mario, pero es la que canta si algún día
+se revisa la página.
+
+---
+
 ## 2026-09-14 (40) — Las cifras, contadas de la exportación del Studio Manager
 
 Mario pasó `sidebflms-proyectos-2026-09-14.csv`, la exportación de proyectos del

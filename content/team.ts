@@ -87,6 +87,19 @@ export type Miembro = {
  * y la condición escrita arriba es que se le vea. Su retrato está recortado de
  * la foto de los tres (`crop=660:825:1130:672` sobre el original de 2728×1830).
  *
+ * ── 2026-09-15: TRES MÁS ─────────────────────────────────────────────────
+ * Mario identificó cuatro por sus fotos: «colores rojo es kenny, la de foto
+ * colorida es sergio, la de la naturaleza es jota y la del fondo blanco es
+ * nacho». Tres de las cuatro estaban guardadas y ya están puestas.
+ *
+ * **La de Jota no se ha podido poner**: es la única de las cuatro que no se
+ * guardó en el disco, así que hay que volver a pasarla.
+ *
+ * Ojo con la de Kenny: está de espaldas, con la cara fuera de cuadro, así que
+ * incumple la condición escrita arriba. Se pone porque es la que eligió Mario
+ * para él, pero si algún día se revisa la página de equipo, ésa es la que
+ * canta.
+ *
  * Las otras nueve siguen siendo fotos de OTRAS personas puestas de relleno para
  * poder ver la rejilla, y llevan `fotoEsEjemplo: true`. En cuanto se sepa quién
  * es quién, se quita esa marca y la foto pasa a color y sin aviso.
@@ -97,12 +110,12 @@ export const EQUIPO: Miembro[] = [
   { nombre: "Galoguin", slug: "galoguin", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
   { nombre: "Iván", slug: "ivan", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
   { nombre: "Jota", slug: "jota", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },
-  { nombre: "Kenny", slug: "kenny", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-recinto.jpg", fotoEsEjemplo: true },
+  { nombre: "Kenny", slug: "kenny", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/kenny.jpg" },
   { nombre: "María", slug: "maria", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/equipo-tres.jpg", fotoEsEjemplo: true },
-  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Montaje", en: "Editing" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-retrato.jpg", fotoEsEjemplo: true },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Montaje", en: "Editing" }, roleEsEjemplo: true, foto: "/media/equipo/nacho-lopez.jpg" },
   { nombre: "Natalia", slug: "natalia", role: { es: "Fotografía", en: "Stills" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
   { nombre: "Rubén", slug: "ruben", role: { es: "Etalonaje", en: "Colour" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
-  { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
+  { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/sergio.jpg" },
 ];
 
 /**

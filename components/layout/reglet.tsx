@@ -58,11 +58,26 @@ export function Reglet() {
     registerGsap();
     const reduced = prefersReducedMotion();
 
+    // ── ¿HAY HERO EN ESTA PÁGINA? ────────────────────────────────────────
+    // De esto depende toda la coreografía, y no tenerlo en cuenta era un
+    // fallo de verdad: el giro de horizontal a vertical sólo tiene sentido
+    // sobre el hero, donde la línea hace de scrubber del reel.
+    //
+    // En el resto de páginas no hay hero, pero el giro se ejecutaba igual:
+    // la línea empezaba cruzando la página en horizontal y tardaba en
+    // enderezarse el 70 % de una pantalla. En una página corta —contacto
+    // tiene 767 px de scroll en total y el giro necesita 630— eso significa
+    // que **te recorres la página entera mirando una línea en diagonal
+    // cruzada por encima del contenido**. Es justo lo que se reportó.
+    //
+    // Sin hero: anclada desde el primer fotograma y sin giro que valga.
+    const hayHero = document.querySelector("[data-hero]") !== null;
+
     // El raíl base y la traza en movimiento comparten geometría exacta.
     const rails: SVGLineElement[] = [line, flow];
 
     /** 0 = horizontal sobre el hero · 1 = anclada al gutter. */
-    const state = { dock: reduced ? 1 : 0, progress: 0 };
+    const state = { dock: reduced || !hayHero ? 1 : 0, progress: 0 };
     let sections: Section[] = [];
     let gutter = 72;
     let vw = 0;
@@ -184,7 +199,7 @@ export function Reglet() {
       buildTicks();
       render();
 
-      if (!reduced) {
+      if (!reduced && hayHero) {
         // El giro ocurre en el primer 70% de una pantalla de scroll: para
         // cuando el hero sale de vista, la regleta ya está anclada.
         ScrollTrigger.create({
@@ -197,7 +212,13 @@ export function Reglet() {
           },
         });
 
-        // Flujo continuo y lento: lo ÚNICO que se mueve sin parar en el sitio.
+      }
+
+      // El flujo continuo va aparte del giro, y no dentro: es lo ÚNICO que se
+      // mueve sin parar en el sitio y tiene que hacerlo haya hero o no.
+      // Estaba metido en el mismo `if` que el giro, así que al dejar de girar
+      // en las páginas interiores se habría quedado también sin flujo.
+      if (!reduced) {
         gsap.set(flow, { attr: { "stroke-dasharray": "18 260" } });
         gsap.to(flow, {
           attr: { "stroke-dashoffset": -278 },
