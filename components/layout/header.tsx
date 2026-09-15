@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { LogoMark, Wordmark } from "@/components/layout/logo";
-import { enlacesMenu } from "@/components/layout/enlaces-menu";
-import { SideNav } from "@/components/layout/side-nav";
+import { enlacesMenu, type EnlaceMenu } from "@/components/layout/enlaces-menu";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { IconoRed, REDES } from "@/components/layout/social-icons";
 import { path, type Locale } from "@/lib/routes";
@@ -41,9 +40,32 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
 
   const links = enlacesMenu(locale, nav);
 
-  // En la portada el menú no va en la columna de la derecha: va dentro del
-  // hero, debajo del titular, y lo pinta el propio hero. Ver `side-nav.tsx`.
   const esPortada = pathname === path(locale, "home");
+
+  /**
+   * EL MENÚ DE LA BARRA: CENTRADO, Y EN TODAS LAS PÁGINAS EL MISMO SITIO.
+   *
+   * Mario, 2026-09-15: «que esté centrado y en las otras páginas igual, que
+   * salga en el mismo sitio». Así que se va la columna del lado derecho que
+   * llevaban las páginas interiores (`side-nav.tsx`, borrado) y el menú pasa a
+   * estar siempre en el centro de la barra de arriba.
+   *
+   * La única excepción es la primera pantalla de la portada: allí el menú está
+   * dentro del hero, debajo del titular, y aquí arriba no se pinta hasta que
+   * se baja de esa pantalla. Si se pintara, estarían los dos a la vez.
+   */
+  const menuEnBarra = !esPortada || pasadoHero;
+
+  /**
+   * En las páginas interiores este menú es el ÚNICO del documento, así que es
+   * el `<nav>` principal. En la portada no puede serlo: el del hero sigue
+   * existiendo aunque esté fuera de pantalla, y dos `<nav aria-label=
+   * "Principal">` a la vez le dicen a un lector de pantalla que hay dos menús
+   * principales distintos, que es mentira. Allí se pinta como una lista de
+   * enlaces: se usa igual con ratón y teclado, y la navegación por regiones
+   * sigue encontrando un solo menú principal.
+   */
+  const esElUnicoMenu = !esPortada;
 
   /**
    * DOS UMBRALES, UN SOLO OYENTE.
@@ -87,7 +109,6 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
   }, [open]);
 
   return (
-    <>
     <header
       className={cn(
         "shell fixed inset-x-0 top-0 z-50 flex h-18 items-center justify-between transition-colors duration-300",
@@ -96,40 +117,38 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           : "border-b border-transparent"
       )}
     >
-      {/* ── IZQUIERDA: EL CASETE ──────────────────────────────────────────
-          El logotipo ya no va aquí pegado al casete: sube al centro. Así que
-          este enlace se queda sólo con el icono, y el nombre accesible lo
-          aporta `aria-label` — sin él, un enlace que sólo contiene una imagen
-          decorativa se anuncia vacío. */}
+      {/* ── IZQUIERDA: EL CASETE, Y EL LOGOTIPO SI EL CENTRO ESTÁ OCUPADO ──
+          `aria-label` en el enlace: sin él, un enlace que sólo contiene una
+          imagen decorativa se anuncia vacío. */}
       <Link
         href={path(locale, "home")}
         aria-label="SIDEBFLMS"
         className="flex items-center gap-3 text-bone transition-colors hover:text-rust-300"
       >
         <LogoMark className="h-6 w-auto" />
+        {menuEnBarra && <Wordmark className="hidden h-5 w-auto lg:block" />}
       </Link>
 
-      {/* ── CENTRO: EL LOGOTIPO, Y SÓLO SI CABE ───────────────────────────
-          Centrado respecto a la VENTANA, no respecto a lo que le rodea: va en
-          posición absoluta. Si fuera un elemento más del flex quedaría centrado
-          entre el casete y el menú —que ocupan anchos distintos— y por tanto
-          descentrado en pantalla, que es justo lo que se nota.
+      {/* ── EL LOGOTIPO ───────────────────────────────────────────────────
+          Dos sitios, según quién ocupe el centro de la barra:
 
-          ── AHORA SÍ CABE SIEMPRE ───────────────────────────────────────
-          Hasta el 2026-09-15 esto sólo se centraba a partir de 1536 px, porque
-          a 1280 el menú arrancaba justo en el centro y se solapaban. Al mover
-          el menú al pie de la ventana, a la derecha sólo quedan tres iconos y
-          el idioma —unos 150 px—, así que el hueco central es de sobra en
-          cualquier ancho y la excepción se retira.
+          - CENTRADO, cuando el centro está libre: sólo en la primera pantalla
+            de la portada. Va en posición absoluta para centrarse respecto a la
+            VENTANA y no respecto a lo que le rodea; si fuera un elemento más
+            del flex quedaría centrado entre el casete y los iconos —que ocupan
+            anchos distintos— y por tanto descentrado en pantalla, que es justo
+            lo que se nota.
+          - PEGADO AL CASETE, a la izquierda, cuando el centro lo ocupa el
+            menú. Es eso o quedarse sin logotipo: a 1024 px el menú mide 367 px
+            y el centro no da para los dos (medido).
 
           `pointer-events-none` en el contenedor y `auto` en el enlace: la capa
-          invisible no puede robarle el ratón al menú que hay debajo. */}
+          invisible, que cruza toda la barra, no puede robarle el ratón a lo
+          que hay debajo. */}
       <div
         className={cn(
           "pointer-events-none absolute inset-x-0 flex justify-center",
-          // Se retira cuando entra el menú (sólo a partir de `lg`, que es
-          // donde el menú se pinta): no caben los dos. Ver la nota del menú.
-          esPortada && pasadoHero && "lg:hidden"
+          menuEnBarra && "lg:hidden"
         )}
       >
         <Link
@@ -141,44 +160,20 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         </Link>
       </div>
 
+      {/* ── EL MENÚ, EN EL CENTRO DE LA BARRA ─────────────────────────────
+          Mismo centrado absoluto que el logotipo, y por el mismo motivo: tiene
+          que caer en el centro de la VENTANA, no entre dos bloques laterales
+          de anchos distintos.
+
+          Por debajo de `lg` no se pinta: ahí manda el botón de menú de la
+          cabecera, que abre la lista a pantalla completa. */}
+      {menuEnBarra && (
+        <div className="pointer-events-none absolute inset-x-0 hidden justify-center lg:flex">
+          <MenuBarra links={links} pathname={pathname} conLandmark={esElUnicoMenu} />
+        </div>
+      )}
+
       <div className="flex items-center gap-6">
-
-        {/* ── EL MENÚ, CUANDO YA SE HA PASADO EL HERO ───────────────────
-            Sólo en la portada, y sólo después de bajar: mientras se ve el
-            hero, el menú está ahí dentro, debajo del titular, y repetirlo aquí
-            arriba sería decir dos veces lo mismo a la vez.
-
-            En el resto de páginas no aparece porque allí manda la columna del
-            lado derecho, que está siempre. Si apareciera, habría dos menús a
-            la vez.
-
-            ── POR QUÉ NO ES UN `<nav>` ────────────────────────────────────
-            Porque el del hero sigue existiendo en el documento aunque esté
-            fuera de pantalla. Dos `<nav aria-label="Principal">` a la vez le
-            dicen a un lector de pantalla que hay dos menús principales
-            distintos, que es mentira. Siendo una lista de enlaces dentro de la
-            cabecera, se usa igual con el ratón y con el teclado, y la
-            navegación por regiones sigue teniendo un único menú principal.
-
-            El sitio lo deja el logotipo del centro, que se retira mientras el
-            menú está puesto: a 1024 px el menú iba de 513 a 880 y el logotipo
-            de 430 a 580, o sea que se pisaban de lleno (medido). No se pierde
-            marca —el casete de la izquierda es el mismo logotipo y lleva a la
-            portada— y así caben además los iconos de redes. */}
-        {esPortada && pasadoHero && (
-          <ul className="hidden items-center gap-6 lg:flex">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:text-rust-300"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
 
         {/* ── ARRIBA A LA DERECHA: LAS REDES ─────────────────────────────
             Se ocultan por debajo de `lg`: en el móvil la cabecera ya tiene
@@ -246,9 +241,43 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         </div>
       )}
     </header>
-
-    {/* El menú, abajo y centrado. Ver components/layout/bottom-nav.tsx. */}
-    {!esPortada && <SideNav links={links} />}
-    </>
   );
+}
+
+/**
+ * Los cuatro enlaces de la barra. Se pinta como `<nav>` o como lista suelta
+ * según `conLandmark` — ver la nota de `esElUnicoMenu` arriba.
+ */
+function MenuBarra({
+  links,
+  pathname,
+  conLandmark,
+}: {
+  links: EnlaceMenu[];
+  pathname: string;
+  conLandmark: boolean;
+}) {
+  const lista = (
+    <ul className="pointer-events-auto flex items-center gap-8">
+      {links.map((link) => {
+        const activo = pathname.startsWith(link.href);
+        return (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              aria-current={activo ? "page" : undefined}
+              className={cn(
+                "text-xs font-medium tracking-[0.08em] uppercase transition-colors duration-200",
+                activo ? "text-rust-300" : "text-bone hover:text-rust-300"
+              )}
+            >
+              {link.label}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  return conLandmark ? <nav aria-label="Principal">{lista}</nav> : lista;
 }

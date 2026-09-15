@@ -5,6 +5,54 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (55) — Un solo menú: centrado en la barra, igual en todas las páginas
+
+Mario: «sí, pero que esté centrado y en las otras páginas igual, que salga en
+el mismo sitio». Con eso se cierra el baile de sitios de hoy.
+
+### Se borra `side-nav.tsx`
+
+La columna del lado derecho que llevaban las páginas interiores desaparece. El
+menú está ahora **en el centro de la barra de arriba, en todas las páginas**.
+
+La única excepción es la primera pantalla de la portada: allí el menú vive
+dentro del hero, debajo del titular, y en la barra no se pinta hasta que se
+baja de esa pantalla. Si se pintara, estarían los dos a la vez.
+
+Centrado respecto a la **ventana** (posición absoluta), no entre los bloques
+laterales: el de la izquierda y el de la derecha miden distinto, así que
+centrarlo «entre ellos» lo dejaría descentrado en pantalla. Medido: el centro
+del menú cae en 504,5 y el de la ventana también.
+
+### El logotipo se va a la izquierda cuando el menú ocupa el centro
+
+No caben los dos: el menú mide 367 px. Así que el wordmark se pega al casete,
+a la izquierda, y sólo se queda centrado en la primera pantalla de la portada,
+que es cuando el centro está libre.
+
+A 1024 px: izquierda de 72 a 245, menú de 309 a 700, derecha de 800 a 961.
+Sin solapes.
+
+### El `<nav>` principal, uno y sólo uno
+
+En las páginas interiores el menú de la barra es el único del documento, así
+que es el `<nav aria-label="Principal">`. En la portada no puede serlo: el del
+hero sigue existiendo aunque esté fuera de pantalla, y dos navegaciones
+principales le dicen a un lector de pantalla que hay dos menús distintos. Allí
+se pinta como lista de enlaces: se usa igual con ratón y teclado, y la
+navegación por regiones sigue encontrando un solo menú principal. Lo decide
+`esElUnicoMenu` en `header.tsx`.
+
+### Nota de verificación
+
+En el navegador de pruebas, un `scrollTo()` por consola **no dispara el evento
+`scroll`** (se comprobó: cero eventos recibidos), así que el menú parecía no
+aparecer. Con un `dispatchEvent(new Event('scroll'))` —o, claro, scrolleando
+de verdad— funciona. Es cosa del entorno de pruebas, no de la web; queda
+apuntado para no volver a perseguirlo.
+
+---
+
 ## 2026-09-15 (54) — Al bajar de la primera pantalla, el menú sube a la barra
 
 Mario: «una vez bajes de la primera página, que salga arriba en esa barra el
