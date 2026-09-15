@@ -31,10 +31,15 @@ import { cn, timecode } from "@/lib/utils";
 const SOURCES = {
   desktop: "/media/reel-1920.mp4",
   mobile: "/media/reel-720.mp4",
-  // El poster es el LCP de la página: sin él, el LCP pasa a ser el vídeo y se
-  // dispara. Es exactamente el primer frame de `reel-1920.mp4`, así que al
+  // El póster es el LCP de la página: sin él, el LCP pasa a ser el vídeo y se
+  // dispara. Es exactamente el primer fotograma de `reel-1920.mp4`, así que al
   // arrancar la reproducción no hay salto visual.
-  poster: "/media/reel-poster.jpg" as string | null,
+  //
+  // En WebP desde el 2026-09-16: la misma imagen pasa de 170 kB a 47. Es lo
+  // PRIMERO que se pinta de toda la web, así que esos 123 kB son los que más
+  // se notan de todo el sitio. El JPEG sigue en `public/media/` por si hay que
+  // volver atrás.
+  poster: "/media/reel-poster.webp" as string | null,
 };
 
 // `locale` vuelve al hero: desde el 2026-09-15 el menú de la portada vive

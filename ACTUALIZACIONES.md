@@ -5,6 +5,78 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (60) — La portada pesaba 52 MB de vídeo. Ahora 24
+
+Mario: «los vídeos de la página de inicio tardan mucho en cargar la primera
+vez». Medido antes de tocar nada: la portada tiene **veintiún vídeos
+distintos** repartidos en las tres cintas, y servía a cada recuadro **el mismo
+fichero que la ficha del trabajo** — 1280×720 a 1,76 Mb/s, unos 2,5 MB cada
+uno. Recorrer la portada entera son **52,2 MB**, más 5,1 del reel.
+
+### Lo que sobraba: los recuadros miden 398 px
+
+Se estaban mandando más de tres veces los píxeles que caben en pantalla.
+`scripts/cinta-web.sh` genera ahora, por cada pieza, una versión `-cinta`:
+
+- **854×480 a 800 kb/s** — sigue sobrando resolución para una pantalla de
+  densidad doble.
+- **Sin pista de audio**, porque las cintas van mudas de todas formas. Son
+  ~190 kB por pieza que se mandaban para no sonar.
+
+**52,2 MB → 24,1 MB. Un 54 % menos.**
+
+### Los pósters, en WebP
+
+Es lo primero que se ve, antes de que el vídeo tenga un fotograma. En JPEG
+pesaban **86 kB de media**; en WebP a ese tamaño, **23**. Con veintiuno en
+pantalla son 1,3 MB que desaparecen del arranque.
+
+El del reel —la primera imagen de toda la web— pasa de **170 kB a 47**.
+
+### Si falta algún fichero, no se rompe
+
+El componente pide la versión de cinta y, si no existe, el `onError` se cae al
+fichero grande y al póster JPEG. Añadir una pieza sin pasar el script se ve más
+lento, pero se ve. El script tampoco rehace lo que ya está hecho.
+
+### Caché y formatos
+
+- `public/media` pasa a **30 días** de caché. Venía con `max-age=0`: cada
+  visita volvía a preguntar por los cuarenta y pico ficheros.
+- **No lleva `immutable`**, a propósito: estos ficheros se reemplazan de vez en
+  cuando —ayer se les añadió audio a seis— y con `immutable` un navegador que
+  ya los tuviera seguiría con el viejo un año sin manera de avisarle.
+- `next/image` pasa a servir **AVIF** antes que WebP, ~20 % menos a igual
+  calidad. No afecta a los pósters de vídeo: el atributo `poster` es una URL a
+  pelo y no pasa por el optimizador, por eso ésos se generan a mano.
+
+### LO GRANDE QUE FALTA, Y NO ES CÓDIGO
+
+**Mientras la web tenga contraseña, cada vídeo pasa por PHP.**
+
+Lo dice el propio `despliegue/publicar.sh`: con `.htpasswd` puesto no se copia
+ni un fichero estático al directorio público, porque nginx los serviría
+saltándose la contraseña. Así que hoy cada uno de esos veintiún vídeos entra
+por Apache → `proxy.php` → curl → Node. Un proceso de PHP por fichero, y diez
+a la vez cuando se abre la portada.
+
+El día que se quite el `.htpasswd`, ese mismo script deja `public/` y
+`.next/static` en disco y los sirve **nginx directamente con `expires max`**,
+sin despertar ni a PHP ni a Node. Eso es lo que de verdad arregla la primera
+carga; todo lo de arriba es lo que se puede hacer sin llegar ahí.
+
+### Otras dos cosas que dependen de una decisión, no del código
+
+- **Doce piezas de drone en la primera cinta.** Aunque pesen la mitad, siguen
+  siendo doce ficheros. Con seis bien elegidas la portada carga la mitad y
+  probablemente se vea igual de bien.
+- **El reel definitivo.** El de ahora son 5,1 MB (21 s a 2 Mb/s) y es
+  provisional. Cuando se monte el bueno, conviene pedirlo con presupuesto:
+  **20 segundos y 1,4 Mb/s** dejan un fichero de 3,5 MB que empieza a verse
+  enseguida.
+
+---
+
 ## 2026-09-15 (59) — Seis piezas ya suenan. Y una corrección a la entrada anterior
 
 ### Lo que decía la entrada 58 estaba mal

@@ -70,8 +70,20 @@ function Pieza({
   const marcoRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const video = project.media.video;
-  const poster = project.media.poster;
+  /**
+   * LA VERSIÓN LIGERA, NO LA DE LA FICHA.
+   *
+   * Estos recuadros miden 398 px de ancho y servían el mismo fichero que la
+   * página del trabajo: 1280×720 a 1,76 Mb/s. Recorrer las tres cintas eran
+   * 52 MB. Las versiones `-cinta` son 854×480 sin audio —van mudas de todas
+   * formas— y bajan eso a 24. El póster, en WebP, pasa de 86 kB de media a 23.
+   *
+   * Se generan con `scripts/cinta-web.sh`. Si alguna faltara —una pieza nueva
+   * sin pasar el script— el `onError` de abajo se cae al fichero grande: se
+   * ve más lento, pero se ve.
+   */
+  const video = project.media.video?.replace(/\.mp4$/, "-cinta.mp4") ?? null;
+  const poster = project.media.poster?.replace(/\.jpg$/, "-cinta.webp") ?? null;
 
   useEffect(() => {
     const marco = marcoRef.current;
@@ -100,6 +112,15 @@ function Pieza({
           ref={videoRef}
           src={video}
           poster={poster ?? undefined}
+          onError={() => {
+            // Vuelta al fichero grande, UNA vez. Sin la marca, un error en el
+            // grande volvería a disparar esto y se quedaría en bucle.
+            const v = videoRef.current;
+            if (!v || v.dataset.completo === "si") return;
+            v.dataset.completo = "si";
+            if (project.media.video) v.src = project.media.video;
+            if (project.media.poster) v.poster = project.media.poster;
+          }}
           muted
           loop
           playsInline
@@ -111,7 +132,18 @@ function Pieza({
       ) : (
         poster && (
           // eslint-disable-next-line @next/next/no-img-element -- mismo hueco que el vídeo.
-          <img src={poster} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src={poster}
+            alt=""
+            loading="lazy"
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (img.dataset.completo === "si" || !project.media.poster) return;
+              img.dataset.completo = "si";
+              img.src = project.media.poster;
+            }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         )
       )}
 
