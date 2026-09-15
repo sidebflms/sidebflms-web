@@ -25,6 +25,7 @@ type NavCopy = {
 export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [pasadoHero, setPasadoHero] = useState(false);
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -44,10 +45,24 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
   // hero, debajo del titular, y lo pinta el propio hero. Ver `side-nav.tsx`.
   const esPortada = pathname === path(locale, "home");
 
-  // El header es transparente sobre el vídeo del hero y se opaca al scrollear,
-  // para que el copy siga legible sobre cualquier fotograma.
+  /**
+   * DOS UMBRALES, UN SOLO OYENTE.
+   *
+   * - A los 24 px el header deja de ser transparente y se opaca, para que el
+   *   copy siga legible sobre cualquier fotograma del vídeo.
+   * - Al 80 % del alto de la ventana se da por pasado el hero, y en la portada
+   *   aparece el menú aquí arriba (Mario, 2026-09-15: «una vez bajes de la
+   *   primera página, que salga arriba en esa barra el menú»). El 80 % y no el
+   *   100 %: así el menú ya está puesto cuando el titular acaba de salir de
+   *   cuadro, en vez de aparecer tarde.
+   *
+   * Un único oyente para los dos: son el mismo evento y se disparan muchísimo.
+   */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      setPasadoHero(window.scrollY > window.innerHeight * 0.8);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -109,7 +124,14 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
 
           `pointer-events-none` en el contenedor y `auto` en el enlace: la capa
           invisible no puede robarle el ratón al menú que hay debajo. */}
-      <div className="pointer-events-none absolute inset-x-0 flex justify-center">
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 flex justify-center",
+          // Se retira cuando entra el menú (sólo a partir de `lg`, que es
+          // donde el menú se pinta): no caben los dos. Ver la nota del menú.
+          esPortada && pasadoHero && "lg:hidden"
+        )}
+      >
         <Link
           href={path(locale, "home")}
           aria-label="SIDEBFLMS"
@@ -120,6 +142,43 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
       </div>
 
       <div className="flex items-center gap-6">
+
+        {/* ── EL MENÚ, CUANDO YA SE HA PASADO EL HERO ───────────────────
+            Sólo en la portada, y sólo después de bajar: mientras se ve el
+            hero, el menú está ahí dentro, debajo del titular, y repetirlo aquí
+            arriba sería decir dos veces lo mismo a la vez.
+
+            En el resto de páginas no aparece porque allí manda la columna del
+            lado derecho, que está siempre. Si apareciera, habría dos menús a
+            la vez.
+
+            ── POR QUÉ NO ES UN `<nav>` ────────────────────────────────────
+            Porque el del hero sigue existiendo en el documento aunque esté
+            fuera de pantalla. Dos `<nav aria-label="Principal">` a la vez le
+            dicen a un lector de pantalla que hay dos menús principales
+            distintos, que es mentira. Siendo una lista de enlaces dentro de la
+            cabecera, se usa igual con el ratón y con el teclado, y la
+            navegación por regiones sigue teniendo un único menú principal.
+
+            El sitio lo deja el logotipo del centro, que se retira mientras el
+            menú está puesto: a 1024 px el menú iba de 513 a 880 y el logotipo
+            de 430 a 580, o sea que se pisaban de lleno (medido). No se pierde
+            marca —el casete de la izquierda es el mismo logotipo y lleva a la
+            portada— y así caben además los iconos de redes. */}
+        {esPortada && pasadoHero && (
+          <ul className="hidden items-center gap-6 lg:flex">
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:text-rust-300"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
 
         {/* ── ARRIBA A LA DERECHA: LAS REDES ─────────────────────────────
             Se ocultan por debajo de `lg`: en el móvil la cabecera ya tiene

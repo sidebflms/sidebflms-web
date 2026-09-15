@@ -5,6 +5,44 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (54) — Al bajar de la primera pantalla, el menú sube a la barra
+
+Mario: «una vez bajes de la primera página, que salga arriba en esa barra el
+menú». En la portada el menú vive dentro del hero, así que al dejar atrás el
+hero no quedaba menú a la vista hasta el pie.
+
+### Cuándo aparece
+
+Al pasar el **80 % del alto de la ventana**, no el 100 %: así está puesto
+cuando el titular acaba de salir de cuadro, en vez de llegar tarde. Lo calcula
+el mismo oyente de scroll que ya decidía cuándo opacar la barra —es el mismo
+evento y se dispara muchísimo, no tiene sentido tener dos.
+
+Sólo en la portada. En el resto de páginas manda la columna del lado derecho,
+que está siempre; si esto apareciera allí, habría dos menús a la vez.
+
+### El logotipo del centro se retira mientras el menú está puesto
+
+No caben: a 1024 px el menú ocupa de 409 a 776 y el logotipo centrado iba de
+430 a 580. Se pisaban de lleno. No se pierde marca —el casete de la izquierda
+es el mismo logotipo y lleva a la portada— y, con el centro libre, caben
+además los tres iconos de redes. Al volver arriba, el logotipo vuelve.
+
+Comprobado a 1024 px: bajando, menú de 409 a 776, sin logotipo central y sin
+solaparse con el casete ni con las redes; subiendo, el logotipo vuelve a su
+sitio y el menú desaparece.
+
+### Por qué esa lista NO es un `<nav>`
+
+Porque el menú del hero sigue existiendo en el documento aunque esté fuera de
+pantalla. Dos `<nav aria-label="Principal">` a la vez le dicen a un lector de
+pantalla que hay dos menús principales distintos, y eso es mentira. Siendo una
+lista de enlaces dentro de la cabecera se usa igual —con ratón y con
+teclado— y la navegación por regiones sigue encontrando un único menú
+principal.
+
+---
+
 ## 2026-09-15 (53) — El menú ocupa el sitio de las disciplinas, que se van a Servicios
 
 Mario, señalando la línea de debajo del titular: «donde pone drone, live
