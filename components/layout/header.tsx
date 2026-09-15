@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { LogoMark, Wordmark } from "@/components/layout/logo";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { IconoRed, REDES } from "@/components/layout/social-icons";
 import { path, type Locale } from "@/lib/routes";
@@ -71,6 +72,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
   }, [open]);
 
   return (
+    <>
     <header
       className={cn(
         "shell fixed inset-x-0 top-0 z-50 flex h-18 items-center justify-between transition-colors duration-300",
@@ -90,9 +92,6 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         className="flex items-center gap-3 text-bone transition-colors hover:text-rust-300"
       >
         <LogoMark className="h-6 w-auto" />
-        {/* El logotipo acompaña al casete SÓLO cuando no cabe centrado.
-            Ver la nota del bloque centrado, justo debajo. */}
-        <Wordmark className="block h-5 2xl:hidden" />
       </Link>
 
       {/* ── CENTRO: EL LOGOTIPO, Y SÓLO SI CABE ───────────────────────────
@@ -101,21 +100,16 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           entre el casete y el menú —que ocupan anchos distintos— y por tanto
           descentrado en pantalla, que es justo lo que se nota.
 
-          ── POR QUÉ `2xl:` Y NO SIEMPRE ─────────────────────────────────
-          Porque por debajo de 1536 px NO CABE, y se comprobó midiendo: a
-          1280 el menú arranca en el píxel 641 —o sea, exactamente en el
-          centro— así que cualquier cosa centrada se le monta encima. A 1024
-          igual. No es cuestión de encoger el logotipo: el problema es que a la
-          derecha hay cuatro enlaces, tres iconos y el idioma, y eso ocupa
-          media pantalla.
-
-          Así que a partir de 1536 va centrado, como se pidió, y por debajo
-          vuelve al lado del casete —donde estaba— en vez de solaparse. Se
-          prefiere eso a quitar los iconos de redes, que se pidieron aparte.
+          ── AHORA SÍ CABE SIEMPRE ───────────────────────────────────────
+          Hasta el 2026-09-15 esto sólo se centraba a partir de 1536 px, porque
+          a 1280 el menú arrancaba justo en el centro y se solapaban. Al mover
+          el menú al pie de la ventana, a la derecha sólo quedan tres iconos y
+          el idioma —unos 150 px—, así que el hueco central es de sobra en
+          cualquier ancho y la excepción se retira.
 
           `pointer-events-none` en el contenedor y `auto` en el enlace: la capa
           invisible no puede robarle el ratón al menú que hay debajo. */}
-      <div className="pointer-events-none absolute inset-x-0 hidden justify-center 2xl:flex">
+      <div className="pointer-events-none absolute inset-x-0 flex justify-center">
         <Link
           href={path(locale, "home")}
           aria-label="SIDEBFLMS"
@@ -126,24 +120,6 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
       </div>
 
       <div className="flex items-center gap-6">
-        <nav className="hidden items-center gap-8 md:flex">
-          {links.map((link) => {
-            const active = pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-200",
-                  active ? "text-rust-300" : "text-bone hover:text-rust-300"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
 
         {/* ── ARRIBA A LA DERECHA: LAS REDES ─────────────────────────────
             Se ocultan por debajo de `lg`: en el móvil la cabecera ya tiene
@@ -207,5 +183,9 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         </div>
       )}
     </header>
+
+    {/* El menú, abajo y centrado. Ver components/layout/bottom-nav.tsx. */}
+    <BottomNav links={links} />
+    </>
   );
 }

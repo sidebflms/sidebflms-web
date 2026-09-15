@@ -2,11 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { Magnetic } from "@/components/motion/magnetic";
-import { ButtonLink, Arrow } from "@/components/ui/button";
 import type { Dictionary } from "@/lib/dictionaries";
 import { prefersReducedMotion } from "@/lib/gsap";
-import { path, type Locale } from "@/lib/routes";
 import { timecode } from "@/lib/utils";
 
 /**
@@ -36,7 +33,9 @@ const SOURCES = {
   poster: "/media/reel-poster.jpg" as string | null,
 };
 
-export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+// `locale` se dejó de usar al quitar los dos botones del hero: eran lo único
+// que construía rutas. El componente ya no necesita saber el idioma.
+export function Hero({ dict }: { dict: Dictionary }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -135,7 +134,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       // arranca la reproducción, el navegador promociona el vídeo a su propia
       // capa de composición, y ahí el -10 sí se nota: el hero se queda en un
       // gris liso con el vídeo sonando por detrás. Comprobado y reproducido.
-      className="isolate relative flex min-h-dvh flex-col justify-end overflow-hidden pt-28 pb-28"
+      className="isolate relative flex min-h-dvh flex-col justify-center overflow-hidden pt-28 pb-28"
     >
       {/* Capa de fondo procedural. Se ve mientras no exista el reel y también
           por detrás de él, para que el corte a negro nunca sea plano. */}
@@ -171,7 +170,19 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-900 via-ink-900/55 to-ink-900/70"
       />
 
-      <div className="shell relative">
+      {/* EL TITULAR, CENTRADO EN EL HERO.
+          Estaba abajo a la izquierda, con la frase de apoyo y dos botones
+          debajo. Mario quitó los botones —«watch the reel y tell us lo
+          quitamos»— y pidió el titular «más pequeño y en todo el medio».
+
+          Centrado de las dos maneras: en horizontal con `text-center`, y en
+          vertical porque la sección pasa de `justify-end` a `justify-center`.
+          Sin lo segundo, el titular quedaría centrado de lado a lado pero
+          seguiría pegado abajo.
+
+          El reel se sigue viendo —es el fondo— y para contactar está el menú.
+          O sea que quitar los botones no deja nada sin camino. */}
+      <div className="shell relative flex flex-col items-center text-center">
         <h1 className="font-display text-display-xl text-bone">
           {dict.hero.headline.map((line) => (
             <span key={line} className="block">
@@ -180,27 +191,16 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           ))}
         </h1>
 
-        <p className="text-lead measure mt-8 text-bone">{dict.hero.sub}</p>
-
-        <div className="mt-10 flex flex-wrap items-center gap-4">
-          <Magnetic>
-            <ButtonLink href={path(locale, "portfolio")} variant="primary">
-              <span aria-hidden="true">▶</span>
-              {dict.hero.ctaReel}
-            </ButtonLink>
-          </Magnetic>
-          <Magnetic>
-            <ButtonLink href={path(locale, "contact")} variant="outline">
-              {dict.hero.ctaContact}
-              <Arrow />
-            </ButtonLink>
-          </Magnetic>
-        </div>
+        <p className="text-lead mt-6 max-w-lg text-bone">{dict.hero.sub}</p>
       </div>
 
       {/* Fila de timecode + controles. Se alinea con el estado horizontal de la
           regleta, que cruza el hero justo por encima. */}
-      <div className="shell absolute inset-x-0 bottom-8 flex items-center justify-between gap-4">
+      {/* `bottom-8` en móvil y `bottom-24` a partir de `md`: desde ahí aparece
+          la cápsula del menú, que flota a 24 px del borde, y esta fila le
+          quedaba justo debajo — se solapaban. En móvil no hay cápsula, así que
+          no hace falta subirla. */}
+      <div className="shell absolute inset-x-0 bottom-8 flex items-center justify-between gap-4 md:bottom-24">
         <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
           {timecode(elapsed)}
         </p>

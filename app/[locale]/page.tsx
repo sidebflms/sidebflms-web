@@ -30,7 +30,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <main id="main">
-      <Hero locale={locale} dict={dict} />
+      <Hero dict={dict} />
       {/* LOS TRABAJOS, DIRECTAMENTE.
           Hasta el 2026-09-15 aquí había dos cosas: el `Showpiece` —una sección
           fijada que contaba UNA pieza plano a plano— y debajo seis

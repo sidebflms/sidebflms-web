@@ -5,6 +5,64 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (49) — El menú baja al pie de la ventana y el hero se queda solo
+
+Tres peticiones de Mario que encajan entre sí: «watch the reel y tell us lo
+quitamos; las pestañas de work, contact y demás las ponemos en la parte de abajo
+en medio centradas; y lo de capture the energy ahora ponlo más pequeño y en todo
+el medio».
+
+### Fuera los dos botones del hero
+
+Y no dejan nada sin camino: el reel se sigue viendo —es el fondo de la propia
+sección— y para contactar está el menú. El hero se queda con el titular y la
+frase de apoyo, nada más.
+
+Al quitarlos, `locale` dejó de usarse en el componente: eran lo único que
+construía rutas. Se quita también, junto con los imports que quedaban muertos.
+
+### El titular, centrado de las dos maneras
+
+En horizontal con `text-center`, y en vertical porque la sección pasa de
+`justify-end` a `justify-center`. Sólo lo primero lo habría dejado centrado de
+lado a lado pero pegado abajo, que es la mitad del encargo.
+
+Y más pequeño: `text-display-xl` baja de `3.9vw / 5rem` a `3.2vw / 4rem`. **Es
+la segunda bajada del día** —venía de `4.6vw / 6rem`— así que a 1440 px ha
+pasado de ~66 px a **46**. Esa clase sólo la usa el hero, así que tocarla no
+afecta a nada más.
+
+### El menú, abajo y centrado
+
+Sale de la cabecera y pasa a una cápsula fija en el borde inferior, centrada.
+Fija y no al final del documento: es el menú, tiene que estar siempre a mano.
+
+Lleva fondo y desenfoque porque flota sobre vídeo; sin eso los rótulos
+desaparecen cada vez que pasa por debajo un plano claro. En móvil no se pinta:
+ahí ya está el botón de menú de la cabecera, y dos menús para lo mismo —uno de
+ellos tapando contenido en una pantalla pequeña— es peor que uno.
+
+### Lo que esto desbloqueó
+
+**El logotipo ya se centra en cualquier ancho.** Hasta hoy sólo a partir de
+1536 px, porque a 1280 el menú arrancaba justo en el centro y se solapaban. Al
+vaciarse la derecha de la cabecera —quedan tres iconos y el idioma, unos 150
+px— la excepción se retira.
+
+### Dos solapes que hubo que arreglar, y salieron de mirar
+
+La cápsula flota a 24 px del borde, así que se puso encima de dos cosas:
+
+1. **Los controles del reel** (pausar / sonido / desplázate), que estaban a
+   `bottom-8`. Suben a `bottom-24` desde `md`, que es donde aparece la cápsula.
+2. **La línea de copyright del pie**, que quedaba justo debajo. El pie gana
+   `md:pb-20`.
+
+Los dos comprobados midiendo las cajas antes y después: de solaparse a no
+solaparse.
+
+---
+
 ## 2026-09-15 (48) — El pie, más corto y reordenado
 
 «Esta parte de abajo es muy grande, baja el tamaño de "Side B of every night" y
