@@ -5,6 +5,58 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (59) — Seis piezas ya suenan. Y una corrección a la entrada anterior
+
+### Lo que decía la entrada 58 estaba mal
+
+Decía que «los doce másters que están en este Mac son mudos». **No lo son.** El
+fallo era de mi comprobación: `ffprobe -select_streams a` saca una **línea en
+blanco antes del resultado** en los ficheros de DJI, que declaran dos flujos de
+vídeo. Yo leía la primera línea, veía el vacío y daba el fichero por mudo.
+
+Al mirarlo bien, casi todos los ficheros de `~/Desktop/PARA-LA-WEB/` traen
+pista de audio. Lo que hay que preguntarse no es si la traen, sino **si suena**:
+los planos de dron la traen a −91 dB, que es silencio digital, porque el dron
+no tiene micrófono.
+
+### Seis piezas con sonido, hechas ya
+
+| Pieza | Máster | Pico |
+|---|---|---|
+| Sala llena | clubes-y-festivales / 16 | 0,0 dB |
+| Sala en rojo | clubes-y-festivales / 23 | 0,0 dB |
+| La cabina y el público | clubes-y-festivales / 15 | −0,5 dB |
+| En cabina | clubes-y-festivales / 28 | −6,5 dB |
+| DURO — el recinto de noche | duro / 13 | 0,0 dB |
+| MITT MOTORS | mitt-motors / 60 | −0,7 dB |
+
+El script encontró solo el punto de cada máster (segundos 10, 4, 13, 13, 6 y 0)
+comparando fotogramas, y **la imagen no se ha tocado**: el MD5 del flujo de
+vídeo de las seis es idéntico al de antes. El audio cubre la pieza entera
+(11,99 s de 12, que es la rejilla de fotogramas del AAC, no un recorte).
+
+Comprobado además en el navegador: el reproductor de la ficha decodifica audio.
+
+### Las que siguen mudas, y por qué
+
+- **Las de dron** —Madrid desde el aire, Las cuatro torres, La costa, El pueblo
+  sobre el mar, Monegros el recinto, Recinto desde el aire—: el origen es
+  silencio digital. No hay nada que recuperar.
+- **Las ocho del disco de producción** —Fátima Hajji, Adrián Mills, Fabrik 150,
+  GORDO, Prospa, Monegros hora dorada, DURO pyroshow, Metropolitano—: son
+  justo las que llevarían música. En cuanto se conecte `@SIDEB404L`, el mismo
+  script las hace.
+- **El reel de la portada**, por decisión de Mario.
+
+### Aviso sobre ese sonido
+
+Es el audio de cámara de una sala, y **viene recortado de origen**: tres de las
+seis tocan los 0,0 dB. Se ha dejado tal cual —es lo que se grabó— pero si al
+oírlo suena agresivo, se normaliza en un momento. No se puede «arreglar» el
+recorte, sólo bajarlo.
+
+---
+
 ## 2026-09-15 (58) — El sonido: qué se puede hacer y qué hace falta para hacerlo
 
 Mario: «vuelve a codificar todo, pero el reel de portada que no lleve sonido, no
