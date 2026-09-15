@@ -79,7 +79,15 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Drone, producción en directo, cablecam y multicámara. Con base en España.",
+    // Una sola línea de servicios, en gris y pequeña, en vez de la frase
+    // «Drone, producción en directo, cablecam y multicámara. Con base en
+    // España.». Mario, 2026-09-15. Va en inglés igual en ES y EN, como el
+    // titular: son nombres de oficio, no una frase que traducir.
+    //
+    // Es una lista, no un texto: el separador «|» lo pone el componente entre
+    // elementos, así no queda una barra suelta al final si en una pantalla
+    // estrecha la línea parte en dos.
+    sub: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
   },
 
   brands: {

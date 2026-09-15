@@ -20,10 +20,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
 
   return (
-    // `md:pb-20`: desde `md` flota la cápsula del menú a 24 px del borde
-    // inferior, y sin este hueco tapaba la línea del copyright — comprobado.
-    // En móvil no hay cápsula, así que no hace falta.
-    <footer className="grain border-t border-ink-600 bg-ink-900 md:pb-20">
+    // Aquí hubo un `md:pb-20` para que la cápsula del menú no tapara la línea
+    // del copyright. Se quita con ella: el menú pasó a ser una columna en el
+    // lado derecho y ya no vuela sobre el borde inferior.
+    <footer className="grain border-t border-ink-600 bg-ink-900">
       <div className="shell relative z-1 pt-24 pb-12">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           {/* `lg:shrink-0`: sin esto el ítem encoge en proporción a su

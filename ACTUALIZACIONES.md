@@ -5,6 +5,69 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (51) — El menú, en columna a la derecha; el hero, con línea de servicios
+
+Corrección de lo anterior y un cambio de texto. Mario, al ver la cápsula
+horizontal en la esquina: «no, pero me refería en vertical, a la derecha de
+capture the energy». Y después: «el texto de *Drone, live production, cablecam
+and multicam. Based in Spain.* mejor que ponga, en más pequeño o gris, en una
+sola línea DRONE | LIVE PRODUCTION | CABLECAM | MULTICAM | PHOTO».
+
+### `bottom-nav.tsx` pasa a ser `side-nav.tsx`
+
+Ya no es una cápsula en el borde inferior sino una columna pegada al lado
+derecho y centrada en vertical. «A la altura de capture the energy» es,
+literalmente, el centro de la ventana: es donde el hero centra su titular. Con
+`top`/`bottom` a cero y `items-center` queda ahí sea cual sea la pantalla.
+
+Los rótulos **no** van girados: «en vertical» es la disposición, no el texto
+tumbado. Texto a 90° ya hay en la página —la regleta de la izquierda— y es
+decorativo a propósito; un menú hay que poder leerlo de un vistazo.
+
+**Aparece a partir de 1024 px, no de 768.** Medido: a 768 la columna se metía
+por encima de la frase de apoyo del hero (acababa en 633, la columna empezaba
+en 605) y del titular de la página de Trabajo. Al subir ese corte hay que
+subir el del botón de menú de la cabecera —de `md:hidden` a `lg:hidden`—, o
+entre 768 y 1023 px no habría menú ninguno. Están acoplados: **si se toca uno,
+se toca el otro**.
+
+A 1440 px la columna queda a 154 px del titular y su centro coincide al píxel
+con el de la ventana.
+
+### Se deshacen dos parches que existían por la cápsula
+
+- El timecode del hero vuelve a `bottom-8` en todos los tamaños (tenía un
+  `md:bottom-24` para no quedar debajo de la cápsula).
+- El pie pierde el `md:pb-20` que reservaba hueco para que la cápsula no
+  tapara la línea del copyright.
+
+Los dos sobraban en cuanto el menú dejó el borde inferior.
+
+### La frase del hero pasa a ser una línea de servicios
+
+`DRONE | LIVE PRODUCTION | CABLECAM | MULTICAM | PHOTO`, a 12 px y en gris
+(`smoke`), para que no le dispute el sitio al titular: es una etiqueta de qué
+hacemos, no una frase que leer. Va en inglés igual en ES y EN, como el
+titular: son nombres de oficio.
+
+En el diccionario es una **lista**, no un texto con barras dentro. El
+separador lo pone el componente, y eso resuelve dos cosas:
+
+- El lector de pantalla no oye «drone barra live production»: las barras van
+  marcadas como decoración y la lista se anuncia como lista.
+- **Las barras sólo se pintan a partir de `sm`.** Por debajo la línea parte en
+  dos y, como la barra va pegada al elemento que la sigue, la segunda línea
+  arrancaba con una barra suelta: «| CABLECAM | MULTICAM | PHOTO». Comprobado
+  a 375 px. Sin barras, las dos líneas se leen igual y no queda nada colgando.
+
+Comprobado a 375 px (dos líneas, sin desbordar), 640 (una línea con barras) y
+1440 (una línea, 530 px de ancho).
+
+**Se pierde «Con base en España»**, que era lo único que lo decía en el hero.
+Sigue estando en el pie y en la página de Nosotros.
+
+---
+
 ## 2026-09-15 (50) — Las marcas en cinta, el FAQ a Contacto, y el hero desnudo
 
 Cuatro peticiones de Mario: «un slider con las marcas también, lo del FAQ en

@@ -153,7 +153,38 @@ export function Hero({ dict }: { dict: Dictionary }) {
           ))}
         </h1>
 
-        <p className="text-lead mt-6 max-w-lg text-bone">{dict.hero.sub}</p>
+        {/* LA LÍNEA DE SERVICIOS.
+            Pequeña y en `smoke` (el gris), para que no le dispute el sitio al
+            titular: es una etiqueta de qué hacemos, no una frase que leer.
+
+            `flex-wrap` + `justify-center`: en una pantalla estrecha no caben
+            los cinco en una línea, y así parte por los huecos y queda
+            centrada, en vez de salirse.
+
+            LAS BARRAS SÓLO A PARTIR DE `sm`, y no es un capricho: por debajo
+            la línea parte en dos y, como la barra va pegada al elemento que la
+            sigue, la segunda línea arrancaba con una barra suelta —«| CABLECAM
+            | MULTICAM | PHOTO»—. Medido a 375 px. Sin barras, las dos líneas
+            se leen igual de bien y no queda el resto colgando.
+
+            Las barras son decoración, así que no las lee el lector de pantalla
+            —oiría «drone barra live production»— y la lista se anuncia como lo
+            que es. */}
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          {dict.hero.sub.map((servicio, i) => (
+            <li
+              key={servicio}
+              className="flex items-center gap-3 text-xs font-medium tracking-[0.14em] text-smoke uppercase"
+            >
+              {i > 0 && (
+                <span aria-hidden="true" className="hidden text-smoke/40 sm:inline">
+                  |
+                </span>
+              )}
+              {servicio}
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* SÓLO EL TIMECODE.
@@ -175,9 +206,10 @@ export function Hero({ dict }: { dict: Dictionary }) {
           2. `hasVideo` ya no decide nada visible; sigue haciendo falta para el
              timecode de la maqueta (cuando no hay vídeo, corre solo).
 
-          `bottom-8` en móvil y `bottom-24` a partir de `md`: desde ahí aparece
-          la cápsula del menú, que flota a 24 px del borde. */}
-      <div className="shell absolute inset-x-0 bottom-8 md:bottom-24">
+          Vuelve a `bottom-8` en todos los tamaños: la cápsula del menú, que
+          era lo que obligaba a subirlo a partir de `md`, ya no está en el
+          borde inferior sino en columna a la derecha. */}
+      <div className="shell absolute inset-x-0 bottom-8">
         <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
           {timecode(elapsed)}
         </p>

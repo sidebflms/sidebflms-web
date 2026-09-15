@@ -77,7 +77,15 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    sub: "Drone, live production, cablecam and multicam. Based in Spain.",
+    // Una sola línea de servicios, en gris y pequeña, en vez de la frase
+    // «Drone, producción en directo, cablecam y multicámara. Con base en
+    // España.». Mario, 2026-09-15. Va en inglés igual en ES y EN, como el
+    // titular: son nombres de oficio, no una frase que traducir.
+    //
+    // Es una lista, no un texto: el separador «|» lo pone el componente entre
+    // elementos, así no queda una barra suelta al final si en una pantalla
+    // estrecha la línea parte en dos.
+    sub: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
   },
 
   brands: {

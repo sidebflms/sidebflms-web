@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { LogoMark, Wordmark } from "@/components/layout/logo";
-import { BottomNav } from "@/components/layout/bottom-nav";
+import { SideNav } from "@/components/layout/side-nav";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { IconoRed, REDES } from "@/components/layout/social-icons";
 import { path, type Locale } from "@/lib/routes";
@@ -146,7 +146,11 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-expanded={open}
-          className="text-xs font-medium uppercase tracking-[0.08em] text-bone transition-colors hover:text-rust-300 md:hidden"
+          // `lg:hidden`, no `md:hidden`: el menú en columna del lado derecho no
+          // aparece hasta `lg`, porque entre 768 y 1023 px se comía la frase de
+          // apoyo del hero y el titular de Trabajo (medido). En esa franja el
+          // que manda sigue siendo este botón.
+          className="text-xs font-medium uppercase tracking-[0.08em] text-bone transition-colors hover:text-rust-300 lg:hidden"
         >
           {nav.menu}
         </button>
@@ -157,7 +161,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           role="dialog"
           aria-modal="true"
           aria-label={nav.menu}
-          className="fixed inset-0 z-50 flex flex-col bg-ink-900 md:hidden"
+          className="fixed inset-0 z-50 flex flex-col bg-ink-900 lg:hidden"
         >
           <div className="shell flex h-18 items-center justify-end">
             <button
@@ -185,7 +189,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
     </header>
 
     {/* El menú, abajo y centrado. Ver components/layout/bottom-nav.tsx. */}
-    <BottomNav links={links} />
+    <SideNav links={links} />
     </>
   );
 }
