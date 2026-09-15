@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (43) — El giro de la regleta se quita entero
+
+Mario, sobre la portada: «sigue saliendo la línea esa del drone».
+
+### Por qué esto no era el mismo fallo de antes
+
+En la entrada (41) se arregló el giro en las páginas interiores, donde era un
+fallo claro: no hay hero, así que la línea cruzaba el contenido en diagonal
+durante toda la página.
+
+**En la portada no había fallo**: allí el giro hacía exactamente lo que estaba
+diseñado —empezar horizontal sobre el hero, como aguja del reel, y bascular
+hasta anclarse—. Lo que pasa es que el resultado tampoco gustaba.
+
+Y cuando algo funciona como se diseñó y aun así molesta, el diseño es lo que
+está mal. Así que el giro se va entero, no sólo donde fallaba.
+
+### Lo que queda
+
+Un solo estado: **anclada en vertical** en el margen izquierdo, siempre, en
+todas las páginas. Sigue siendo indicador de progreso, navegación por secciones
+y rótulo de contexto — es decir, sigue sirviendo para algo, que es lo que
+justifica que exista.
+
+Y sigue moviéndose el flujo naranja que la recorre: lento, continuo y **dentro**
+de la propia línea, sin cruzarse por encima de nada. Es lo único del sitio que
+no se detiene.
+
+Comprobado en la portada a 0, 150, 400, 700, 1500 y 3000 px de scroll: vertical
+en todos.
+
+### Detalle de implementación
+
+`state.dock` se queda fijo en 1 en vez de simplificar `endpoints()` a un único
+juego de coordenadas. Es deliberado: así devolver el giro es cambiar una línea,
+si algún día se quiere recuperar para la portada. El `data-hero` que se añadió
+en (41) se retira, porque ya no lo lee nadie.
+
+---
+
 ## 2026-09-15 (42) — La portada enseña los trabajos, sin rodeos
 
 Mario, señalando la sección fijada del showpiece: «esto quítamelo, prefiero que

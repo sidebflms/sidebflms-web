@@ -113,10 +113,6 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <section
       data-reglet={dict.meta.siteName}
-      // Lo lee la regleta para saber si en esta página hay hero. Del hero
-      // depende toda su coreografía: sin él no hay nada que recorrer y la
-      // línea tiene que empezar ya anclada. Ver components/layout/reglet.tsx.
-      data-hero
       // `pt-28` es un piso, no un adorno: con 4 líneas de headline en Akira a
       // tamaño grande, el bloque de texto puede superar el alto del viewport
       // en pantallas bajas. `justify-end` + `min-h-dvh` no protege ese caso —
