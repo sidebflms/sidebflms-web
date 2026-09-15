@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { ContactCta } from "@/components/sections/contact-cta";
-import { EditorialBlock } from "@/components/sections/editorial-block";
 import { Hero } from "@/components/sections/hero";
+import { Reveal } from "@/components/motion/reveal";
 import { Manifesto } from "@/components/sections/manifesto";
-import { Showpiece } from "@/components/sections/showpiece";
+import { PortfolioMosaic } from "@/components/sections/portfolio-mosaic";
 import { ButtonLink, Arrow } from "@/components/ui/button";
 import { featuredProjects } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
@@ -27,27 +27,40 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
-  // El showpiece va primero en la lista de destacados; el resto se reparte en
-  // bloques editoriales alternados debajo.
-  const [, ...rest] = featuredProjects();
+  const destacados = featuredProjects();
 
   return (
     <main id="main">
       <Hero locale={locale} dict={dict} />
       <BrandStrip dict={dict} />
-      <Showpiece dict={dict} />
+      {/* LOS TRABAJOS, DIRECTAMENTE.
+          Hasta el 2026-09-15 aquí había dos cosas: el `Showpiece` —una sección
+          fijada que contaba UNA pieza plano a plano, con fichas de texto
+          encima del vídeo— y debajo seis `EditorialBlock`, uno por cada
+          destacado, a pantalla por proyecto.
 
-      {rest.map((project, index) => (
-        <EditorialBlock
-          key={project.slug}
-          project={project}
-          locale={locale}
-          dict={dict}
-          reverse={index % 2 === 1}
-        />
-      ))}
+          Mario las quitó las dos: «prefiero que salgan directamente los
+          trabajos en la página principal». Y tenía sentido, porque entre las
+          dos cosas había que bajar siete pantallas para ver siete trabajos.
 
-      <div className="shell -mt-6 pb-16">
+          Ahora va el mismo mosaico que la página de Trabajo, con los siete
+          destacados. Se ven todos de una vez, cada uno arranca al pasar el
+          ratón, y quien quiera el resto tiene el botón debajo.
+
+          Los dos componentes NO se han borrado: siguen en
+          `components/sections/`, sin usar, por si se quieren recuperar. */}
+      <section data-reglet={dict.featured.label} className="shell pt-24 pb-16">
+        <Reveal>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <p className="label">{dict.featured.label}</p>
+          </div>
+        </Reveal>
+        <div className="mt-8">
+          <PortfolioMosaic projects={destacados} locale={locale} dict={dict} />
+        </div>
+      </section>
+
+      <div className="shell pb-16">
         <ButtonLink href={path(locale, "portfolio")} variant="outline">
           {dict.featured.viewAll}
           <Arrow />

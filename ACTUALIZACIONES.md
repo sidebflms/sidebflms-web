@@ -5,6 +5,45 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (42) — La portada enseña los trabajos, sin rodeos
+
+Mario, señalando la sección fijada del showpiece: «esto quítamelo, prefiero que
+salgan directamente los trabajos en la página principal».
+
+### Lo que había
+
+Dos cosas, una detrás de otra:
+
+1. El **`Showpiece`**: una sección que se quedaba fija mientras se scrolleaba y
+   contaba UNA pieza plano a plano, con fichas de texto encima del vídeo
+   («Despegue · 00:00 — Sobre el público, con los lanzallamas encendidos»).
+2. Seis **`EditorialBlock`**, uno por cada destacado restante, a pantalla por
+   proyecto.
+
+Entre las dos, **había que bajar siete pantallas para ver siete trabajos**. Esa
+es la razón de fondo de la queja, aunque no se dijera así.
+
+### Lo que hay
+
+El mismo mosaico que la página de Trabajo, con los siete destacados. Salen todos
+a la vez en tres filas (2 + 3 + 2), cada uno arranca al pasar el ratón, y debajo
+sigue el botón de ver todo el trabajo.
+
+La página baja de altura de forma notable, y la portada pasa de contar una
+historia a enseñar el catálogo, que es lo que se pidió.
+
+### Los dos componentes no se han borrado
+
+`showpiece.tsx` y `editorial-block.tsx` siguen en `components/sections/`, sin
+usar. Se dejan por si se quieren recuperar: el `Showpiece` en particular es una
+pieza de trabajo considerable —scroll fijado, fichas sincronizadas con el
+vídeo— y rehacerla desde cero no sería rápido.
+
+Si se decide que no vuelven, se borran y se llevan por delante también
+`dict.featured.headline` y `dict.featured.viewProject`, que se quedan sin uso.
+
+---
+
 ## 2026-09-15 (41) — La regleta en diagonal: un fallo de verdad, y tres retratos
 
 ### El fallo
