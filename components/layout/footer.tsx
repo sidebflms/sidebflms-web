@@ -22,7 +22,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="grain border-t border-ink-600 bg-ink-900">
       <div className="shell relative z-1 pt-24 pb-12">
-        <div className="flex flex-col gap-16 lg:flex-row lg:justify-between">
+        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           {/* `lg:shrink-0`: sin esto el ítem encoge en proporción a su
               contenido, así que al bajar el cuerpo del lema la caja bajaba
               también y el lema seguía sin caber — un lazo que no converge.
@@ -34,7 +34,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 276px a 1024 y 371px a 1280. Con la escala normal (61-64px) la
                 línea más ancha, «de cada», pedía 367-382px y «NOCHE» acababa
                 partida en dos. 4.4vw cabe en todo el rango. Ver globals.css. */}
-            <p className="font-display text-display-l en-columna [--display-en-columna:4.4vw] mt-8 text-bone">
+            {/* Bajado de 4.4vw a 3vw el 2026-09-15: «esta parte de abajo es
+                muy grande». Con 4.4 el lema medía tres líneas enormes y el pie
+                se comía una pantalla entera para decir cuatro enlaces. */}
+            <p className="font-display text-display-l en-columna [--display-en-columna:3vw] mt-6 text-bone">
               {dict.footer.tagline.map((line) => (
                 <span key={line} className="block">
                   {line}
@@ -44,32 +47,11 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
 
           <div className="grid gap-12 sm:grid-cols-3 lg:gap-20">
-            <div>
-              <p className="label">{dict.footer.social}</p>
-              <ul className="mt-4 space-y-2">
-                {SOCIAL.map((item) => (
-                  <li key={item.key}>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="text-bone transition-colors hover:text-rust-300"
-                    >
-                      {dict.contact[item.key]}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a
-                    href={`mailto:${dict.contact.email}`}
-                    className="text-bone transition-colors hover:text-rust-300"
-                  >
-                    {dict.contact.email}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
+            {/* ORDEN: menú, redes, legal.
+                Estaba al revés —redes primero, legal al final— y no tenía
+                sentido: quien baja al pie suele venir buscando una página del
+                sitio, no el Instagram. Lo legal se queda el último porque es
+                lo que menos se busca y lo que la ley sólo pide que esté. */}
             <div>
               <p className="label">{dict.nav.menu}</p>
               <ul className="mt-4 space-y-2">
@@ -114,6 +96,32 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </div>
 
             <div>
+              <p className="label">{dict.footer.social}</p>
+              <ul className="mt-4 space-y-2">
+                {SOCIAL.map((item) => (
+                  <li key={item.key}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="text-bone transition-colors hover:text-rust-300"
+                    >
+                      {dict.contact[item.key]}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href={`mailto:${dict.contact.email}`}
+                    className="text-bone transition-colors hover:text-rust-300"
+                  >
+                    {dict.contact.email}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
               <p className="label">{dict.footer.legalLinks}</p>
               <ul className="mt-4 space-y-2">
                 <li>
@@ -138,7 +146,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         {/* Cierre de la regleta: la línea de tiempo termina aquí. */}
-        <div className="mt-24 flex flex-col gap-4 border-t border-ink-600 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-ink-600 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="label">
             © {year} SIDEBFLMS · {dict.footer.rights}
           </p>

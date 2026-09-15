@@ -5,6 +5,30 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (48) — El pie, más corto y reordenado
+
+«Esta parte de abajo es muy grande, baja el tamaño de "Side B of every night" y
+lo de la derecha reordénalo.»
+
+### El lema
+
+De `4.4vw` a `3vw`: a 1440 px pasa de ~63 px a **43**. Con el tamaño anterior el
+lema ocupaba tres líneas enormes y el pie se comía una pantalla entera para
+decir cuatro enlaces. Se recorta además el aire: el hueco entre el lema y las
+columnas baja de 16 a 10, y el que separa la línea de copyright de 24 a 14.
+
+**El pie entero queda en 408 px de alto.**
+
+### El orden de las columnas
+
+Pasa de **Síguenos · Menú · Legal** a **Menú · Síguenos · Legal**.
+
+No es un capricho de simetría: quien baja al pie suele venir buscando una página
+del sitio, no el Instagram. Y lo legal se queda el último porque es lo que menos
+se busca y lo que la ley sólo exige que esté.
+
+---
+
 ## 2026-09-15 (47) — Cabecera nueva, titular más pequeño y tres cintas en la portada
 
 ### La cabecera: casete a la izquierda, logotipo al centro, redes a la derecha
