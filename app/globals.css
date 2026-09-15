@@ -200,9 +200,14 @@
      4.6vw deja ~13-15% de margen en todo el rango 390-1920px (verificado en
      navegador, no solo calculado): a 390px ≈18.4px, a 1440px ≈66px, a
      1920px ≈88px, ninguno parte la frase en dos líneas. */
+  /* Bajado de 4.6vw / 6rem a 3.9vw / 5rem el 2026-09-15: «las letras de
+     capture un poco más pequeñas». Sigue siendo el texto más grande del sitio
+     y sigue sin partir «CAPTURE THE ENERGY.» en dos líneas en ningún ancho
+     —que era la razón de ser del 4.6vw—, pero deja respirar al vídeo del hero,
+     que antes quedaba tapado por el titular de lado a lado. */
   .text-display-xl {
-    font-size: clamp(1rem, 4.6vw, 6rem);
-    line-height: 0.88;
+    font-size: clamp(1rem, 3.9vw, 5rem);
+    line-height: 0.9;
   }
   .text-display-l {
     font-size: clamp(1.75rem, 6vw, 4rem);
@@ -356,5 +361,57 @@
   /* El contenido, visible desde el primer frame. */
   [data-route-fade] {
     opacity: 1 !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   LAS CINTAS DE LA PORTADA
+
+   Se desplaza exactamente el 50 %: la lista se pinta dos veces, así que al
+   llegar a la mitad la segunda copia está justo donde arrancó la primera y el
+   reinicio no se ve. Cualquier otro valor da un tirón.
+
+   `will-change: transform` para que el navegador la suba a su propia capa: sin
+   esto, una cinta ancha con vídeos dentro repinta en cada fotograma.
+
+   La duración NO está aquí: la pone el componente según cuántas piezas tenga
+   cada fila, para que las tres se muevan a la misma velocidad aparente.
+   -------------------------------------------------------------------------- */
+@keyframes cintaIzquierda {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes cintaDerecha {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.cinta {
+  /* Se le quita la barra de desplazamiento: la cinta se mueve sola y la barra
+     sólo aparecería como un resto feo debajo. Sigue siendo desplazable. */
+  scrollbar-width: none;
+}
+.cinta::-webkit-scrollbar {
+  display: none;
+}
+
+.cinta-pista {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* Al pasar el ratón se para, para poder leer un título o pinchar una pieza sin
+   perseguirla. */
+.cinta:hover .cinta-pista {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Ver la nota del componente: la cinta deja de deslizarse sola, pero la fila
+     sigue siendo desplazable a mano, así que no se pierde contenido. */
+  .cinta-pista {
+    animation: none;
   }
 }

@@ -5,6 +5,83 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (47) — Cabecera nueva, titular más pequeño y tres cintas en la portada
+
+### La cabecera: casete a la izquierda, logotipo al centro, redes a la derecha
+
+El logotipo **deja de ser texto**. Hasta ahora era «SIDE» + una B en `rust-500`
++ «FLMS» compuesto con la tipografía del sitio: se parecía, pero no era el
+logotipo. El de verdad tiene su propio dibujo de letra, su bajada y el naranja
+en las letras con la B en blanco —al revés que la imitación—. Ahora es
+`public/logo/wordmark.png`, sacado de `PNG-15.png` del manual de marca.
+
+(Mario pasó el logotipo por el chat, pero los adjuntos no llegan como fichero.
+Se identificó cuál era de las nueve del manual por una pista: la suya se leía
+«SIDE FLMS» con un hueco sobre fondo blanco, o sea que la B es BLANCA y
+desaparecía contra el fondo. Sólo `PNG-15` cumple eso.)
+
+Y tres iconos de redes arriba a la derecha, en SVG en línea para que hereden
+`currentColor` y cambien de color con el `hover` sin duplicar ficheros. La lista
+de URLs se movió a `components/layout/social-icons.tsx`: estaba dentro del pie,
+y con las redes también en la cabecera habría dos listas que mantener.
+
+**El logotipo se centra sólo a partir de 1536 px, y esto no es una rebaja
+gratuita.** Se midió: a 1280 el menú arranca en el píxel 641 —o sea, justo en el
+centro—, así que cualquier cosa centrada se le monta encima; a 1024, igual.
+Encoger el logotipo no lo arregla: el problema es que a la derecha hay cuatro
+enlaces, tres iconos y el idioma, y eso ocupa media pantalla. Por debajo de
+1536, el logotipo vuelve al lado del casete. Comprobado a 1280 (sin solape) y a
+1600 (centrado, sin solape).
+
+### «Capture the energy», más pequeño
+
+`text-display-xl` baja de `4.6vw / 6rem` a `3.9vw / 5rem`. A 1440 px pasa de
+~66 px a 56. Sigue sin partirse en dos líneas en ningún ancho —que era la razón
+del 4.6vw— y deja respirar al vídeo, que antes quedaba tapado de lado a lado.
+
+### Tres cintas en la portada, una por disciplina
+
+El mosaico de doce piezas se sustituye por **tres cintas que se deslizan
+solas**: drone arriba (hacia la derecha), aftermovies en medio (hacia la
+izquierda) y multicámara abajo (hacia la derecha). Sólo en la portada; la página
+de Trabajo mantiene su mosaico quieto.
+
+**El bucle**: cada fila pinta su lista dos veces y se desplaza exactamente el
+50 % de su ancho. Al acabar, la segunda copia está donde empezó la primera, así
+que el reinicio no se ve. Cualquier otro valor da un tirón. La copia lleva
+`aria-hidden`: para un lector de pantalla los trabajos están una vez, no dos.
+
+**La velocidad depende del número de piezas**, no es un tiempo fijo. Con uno
+fijo, la fila de multicámara —tres piezas— iría disparada y la de drone —doce—
+parecería parada, porque recorren distancias muy distintas. Sale: drone 84 s,
+aftermovie 42 s, multicámara 21 s, o sea la misma velocidad aparente en las tres.
+
+**Sin `shell`**: una cinta que empieza y acaba en el margen no se lee como una
+cinta sino como una fila cortada; tiene que salirse por los dos lados.
+
+**Reproducción.** Mario pidió que se reproduzcan todas a la vez y así es: todas
+arrancan. Lo que hace el `IntersectionObserver` es pausar las que están fuera de
+la ventana, incluida la copia duplicada —que es la mitad del total—. El efecto a
+la vista es el pedido; lo que se evita es tener 43 vídeos decodificando a la vez
+en un portátil. Medido: de 43 en el DOM, 10 activos con la sección a la vista.
+
+**«Reducir movimiento» SÍ se respeta aquí**: las cintas no se deslizan solas,
+pero la fila sigue siendo desplazable a mano, así que no se pierde contenido.
+Consecuencia práctica: **en un Mac con esa preferencia activada la sección se ve
+quieta.** No está rota.
+
+Al pasar el ratón, la cinta se para: si no, habría que perseguir un título para
+poder leerlo o pincharlo.
+
+### Código que se va
+
+`homeProjects()` en `content/projects.ts`. Ordenaba las piezas por rondas de
+categoría para la portada, y la portada ya no la usa: ahora cada cinta filtra su
+categoría. Se borra en vez de dejarla, porque su comentario decía «la selección
+de la portada» y eso ya no es verdad.
+
+---
+
 ## 2026-09-15 (46) — La portada se aprieta: marcas a Trabajo, dos bloques a la mitad
 
 ### La tira de marcas se va a Trabajo

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { LogoMark, Wordmark } from "@/components/layout/logo";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { IconoRed, REDES } from "@/components/layout/social-icons";
 import { path, type Locale } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -78,15 +79,53 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           : "border-b border-transparent"
       )}
     >
+      {/* ── IZQUIERDA: EL CASETE ──────────────────────────────────────────
+          El logotipo ya no va aquí pegado al casete: sube al centro. Así que
+          este enlace se queda sólo con el icono, y el nombre accesible lo
+          aporta `aria-label` — sin él, un enlace que sólo contiene una imagen
+          decorativa se anuncia vacío. */}
       <Link
         href={path(locale, "home")}
+        aria-label="SIDEBFLMS"
         className="flex items-center gap-3 text-bone transition-colors hover:text-rust-300"
       >
-        <LogoMark className="h-5 w-auto" />
-        <Wordmark className="text-xs font-medium tracking-[0.14em]" />
+        <LogoMark className="h-6 w-auto" />
+        {/* El logotipo acompaña al casete SÓLO cuando no cabe centrado.
+            Ver la nota del bloque centrado, justo debajo. */}
+        <Wordmark className="block h-5 2xl:hidden" />
       </Link>
 
-      <div className="flex items-center gap-8">
+      {/* ── CENTRO: EL LOGOTIPO, Y SÓLO SI CABE ───────────────────────────
+          Centrado respecto a la VENTANA, no respecto a lo que le rodea: va en
+          posición absoluta. Si fuera un elemento más del flex quedaría centrado
+          entre el casete y el menú —que ocupan anchos distintos— y por tanto
+          descentrado en pantalla, que es justo lo que se nota.
+
+          ── POR QUÉ `2xl:` Y NO SIEMPRE ─────────────────────────────────
+          Porque por debajo de 1536 px NO CABE, y se comprobó midiendo: a
+          1280 el menú arranca en el píxel 641 —o sea, exactamente en el
+          centro— así que cualquier cosa centrada se le monta encima. A 1024
+          igual. No es cuestión de encoger el logotipo: el problema es que a la
+          derecha hay cuatro enlaces, tres iconos y el idioma, y eso ocupa
+          media pantalla.
+
+          Así que a partir de 1536 va centrado, como se pidió, y por debajo
+          vuelve al lado del casete —donde estaba— en vez de solaparse. Se
+          prefiere eso a quitar los iconos de redes, que se pidieron aparte.
+
+          `pointer-events-none` en el contenedor y `auto` en el enlace: la capa
+          invisible no puede robarle el ratón al menú que hay debajo. */}
+      <div className="pointer-events-none absolute inset-x-0 hidden justify-center 2xl:flex">
+        <Link
+          href={path(locale, "home")}
+          aria-label="SIDEBFLMS"
+          className="pointer-events-auto h-6 transition-opacity hover:opacity-80"
+        >
+          <Wordmark className="block h-full" />
+        </Link>
+      </div>
+
+      <div className="flex items-center gap-6">
         <nav className="hidden items-center gap-8 md:flex">
           {links.map((link) => {
             const active = pathname.startsWith(link.href);
@@ -105,6 +144,25 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             );
           })}
         </nav>
+
+        {/* ── ARRIBA A LA DERECHA: LAS REDES ─────────────────────────────
+            Se ocultan por debajo de `lg`: en el móvil la cabecera ya tiene
+            logotipo, casete, idioma y el botón de menú, y tres iconos más la
+            dejan sin aire. En el pie siguen estando para todo el mundo. */}
+        <div className="hidden items-center gap-4 lg:flex">
+          {REDES.map((red) => (
+            <a
+              key={red.key}
+              href={red.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={red.nombre}
+              className="text-bone transition-colors hover:text-rust-300"
+            >
+              <IconoRed red={red.key} className="h-4 w-4" />
+            </a>
+          ))}
+        </div>
 
         <LocaleSwitcher locale={locale} label={nav.languageLabel} />
 

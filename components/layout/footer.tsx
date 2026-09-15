@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LogoMark } from "@/components/layout/logo";
+import { REDES as SOCIAL } from "@/components/layout/social-icons";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 
@@ -14,11 +15,6 @@ import { path, type Locale } from "@/lib/routes";
  * Vimeo se retiró el 2026-09-10 y entran LinkedIn y YouTube: quien contrata
  * producción para una marca o un festival está en LinkedIn, no en Vimeo.
  */
-const SOCIAL = [
-  { key: "instagram", href: "https://instagram.com/sidebflms" },
-  { key: "linkedin", href: "https://www.linkedin.com/company/sidebflms" },
-  { key: "youtube", href: "https://www.youtube.com/@sidebflms" },
-] as const;
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
