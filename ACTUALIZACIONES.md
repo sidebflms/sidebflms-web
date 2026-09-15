@@ -5,6 +5,26 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (56) — En la barra, a la izquierda, sólo el casete
+
+Ajuste de lo anterior. Al llevarse el menú el centro, el logotipo completo se
+había pegado al casete para no perderlo. Mario: «en la izquierda deja sólo el
+casete, el otro no hace falta que le pongas».
+
+Así que con el menú puesto —o sea, en todas las páginas y en la portada en
+cuanto se baja del hero— la barra queda: **casete** a la izquierda, **menú**
+centrado, **redes e idioma** a la derecha. El logotipo completo sólo aparece,
+centrado, en la primera pantalla de la portada.
+
+No se pierde nada: el casete es el mismo logotipo de marca y sigue siendo el
+enlace a la portada.
+
+Comprobado a 1024 px: un solo elemento a la izquierda (72-108), menú de 309 a
+700 con su centro clavado en el de la ventana, y el logotipo centrado
+apareciendo y desapareciendo al subir y bajar en la portada.
+
+---
+
 ## 2026-09-15 (55) — Un solo menú: centrado en la barra, igual en todas las páginas
 
 Mario: «sí, pero que esté centrado y en las otras páginas igual, que salga en

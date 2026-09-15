@@ -117,7 +117,13 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           : "border-b border-transparent"
       )}
     >
-      {/* ── IZQUIERDA: EL CASETE, Y EL LOGOTIPO SI EL CENTRO ESTÁ OCUPADO ──
+      {/* ── IZQUIERDA: EL CASETE, Y NADA MÁS ─────────────────────────────
+          Estuvo un rato acompañado del logotipo cuando el menú se llevaba el
+          centro. Mario: «en la izquierda deja sólo el casete, el otro no hace
+          falta que le pongas». O sea que, con el menú puesto, el logotipo
+          completo no está en la barra: el casete es la marca ahí, y sigue
+          siendo el enlace a la portada.
+
           `aria-label` en el enlace: sin él, un enlace que sólo contiene una
           imagen decorativa se anuncia vacío. */}
       <Link
@@ -126,7 +132,6 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         className="flex items-center gap-3 text-bone transition-colors hover:text-rust-300"
       >
         <LogoMark className="h-6 w-auto" />
-        {menuEnBarra && <Wordmark className="hidden h-5 w-auto lg:block" />}
       </Link>
 
       {/* ── EL LOGOTIPO ───────────────────────────────────────────────────
@@ -138,9 +143,10 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             del flex quedaría centrado entre el casete y los iconos —que ocupan
             anchos distintos— y por tanto descentrado en pantalla, que es justo
             lo que se nota.
-          - PEGADO AL CASETE, a la izquierda, cuando el centro lo ocupa el
-            menú. Es eso o quedarse sin logotipo: a 1024 px el menú mide 367 px
-            y el centro no da para los dos (medido).
+          - FUERA DE LA BARRA cuando el centro lo ocupa el menú: a 1024 px el
+            menú mide 367 px y el centro no da para los dos. Llegó a probarse
+            pegado al casete, pero Mario lo descartó — a la izquierda se queda
+            sólo el casete, que ya es la marca y el enlace a la portada.
 
           `pointer-events-none` en el contenedor y `auto` en el enlace: la capa
           invisible, que cruza toda la barra, no puede robarle el ratón a lo
