@@ -180,6 +180,34 @@ export const FOTO_AMPLIACION: string | null = "/media/equipo/monegros.jpg";
  * Así no hay que acordarse de nada: el día que entre la última foto, los
  * retratos aparecen solos.
  */
+/**
+ * QUÉ SE PUBLICA DE CADA PERSONA.
+ *
+ * Estas dos funciones son el filtro entre lo que hay apuntado y lo que ve un
+ * visitante, y existen por una regla que no admite matices: **no se publica
+ * una cara bajo un nombre que no es el suyo, ni un cargo que nadie ha
+ * confirmado**. Las dos cosas se estaban publicando con un rótulo de
+ * «Ejemplo» al lado, y un rótulo no arregla que la foto sea de otro.
+ *
+ * Lo que había en `EQUIPO` no se toca: sigue apuntado, con su marca, para que
+ * el día que llegue la foto buena o se confirme el cargo aparezca solo. Lo que
+ * cambia es que hasta entonces no sale.
+ *
+ * PENDIENTE (equipo): faltan la foto de Galoguin y la de Rubén —ahora mismo
+ * comparten la de otra persona— y la confirmación de los once cargos. Mientras
+ * tanto, esas dos fichas salen sin retrato y ninguna lleva cargo.
+ */
+export function fotoPublicable(m: Miembro): string | null {
+  return m.fotoEsEjemplo ? null : m.foto;
+}
+
+export function cargoPublicable(m: Miembro): { es: string; en: string } | null {
+  return m.roleEsEjemplo ? null : m.role;
+}
+
+/** Cuántas fichas se quedan sin retrato. Lo usa la página para avisar al equipo. */
+export const RETRATOS_PENDIENTES = EQUIPO.filter((m) => fotoPublicable(m) === null).length;
+
 export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== null);
 
 /**
@@ -267,3 +295,25 @@ export const FOTOS_TRABAJANDO: FotoTrabajando[] = [
     },
   },
 ];
+
+/**
+ * LA SELECCIÓN EDITORIAL DE «EN FAENA».
+ *
+ * `FOTOS_TRABAJANDO` tiene siete y se pintaban las siete en una rejilla. Siete
+ * fotos seguidas del mismo equipo en el mismo tipo de sitio dejan de leerse
+ * como una selección y pasan a leerse como un volcado de carpeta: la primera
+ * dice algo y la séptima ya no.
+ *
+ * Estas cuatro son las que cuentan cosas distintas —cámara, dron en mano, el
+ * dron de cine en el suelo y el equipo en grupo— y son las que se publican.
+ * Las otras tres siguen en la lista de arriba y se usan en otros sitios del
+ * sitio; no se han borrado.
+ */
+export const FOTOS_EDITORIAL: FotoTrabajando[] = [
+  "/media/equipo/trabajando/camara-grada.jpg",
+  "/media/equipo/trabajando/emisora-humo.jpg",
+  "/media/equipo/trabajando/piloto-inspire.jpg",
+  "/media/equipo/trabajando/equipo-tres.jpg",
+]
+  .map((src) => FOTOS_TRABAJANDO.find((f) => f.src === src))
+  .filter((f): f is FotoTrabajando => f !== undefined);

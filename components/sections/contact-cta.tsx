@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { Arrow, ButtonLink } from "@/components/ui/button";
@@ -9,11 +11,18 @@ export function ContactCta({
   dict,
   headline,
   intro,
+  secondary,
 }: {
   locale: Locale;
   dict: Dictionary;
   headline: readonly string[];
   intro: string;
+  /** Segundo camino, opcional. Lo usa Nosotros para ofrecer «trabaja con
+      nosotros» sin quitarle protagonismo al botón de presupuesto: quien llega
+      al final de esa página puede querer dos cosas distintas y sólo se le
+      ofrecía una. Va como enlace y no como segundo botón, para que la jerarquía
+      entre los dos se lea sola. */
+  secondary?: { href: string; label: string };
 }) {
   return (
     // Más corto, por el mismo motivo que el manifiesto: el titular a
@@ -37,12 +46,22 @@ export function ContactCta({
         </Reveal>
 
         <Reveal>
-          <Magnetic>
-            <ButtonLink href={path(locale, "contact")} variant="primary">
-              {dict.services.cta}
-              <Arrow />
-            </ButtonLink>
-          </Magnetic>
+          <div className="flex flex-col items-start gap-4 lg:items-end">
+            <Magnetic>
+              <ButtonLink href={path(locale, "contact")} variant="primary">
+                {dict.services.cta}
+                <Arrow />
+              </ButtonLink>
+            </Magnetic>
+            {secondary && (
+              <Link
+                href={secondary.href}
+                className="label underline underline-offset-4 transition-colors hover:text-bone"
+              >
+                {secondary.label}
+              </Link>
+            )}
+          </div>
         </Reveal>
       </div>
     </section>

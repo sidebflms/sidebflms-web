@@ -25,10 +25,13 @@
 export const FOTO_ETAPA: Record<string, string | null> = {
   // 01 Preproducción — reconociendo el recinto, con la emisora en la mano.
   "01": "/media/equipo/trabajando/emisora-recinto.jpg",
-  // 02 Rodaje en directo — cámara al hombro en la grada.
+  // 02 Rodaje — cámara al hombro en la grada.
   "02": "/media/equipo/trabajando/camara-grada.jpg",
-  // 03 Cobertura aérea — piloto con el Inspire posado.
-  "03": "/media/equipo/trabajando/piloto-inspire.jpg",
-  // 04 Postproducción — PENDIENTE: hace falta una foto de alguien montando.
-  "04": null,
+  // 03 Postproducción y entrega — PENDIENTE: hace falta una foto de alguien
+  // montando. Mientras sea `null`, esa fase se pinta a todo el ancho.
+  "03": null,
+  // La antigua etapa 04 ya no existe: el proceso pasó de cuatro fases a tres
+  // el 2026-09-15, con la cobertura aérea integrada dentro del rodaje. La foto
+  // del piloto con el Inspire, que ilustraba la etapa aérea, no se pierde:
+  // sigue en FOTOS_TRABAJANDO (content/team.ts) y en la página de drone.
 };

@@ -5,6 +5,185 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (60) — Revisión de Servicios, Nosotros, Contacto y Trabaja con nosotros
+
+Repaso completo de las cuatro páginas: jerarquía tipográfica, contraste,
+formularios y contenido. **Está en la rama `mejoras-cuatro-paginas`, sin
+desplegar.**
+
+### Lo que se toca en el sistema, y afecta a todo el sitio
+
+**Tres tamaños de titular, uno por nivel** (`app/globals.css`): `text-page-title`
+(32→56 px), `text-section-title` (22→30 px) y `text-card-title` (17→20 px).
+Antes había dos clases repartidas a ojo y un título de tarjeta pedía el mismo
+cuerpo que el titular de una página.
+
+Eso es lo que arregla **«MULTICÁMARA» partido como «MULTICÁMA / RA»**: no era
+la palabra, era el cuerpo. `.font-display` lleva `overflow-wrap: anywhere` como
+red de seguridad, y con 36 px esa palabra no entra en una tarjeta de tres
+columnas, así que la red saltaba. Con 20 px entra —190 px de palabra en una
+tarjeta que a 390 px deja 294— y en las tarjetas la red pasa a `break-word`,
+que no afecta al ancho mínimo del contenedor.
+
+**Un color nuevo, `ink-500` (#726c66)**, para bordes de control. El borde de
+los campos era `ink-600`: **1,2:1** contra el fondo, cuando un componente de
+interfaz necesita 3:1. El nuevo da 3,21:1 sobre `ink-800`, calculado. `ink-600`
+se queda para hairlines decorativos.
+
+**Aviso para quien toque los titulares**: la regla `.en-columna` —la que ajusta
+el titular de Contacto a su columna— apuntaba sólo a `.text-display-l`. Al
+renombrar la clase, «CUÉNTANOS» volvió a partirse como «CUÉNTANO / S». Ahora
+cubre las dos clases. Si aparece un tercer titular en columna estrecha, hay que
+añadirlo ahí.
+
+### Servicios
+
+El titular anunciaba las cuatro etapas del proceso, que es cómo trabajamos, no
+qué se puede contratar. Ahora la página responde en el orden en que se
+pregunta:
+
+1. **Los tres que más se contratan** —drone, aftermovie, directo y
+   multicámara— con **imagen real del trabajo** (sale de `content/projects.ts`)
+   y enlace a esa ficha. El de drone enlaza además a la flota.
+2. **Un bloque que explica la diferencia entre realización en directo y
+   grabación multicámara**, que se usan como sinónimos y se contratan como
+   cosas distintas.
+3. **Las otras cinco capacidades** —cablecam, fotografía, publicidad, VJ y
+   podcast— en lista compacta. **No se ha quitado ninguna**: lo que cambia es
+   que ya no compiten de igual a igual con las tres de arriba, y que no hay una
+   fila de nueve tarjetas sólo de texto.
+4. **El proceso, en tres fases y no en cuatro.** La cobertura aérea era la
+   etapa 03 en fila con las demás, y así leído parecía que todos los encargos
+   llevan drone. Ahora va dentro del rodaje, «cuando el plano lo pide».
+
+La llamada final pasa de «qué evento tienes» a «qué proyecto tienes»: dejaba
+fuera la mitad de lo que se ofrece en la propia página.
+
+### Nosotros
+
+**Lo que ya no se publica.** Dos fichas compartían la foto de otra persona y
+los once cargos están sin confirmar; salían con un rótulo de «Ejemplo» al lado.
+Un rótulo no arregla que la cara sea de otro. Ahora **no salen**: esas dos
+fichas se quedan sin retrato —con la inicial, para no romper la rejilla— y
+**nadie lleva cargo** hasta que se confirmen. Lo que falta sigue apuntado en
+`content/team.ts` y aparece solo el día que se rellene. En desarrollo se ve un
+aviso en naranja con lo que queda; en producción no.
+
+**Las cifras, separadas por periodo.** Cuatro están contadas del gestor de
+proyectos desde el 1 de enero de 2026 y se dice a la vista. Las horas de vuelo
+son una **estimación acumulada** y van aparte, marcadas como tales: juntas bajo
+el mismo rótulo, una estimación acumulada pasaba por resultado del año.
+
+**La entradilla, reescrita.** Decía «no una agencia con una bolsa de freelance
+distinta cada fin de semana». El argumento —la continuidad del equipo— era
+bueno, pero lo decía menospreciando a media profesión, incluida gente con la
+que se trabaja. Ahora dice lo mismo en positivo.
+
+**Menos repetición y menos galería.** Se quita el bloque «Cómo trabajamos», que
+repetía palabra por palabra el manifiesto de la portada. Y «En faena» pasa de
+siete fotos a **cuatro elegidas**: siete seguidas del mismo equipo en el mismo
+tipo de sitio se leen como un volcado de carpeta.
+
+Cierra con la llamada de siempre más un **enlace secundario a «trabaja con
+nosotros»**: quien llega al final de esta página puede querer dos cosas y sólo
+se le ofrecía una.
+
+### Contacto
+
+- Titular y formulario cubren **cualquier proyecto audiovisual**, no sólo
+  eventos. «Nombre del evento» pasa a «Nombre del proyecto».
+- **LinkedIn y YouTube estaban dentro del mismo `<li>`**, sin nada entre ellos:
+  se leían pegados y un lector de pantalla los anunciaba como un solo ítem.
+  Ahora salen de `REDES`, la misma lista que usan la cabecera y el pie.
+- **Lo opcional se dice con la palabra «opcional»**, no con un punto suelto que
+  no significa nada para quien no conoce la convención —ni para un lector de
+  pantalla.
+- **Obligatorio: nombre, email, tipo de proyecto y una descripción breve.** El
+  nombre del proyecto deja de serlo (mucha gente escribe antes de tenerlo) y el
+  mensaje pasa a serlo (sin una línea de contexto hay que responder
+  preguntando).
+- **Aforo y escenarios sólo aparecen** si lo que se pide es cobertura de un
+  evento. En un anuncio no significan nada.
+- **La fecha, en tres estados**: ya la tengo, aproximada, o por definir. Antes
+  quien no tenía fecha dejaba el campo vacío, y un hueco no distingue entre «no
+  lo sé» y «se me pasó».
+- **En móvil el formulario va antes** que el bloque de vías directas: el orden
+  del DOM es el de móvil y la rejilla lo recoloca a partir de `lg`.
+- El presupuesto sigue opcional y con «Todavía no lo sé».
+- **El FAQ, revisado** para que diga lo mismo que Servicios (incluida la
+  diferencia entre directo y multicámara, y que el drone no entra siempre). Se
+  reescribe «para que no perdamos el tiempo ninguno de los dos». Sólo se
+  prometen los dos plazos confirmados: entrega en 24-48 h y respuesta en 24
+  horas laborables.
+
+### Trabaja con nosotros
+
+- **Decía «Buscamos gente que sepa hacerlo»**, que se lee como convocatoria
+  abierta. No la hay. Ahora la página dice que no hay convocatorias y que esto
+  es una candidatura espontánea. No se promete contratación, ni plazo de
+  respuesta, ni condiciones.
+- **Se distingue del formulario comercial** con una línea arriba del todo y el
+  camino al otro: las dos páginas son un titular y un formulario oscuro, y
+  quien llega de un enlace puede tardar en darse cuenta de en cuál está.
+- **De trece campos a siete.** Fuera edad, nacionalidad, teléfono, idiomas,
+  carnet de conducir, en qué eventos te gustaría trabajar e Instagram. Nada de
+  eso hace falta para decidir si alguien encaja en un rodaje, y cuanto menos
+  dato personal entra, menos hay que justificar, conservar y borrar. Queda
+  nombre, correo, especialidad, base, disponibilidad, portfolio y mensaje.
+- **El portfolio se pide como enlace** y no hay subida de ficheros, que era ya
+  el caso y ahora está razonado en el código.
+- Se explica **qué ayuda a valorar una candidatura** —preferencias nuestras
+  sobre cómo leerla, no requisitos— y se usan las **mismas fotos de rodaje y el
+  mismo recorte** que Nosotros.
+- **La política de privacidad se ha actualizado** en los dos idiomas: enumeraba
+  los campos viejos, incluidos los que ya no se piden.
+
+### Formularios: piezas compartidas
+
+Los dos tenían su copia de los mismos campos, con diferencias que no eran
+decisiones. Ahora salen de `components/ui/campos.tsx`: etiquetas, pistas,
+errores, casillas con 44 px de alto táctil, resumen de errores arriba —en un
+formulario largo, el primer campo mal puede quedar fuera de pantalla— y el
+botón primario en `brand-600`, que es el que cumple AA con `bone` encima.
+
+### Qué se ha comprobado
+
+- **390, 768, 1280 y 1440 px** en las cuatro páginas: sin desbordamiento
+  horizontal y **sin una sola palabra partida** (comprobado con un recorrido
+  por todos los nodos de texto midiendo si alguna palabra ocupa dos líneas).
+- **Contraste medido en el navegador**, resolviendo los colores con un canvas
+  porque Tailwind emite `oklab` en cuanto hay transparencia y una lectura
+  ingenua da números falsos: **cero textos por debajo del mínimo** en las
+  cuatro páginas.
+- **Campos condicionales**: aforo y escenarios aparecen con «aftermovie» y no
+  con «publicidad»; los tres modos de fecha enseñan el control que toca.
+- **Errores y envío**: formulario vacío → resumen arriba y error en cada campo;
+  formulario relleno → el fallo de envío se enseña como tal. **No se ha enviado
+  ningún mensaje real**: en desarrollo no hay SMTP, que es justo lo que permite
+  probar la rama de error.
+- **Teclado**: foco visible en `rust-300`, 2 px y 2 px de separación,
+  comprobado tabulando de verdad; los 18 elementos del formulario tienen 44 px
+  o más de alto táctil.
+- `npx tsc --noEmit`, `npx eslint` y `npm run build`, en verde.
+- Portada, inglés y el resto de páginas, sin regresiones.
+
+### Lo que sigue pendiente, y no lo puede resolver el código
+
+1. **Las fotos de Galoguin y Rubén** y **los once cargos**. Hasta entonces, dos
+   fichas sin retrato y ninguna con cargo.
+2. **Una foto de alguien montando**, para la tercera fase del proceso.
+3. **Dónde deben llegar las candidaturas.** Hoy van al mismo buzón que las
+   consultas comerciales (`contact@sidebflms.com`) por el SMTP local. Si se
+   quiere una bandeja aparte, es `CORREO_DESTINO` en `lib/correo.ts`, pero eso
+   lo decide quien gestiona el buzón.
+4. **Las horas de vuelo siguen siendo una estimación.** Se publican marcadas
+   como tal; si se prefiere enseñar sólo lo contado, es quitar una entrada de
+   `content/cifras.ts`.
+5. **No hay vacantes reales que publicar.** Si alguna vez las hay, la página
+   tiene sitio para ellas; ahora mismo no se inventa ninguna.
+
+---
+
 ## 2026-09-15 (59) — Seis piezas ya suenan. Y una corrección a la entrada anterior
 
 ### Lo que decía la entrada 58 estaba mal

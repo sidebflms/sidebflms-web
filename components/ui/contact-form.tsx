@@ -1,128 +1,226 @@
 "use client";
 
-import { useActionState } from "react";
 import Link from "next/link";
+import { useActionState, useState } from "react";
 
 import { submitContact, type ContactState } from "@/app/[locale]/contact/actions";
-import type { Dictionary } from "@/lib/dictionaries";
+import { Acuse, BotonEnviar, Campo, Opciones, ResumenError, claseCampo } from "@/components/ui/campos";
 import { CATEGORIES } from "@/content/projects";
+import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
+/**
+ * FORMULARIO DE CONTACTO.
+ *
+ * ── LO QUE SE PIDE, Y LO QUE SE EXIGE ────────────────────────────────────
+ * Obligatorio: nombre, email, tipo de proyecto y una descripción breve. Con
+ * eso se puede responder de verdad. Todo lo demás es opcional y lo dice.
+ *
+ * El nombre del proyecto DEJÓ de ser obligatorio: mucha gente escribe antes de
+ * tener nombre, y exigirlo era un muro en el tercer campo.
+ *
+ * ── CAMPOS QUE APARECEN Y DESAPARECEN ────────────────────────────────────
+ * Aforo y número de escenarios sólo salen si lo que se pide es cobertura de un
+ * evento. En un anuncio o una pieza de marca no significan nada, y un
+ * formulario que pregunta cosas que no vienen a cuento se abandona antes.
+ *
+ * La fecha tiene tres estados en vez de un selector de día: «ya la tengo»,
+ * «aproximada» y «por definir». Antes, quien no tenía fecha cerrada dejaba el
+ * campo vacío, y un hueco no distingue entre «no lo sé» y «se me pasó».
+ */
+
 const initialState: ContactState = { status: "idle" };
 
-const fieldClasses =
-  "w-full border-b border-ink-600 bg-transparent py-3 text-bone placeholder:text-ink-600 focus:border-rust-300 focus:outline-none transition-colors";
+/**
+ * Qué tipos de proyecto tienen aforo y escenarios.
+ *
+ * Los de cobertura de evento. `ads` (publicidad) y «otro» no: un anuncio no
+ * tiene aforo. Es una lista explícita y no una regla lista: si mañana se
+ * añade una categoría al portfolio, alguien tiene que decidir a cuál de los
+ * dos grupos pertenece, y es mejor que lo decida aquí a que lo herede sin
+ * querer.
+ */
+const TIPOS_DE_EVENTO = new Set(["aftermovie", "multicam", "drone", "photo"]);
 
-const errorMessage = (dict: Dictionary, code: string | undefined) => {
-  if (code === "email") return dict.contact.form.errorEmail;
-  if (code === "consent") return dict.contact.form.errorConsent;
-  if (code) return dict.contact.form.errorRequired;
-  return undefined;
-};
+type ModoFecha = "exacta" | "aproximada" | "sin-definir";
 
 export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
+  const f = dict.contact.form;
+
+  const [tipos, setTipos] = useState<string[]>([]);
+  const [modoFecha, setModoFecha] = useState<ModoFecha>("exacta");
+
+  const esEvento = tipos.some((t) => TIPOS_DE_EVENTO.has(t));
 
   if (state.status === "success") {
-    return (
-      <div role="status" className="border-l-2 border-rust-500 bg-ink-700 p-6">
-        <p className="font-display text-display-m text-bone">
-          {dict.contact.form.successTitle}
-        </p>
-        <p className="mt-2 text-smoke">{dict.contact.form.successBody}</p>
-      </div>
-    );
+    return <Acuse titulo={f.successTitle} cuerpo={f.successBody} />;
   }
 
+  const error = (campo: keyof NonNullable<ContactState["fieldErrors"]>) => {
+    const code = state.fieldErrors?.[campo];
+    if (!code) return undefined;
+    if (code === "email") return f.errorEmail;
+    if (code === "consent") return f.errorConsent;
+    if (code === "projectType") return f.errorProjectType;
+    return f.errorRequired;
+  };
+
+  const hayErrores = state.status === "error";
+
   return (
-    <form action={formAction} noValidate className="space-y-8">
+    // El `onChange` va en el formulario y no en cada casilla a propósito: así
+    // las casillas siguen siendo del navegador —conserva lo marcado si el
+    // servidor devuelve un error y se vuelve a pintar— y React sólo se entera
+    // de cuáles hay marcadas, que es lo único que necesita para decidir si
+    // enseña el bloque de aforo y escenarios.
+    <form
+      action={formAction}
+      noValidate
+      className="space-y-8"
+      onChange={(evento) => {
+        // `target` es el control que cambió; `currentTarget` es el formulario.
+        const campo = evento.target as HTMLElement;
+        if (!(campo instanceof HTMLInputElement) || campo.name !== "projectType") return;
+        const form = evento.currentTarget;
+        setTipos(
+          Array.from(
+            form.querySelectorAll<HTMLInputElement>('input[name="projectType"]:checked')
+          ).map((i) => i.value)
+        );
+      }}
+    >
       {/* Honeypot — oculto para personas, visible para bots que rellenan todo. */}
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
+      {hayErrores && (
+        <ResumenError
+          titulo={state.fieldErrors ? f.errorSummary : f.errorTitle}
+          cuerpo={state.fieldErrors ? undefined : f.errorBody}
+        />
+      )}
+
       <div className="grid gap-8 sm:grid-cols-2">
-        <Field
+        <Campo
           id="name"
           name="name"
-          label={dict.contact.form.name}
+          label={f.name}
+          textos={f}
           required
-          error={errorMessage(dict, state.fieldErrors?.name)}
+          autoComplete="name"
+          error={error("name")}
         />
-        <Field
+        <Campo
           id="email"
           name="email"
           type="email"
-          label={dict.contact.form.email}
+          inputMode="email"
+          label={f.email}
+          textos={f}
           required
-          error={errorMessage(dict, state.fieldErrors?.email)}
+          autoComplete="email"
+          error={error("email")}
         />
       </div>
 
+      <Opciones
+        nombre="projectType"
+        leyenda={f.projectType}
+        pista={f.projectTypeHint}
+        obligatorio
+        textos={f}
+        error={error("projectType")}
+        opciones={[
+          ...CATEGORIES.map((c) => ({ value: c, label: dict.portfolio.categories[c] })),
+          // «Otro», y NO como una categoría más del portfolio: esa lista
+          // clasifica los trabajos publicados, y meter «otro» ahí crearía un
+          // filtro que no clasifica nada. Aquí hace falta porque la pregunta
+          // es otra —qué quiere quien escribe— y una boda o un podcast no
+          // encajan en ninguna de las cinco.
+          { value: "otro", label: f.projectTypeOther },
+        ]}
+      />
+
       <div className="grid gap-8 sm:grid-cols-2">
-        <Field
-          id="eventName"
-          name="eventName"
-          label={dict.contact.form.eventName}
-          required
-          error={errorMessage(dict, state.fieldErrors?.eventName)}
+        <Campo
+          id="projectName"
+          name="projectName"
+          label={f.projectName}
+          placeholder={f.projectNamePlaceholder}
+          textos={f}
         />
-        <Field id="eventDate" name="eventDate" type="date" label={dict.contact.form.eventDate} />
-      </div>
-
-      <div className="grid gap-8 sm:grid-cols-2">
-        <Field id="capacity" name="capacity" type="number" min={0} label={dict.contact.form.capacity} />
-        <Field id="stages" name="stages" type="number" min={0} label={dict.contact.form.stages} />
-      </div>
-
-      <fieldset>
-        <legend className="label">{dict.contact.form.coverage}</legend>
-        <p className="mt-1 text-xs text-smoke">{dict.contact.form.coverageHint}</p>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-          {CATEGORIES.map((category) => (
-            <label key={category} className="flex items-center gap-2 text-sm text-bone">
-              <input
-                type="checkbox"
-                name="coverage"
-                value={category}
-                className="h-4 w-4 border-ink-600 accent-rust-500"
-              />
-              {dict.portfolio.categories[category]}
-            </label>
-          ))}
-
-          {/* «Otros», y NO como una categoría más del portfolio.
-              Las casillas salen de `CATEGORIES`, que es la lista con la que se
-              clasifican los trabajos publicados. Meter «otros» ahí crearía un
-              filtro «Otros» en la página de Trabajo que no clasifica nada.
-
-              Aquí hace falta porque lo que se pregunta es otra cosa: qué
-              quiere el que escribe, no cómo archivamos lo que ya hicimos. Una
-              boda o un podcast no encajan en ninguna de las cinco, y sin esta
-              casilla esa consulta llega sin decir de qué va. */}
-          <label className="flex items-center gap-2 text-sm text-bone">
+        <div>
+          <Opciones
+            nombre="dateMode"
+            leyenda={f.dateMode}
+            tipo="radio"
+            textos={f}
+            valor={modoFecha}
+            onChange={(v) => setModoFecha(v as ModoFecha)}
+            opciones={[
+              { value: "exacta", label: f.dateModeExact },
+              { value: "aproximada", label: f.dateModeApprox },
+              { value: "sin-definir", label: f.dateModeUnknown },
+            ]}
+          />
+          {modoFecha === "exacta" && (
             <input
-              type="checkbox"
-              name="coverage"
-              value="otros"
-              className="h-4 w-4 border-ink-600 accent-rust-500"
+              id="dateExact"
+              name="dateExact"
+              type="date"
+              aria-label={f.dateExact}
+              className={cn(claseCampo, "mt-2")}
             />
-            {dict.contact.form.coverageOther}
-          </label>
+          )}
+          {modoFecha === "aproximada" && (
+            <input
+              id="dateApprox"
+              name="dateApprox"
+              type="text"
+              aria-label={f.dateApprox}
+              placeholder={f.dateApproxPlaceholder}
+              className={cn(claseCampo, "mt-2")}
+            />
+          )}
         </div>
-      </fieldset>
+      </div>
+
+      {esEvento && (
+        <fieldset className="grid gap-8 sm:grid-cols-2">
+          <legend className="label mb-2 text-bone">{f.eventDetailsLabel}</legend>
+          <Campo
+            id="capacity"
+            name="capacity"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            label={f.capacity}
+            textos={f}
+          />
+          <Campo
+            id="stages"
+            name="stages"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            label={f.stages}
+            textos={f}
+          />
+        </fieldset>
+      )}
 
       <div>
-        <label htmlFor="budget" className="label">
-          {dict.contact.form.budget}
+        <label htmlFor="budget" className="label text-bone">
+          {f.budget}{" "}
+          <span className="font-normal text-smoke normal-case">({f.optional.toLowerCase()})</span>
         </label>
-        <select id="budget" name="budget" defaultValue="" className={cn(fieldClasses, "mt-2")}>
-          <option value="" disabled>
-            {dict.contact.form.select}
-          </option>
-          {dict.contact.form.budgetOptions.map((option) => (
+        <select id="budget" name="budget" defaultValue="" className={cn(claseCampo, "mt-2")}>
+          <option value="">{f.select}</option>
+          {f.budgetOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -130,103 +228,46 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
         </select>
       </div>
 
-      <div>
-        <label htmlFor="message" className="label">
-          {dict.contact.form.message}
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={4}
-          placeholder={dict.contact.form.messagePlaceholder}
-          className={cn(fieldClasses, "mt-2 resize-none")}
-        />
-      </div>
+      <Campo
+        id="message"
+        name="message"
+        label={f.message}
+        placeholder={f.messagePlaceholder}
+        textos={f}
+        required
+        rows={4}
+        error={error("message")}
+      />
 
       {/* RGPD: consentimiento explícito, sin casilla premarcada. */}
       <div>
-        <label className="flex items-start gap-3 text-sm text-bone">
+        <label className="flex min-h-11 items-start gap-3 text-sm text-bone">
           <input
             type="checkbox"
             name="consent"
-            required
             defaultChecked={false}
-            className="mt-1 h-4 w-4 border-ink-600 accent-rust-500"
+            className="mt-1 h-4 w-4 shrink-0 accent-rust-500"
             aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
           />
           <span>
-            {dict.contact.form.consent.split(dict.contact.form.consentLink)[0]}
+            {f.consent.split(f.consentLink)[0]}
             <Link
               href={path(locale, "privacy")}
               className="text-rust-300 underline underline-offset-2 hover:text-bone"
             >
-              {dict.contact.form.consentLink}
+              {f.consentLink}
             </Link>
-            {dict.contact.form.consent.split(dict.contact.form.consentLink)[1]}
+            {f.consent.split(f.consentLink)[1]}
           </span>
         </label>
         {state.fieldErrors?.consent && (
           <p id="consent-error" className="mt-2 text-sm text-rust-300">
-            {errorMessage(dict, state.fieldErrors.consent)}
+            {f.errorConsent}
           </p>
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="w-full bg-rust-500 px-6 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:bg-rust-300 hover:text-ink-900 disabled:opacity-60 sm:w-auto"
-      >
-        {pending ? dict.contact.form.submitting : dict.contact.form.submit}
-      </button>
-
-      {state.status === "error" && !Object.keys(state.fieldErrors ?? {}).length && (
-        <p role="alert" className="text-sm text-rust-300">
-          {dict.contact.form.errorBody}
-        </p>
-      )}
+      <BotonEnviar pendiente={pending} textos={f} />
     </form>
-  );
-}
-
-function Field({
-  id,
-  name,
-  label,
-  type = "text",
-  required,
-  min,
-  error,
-}: {
-  id: string;
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-  min?: number;
-  error?: string;
-}) {
-  return (
-    <div>
-      <label htmlFor={id} className="label">
-        {label}
-        {!required && " ·"}
-      </label>
-      <input
-        id={id}
-        name={name}
-        type={type}
-        min={min}
-        required={required}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className={cn(fieldClasses, "mt-2")}
-      />
-      {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm text-rust-300">
-          {error}
-        </p>
-      )}
-    </div>
   );
 }

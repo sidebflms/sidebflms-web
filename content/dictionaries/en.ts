@@ -118,40 +118,62 @@ export const en: Dictionary = {
 
   services: {
     label: "Services",
-    headline: ["Four stages", "of the same", "job"],
+    // Ver la nota de es.ts: el titular presenta los servicios, no el proceso.
+    headline: ["What you", "can", "book"],
     intro:
-      "The order isn't decorative: it's the actual process, from the moodboard to the file you post on Instagram.",
-    // THE DISCIPLINES LINE. Ver la nota en es.ts: estuvo unas horas en el
-    // hero de la portada y se movió aquí el 2026-09-15. No se traduce —son
-    // nombres de oficio— así que es idéntica a la castellana.
+      "We cover a whole event with a single crew, and we also shoot brand pieces, advertising and studio content. This is what you can book, and how it gets done.",
+    // THE DISCIPLINES LINE. No se traduce: son nombres de oficio.
     disciplinas: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
 
-    offerLabel: "What we do",
-    offer: [
-      {
-        key: "live",
-        title: "Live production",
-        body: "Live event direction with several cameras coordinated from a single control point.",
-      },
+    // Ver la nota de es.ts. Los `slug` son los mismos: apuntan a proyectos, no
+    // a texto, así que no se traducen.
+    featuredLabel: "What gets booked most",
+    featured: [
       {
         key: "drone",
         title: "Drone",
-        body: "Our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
-      },
-      {
-        key: "cablecam",
-        title: "Cablecam",
-        body: "A cable-suspended camera that travels a venue above the crowd, with a movement neither a drone nor a crane can give you.",
-      },
-      {
-        key: "multicam",
-        title: "Multicam recording",
-        body: "Several synced operators, each on their own stage, with the cut plan locked before doors open.",
+        body: "The specialty. Aerial work for film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
+        slug: "monegros-hora-dorada",
       },
       {
         key: "aftermovie",
         title: "Aftermovie",
-        body: "The piece that sums up a night and sells the next edition. Delivered within 24-48 hours, with vertical cuts for social.",
+        body: "The piece that sums up a night and sells the next edition. Delivered within 24-48 hours, vertical cuts included.",
+        slug: "fatima-hajji-fabrik",
+      },
+      {
+        key: "live",
+        title: "Live and multicam",
+        body: "Several cameras covering the same event, with the cut plan locked before doors open.",
+        slug: "gordo-lebanon",
+      },
+    ],
+    featuredLink: "See the work",
+    droneLink: "See the fleet",
+
+    liveVsMulticamLabel: "Live direction and multicam aren't the same thing",
+    liveVsMulticam: [
+      {
+        title: "Live direction",
+        body: "The cut is called as it happens, from a control point with every camera in view. What comes out is a finished feed: for the venue screens, for broadcast or for streaming.",
+      },
+      {
+        title: "Multicam recording",
+        body: "Every camera records in full and the edit happens afterwards. It leaves room in post, and it's what feeds the aftermovie and the vertical cuts.",
+      },
+    ],
+
+    offerLabel: "And also",
+    offer: [
+      {
+        key: "cablecam",
+        title: "Cablecam",
+        body: "A cable-suspended camera that travels the venue above the crowd, with a movement neither a drone nor a crane can give you.",
+      },
+      {
+        key: "photo",
+        title: "Photography",
+        body: "Booth, venue and artist photography, as part of the same coverage or as a separate job.",
       },
       {
         key: "ads",
@@ -168,53 +190,37 @@ export const en: Dictionary = {
         title: "Podcast",
         body: "Recorded in studio or on location, multi-camera and with sound done properly, ready to publish as video and as audio.",
       },
-      {
-        key: "photo",
-        title: "Photography",
-        body: "Booth, venue and artist photography, as part of the same coverage or as a separate job.",
-      },
     ],
-    offerDroneLink: "See the fleet",
+
+    // Tres fases, no cuatro: la cobertura aérea va dentro del rodaje. Ver es.ts.
     processLabel: "How we do it",
     stages: [
       {
         number: "01",
         title: "Pre-production",
-        body: "Moodboard, shotlist and an hour-by-hour plan. A production sheet with colour-coded priorities to coordinate drone and camera when several stages run at once.",
+        body: "Moodboard, shotlist and an hour-by-hour plan. A production sheet with priorities per stage, so everyone knows where they are before we get there.",
         items: ["Moodboard and references", "Shotlist by slot", "Stage plan", "Production liaison"],
         pending: false,
       },
       {
         number: "02",
-        title: "Live shoot",
-        body: "Multicam, hero shots and golden hour. One operator per stage, radio open, and the cut plan agreed before doors.",
-        items: ["Multicam", "Live stills", "Hero shots", "Backstage and atmosphere"],
+        title: "Shoot",
+        body: "One operator per stage, radio open and the cut plan agreed. When the shot calls for it the drone goes up, with a certified pilot and a safety perimeter coordinated with production.",
+        items: ["Multicam", "Aerial when it fits", "Live stills", "Backstage and atmosphere"],
         pending: false,
       },
       {
         number: "03",
-        title: "Aerial coverage",
-        // TODO (client) — BLOCKING BEFORE LAUNCH: same as the Spanish version.
-        // Deliberately generic wording. The exact claim about permits and
-        // flight category must be checked against the real paperwork.
-        body: "Aerial shots with a certified pilot and a safety perimeter coordinated with production.",
-        items: ["Certified pilot", "Hyperlapse and sunrise", "Crowd-scale shots", "Production liaison"],
-        // Ver la nota de es.ts: confirmado que hay piloto certificado.
-        pending: false,
-      },
-      {
-        number: "04",
-        title: "Post-production",
-        body: "DaVinci Resolve, colour grading and delivery in 24-48 hours. You get the aftermovie and the vertical cuts ready for Reels and TikTok.",
+        title: "Post and delivery",
+        body: "Edit and grade in DaVinci Resolve. You leave with the main piece and the vertical cuts ready to publish.",
         items: ["Edit and grade", "Aftermovie", "Vertical cuts", "24-48 h delivery"],
         pending: false,
       },
     ],
     pendingNote: "Wording pending verification",
-    ctaTitle: ["Tell us", "what event", "you have"],
+    ctaTitle: ["Tell us", "what project", "you have"],
     cta: "Request a quote",
   },
-
   portfolio: {
     label: "Work",
     headline: ["Festivals, clubs", "and everything", "inside them"],
@@ -248,93 +254,112 @@ export const en: Dictionary = {
 
   jobs: {
     label: "Work with us",
-    headline: ["We're looking", "for people", "who can do it"],
+    // Ver la nota de es.ts: no anuncia un puesto que no existe.
+    headline: ["Put", "yourself", "forward"],
     intro:
-      "We don't run occasional call-outs: this form is always open and we go through it when a job comes in that matches what you do. The more specific you are, the easier it is for us to remember you.",
+      "There are no open positions right now. What there is, is a list: when a job needs extra hands, we look here first. If you work in this and want to be on it, tell us.",
+    notClientLabel: "Looking for a quote for a project?",
+    notClientLink: "Go to the contact form",
+    helpsLabel: "What helps us read it",
+    helps: [
+      "A link where your work can be seen: site, Vimeo, YouTube or a folder. A link beats a heavy file.",
+      "What you're genuinely good at, even if you do more. A clear specialty beats a long list.",
+      "Where you're based, because some jobs go to whoever is closest.",
+      "Whether a piece in your portfolio is entirely yours or you did part of it. It shows, and saying so counts.",
+    ],
     formLabel: "Tell us who you are",
     form: {
       name: "Full name",
-      age: "Age",
-      nationality: "Nationality",
-      city: "Where you live",
       email: "Email",
-      phone: "Phone",
-      speciality: "What you do",
+      speciality: "Specialty",
       specialityHint: "Tick as many as apply",
-      specialityOptions: ["Filmmaker", "Stills", "Editing", "Drone pilot", "3D", "Production"],
-      experience: "How long have you been doing this?",
-      experiencePlaceholder: "For example: three years, or since 2019.",
-      events: "What kind of events would you like to work on?",
-      eventsHint: "Tick as many as apply",
-      eventsOptions: ["Clubs", "Festivals", "Commercials", "Everything"],
-      licence: "Do you have a driving licence?",
-      licenceOptions: ["Yes", "No"],
-      languages: "What languages do you speak?",
-      portfolio: "Portfolio",
-      portfolioHint: "A link: website, Vimeo, Drive, whatever you have.",
-      instagram: "Instagram",
+      specialityOptions: ["Filmmaker", "Photography", "Editing", "Drone pilot", "3D", "Production"],
+      base: "Where you're based",
+      basePlaceholder: "City or area.",
+      portfolio: "Portfolio or reel",
+      portfolioHint: "A link: site, Vimeo, YouTube, Drive…",
+      availability: "Availability",
+      availabilityPlaceholder: "Weekends, weekdays, able to travel…",
+      message: "Anything else",
+      messagePlaceholder: "Two lines about what you do and what you'd like to shoot.",
       consent:
-        "I have read the privacy policy and agree to my data being processed to consider my application.",
+        "I have read the privacy policy and agree to my data being used to assess my application.",
       consentLink: "privacy policy",
       submit: "Send application",
       submitting: "Sending…",
       required: "Required",
       optional: "Optional",
       errorRequired: "Please fill this in.",
-      errorEmail: "Check the email: something is missing.",
-      errorConsent: "We need your consent to be able to keep your application.",
-      successTitle: "Received",
+      errorEmail: "Check the email: something's missing.",
+      errorSpeciality: "Tick at least one specialty.",
+      errorConsent: "We need your consent in order to keep your application.",
+      errorSummary: "Some details are missing. Check the marked fields.",
+      successTitle: "Got it",
       successBody:
-        "We've kept your application. We don't reply to all of them, but we do read them: if something that fits comes in, we'll write.",
-      errorTitle: "Could not be sent",
-      errorBody: "Try again or write to us at contact@sidebflms.com.",
+        "It's saved. We don't reply to every application, but they do get read: if something comes up that fits what you do, we'll be in touch.",
+      errorTitle: "Couldn't send it",
+      errorBody: "Try again or email us at contact@sidebflms.com.",
     },
   },
+
   contact: {
     label: "Contact",
-    headline: ["Tell us", "what event", "you have"],
+    // Ver la nota de es.ts: el titular cubre cualquier proyecto, no sólo eventos.
+    headline: ["Tell us", "what project", "you have"],
     intro:
-      "The more you tell us about capacity and stages, the tighter the quote.",
-    directLabel: "Or straight to us",
+      "A festival, a club night, a commercial or a brand piece. With four details we can tell you if it fits and roughly what it costs.",
+    directLabel: "Or directly",
     email: "contact@sidebflms.com",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     youtube: "YouTube",
     form: {
+      formLabel: "The form",
       name: "Your name",
       email: "Email",
-      eventName: "Event name",
-      eventDate: "Expected event date",
+      projectName: "Project name",
+      projectNamePlaceholder: "If it has one yet.",
+      projectType: "Type of project",
+      projectTypeHint: "Tick as many as apply",
+      projectTypeOther: "Other",
+      dateMode: "Date",
+      dateModeExact: "I have a date",
+      dateModeApprox: "Roughly",
+      dateModeUnknown: "Not set yet",
+      dateExact: "Which day",
+      dateApprox: "Roughly when",
+      dateApproxPlaceholder: "For example: June, or the first quarter.",
+      eventDetailsLabel: "About the event",
       capacity: "Estimated capacity",
       stages: "Number of stages",
-      coverage: "Coverage type",
-      coverageHint: "Pick as many as you need",
-      coverageOther: "Other",
-      budget: "Budget range",
+      budget: "Ballpark budget",
       budgetOptions: [
         "Under €2,000",
-        "€2,000 – €5,000",
-        "€5,000 – €10,000",
+        "€2,000 – 5,000",
+        "€5,000 – 10,000",
         "Over €10,000",
-        "Not sure yet",
+        "I don't know yet",
       ],
-      message: "Anything else",
-      messagePlaceholder: "Running times, confirmed artists, what you need delivered and by when.",
+      message: "Tell us about the project",
+      messagePlaceholder:
+        "What it is, where, what you need delivered and by when. Two lines is enough to start.",
       consent:
-        "I've read the privacy policy and agree to my data being used to answer this enquiry.",
+        "I have read the privacy policy and agree to my data being used to answer this enquiry.",
       consentLink: "privacy policy",
       submit: "Send",
       submitting: "Sending…",
       required: "Required",
       optional: "Optional",
-      select: "Pick one",
-      errorRequired: "Fill this in.",
-      errorEmail: "Check the email — something's missing.",
-      errorConsent: "We need your consent before we can reply.",
+      select: "Choose an option",
+      errorRequired: "Please fill this in.",
+      errorEmail: "Check the email: something's missing.",
+      errorProjectType: "Tick at least one type of project.",
+      errorConsent: "We need your consent in order to reply.",
+      errorSummary: "Some details are missing. Check the marked fields.",
       successTitle: "Got it",
-      successBody: "We'll answer within 24 working hours. If it's urgent, write to us directly.",
-      errorTitle: "That didn't send",
-      errorBody: "Try again, or write to contact@sidebflms.com.",
+      successBody: "We reply within 24 working hours. If it's urgent, email us directly.",
+      errorTitle: "Couldn't send it",
+      errorBody: "Try again or email us at contact@sidebflms.com.",
     },
   },
 
@@ -386,7 +411,7 @@ export const en: Dictionary = {
       },
       {
         heading: "What data is collected",
-        text: "Contact form: name, email and whatever event details you choose to give us. «Work with us» form: name, age, nationality, town, email, phone, speciality, experience, languages, driving licence and the links to your portfolio and Instagram. Of those, only name, email and speciality are required — the rest is up to you.",
+        text: "Contact form: name, email, type of project, a description of the job and whatever you choose to tell us about date, capacity, stages and budget. «Work with us» form: name, email, specialty, where you are based, your availability, a link to your portfolio and anything else you want to tell us. Of those, only name, email and specialty are required — the rest is up to you. We do not collect age, nationality, phone number or driving licence.",
       },
       {
         heading: "Legal basis",
@@ -413,50 +438,60 @@ export const en: Dictionary = {
 
   about: {
     label: "About",
-    headline: ["Who", "is behind", "all this"],
+    headline: ["Who's", "behind", "this"],
+    // Ver la nota de es.ts: reescrito para decirlo en positivo.
     intro:
-      "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last one works the next one, and that shows at four in the morning.",
+      "There are eleven of us and it's always the same eleven. The crew that worked the last event is the crew on the next one, so nobody has to explain twice how things are done — at four in the morning that's the difference between fixing it and arguing about it.",
     figuresLabel: "So far in 2026",
-    whereLabel: "Where we operate",
+    figuresNote: "Counted from our own project manager, from 1 January 2026 onwards.",
+    figuresAccumulatedLabel: "All time",
+    estimateNote: "Estimate",
+    whereLabel: "Where we work",
     whereBody:
-      "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
-    howLabel: "How we work",
+      "Based in Spain. The circuit doesn't care about provinces: if the event is somewhere else, the whole crew travels, with the same plan and the same delivery window.",
     teamLabel: "The crew",
-    teamNote: "Roles and photos pending",
+    teamPendingNote: "Pending: {n} portrait(s) and unconfirmed roles",
     groupAlt: "The SIDEBFLMS crew",
-    photoExample: "Placeholder",
-    roleExample: "Role to confirm",
-    photoExampleNote: "Provisional: marked photos are not that person, and roles with * are unconfirmed",
-    scaleLabel: "When the job needs more crew",
+    scaleLabel: "When more crew is needed",
     scaleBody:
-      "The core is eleven people, but not every job fits into eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery date. Building a large crew and making it work is part of what we do.",
-    scaleAlt: "The scaled-up SIDEBFLMS crew at Monegros",
-    workLabel: "On the job",
-    workNote: "Not yet captioned",
-    ctaTitle: ["Tell us", "what event", "you have"],
+      "The core is eleven people, but not every job fits in eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery window. Building a bigger crew and making it work is part of the job.",
+    scaleAlt: "The extended SIDEBFLMS crew at Monegros",
+    workLabel: "On set",
+    ctaTitle: ["Tell us", "what project", "you have"],
+    ctaSecondary: "Want to work with us?",
   },
 
   faq: {
     label: "FAQ",
     headline: ["What people", "ask before", "hiring us"],
     intro:
-      "The questions that always come up on the first call. If yours isn't here, write to us and we'll add it.",
+      "The questions that always come up on the first call. If yours isn't here, write and we'll add it.",
+    // Ver la nota de es.ts: revisado para que coincida con Servicios y con el
+    // formulario. Sólo los dos plazos confirmados.
     items: [
       {
         q: "What exactly do you do?",
-        a: "Four things, usually together: aftermovie, live multicam, aerial drone coverage and stills. The typical job is a whole event covered by the same crew, not a one-off piece.",
+        a: "What gets booked most is drone, aftermovie and live or multicam coverage, usually together in the same job. We also do cablecam, photography, advertising, VJ and podcast. The typical job is a whole event covered by the same crew, but we also shoot brand pieces that have nothing to do with a festival.",
+      },
+      {
+        q: "What's the difference between live direction and multicam?",
+        a: "In live direction the cut is called as it happens, from a control point with every camera in view, and what comes out is a finished feed for screens, broadcast or streaming. In multicam every camera records in full and the edit happens afterwards, which is what leaves room for the aftermovie and the vertical cuts. You can do both at once, but they aren't the same thing and they don't cost the same.",
       },
       {
         q: "Where do you work?",
-        a: "Based in Spain, with most of the work in Madrid, Barcelona and Ibiza. Elsewhere too: what changes is the logistics and the budget, not what gets delivered.",
+        a: "Based in Spain, with most of the work in Madrid, Barcelona and Ibiza. Elsewhere too: what changes is logistics and budget, not what gets delivered.",
       },
       {
-        q: "How fast do you deliver?",
-        a: "Between 24 and 48 hours. It isn't a rush fee: it's the deadline the shoot is planned around, because an aftermovie that lands two weeks later lands when nobody cares about the event any more.",
+        q: "How long does delivery take?",
+        a: "Between 24 and 48 hours. It isn't an add-on you pay extra for: it's the window the shoot is planned around, because an aftermovie that lands two weeks later lands when nobody cares about the event any more.",
       },
       {
         q: "Do you fly drones? With permits?",
-        a: "Yes, with a certified pilot and a safety perimeter coordinated with production. If your site has airspace restrictions, tell us when you ask for a quote: it shapes the flight plan and it is much better known in advance than on the day.",
+        a: "Yes, with a certified pilot and a safety perimeter coordinated with production. If your venue has airspace restrictions, tell us when you ask for a quote: it shapes the flight plan and it's better known in advance than on the day.",
+      },
+      {
+        q: "Is the drone always part of it?",
+        a: "No. It goes up when the shot calls for it and when the site allows it. On an indoor shoot or a podcast it adds nothing, and a restricted venue may not allow flying at all. That's why it sits inside the shoot rather than being a stage of its own.",
       },
       {
         q: "Do you deliver vertical cuts for Reels and TikTok?",
@@ -464,11 +499,11 @@ export const en: Dictionary = {
       },
       {
         q: "What do you need to quote me?",
-        a: "Estimated capacity, number of stages, date and what kind of coverage you want. With that we can quote a fixed price. Without it all you get is a range, which helps nobody.",
+        a: "What kind of project it is, when — a rough date is fine — and, if it's an event, the estimated capacity and how many stages there are. With that we can quote properly; without it, only a range.",
       },
       {
-        q: "How much does it cost?",
-        a: "It depends on capacity, how many stages have to be covered at once, and how many hours it runs. The form has budget ranges so you can tell us where you sit and neither of us wastes time.",
+        q: "What does it cost?",
+        a: "It depends on the type of project, how many cameras are needed at once and how many hours it runs. The form has budget ranges and an \"I don't know yet\" option: telling us roughly where you are lets us propose something realistic from the first message, instead of sending a number that doesn't fit.",
       },
       {
         q: "How long do you take to reply?",
@@ -476,7 +511,7 @@ export const en: Dictionary = {
       },
       {
         q: "Can you cover several stages at once?",
-        a: "Yes. It gets solved in pre-production, not on the fly: a plan broken down by time slots with priorities per stage, so drone and camera aren't both in the same place while something happens in the other.",
+        a: "Yes. It's solved in pre-production, not on the fly: an hour-by-hour plan with priorities per stage, so drone and camera aren't both in the same place while something happens in the other.",
       },
     ],
   },

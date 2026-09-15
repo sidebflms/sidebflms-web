@@ -46,7 +46,12 @@
   --color-ink-900: #141414; /* secciones alternas, footer, letterbox */
   --color-ink-800: #1e1e1e; /* ★ fondo base — antracita de marca */
   --color-ink-700: #262626; /* superficies: cards, inputs, celdas */
-  --color-ink-600: #333130; /* hairlines, bordes, divisores */
+  --color-ink-600: #333130; /* hairlines y divisores DECORATIVOS */
+  /* Borde de controles de formulario. `ink-600` da 1,2:1 contra el fondo, y
+     un borde de campo es un componente de interfaz: la WCAG le pide 3:1. Este
+     mide 3,21:1 sobre `ink-800` y 3,55:1 sobre `ink-900`. Calculado, no a ojo.
+     NO se usa para hairlines decorativos: ahí `ink-600` sigue valiendo. */
+  --color-ink-500: #726c66;
 
   /* --- Acento: EL NARANJA DE MARCA, del manual §02 ---------------------
      Hasta el 2026-09-10 estos tres valores eran #5c271a / #ae4b2f / #c97a55,
@@ -263,9 +268,57 @@
      letra, y se busca el `vw` que deje ese producto por debajo del ancho de
      la columna en TODO el rango. Ahí sí valdría la pena pasarse a `cqw`. */
   @media (width >= 64rem) {
-    .text-display-l.en-columna {
+    /* Se aplica a las dos clases de titular. `.text-page-title` se estrenó el
+       2026-09-15 y esta regla se quedó apuntando sólo a la vieja: el titular
+       de Contacto volvió a partirse como «CUÉNTANO / S» en cuanto cambió de
+       clase. Comprobado en navegador a 1280 px. */
+    .text-display-l.en-columna,
+    .text-page-title.en-columna {
       font-size: clamp(1.75rem, var(--display-en-columna, 3.4vw), 4rem);
     }
+  }
+
+  /* --------------------------------------------------------------------------
+     TÍTULOS: UN TAMAÑO POR NIVEL, NO UNO POR SITIO.
+
+     Hasta ahora había dos clases (`display-l` y `display-m`) repartidas a ojo:
+     el titular de una página y el título de una tarjeta compartían `-m` en
+     algunos sitios, así que no se distinguía la jerarquía y, sobre todo, un
+     título de tarjeta pedía un cuerpo que no cabe en una tarjeta.
+
+     ── EL CASO CONCRETO QUE LO OBLIGA ──────────────────────────────────────
+     «MULTICÁMARA» se partía como «MULTICÁMA / RA» en las tarjetas de
+     Servicios. No era un fallo de la palabra: `.font-display` lleva
+     `overflow-wrap: anywhere` como red de seguridad, y con `display-m`
+     (36 px en escritorio) esa palabra no entra en una tarjeta de tres
+     columnas, así que la red saltaba y cortaba a media palabra.
+
+     La solución no es quitar la red —entonces desborda— sino darle a cada
+     nivel el cuerpo que cabe en su contenedor:
+
+       .text-page-title     titular de página          32 → 56 px
+       .text-section-title  título de sección          22 → 30 px
+       .text-card-title     título de tarjeta          17 → 20 px
+
+     Con 20 px, «MULTICÁMARA» mide unos 190 px en Akira y la tarjeta más
+     estrecha del sitio (390 px de viewport, con sus márgenes) deja 294.
+     Entra sin partirse, y en las tarjetas se cambia `anywhere` por
+     `break-word`: sigue habiendo red si algún día entra una palabra
+     imposible, pero deja de afectar al ancho mínimo del contenedor.
+     ------------------------------------------------------------------------ */
+  .text-page-title {
+    font-size: clamp(2rem, 5.2vw, 3.5rem);
+    line-height: 0.95;
+  }
+  .text-section-title {
+    font-size: clamp(1.375rem, 2.6vw, 1.875rem);
+    line-height: 1;
+  }
+  .text-card-title {
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    overflow-wrap: break-word;
   }
 
   /* La mono es material principal, no label secundario: todo metadato del

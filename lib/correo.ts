@@ -54,11 +54,17 @@ const REMITENTE = process.env.CORREO_REMITENTE ?? "contact@sidebflms.com";
 export type Consulta = {
   nombre: string;
   email: string;
-  evento: string;
+  /** Nombre del proyecto. Puede venir vacío: dejó de ser obligatorio. */
+  proyecto: string;
+  /** Tipos de proyecto marcados. Antes se llamaba «cobertura». */
+  tipos: string[];
+  /** Ya resuelta a una frase: el día, el «más o menos» o «sin definir». */
   fecha: string;
+  /** `exacta` | `aproximada` | `sin-definir`. Para leer la fecha con criterio. */
+  fechaModo: string;
+  /** Sólo llegan si lo que se pide es cobertura de un evento. */
   aforo: string;
   escenarios: string;
-  cobertura: string[];
   presupuesto: string;
   mensaje: string;
 };
@@ -73,11 +79,11 @@ function cuerpo(c: Consulta): string {
     linea("Nombre", c.nombre),
     linea("Email", c.email),
     "",
-    linea("Evento", c.evento),
-    linea("Fecha", c.fecha),
+    linea("Proyecto", c.proyecto),
+    linea("Tipo", c.tipos.join(", ")),
+    linea(`Fecha (${c.fechaModo})`, c.fecha),
     linea("Aforo", c.aforo),
     linea("Escenarios", c.escenarios),
-    linea("Cobertura", c.cobertura.join(", ")),
     linea("Presupuesto", c.presupuesto),
     "",
     "Mensaje:",
@@ -113,9 +119,10 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
       from: `"Web SIDEBFLMS" <${REMITENTE}>`,
       to: DESTINO,
       replyTo: `"${c.nombre}" <${c.email}>`,
-      // El nombre del evento en el asunto para poder buscarlo luego en el
-      // buzón sin abrir cada mensaje.
-      subject: `Consulta web: ${c.evento || "sin nombre de evento"}`,
+      // Algo identificable en el asunto para buscarlo luego en el buzón sin
+      // abrir cada mensaje. El nombre del proyecto si lo hay y, si no, el tipo:
+      // desde que el nombre es opcional, el asunto no puede depender de él.
+      subject: `Consulta web: ${c.proyecto || c.tipos.join(", ") || "sin nombre"}`,
       text: cuerpo(c),
     });
 
@@ -139,52 +146,50 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
  *
  * Mismo transporte que las consultas, distinto asunto y distinto cuerpo.
  *
- * ── OJO: AQUÍ HAY MÁS DATO PERSONAL QUE EN UNA CONSULTA ─────────────────
- * Una consulta trae nombre, email y de qué va el evento. Una candidatura trae
- * además edad, nacionalidad, dónde vive y el teléfono. Eso es otra categoría
- * de dato y por eso:
+ * ── LO QUE SE RECOGE, Y LO QUE SE DEJÓ DE RECOGER ───────────────────────
+ * El formulario pedía edad, nacionalidad, teléfono, idiomas y carnet de
+ * conducir. Se quitaron el 2026-09-15: no hacen falta para decidir si alguien
+ * encaja en un rodaje, y cuanto menos dato personal entra, menos hay que
+ * justificar, conservar y borrar. Queda nombre, correo, especialidad, base,
+ * disponibilidad, portfolio y mensaje.
  *
- *   · El asunto NO lleva el nombre de la persona. El de las consultas sí lleva
- *     el del evento, porque un evento no es nadie; una lista de asuntos en el
+ * Dos cosas que siguen en pie:
+ *
+ *   · El asunto NO lleva el nombre de la persona. Una lista de asuntos en el
  *     buzón con nombres y apellidos de gente que busca trabajo es otra cosa.
- *   · La política de privacidad tuvo que decir que esto se recoge y para qué.
- *     Si se añade o quita un campo de este formulario, hay que tocarla.
+ *   · La política de privacidad enumera lo que se recoge. Si se añade o quita
+ *     un campo de este formulario, hay que tocarla — y se ha tocado.
  */
 export type Candidatura = {
   nombre: string;
-  edad: string;
-  nacionalidad: string;
-  localidad: string;
   email: string;
-  telefono: string;
   especialidad: string[];
-  experiencia: string;
-  eventos: string[];
-  carnet: string;
-  idiomas: string;
+  /** Desde dónde se mueve. Hay trabajos que se resuelven con quien está cerca. */
+  base: string;
+  disponibilidad: string;
+  /** Un enlace. No hay subida de ficheros y es deliberado: ver jobs-form.tsx. */
   portfolio: string;
-  instagram: string;
+  mensaje: string;
 };
 
 function cuerpoCandidatura(c: Candidatura): string {
   const lista = (v: string[]) => (v.length ? v.join(", ") : "—");
   const o = (v: string) => v || "—";
   return [
-    `Nombre:        ${o(c.nombre)}`,
-    `Edad:          ${o(c.edad)}`,
-    `Nacionalidad:  ${o(c.nacionalidad)}`,
-    `Localidad:     ${o(c.localidad)}`,
-    `Email:         ${o(c.email)}`,
-    `Teléfono:      ${o(c.telefono)}`,
+    "Nueva candidatura desde sidebflms.com",
     "",
-    `Especialidad:  ${lista(c.especialidad)}`,
-    `Experiencia:   ${o(c.experiencia)}`,
-    `Eventos:       ${lista(c.eventos)}`,
-    `Carnet:        ${o(c.carnet)}`,
-    `Idiomas:       ${o(c.idiomas)}`,
+    `Nombre:          ${o(c.nombre)}`,
+    `Email:           ${o(c.email)}`,
+    `Especialidad:    ${lista(c.especialidad)}`,
+    `Base:            ${o(c.base)}`,
+    `Disponibilidad:  ${o(c.disponibilidad)}`,
+    `Portfolio:       ${o(c.portfolio)}`,
     "",
-    `Portfolio:     ${o(c.portfolio)}`,
-    `Instagram:     ${o(c.instagram)}`,
+    "Mensaje:",
+    c.mensaje.trim() || "—",
+    "",
+    "—",
+    "Para responder, basta con darle a Responder: el Reply-To apunta a la persona.",
   ].join("\n");
 }
 

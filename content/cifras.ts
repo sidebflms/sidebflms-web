@@ -38,7 +38,26 @@
  * (104 de 329, o sea que el drone no es un extra, es un tercio del trabajo) y
  * las ciudades.
  */
+/**
+ * DOS TIPOS DE CIFRA, Y NO SE PUEDEN MEZCLAR.
+ *
+ * Cuatro de estas cinco están CONTADAS de la exportación del Studio Manager,
+ * que empieza el 1 de enero de 2026: son lo que va de año. La quinta —las
+ * horas de vuelo— no está en ninguna exportación: es una ESTIMACIÓN y además
+ * acumulada, porque incluye horas de práctica y de simulador.
+ *
+ * Se pintaban las cinco juntas bajo el rótulo «En lo que va de 2026». Eso
+ * presenta una estimación acumulada como un resultado del año, que es
+ * exactamente lo que no se puede hacer con una cifra que un cliente puede
+ * pedir por escrito. Ahora cada una lleva su periodo y la página las separa.
+ */
+export type Periodo = "2026" | "acumulado";
+
 export type Cifra = {
+  /** «2026» = contado de la exportación. «acumulado» = no es de este año. */
+  periodo: Periodo;
+  /** `true` si el número no está contado sino calculado. Se dice a la vista. */
+  estimada?: boolean;
   /** El número, ya formateado como se quiera leer: "329", "6". */
   valor: string | null;
   etiqueta: { es: string; en: string };
@@ -47,22 +66,26 @@ export type Cifra = {
 export const CIFRAS: Cifra[] = [
   {
     // 329 de 387 filas en estado «Completado».
+    periodo: "2026",
     valor: "329",
     etiqueta: { es: "Proyectos", en: "Projects" },
   },
   {
     // Tipo «Drone» entre los completados. Un tercio del total.
+    periodo: "2026",
     valor: "104",
     etiqueta: { es: "Rodajes con drone", en: "Drone shoots" },
   },
   {
     // Ubicaciones distintas, sin contar el propio estudio.
+    periodo: "2026",
     valor: "26",
     etiqueta: { es: "Ciudades", en: "Cities" },
   },
   {
     // España, Italia, Francia, Líbano, Reino Unido y Costa Rica.
     // «SPAIN» y «ESPAÑA» aparecen las dos en el fichero: es el mismo país.
+    periodo: "2026",
     valor: "6",
     etiqueta: { es: "Países", en: "Countries" },
   },
@@ -108,6 +131,8 @@ export const CIFRAS: Cifra[] = [
      * de pilotos o el periodo, hay que rehacer la cuenta: está aquí entera para
      * que se pueda.
      */
+    periodo: "acumulado",
+    estimada: true,
     valor: "+2.000",
     etiqueta: { es: "Horas de vuelo", en: "Flight hours" },
   },
@@ -115,3 +140,9 @@ export const CIFRAS: Cifra[] = [
 
 /** Las que tienen número. Si está vacío, la sección no se pinta. */
 export const CIFRAS_CON_DATO = CIFRAS.filter((c) => c.valor !== null);
+
+/** Contadas de la exportación del Studio Manager: lo que va de 2026. */
+export const CIFRAS_2026 = CIFRAS_CON_DATO.filter((c) => c.periodo === "2026");
+
+/** No son de este año. Se pintan aparte y con su aviso. */
+export const CIFRAS_ACUMULADAS = CIFRAS_CON_DATO.filter((c) => c.periodo === "acumulado");

@@ -43,7 +43,7 @@ export function Faq({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       <Reveal>
         <div className="shell">
           <p className="label">{dict.faq.label}</p>
-          <h2 className="font-display text-display-m mt-3 text-bone">
+          <h2 className="font-display text-section-title mt-3 text-bone">
             {dict.faq.headline.join(" ")}
           </h2>
         </div>
@@ -56,14 +56,17 @@ export function Faq({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             as="article"
             className="shell grid gap-4 border-t border-ink-600 py-8 lg:grid-cols-12 lg:gap-6"
           >
+            {/* `ink-500` y no `ink-600`: en `ink-600` el número daba 1,3:1
+                contra el fondo, o sea que no se veía. Es decorativo —va
+                `aria-hidden`— pero si no se ve, no decora nada. */}
             <p
               aria-hidden="true"
-              className="text-2xl font-medium text-ink-600 tabular-nums lg:col-span-1"
+              className="text-2xl font-medium text-ink-500 tabular-nums lg:col-span-1"
             >
               {pad(index + 1)}
             </p>
-            <h3 className="text-bone lg:col-span-5">{item.q}</h3>
-            <p className="measure text-smoke lg:col-span-6">{item.a}</p>
+            <h3 className="text-card-title font-semibold text-bone lg:col-span-5">{item.q}</h3>
+            <p className="measure text-bone/90 lg:col-span-6">{item.a}</p>
           </Reveal>
         ))}
       </div>

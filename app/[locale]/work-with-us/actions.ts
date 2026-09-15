@@ -10,17 +10,22 @@ export type JobsState = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
- * Server Action del formulario de «trabaja con nosotros».
+ * Server Action de «trabaja con nosotros».
  *
  * ── QUÉ SE EXIGE Y QUÉ NO ────────────────────────────────────────────────
- * Sólo cuatro cosas: nombre, email, especialidad y consentimiento. El resto
- * —edad, nacionalidad, teléfono, idiomas— se pide pero no se obliga, y es
- * deliberado: son datos personales, y obligar a darlos para poder mandar una
- * candidatura convierte un formulario en un interrogatorio. Quien quiera
- * contar poco, que cuente poco; ya se le preguntará si interesa.
+ * Cuatro cosas: nombre, correo, especialidad y consentimiento. El resto
+ * —dónde te mueves, disponibilidad, portfolio, lo que quieras contar— se pide
+ * pero no se obliga.
  *
- * El consentimiento SÍ es obligatorio, y aquí más que en el de contacto:
- * esto recoge edad y nacionalidad, que es dato personal de otra categoría.
+ * El consentimiento SÍ es obligatorio: esto guarda datos de una persona para
+ * valorarla más adelante, que es tratamiento con toda la letra.
+ *
+ * ── A DÓNDE VA ───────────────────────────────────────────────────────────
+ * Al mismo buzón que las consultas (`contact@sidebflms.com`), por el SMTP
+ * local de la máquina. No hay sistema de recepción de candidaturas ni base de
+ * datos: llega un correo y se lee. Si algún día se quiere una bandeja aparte,
+ * es `CORREO_DESTINO` en `lib/correo.ts` — pero eso es una decisión de quien
+ * gestiona el buzón, no algo que se pueda dar por hecho desde aquí.
  */
 export async function submitJobs(
   _prevState: JobsState,
@@ -31,37 +36,31 @@ export async function submitJobs(
     return { status: "success" };
   }
 
-  const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
+  const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
+
+  const name = texto("name");
+  const email = texto("email");
   const speciality = formData.getAll("speciality").map(String);
   const consent = formData.get("consent") === "on";
 
   const fieldErrors: JobsState["fieldErrors"] = {};
   if (!name) fieldErrors.name = "required";
   if (!email || !EMAIL_RE.test(email)) fieldErrors.email = "email";
-  if (speciality.length === 0) fieldErrors.speciality = "required";
+  if (speciality.length === 0) fieldErrors.speciality = "speciality";
   if (!consent) fieldErrors.consent = "consent";
 
   if (Object.keys(fieldErrors).length > 0) {
     return { status: "error", fieldErrors };
   }
 
-  const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
-
   const enviado = await enviarCandidatura({
     nombre: name,
-    edad: texto("age"),
-    nacionalidad: texto("nationality"),
-    localidad: texto("city"),
     email,
-    telefono: texto("phone"),
     especialidad: speciality,
-    experiencia: texto("experience"),
-    eventos: formData.getAll("events").map(String),
-    carnet: texto("licence"),
-    idiomas: texto("languages"),
+    base: texto("base"),
+    disponibilidad: texto("availability"),
     portfolio: texto("portfolio"),
-    instagram: texto("instagram"),
+    mensaje: texto("message"),
   });
 
   if (!enviado) return { status: "error" };

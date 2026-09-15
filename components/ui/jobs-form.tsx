@@ -1,286 +1,164 @@
 "use client";
 
-import { useActionState } from "react";
 import Link from "next/link";
+import { useActionState } from "react";
 
 import { submitJobs, type JobsState } from "@/app/[locale]/work-with-us/actions";
+import { Acuse, BotonEnviar, Campo, Opciones, ResumenError } from "@/components/ui/campos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
-import { cn } from "@/lib/utils";
 
 /**
- * Formulario de candidaturas.
+ * FORMULARIO DE CANDIDATURAS.
  *
- * Mismo aspecto y mismo comportamiento que el de contacto —línea inferior,
- * foco en `rust-300`, honeypot, acuse de recibo que sustituye al formulario—
- * para que se lea como parte del mismo sitio y no como un añadido.
+ * ── DE TRECE CAMPOS A SIETE ──────────────────────────────────────────────
+ * Pedía edad, nacionalidad, teléfono, idiomas, carnet de conducir, en qué
+ * eventos te gustaría trabajar e Instagram. Nada de eso hace falta para
+ * decidir si alguien encaja en un rodaje, y todo junto convierte una
+ * candidatura espontánea en un formulario de alta laboral. Además, cuanto más
+ * dato personal se recoge, más hay que justificar y conservar.
  *
- * ── LO QUE ES DISTINTO, Y POR QUÉ ────────────────────────────────────────
- * Sólo cuatro campos son obligatorios: nombre, correo, especialidad y el
- * consentimiento. Los demás llevan la marca de «opcional» A LA VISTA, no sólo
- * en el código: son trece preguntas, y sin esa marca la página parece exigirlo
- * todo y la gente abandona a la quinta.
+ * Queda lo que se usa de verdad: quién eres, cómo escribirte, qué haces, desde
+ * dónde te mueves, dónde se puede ver tu trabajo, cuándo puedes y lo que
+ * quieras contar. Obligatorio, sólo nombre, correo, especialidad y el
+ * consentimiento.
+ *
+ * ── UN ENLACE, NO UN ARCHIVO ─────────────────────────────────────────────
+ * El portfolio se pide como enlace y no hay —ni había— subida de ficheros.
+ * Deliberado: una subida obliga a almacenar archivos de desconocidos, a
+ * limitar tamaños y a decidir cuánto se guardan. Un enlace no.
  */
 
 const initialState: JobsState = { status: "idle" };
-
-const campo =
-  "w-full border-b border-ink-600 bg-transparent py-3 text-bone placeholder:text-ink-600 focus:border-rust-300 focus:outline-none transition-colors";
-
-const mensajeError = (dict: Dictionary, code: string | undefined) => {
-  if (code === "email") return dict.jobs.form.errorEmail;
-  if (code === "consent") return dict.jobs.form.errorConsent;
-  if (code) return dict.jobs.form.errorRequired;
-  return undefined;
-};
 
 export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [state, formAction, pending] = useActionState(submitJobs, initialState);
   const f = dict.jobs.form;
 
   if (state.status === "success") {
-    return (
-      <div role="status" className="border-l-2 border-rust-500 bg-ink-700 p-6">
-        <p className="font-display text-display-m text-bone">{f.successTitle}</p>
-        <p className="measure mt-2 text-smoke">{f.successBody}</p>
-      </div>
-    );
+    return <Acuse titulo={f.successTitle} cuerpo={f.successBody} />;
   }
 
+  const error = (campo: keyof NonNullable<JobsState["fieldErrors"]>) => {
+    const code = state.fieldErrors?.[campo];
+    if (!code) return undefined;
+    if (code === "email") return f.errorEmail;
+    if (code === "consent") return f.errorConsent;
+    if (code === "speciality") return f.errorSpeciality;
+    return f.errorRequired;
+  };
+
   return (
-    <form action={formAction} noValidate className="space-y-10">
+    <form action={formAction} noValidate className="space-y-8">
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      {state.status === "error" && !state.fieldErrors && (
-        <div role="alert" className="border-l-2 border-rust-500 bg-ink-700 p-5">
-          <p className="text-bone">{f.errorTitle}</p>
-          <p className="mt-1 text-sm text-smoke">{f.errorBody}</p>
-        </div>
+      {state.status === "error" && (
+        <ResumenError
+          titulo={state.fieldErrors ? f.errorSummary : f.errorTitle}
+          cuerpo={state.fieldErrors ? undefined : f.errorBody}
+        />
       )}
 
-      {/* Quién eres */}
       <div className="grid gap-8 sm:grid-cols-2">
         <Campo
           id="name"
           name="name"
           label={f.name}
-          dict={dict}
+          textos={f}
           required
           autoComplete="name"
-          error={mensajeError(dict, state.fieldErrors?.name)}
+          error={error("name")}
         />
         <Campo
           id="email"
           name="email"
           type="email"
+          inputMode="email"
           label={f.email}
-          dict={dict}
+          textos={f}
           required
           autoComplete="email"
-          error={mensajeError(dict, state.fieldErrors?.email)}
+          error={error("email")}
         />
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-3">
-        <Campo id="age" name="age" type="number" min={16} max={99} label={f.age} dict={dict} />
-        <Campo id="nationality" name="nationality" label={f.nationality} dict={dict} />
-        <Campo id="city" name="city" label={f.city} dict={dict} autoComplete="address-level2" />
-      </div>
-
-      <div className="grid gap-8 sm:grid-cols-2">
-        <Campo id="phone" name="phone" type="tel" label={f.phone} dict={dict} autoComplete="tel" />
-        <Campo id="languages" name="languages" label={f.languages} dict={dict} />
-      </div>
-
-      {/* Qué haces */}
-      <Casillas
+      <Opciones
         nombre="speciality"
         leyenda={f.speciality}
         pista={f.specialityHint}
-        opciones={f.specialityOptions}
-        requerido
-        dict={dict}
-        error={mensajeError(dict, state.fieldErrors?.speciality)}
+        obligatorio
+        textos={f}
+        error={error("speciality")}
+        opciones={f.specialityOptions.map((o) => ({ value: o, label: o }))}
+      />
+
+      <div className="grid gap-8 sm:grid-cols-2">
+        <Campo
+          id="base"
+          name="base"
+          label={f.base}
+          placeholder={f.basePlaceholder}
+          textos={f}
+          autoComplete="address-level2"
+        />
+        <Campo
+          id="availability"
+          name="availability"
+          label={f.availability}
+          placeholder={f.availabilityPlaceholder}
+          textos={f}
+        />
+      </div>
+
+      <Campo
+        id="portfolio"
+        name="portfolio"
+        type="url"
+        inputMode="url"
+        label={f.portfolio}
+        hint={f.portfolioHint}
+        placeholder="https://"
+        textos={f}
       />
 
       <Campo
-        id="experience"
-        name="experience"
-        label={f.experience}
-        placeholder={f.experiencePlaceholder}
-        dict={dict}
+        id="message"
+        name="message"
+        label={f.message}
+        placeholder={f.messagePlaceholder}
+        textos={f}
+        rows={4}
       />
-
-      <Casillas
-        nombre="events"
-        leyenda={f.events}
-        pista={f.eventsHint}
-        opciones={f.eventsOptions}
-        dict={dict}
-      />
-
-      {/* Carnet: dos opciones excluyentes, así que botones de radio y no una
-          casilla suelta. Con una casilla «tengo carnet» sin marcar no se sabe
-          si es un «no» o si no la ha visto. */}
-      <fieldset>
-        <legend className="label">
-          {f.licence} <span className="text-ink-600">· {f.optional}</span>
-        </legend>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-          {f.licenceOptions.map((opcion) => (
-            <label key={opcion} className="flex items-center gap-2 text-sm text-bone">
-              <input
-                type="radio"
-                name="licence"
-                value={opcion}
-                className="h-4 w-4 border-ink-600 accent-rust-500"
-              />
-              {opcion}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* Dónde verte */}
-      <div className="grid gap-8 sm:grid-cols-2">
-        <Campo
-          id="portfolio"
-          name="portfolio"
-          type="url"
-          label={f.portfolio}
-          placeholder={f.portfolioHint}
-          dict={dict}
-        />
-        <Campo id="instagram" name="instagram" label={f.instagram} placeholder="@" dict={dict} />
-      </div>
 
       <div>
-        <label className="flex items-start gap-3 text-sm text-smoke">
+        <label className="flex min-h-11 items-start gap-3 text-sm text-bone">
           <input
             type="checkbox"
             name="consent"
-            className="mt-1 h-4 w-4 shrink-0 border-ink-600 accent-rust-500"
+            className="mt-1 h-4 w-4 shrink-0 accent-rust-500"
+            aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
           />
           <span>
             {f.consent}{" "}
-            <Link href={path(locale, "privacy")} className="text-rust-300 underline">
+            <Link
+              href={path(locale, "privacy")}
+              className="text-rust-300 underline underline-offset-2 hover:text-bone"
+            >
               {f.consentLink}
             </Link>
           </span>
         </label>
         {state.fieldErrors?.consent && (
-          <p className="mt-2 text-sm text-rust-300">{mensajeError(dict, state.fieldErrors.consent)}</p>
+          <p id="consent-error" className="mt-2 text-sm text-rust-300">
+            {f.errorConsent}
+          </p>
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="bg-brand-600 px-8 py-4 text-sm font-semibold tracking-[0.04em] text-bone transition-colors hover:bg-rust-500 disabled:opacity-60"
-      >
-        {pending ? f.submitting : f.submit}
-      </button>
+      <BotonEnviar pendiente={pending} textos={f} />
     </form>
-  );
-}
-
-function Campo({
-  id,
-  name,
-  label,
-  dict,
-  type = "text",
-  required,
-  min,
-  max,
-  placeholder,
-  autoComplete,
-  error,
-}: {
-  id: string;
-  name: string;
-  label: string;
-  dict: Dictionary;
-  type?: string;
-  required?: boolean;
-  min?: number;
-  max?: number;
-  placeholder?: string;
-  autoComplete?: string;
-  error?: string;
-}) {
-  return (
-    <div>
-      <label htmlFor={id} className="label">
-        {label}{" "}
-        <span className="text-ink-600">
-          · {required ? dict.jobs.form.required : dict.jobs.form.optional}
-        </span>
-      </label>
-      <input
-        id={id}
-        name={name}
-        type={type}
-        min={min}
-        max={max}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className={cn(campo, error && "border-rust-300")}
-      />
-      {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm text-rust-300">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function Casillas({
-  nombre,
-  leyenda,
-  pista,
-  opciones,
-  dict,
-  requerido,
-  error,
-}: {
-  nombre: string;
-  leyenda: string;
-  pista: string;
-  opciones: string[];
-  dict: Dictionary;
-  requerido?: boolean;
-  error?: string;
-}) {
-  return (
-    <fieldset>
-      <legend className="label">
-        {leyenda}{" "}
-        <span className="text-ink-600">
-          · {requerido ? dict.jobs.form.required : dict.jobs.form.optional}
-        </span>
-      </legend>
-      <p className="mt-1 text-xs text-smoke">{pista}</p>
-      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-        {opciones.map((opcion) => (
-          <label key={opcion} className="flex items-center gap-2 text-sm text-bone">
-            <input
-              type="checkbox"
-              name={nombre}
-              value={opcion}
-              className="h-4 w-4 border-ink-600 accent-rust-500"
-            />
-            {opcion}
-          </label>
-        ))}
-      </div>
-      {error && <p className="mt-2 text-sm text-rust-300">{error}</p>}
-    </fieldset>
   );
 }
