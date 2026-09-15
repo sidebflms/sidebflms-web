@@ -77,15 +77,6 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    // Una sola línea de servicios, en gris y pequeña, en vez de la frase
-    // «Drone, producción en directo, cablecam y multicámara. Con base en
-    // España.». Mario, 2026-09-15. Va en inglés igual en ES y EN, como el
-    // titular: son nombres de oficio, no una frase que traducir.
-    //
-    // Es una lista, no un texto: el separador «|» lo pone el componente entre
-    // elementos, así no queda una barra suelta al final si en una pantalla
-    // estrecha la línea parte en dos.
-    sub: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
   },
 
   brands: {
@@ -130,6 +121,11 @@ export const en: Dictionary = {
     headline: ["Four stages", "of the same", "job"],
     intro:
       "The order isn't decorative: it's the actual process, from the moodboard to the file you post on Instagram.",
+    // THE DISCIPLINES LINE. Ver la nota en es.ts: estuvo unas horas en el
+    // hero de la portada y se movió aquí el 2026-09-15. No se traduce —son
+    // nombres de oficio— así que es idéntica a la castellana.
+    disciplinas: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
+
     offerLabel: "What we do",
     offer: [
       {

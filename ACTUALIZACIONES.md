@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (53) — El menú ocupa el sitio de las disciplinas, que se van a Servicios
+
+Mario, señalando la línea de debajo del titular: «donde pone drone, live
+production, es donde tienes que poner el menú, y con las barras también; y esa
+parte de live production y demás se va a la página de services». Y: «en la hora
+tienes que poner TC delante, simulando el timecode».
+
+### El menú **sustituye** a la línea de disciplinas, no se suma
+
+Sube de `mt-8` a `mt-6` —el hueco que tenía la línea que había ahí— y estrena
+las mismas barras entre entradas. Sigue en blanco, no en el gris de aquella
+línea: esto se pulsa, y el gris es el color de lo que sólo se lee.
+
+Las barras son decoración y van marcadas como tal, así que un lector de
+pantalla no oye «work barra services»: anuncia la lista de enlaces y ya.
+
+### Las disciplinas se mudan a Servicios
+
+`DRONE | LIVE PRODUCTION | CABLECAM | MULTICAM | PHOTO` pasa de `hero.sub` a
+`services.disciplinas`, y se pinta bajo la entradilla de la página, alineada
+con el titular. Encaja mejor ahí: en la portada era una etiqueta suelta, y
+aquí resume de un vistazo lo que desarrollan las tarjetas de más abajo.
+
+Se mantiene la regla de las barras a partir de `sm`: por debajo la línea parte
+en dos y, como la barra va pegada al elemento que la sigue, la segunda línea
+arrancaría con una barra suelta.
+
+**En la portada, por debajo de 1024 px no queda nada bajo el titular**: el menú
+del hero sólo se pinta desde `lg` (por debajo manda el botón de menú de la
+cabecera) y la línea de disciplinas ya no está. El hero se queda con el
+titular y la hora, que es lo que se pidió.
+
+### La hora lleva «TC» delante
+
+Como el monitor de una sala: `TC 17:13:07:18`. La etiqueta va más apagada que
+los números —es la etiqueta, no el dato— y se pinta siempre, también en el
+instante en que la hora aún no está, para que la línea no aparezca de golpe.
+
+---
+
 ## 2026-09-15 (52) — El menú de la portada baja al hero, y el timecode es la hora
 
 Dos peticiones de Mario sobre la primera pantalla: «pon ahí el menú y que

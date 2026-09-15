@@ -79,15 +79,6 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
-    // Una sola línea de servicios, en gris y pequeña, en vez de la frase
-    // «Drone, producción en directo, cablecam y multicámara. Con base en
-    // España.». Mario, 2026-09-15. Va en inglés igual en ES y EN, como el
-    // titular: son nombres de oficio, no una frase que traducir.
-    //
-    // Es una lista, no un texto: el separador «|» lo pone el componente entre
-    // elementos, así no queda una barra suelta al final si en una pantalla
-    // estrecha la línea parte en dos.
-    sub: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
   },
 
   brands: {
@@ -136,6 +127,21 @@ export const es = {
     headline: ["Cuatro etapas", "del mismo", "encargo"],
     intro:
       "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subes a Instagram.",
+    // LA LÍNEA DE DISCIPLINAS.
+    //
+    // Estuvo unas horas en el hero de la portada, el 2026-09-15, en el sitio
+    // que ahora ocupa el menú. Mario: «esa parte de live production y demás se
+    // va a la página de services». Aquí encaja mejor de todos modos: en la
+    // portada era una etiqueta suelta y aquí es el resumen de la página.
+    //
+    // Va en inglés igual en ES y EN, como el titular de la portada: son
+    // nombres de oficio, no una frase que traducir.
+    //
+    // Es una lista, no un texto con barras dentro: el separador lo pone el
+    // componente, así no queda una barra suelta al empezar la segunda línea
+    // cuando la pantalla es estrecha.
+    disciplinas: ["DRONE", "LIVE PRODUCTION", "CABLECAM", "MULTICAM", "PHOTO"],
+
     // LO QUE OFRECEMOS — la lista de servicios. Va ANTES de las etapas: las
     // etapas explican cómo se hace un encargo, pero quien llega a esta página
     // quiere saber primero qué se puede encargar.

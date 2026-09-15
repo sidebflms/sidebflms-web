@@ -171,62 +171,22 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           ))}
         </h1>
 
-        {/* LA LÍNEA DE SERVICIOS.
-            Pequeña y en `smoke` (el gris), para que no le dispute el sitio al
-            titular: es una etiqueta de qué hacemos, no una frase que leer.
-
-            `flex-wrap` + `justify-center`: en una pantalla estrecha no caben
-            los cinco en una línea, y así parte por los huecos y queda
-            centrada, en vez de salirse.
-
-            LAS BARRAS SÓLO A PARTIR DE `sm`, y no es un capricho: por debajo
-            la línea parte en dos y, como la barra va pegada al elemento que la
-            sigue, la segunda línea arrancaba con una barra suelta —«| CABLECAM
-            | MULTICAM | PHOTO»—. Medido a 375 px. Sin barras, las dos líneas
-            se leen igual de bien y no queda el resto colgando.
-
-            Las barras son decoración, así que no las lee el lector de pantalla
-            —oiría «drone barra live production»— y la lista se anuncia como lo
-            que es. */}
-        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-          {dict.hero.sub.map((servicio, i) => (
-            <li
-              key={servicio}
-              className="flex items-center gap-3 text-xs font-medium tracking-[0.14em] text-smoke uppercase"
-            >
-              {i > 0 && (
-                <span aria-hidden="true" className="hidden text-smoke/40 sm:inline">
-                  |
-                </span>
-              )}
-              {servicio}
-            </li>
-          ))}
-        </ul>
-
-        {/* EL MENÚ DE LA PORTADA, AQUÍ.
-            Mario, 2026-09-15, señalando la línea de servicios: «pon ahí el
-            menú y que cuando pases por encima se ilumine en naranja».
-
-            Vive dentro del hero y no en la columna de la derecha —que es lo
-            que ve el resto de páginas—, porque «ahí» es este sitio: debajo del
-            titular. En las demás páginas no hay hero, así que allí sigue
-            mandando `side-nav.tsx`. Las dos listas salen de `enlacesMenu()`,
-            de modo que una página nueva aparece en las dos a la vez.
-
-            Es el mismo `<nav aria-label="Principal">` que la columna, y sólo
-            se pinta uno de los dos a la vez (la cabecera decide), así que no
-            hay dos menús principales compitiendo.
-
-            Más grande y en blanco frente al gris de los servicios: son dos
-            cosas distintas —una se lee, la otra se pulsa— y si compartieran
-            tratamiento, la línea de arriba parecería pulsable. */}
-        <nav aria-label="Principal" className="mt-8 hidden lg:block">
-          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
-            {links.map((link) => {
+        <nav aria-label="Principal" className="mt-6 hidden lg:block">
+          <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            {links.map((link, i) => {
               const activo = pathname.startsWith(link.href);
               return (
-                <li key={link.href}>
+                <li key={link.href} className="flex items-center gap-4">
+                  {/* Las barras, como las tenía la línea de disciplinas que
+                      antes ocupaba este sitio: Mario pidió el menú «con las
+                      barras también». Son decoración, así que el lector de
+                      pantalla no las lee —oiría «work barra services»— y lo
+                      que anuncia es la lista de enlaces. */}
+                  {i > 0 && (
+                    <span aria-hidden="true" className="text-smoke/40">
+                      |
+                    </span>
+                  )}
                   <Link
                     href={link.href}
                     aria-current={activo ? "page" : undefined}
@@ -265,8 +225,15 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           él dejaba la hora 4 px a la derecha del centro real. Medido. Con un
           padding simétrico cae donde tiene que caer. */}
       <div className="absolute inset-x-0 bottom-8 flex min-h-4 justify-center px-6">
-        <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
-          {ahora}
+        {/* El «TC» delante, como en el monitor de una sala. Mario: «en la
+            hora tienes que poner TC delante, simulando el timecode». Va más
+            apagado que los números porque es la etiqueta, no el dato.
+
+            Se pinta siempre, también mientras la hora todavía no está: así la
+            línea no aparece de golpe al montar. */}
+        <p className="flex items-center gap-2 text-xs font-medium tracking-[0.08em] text-smoke">
+          <span className="text-smoke/50">TC</span>
+          <span className="tabular-nums">{ahora}</span>
         </p>
       </div>
     </section>

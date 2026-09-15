@@ -40,6 +40,32 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
             ))}
           </h1>
           <p className="text-lead measure mt-6 text-smoke">{dict.services.intro}</p>
+
+          {/* LA LÍNEA DE DISCIPLINAS.
+              Venía del hero de la portada, donde ahora está el menú (Mario,
+              2026-09-15: «esa parte de live production y demás se va a la
+              página de services»). Aquí funciona mejor: en la portada era una
+              etiqueta suelta y aquí resume de un vistazo lo que desarrollan
+              las tarjetas de más abajo.
+
+              Las barras sólo a partir de `sm`: por debajo la línea parte en
+              dos y, como la barra va pegada al elemento que la sigue, la
+              segunda línea arrancaría con una barra suelta. */}
+          <ul className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1">
+            {dict.services.disciplinas.map((disciplina, i) => (
+              <li
+                key={disciplina}
+                className="flex items-center gap-3 text-xs font-medium tracking-[0.14em] text-smoke uppercase"
+              >
+                {i > 0 && (
+                  <span aria-hidden="true" className="hidden text-smoke/40 sm:inline">
+                    |
+                  </span>
+                )}
+                {disciplina}
+              </li>
+            ))}
+          </ul>
         </Reveal>
       </header>
 
