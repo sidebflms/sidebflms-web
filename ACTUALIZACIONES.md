@@ -5,6 +5,64 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (52) — El menú de la portada baja al hero, y el timecode es la hora
+
+Dos peticiones de Mario sobre la primera pantalla: «pon ahí el menú y que
+cuando pases por encima se ilumine en naranja» —señalando la línea de
+servicios, debajo del titular— y «el timecode de la izquierda ponlo en medio y
+que sea la hora».
+
+### El menú, dentro del hero (sólo en la portada)
+
+Debajo de la línea de servicios, centrado, en blanco y con el naranja de marca
+(`rust-300`) al pasar por encima y en la página en la que estás.
+
+**En las demás páginas no hay hero**, así que allí sigue mandando la columna
+del lado derecho (`side-nav.tsx`). Quien decide cuál se pinta es la cabecera,
+comparando la ruta con la portada; **nunca se pintan los dos a la vez**, que si
+no habría dos `<nav aria-label="Principal">` compitiendo y un lector de
+pantalla anunciaría dos menús principales.
+
+Sí, el menú cambia de sitio entre la portada y el resto. Es a propósito: en la
+portada el hero ocupa la pantalla entera y el menú forma parte de esa
+composición; en una página con contenido, una fila centrada en mitad del texto
+no tendría dónde vivir.
+
+Las dos listas salen ahora de **`components/layout/enlaces-menu.ts`**. Estaban
+duplicadas —la cabecera por un lado, el hero por otro— y con eso, añadir una
+página quinta significaba acordarse de tocar dos ficheros. Olvidarse de uno no
+rompe nada: simplemente falta una entrada en media web, que es la clase de
+fallo que no se ve hasta tarde.
+
+Al volver a construir rutas, **el hero necesita `locale` otra vez** (se lo
+había quitado la entrada 49). `app/[locale]/page.tsx` se lo pasa.
+
+### El timecode pasa a ser la hora, y se centra
+
+Ya no cuenta el tiempo del vídeo: es la hora local del visitante, escrita como
+timecode de montaje `HH:MM:SS:FF` a 25 fps, que es lo que en una sala se llama
+*time of day*. Reaprovecha `timecode()` de `lib/utils.ts` pasándole los
+segundos transcurridos del día.
+
+Tres detalles que parecen menores y no lo son:
+
+- **Arranca vacío y se rellena al montar.** La página se genera en el
+  servidor; si el servidor pintara una hora, al llegar al navegador ya sería
+  otra y React avisaría de que no coincide con lo que esperaba.
+- **Se refresca cada 40 ms**, que es un fotograma a 25 fps. Menos, y el
+  contador de fotogramas daría saltos; más, y se repintaría sin que cambie.
+- **`min-h-4` en la línea.** Como el texto llega un instante después del
+  primer pintado, sin esa altura reservada el hero daba un salto de 16 px.
+
+Y no va dentro de `.shell`: sus márgenes izquierdo y derecho son distintos a
+propósito —es la asimetría de la maqueta—, así que centrar ahí dentro dejaba
+la hora 11 px a la derecha del centro real. Medido.
+
+Con esto el hero deja de seguir la reproducción del vídeo: se van `hasVideo`,
+`elapsed` y el bucle que hacía correr el timecode cuando no había metraje.
+
+---
+
 ## 2026-09-15 (51) — El menú, en columna a la derecha; el hero, con línea de servicios
 
 Corrección de lo anterior y un cambio de texto. Mario, al ver la cápsula

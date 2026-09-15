@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { LogoMark, Wordmark } from "@/components/layout/logo";
+import { enlacesMenu } from "@/components/layout/enlaces-menu";
 import { SideNav } from "@/components/layout/side-nav";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { IconoRed, REDES } from "@/components/layout/social-icons";
@@ -37,12 +38,11 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
     if (open) setOpen(false);
   }
 
-  const links = [
-    { href: path(locale, "portfolio"), label: nav.portfolio },
-    { href: path(locale, "services"), label: nav.services },
-    { href: path(locale, "about"), label: nav.about },
-    { href: path(locale, "contact"), label: nav.contact },
-  ];
+  const links = enlacesMenu(locale, nav);
+
+  // En la portada el menú no va en la columna de la derecha: va dentro del
+  // hero, debajo del titular, y lo pinta el propio hero. Ver `side-nav.tsx`.
+  const esPortada = pathname === path(locale, "home");
 
   // El header es transparente sobre el vídeo del hero y se opaca al scrollear,
   // para que el copy siga legible sobre cualquier fotograma.
@@ -189,7 +189,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
     </header>
 
     {/* El menú, abajo y centrado. Ver components/layout/bottom-nav.tsx. */}
-    <SideNav links={links} />
+    {!esPortada && <SideNav links={links} />}
     </>
   );
 }

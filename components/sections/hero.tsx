@@ -1,10 +1,14 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { enlacesMenu } from "@/components/layout/enlaces-menu";
 import type { Dictionary } from "@/lib/dictionaries";
+import type { Locale } from "@/lib/routes";
 import { prefersReducedMotion } from "@/lib/gsap";
-import { timecode } from "@/lib/utils";
+import { cn, timecode } from "@/lib/utils";
 
 /**
  * HERO.
@@ -33,12 +37,32 @@ const SOURCES = {
   poster: "/media/reel-poster.jpg" as string | null,
 };
 
-// `locale` se dejó de usar al quitar los dos botones del hero: eran lo único
-// que construía rutas. El componente ya no necesita saber el idioma.
-export function Hero({ dict }: { dict: Dictionary }) {
+// `locale` vuelve al hero: desde el 2026-09-15 el menú de la portada vive
+// aquí dentro, debajo del titular, y necesita construir rutas.
+export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [elapsed, setElapsed] = useState(0);
-  const [hasVideo, setHasVideo] = useState(false);
+  const pathname = usePathname();
+  const links = enlacesMenu(locale, dict.nav);
+
+  /**
+   * LA HORA, EN FORMATO TIMECODE.
+   *
+   * Antes esto contaba el tiempo del vídeo. Mario, 2026-09-15: «el timecode de
+   * la izquierda ponlo en medio y que sea la hora». Así que es la hora local
+   * del visitante, escrita como un timecode de montaje `HH:MM:SS:FF` a 25 fps
+   * —que es, literalmente, lo que en una sala se llama *time of day*—.
+   *
+   * ── POR QUÉ ARRANCA VACÍO ───────────────────────────────────────────────
+   * La página se genera en el servidor. Si el servidor pintara una hora, al
+   * llegar al navegador ya sería otra y React avisaría de que lo que hay no
+   * coincide con lo que esperaba. Empezando vacío y rellenando al montar, la
+   * primera hora que se ve es la del visitante y no hay discrepancia.
+   *
+   * ── POR QUÉ 40 ms ───────────────────────────────────────────────────────
+   * Es un fotograma a 25 fps. Menos, y el contador de fotogramas daría saltos;
+   * más, y se estaría repintando un texto de doce caracteres sin que cambie.
+   */
+  const [ahora, setAhora] = useState<string | null>(null);
 
   // Fuente distinta por tamaño: no es la misma escalada.
   useEffect(() => {
@@ -58,21 +82,17 @@ export function Hero({ dict }: { dict: Dictionary }) {
     }
   }, []);
 
-  // El timecode corre con el vídeo si lo hay, y solo, en bucle, si no lo hay:
-  // el hero tiene que leerse como una línea de tiempo también en la maqueta.
   useEffect(() => {
-    if (hasVideo) return;
-    if (prefersReducedMotion()) return;
-
-    const start = performance.now();
-    let frame = 0;
-    const tick = (now: number) => {
-      setElapsed(((now - start) / 1000) % 600);
-      frame = window.requestAnimationFrame(tick);
+    const pinta = () => {
+      const d = new Date();
+      const segundosDelDia =
+        d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds() + d.getMilliseconds() / 1000;
+      setAhora(timecode(segundosDelDia));
     };
-    frame = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frame);
-  }, [hasVideo]);
+    pinta();
+    const id = window.setInterval(pinta, 40);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <section
@@ -122,8 +142,6 @@ export function Hero({ dict }: { dict: Dictionary }) {
         preload="metadata"
         tabIndex={-1}
         aria-hidden="true"
-        onLoadedData={() => setHasVideo(true)}
-        onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)}
       />
 
       {/* Velo de legibilidad. Sin esto el copy pelea con cada fotograma. */}
@@ -185,33 +203,70 @@ export function Hero({ dict }: { dict: Dictionary }) {
             </li>
           ))}
         </ul>
+
+        {/* EL MENÚ DE LA PORTADA, AQUÍ.
+            Mario, 2026-09-15, señalando la línea de servicios: «pon ahí el
+            menú y que cuando pases por encima se ilumine en naranja».
+
+            Vive dentro del hero y no en la columna de la derecha —que es lo
+            que ve el resto de páginas—, porque «ahí» es este sitio: debajo del
+            titular. En las demás páginas no hay hero, así que allí sigue
+            mandando `side-nav.tsx`. Las dos listas salen de `enlacesMenu()`,
+            de modo que una página nueva aparece en las dos a la vez.
+
+            Es el mismo `<nav aria-label="Principal">` que la columna, y sólo
+            se pinta uno de los dos a la vez (la cabecera decide), así que no
+            hay dos menús principales compitiendo.
+
+            Más grande y en blanco frente al gris de los servicios: son dos
+            cosas distintas —una se lee, la otra se pulsa— y si compartieran
+            tratamiento, la línea de arriba parecería pulsable. */}
+        <nav aria-label="Principal" className="mt-8 hidden lg:block">
+          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+            {links.map((link) => {
+              const activo = pathname.startsWith(link.href);
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={activo ? "page" : undefined}
+                    className={cn(
+                      "text-sm font-medium tracking-[0.1em] uppercase transition-colors duration-200",
+                      activo ? "text-rust-300" : "text-bone hover:text-rust-300"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
       </div>
 
-      {/* SÓLO EL TIMECODE.
-          Aquí había tres rótulos más a la derecha: «Pausar el reel»,
-          «Activar sonido» y «Desplázate para ver el trabajo». Mario los quitó
-          el 2026-09-15. El timecode se queda: es lo que hace que la esquina se
-          lea como una línea de tiempo y no como un vídeo de fondo cualquiera.
+      {/* LA HORA, CENTRADA ABAJO.
+          Estaba a la izquierda y marcaba el tiempo del vídeo; ahora va en
+          medio y marca la hora del visitante (ver el efecto de arriba).
 
-          Dos consecuencias que conviene tener presentes:
+          `min-h-4` para que la línea ocupe su sitio desde el primer pintado:
+          como el texto llega un instante después —en el navegador, no en el
+          servidor—, sin esa altura el hero daría un salto de 16 px al montar.
 
-          1. EL REEL YA NO SE PUEDE PAUSAR NI OÍR. Queda mudo y en bucle para
-             siempre. Lo de oírlo es una decisión de contenido y es suya; lo de
-             pausarlo roza el criterio 2.2.2 de la WCAG (todo lo que se mueve
-             solo más de cinco segundos debería poder pararse). Lo que salva la
-             situación es que con «reducir movimiento» activado el vídeo NO
-             arranca —ver el efecto de arriba—, que es justo el caso por el que
-             existe ese criterio. Si algún día vuelve el control, vuelve aquí.
-
-          2. `hasVideo` ya no decide nada visible; sigue haciendo falta para el
-             timecode de la maqueta (cuando no hay vídeo, corre solo).
-
-          Vuelve a `bottom-8` en todos los tamaños: la cápsula del menú, que
-          era lo que obligaba a subirlo a partir de `md`, ya no está en el
-          borde inferior sino en columna a la derecha. */}
-      <div className="shell absolute inset-x-0 bottom-8">
+          Aquí había tres rótulos más: «Pausar el reel», «Activar sonido» y
+          «Desplázate para ver el trabajo». Mario los quitó el 2026-09-15, y
+          con ellos el reel se quedó mudo y sin forma de pararlo. Lo segundo
+          roza el criterio 2.2.2 de la WCAG —lo que se mueve solo más de cinco
+          segundos debería poder pararse—; lo que salva la situación es que con
+          «reducir movimiento» activado el vídeo ni arranca, que es el caso por
+          el que existe ese criterio. Si algún día vuelve el control, vuelve
+          aquí. */}
+      {/* Ojo con `.shell` aquí: sus márgenes izquierdo y derecho son distintos
+          a propósito (es la asimetría de la maqueta), así que centrar dentro de
+          él dejaba la hora 4 px a la derecha del centro real. Medido. Con un
+          padding simétrico cae donde tiene que caer. */}
+      <div className="absolute inset-x-0 bottom-8 flex min-h-4 justify-center px-6">
         <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
-          {timecode(elapsed)}
+          {ahora}
         </p>
       </div>
     </section>
