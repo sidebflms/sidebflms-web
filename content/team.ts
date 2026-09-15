@@ -100,20 +100,43 @@ export type Miembro = {
  * para él, pero si algún día se revisa la página de equipo, ésa es la que
  * canta.
  *
- * Las otras nueve siguen siendo fotos de OTRAS personas puestas de relleno para
- * poder ver la rejilla, y llevan `fotoEsEjemplo: true`. En cuanto se sepa quién
- * es quién, se quita esa marca y la foto pasa a color y sin aviso.
+ * ── 2026-09-15: CUATRO MÁS. VAN NUEVE DE ONCE ───────────────────────────
+ * Iván, Jota, María y Natalia. Faltan **Galoguin y Rubén**.
+ *
+ * Tres de las cuatro necesitaron trabajo antes de entrar:
+ *
+ *   · **Iván** llegó sólo en el portapapeles, sin fichero. Se volcó a disco con
+ *     `osascript` leyendo el portapapeles como PNG. Es una captura, así que es
+ *     la de menor resolución de las nueve (552×628) y se nota si se amplía.
+ *   · **María** era una captura de una story de Instagram, con la barra de
+ *     estado del móvil arriba y la de «Send message» abajo. Se recortó a mano
+ *     (`crop=900:1125:417:926`) para quitar el interfaz.
+ *
+ *     **ATENCIÓN AL CRÉDITO:** la story llevaba «@minifont» sobreimpreso, que
+ *     es presumiblemente quien hizo la foto. Publicarla en una web comercial
+ *     necesita su permiso, igual que hizo falta el de las marcas. PENDIENTE de
+ *     confirmar con Mario.
+ *   · **Natalia** venía en HEIC y `ffprobe` decía 512×512 — era mentira: el
+ *     HEIC va en baldosas de 512 y `sips` da el tamaño real, 3024×4032. Si se
+ *     hubiera hecho caso a `ffprobe` se habría descartado una foto buena por
+ *     inservible. Ella sale pequeña en el encuadre original, así que se recortó
+ *     a mano (`crop=1280:1600:1250:1464`).
+ *
+ * **Quedan DOS de relleno**: Galoguin y Rubén, los dos con la misma foto de
+ * otra persona (`gafas-fpv.jpg`) y con `fotoEsEjemplo: true`. En cuanto lleguen
+ * las suyas se quita esa marca y pasan a color y sin aviso — y con eso
+ * `HAY_EJEMPLOS` se apaga y cae el freno para abrir la web.
  */
 export const EQUIPO: Miembro[] = [
   { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Dirección", en: "Direction" }, roleEsEjemplo: true, foto: "/media/equipo/mario-bote.jpg" },
   { nombre: "Fernando", slug: "fernando", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/fernando.jpg" },
   { nombre: "Galoguin", slug: "galoguin", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
-  { nombre: "Iván", slug: "ivan", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/piloto-inspire.jpg", fotoEsEjemplo: true },
-  { nombre: "Jota", slug: "jota", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/emisora-humo.jpg", fotoEsEjemplo: true },
+  { nombre: "Iván", slug: "ivan", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/ivan.jpg" },
+  { nombre: "Jota", slug: "jota", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/jota.jpg" },
   { nombre: "Kenny", slug: "kenny", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/kenny.jpg" },
-  { nombre: "María", slug: "maria", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/equipo-tres.jpg", fotoEsEjemplo: true },
+  { nombre: "María", slug: "maria", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/maria.jpg" },
   { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Montaje", en: "Editing" }, roleEsEjemplo: true, foto: "/media/equipo/nacho-lopez.jpg" },
-  { nombre: "Natalia", slug: "natalia", role: { es: "Fotografía", en: "Stills" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/camara-grada.jpg", fotoEsEjemplo: true },
+  { nombre: "Natalia", slug: "natalia", role: { es: "Fotografía", en: "Stills" }, roleEsEjemplo: true, foto: "/media/equipo/natalia.jpg" },
   { nombre: "Rubén", slug: "ruben", role: { es: "Etalonaje", en: "Colour" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
   { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/sergio.jpg" },
 ];

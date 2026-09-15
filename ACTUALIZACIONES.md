@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (45) — Cuatro retratos más: van nueve de once
+
+Iván, Jota, María y Natalia. Faltan **Galoguin y Rubén**, y con ellos cae el
+freno para abrir la web.
+
+### Tres de las cuatro no entraron sin pelea
+
+**Iván llegó sólo en el portapapeles**, sin fichero. Los adjuntos del chat no
+aterrizan en el disco —se buscó en el directorio de la sesión y en las cachés, y
+no hay nada—, pero el portapapeles del Mac sí se alcanza: se volcó a PNG con
+`osascript` leyendo `«class PNGf»`.
+
+Es una captura, así que es la de **menor resolución de las nueve** (552×628).
+Entra, pero se nota si se amplía.
+
+**María era una captura de una story de Instagram**, con la barra de estado del
+móvil arriba y la de «Send message» abajo. Recortada a mano para quitar el
+interfaz (`crop=900:1125:417:926`).
+
+**ATENCIÓN AL CRÉDITO:** la story llevaba **«@minifont»** sobreimpreso, que es
+presumiblemente quien hizo la foto. Publicarla en una web comercial necesita su
+permiso, igual que hizo falta el de las marcas. Queda anotado en
+`content/team.ts` y **pendiente de confirmar**.
+
+**Natalia venía en HEIC y `ffprobe` decía 512×512.** Era mentira: los HEIC del
+iPhone van en baldosas de 512, y `ffprobe` enseña las baldosas. `sips` da el
+tamaño real: **3024×4032**.
+
+Merece la pena retener esto, porque por poco se descarta una foto buena como
+inservible: **para saber el tamaño de un HEIC hay que preguntarle a `sips`, no a
+`ffprobe`.** Ella sale pequeña en el encuadre original, así que también se
+recortó a mano (`crop=1280:1600:1250:1464`).
+
+### Estado
+
+Nueve de once con su cara, sin marca. Quedan Galoguin y Rubén, los dos con la
+misma foto de relleno. Los cargos siguen todos sin confirmar (llevan asterisco),
+así que `HAY_EJEMPLOS` sigue en `true` y el aviso sigue arriba de la sección.
+
+---
+
 ## 2026-09-15 (44) — La portada: doce piezas, más pequeñas y en otro orden
 
 Mario: «¿podrían ser más vídeos y más pequeños? Si quieren verlos en grande
