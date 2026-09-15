@@ -74,20 +74,37 @@ type Hueco = { project: Project; aspecto: number };
  * compuesto. Es lo mismo que hubo que corregir en la v7 —ocho paneles iguales
  * seguidos— y por el mismo motivo.
  */
-const PATRONES = [
-  [H, V, H],
-  [V, H, V],
-  [H, H, V],
-];
+const PATRONES: Record<number, number[][]> = {
+  3: [
+    [H, V, H],
+    [V, H, V],
+    [H, H, V],
+  ],
+  // Cuatro por fila: la variante de la portada. Mismo criterio —que ninguna
+  // fila se parezca a la de arriba— pero con las piezas más pequeñas, porque
+  // ahí lo que se quiere es enseñar CUÁNTO hay, no cada cosa en detalle.
+  4: [
+    [H, V, H, V],
+    [V, H, V, H],
+    [H, H, V, H],
+    [V, H, H, V],
+  ],
+};
 
-function filas(projects: Project[]): Hueco[][] {
-  const lider = projects.find((p) => p.showpiece);
+/**
+ * @param porFila  3 (página de Trabajo) o 4 (portada).
+ * @param conDestacada  si la primera fila la encabeza la pieza destacada.
+ *   En la portada NO: allí la rejilla arranca ya en cuatro, sin cabecera, para
+ *   que no se lea como la misma página dos veces.
+ */
+function filas(projects: Project[], porFila: 3 | 4, conDestacada: boolean): Hueco[][] {
+  const lider = conDestacada ? projects.find((p) => p.showpiece) : undefined;
   const resto = projects.filter((p) => p !== lider);
   const out: Hueco[][] = [];
 
-  // La destacada ya no va sola a todo lo ancho: comparte fila con una
-  // vertical. Sigue mandando —ocupa casi el triple— pero deja de comerse una
-  // pantalla entera ella sola, que era parte del problema.
+  // La destacada no va sola a todo lo ancho: comparte fila con una vertical.
+  // Sigue mandando —ocupa casi el triple— pero deja de comerse una pantalla
+  // entera ella sola.
   if (lider) {
     const acompana = resto.shift();
     out.push(
@@ -97,10 +114,11 @@ function filas(projects: Project[]): Hueco[][] {
     );
   }
 
-  for (let i = 0; i < resto.length; i += 3) {
-    const trio = resto.slice(i, i + 3);
-    const patron = PATRONES[(i / 3) % PATRONES.length];
-    out.push(trio.map((project, j) => ({ project, aspecto: patron[j] })));
+  const patrones = PATRONES[porFila];
+  for (let i = 0; i < resto.length; i += porFila) {
+    const grupo = resto.slice(i, i + porFila);
+    const patron = patrones[(i / porFila) % patrones.length];
+    out.push(grupo.map((project, j) => ({ project, aspecto: patron[j] })));
   }
   return out;
 }
@@ -306,14 +324,20 @@ export function PortfolioMosaic({
   projects,
   locale,
   dict,
+  porFila = 3,
+  conDestacada = true,
 }: {
   projects: Project[];
   locale: Locale;
   dict: Dictionary;
+  /** 3 en la página de Trabajo, 4 en la portada. */
+  porFila?: 3 | 4;
+  /** La portada no encabeza con la destacada: ver `filas()`. */
+  conDestacada?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-3">
-      {filas(projects).map((fila, i) => (
+      {filas(projects, porFila, conDestacada).map((fila, i) => (
         <div key={i} className="flex flex-col gap-3 md:flex-row">
           {/* La clave va por POSICIÓN y no por slug: la página de prueba
               repite las mismas piezas para ver la maqueta llena, y ahí el slug

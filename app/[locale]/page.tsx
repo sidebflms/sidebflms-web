@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { Manifesto } from "@/components/sections/manifesto";
 import { PortfolioMosaic } from "@/components/sections/portfolio-mosaic";
 import { ButtonLink, Arrow } from "@/components/ui/button";
-import { featuredProjects } from "@/content/projects";
+import { homeProjects } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -27,7 +27,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
-  const destacados = featuredProjects();
+  const destacados = homeProjects();
 
   return (
     <main id="main">
@@ -56,7 +56,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           </div>
         </Reveal>
         <div className="mt-8">
-          <PortfolioMosaic projects={destacados} locale={locale} dict={dict} />
+          <PortfolioMosaic
+            projects={destacados}
+            locale={locale}
+            dict={dict}
+            porFila={4}
+            conDestacada={false}
+          />
         </div>
       </section>
 

@@ -807,6 +807,59 @@ export function featuredProjects(): Project[] {
   return PROJECTS.filter((project) => project.featured);
 }
 
+/**
+ * LA SELECCIÓN DE LA PORTADA.
+ *
+ * ── POR QUÉ NO ES `featuredProjects()` SIN MÁS ───────────────────────────
+ * Hasta el 2026-09-15 la portada enseñaba los siete destacados, en el mismo
+ * orden y con la misma maqueta que la página de Trabajo. Mario: «ponlos en
+ * otro orden, para que no sea igual que la de work».
+ *
+ * Tiene razón y el motivo es de fondo: si las dos páginas enseñan lo mismo en
+ * el mismo orden, la portada no invita a entrar en Trabajo — ya la has visto.
+ *
+ * ── CÓMO SE ORDENA ───────────────────────────────────────────────────────
+ * Por RONDAS DE CATEGORÍA: se coge una pieza de cada categoría, luego otra de
+ * cada una, y así. El resultado es que dos piezas seguidas casi nunca son del
+ * mismo tipo, y en las primeras cuatro ya se ve aftermovie, multicámara, drone
+ * y publicidad. Eso es lo que una portada tiene que decir: la variedad de lo
+ * que se hace, no el detalle de una pieza.
+ *
+ * Es determinista, y eso importa: **nada de barajar al azar**. Un orden
+ * aleatorio cambiaría en cada carga, no coincidiría entre el servidor y el
+ * navegador —React avisaría del desajuste— y además haría imposible saber qué
+ * está viendo alguien cuando comente algo de la portada.
+ *
+ * ── CUÁNTAS ──────────────────────────────────────────────────────────────
+ * Doce, que a cuatro por fila son tres filas exactas. Más que las siete de
+ * antes, que era lo que se pidió, y sin que la portada se convierta en el
+ * portfolio entero: para eso está el botón de abajo.
+ */
+export function homeProjects(limite = 12): Project[] {
+  const porCategoria = new Map<Category, Project[]>();
+  for (const categoria of CATEGORIES) porCategoria.set(categoria, []);
+  for (const project of PROJECTS) {
+    // La primera categoría de cada pieza manda: es la que mejor la describe.
+    porCategoria.get(project.categories[0])?.push(project);
+  }
+
+  const out: Project[] = [];
+  for (let ronda = 0; out.length < limite; ronda += 1) {
+    let quedaAlguna = false;
+    for (const categoria of CATEGORIES) {
+      const cola = porCategoria.get(categoria)!;
+      if (ronda >= cola.length) continue;
+      quedaAlguna = true;
+      out.push(cola[ronda]);
+      if (out.length === limite) break;
+    }
+    // Sin esto, con `limite` mayor que el número de piezas el bucle no
+    // terminaría nunca.
+    if (!quedaAlguna) break;
+  }
+  return out;
+}
+
 export function showpieceProject(): Project {
   const found = PROJECTS.find((project) => project.showpiece);
   if (!found) throw new Error("No hay proyecto marcado como `showpiece`.");

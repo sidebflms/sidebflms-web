@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (44) — La portada: doce piezas, más pequeñas y en otro orden
+
+Mario: «¿podrían ser más vídeos y más pequeños? Si quieren verlos en grande
+pueden ir a la pestaña work. Y si puedes, en la principal ponlos en otro orden,
+para que no sea igual que la de work».
+
+### Doce en vez de siete, a cuatro por fila
+
+El mosaico acepta ahora `porFila` (3 o 4) y `conDestacada`. La página de Trabajo
+se queda como estaba —tres por fila, encabezando con la destacada— y la portada
+usa la variante de cuatro **sin cabecera**: arranca directamente en rejilla.
+
+Medido: doce piezas en tres filas de cuatro, con anchos de 438 y 197 px
+alternando. Antes la pieza que encabezaba medía 963.
+
+### El orden, y por qué no es aleatorio
+
+Se ordena **por rondas de categoría**: una pieza de cada categoría, luego otra
+de cada una, y así. Dos piezas seguidas casi nunca son del mismo tipo, y en las
+primeras cuatro ya se ve aftermovie, multicámara, drone y fotografía. Eso es lo
+que una portada tiene que decir —la variedad de lo que se hace— mientras que la
+página de Trabajo mantiene el orden curado.
+
+Comprobado que salen distintas:
+
+    Trabajo:  holika · fátima · monegros · duro · metropolitano · gordo
+    Portada:  fátima · gordo · holika · fitz · mitt motors · adrián mills
+
+**Nada de barajar al azar**, y no por pereza: un orden aleatorio cambiaría en
+cada carga, no coincidiría entre el servidor y el navegador —React avisaría del
+desajuste— y haría imposible saber qué está viendo alguien cuando comente algo
+de la portada.
+
+### El motivo de fondo
+
+Si las dos páginas enseñan lo mismo en el mismo orden, la portada no invita a
+entrar en Trabajo: ya la has visto. Ahora la portada dice «esto es la variedad
+de lo que hacemos» y Trabajo dice «míralo en grande».
+
+---
+
 ## 2026-09-15 (43) — El giro de la regleta se quita entero
 
 Mario, sobre la portada: «sigue saliendo la línea esa del drone».
