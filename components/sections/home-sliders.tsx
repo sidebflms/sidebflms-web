@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { Category, Project } from "@/content/projects";
 import type { Dictionary } from "@/lib/dictionaries";
@@ -149,6 +149,130 @@ function Pieza({
   );
 }
 
+/** Hueco entre piezas, en píxeles. Es el `gap-3` de la fila. */
+const HUECO = 12;
+
+/**
+ * UNA FILA.
+ *
+ * Es un componente y no un trozo del `map` de abajo porque necesita medir y
+ * recordar cuántas veces hay que repetir la lista, y eso son hooks.
+ *
+ * ── POR QUÉ SE REPITE LA LISTA ───────────────────────────────────────────
+ * El bucle funciona pintando la lista dos veces y desplazando el 50 %. Eso
+ * sólo se ve continuo si **una copia es más ancha que la pantalla**. Si no lo
+ * es, llega un momento en que la segunda copia ya ha entrado entera y detrás
+ * no hay nada: aparece un hueco a la derecha y la fila se corta.
+ *
+ * Es lo que pasaba con multicámara —cuatro piezas, unos 1.640 px— en una
+ * pantalla de 2.000. Mario: «en multicam sale un hueco, tiene que salir
+ * siempre la línea entera de contenido y que se repita tipo bucle».
+ *
+ * Así que cada copia lleva la lista repetida las veces que hagan falta para
+ * cubrir la ventana. Se calcula midiendo una pieza de verdad en lugar de
+ * suponer su ancho: cambia con el tamaño de pantalla (`h-40` / `lg:h-56`) y
+ * suponerlo sería volver a tener el fallo en el siguiente ajuste de maqueta.
+ *
+ * La duración se multiplica por las repeticiones, porque la distancia que
+ * recorre la cinta también: sin eso, repetir la lista haría la fila el doble
+ * o el triple de rápida.
+ */
+function Fila({
+  piezas,
+  categoria,
+  sentido,
+  locale,
+  dict,
+}: {
+  piezas: Project[];
+  categoria: Category;
+  sentido: "izquierda" | "derecha";
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const marcoRef = useRef<HTMLDivElement>(null);
+  const pistaRef = useRef<HTMLDivElement>(null);
+  const [repeticiones, setRepeticiones] = useState(1);
+
+  // `ResizeObserver` y no el evento `resize` de la ventana: avisa de cualquier
+  // cambio de ancho de la propia fila —zoom, aparición de la barra de
+  // desplazamiento, un cambio de maqueta— y no sólo de que se redimensione la
+  // ventana. Se probó con `resize` y había casos en los que no llegaba a
+  // recalcularse (comprobado a 2560 px).
+  useEffect(() => {
+    const marco = marcoRef.current;
+    if (!marco) return;
+
+    const calcula = () => {
+      const pieza = pistaRef.current?.firstElementChild?.firstElementChild;
+      if (!pieza) return;
+      const anchoPase = piezas.length * (pieza.getBoundingClientRect().width + HUECO);
+      const ancho = marco.getBoundingClientRect().width;
+      if (anchoPase <= 0 || ancho <= 0) return;
+      // `+ 1` de margen: con el ancho justo, un redondeo a la baja deja una
+      // rendija de un par de píxeles al final de la vuelta.
+      setRepeticiones(Math.max(1, Math.ceil((ancho + 1) / anchoPase)));
+    };
+
+    calcula();
+    const obs = new ResizeObserver(calcula);
+    obs.observe(marco);
+    return () => obs.disconnect();
+  }, [piezas.length]);
+
+  const duracion = piezas.length * repeticiones * SEGUNDOS_POR_PIEZA;
+  const pases = Array.from({ length: repeticiones }, (_, i) => i);
+
+  return (
+    <section aria-label={dict.portfolio.categories[categoria]}>
+      <p className="label shell mb-2">{dict.portfolio.categories[categoria]}</p>
+
+      {/* `overflow-x-auto` y no `hidden`: con «reducir movimiento» la cinta no
+          se desliza sola, y si no fuera desplazable a mano el contenido
+          quedaría inalcanzable. */}
+      <div ref={marcoRef} className="cinta overflow-x-auto">
+        {/* CADA COPIA VA EN SU PROPIO GRUPO, y el grupo lleva un `pr-3` igual
+            al hueco entre piezas.
+
+            Con las dos copias sueltas dentro de la misma fila, el ancho total
+            era `2 × piezas + (2n − 1) huecos`, mientras que la animación
+            desplaza justo el 50 %. Falta medio hueco por copia: la cinta
+            pegaba un saltito de 6 px en cada vuelta. Agrupando, cada grupo
+            mide `piezas + n huecos` exactos y el 50 % cae clavado donde
+            empieza la copia. */}
+        <div
+          ref={pistaRef}
+          className="cinta-pista flex w-max"
+          style={{
+            ["--cinta-duracion" as string]: `${duracion}s`,
+            ["--cinta-sentido" as string]:
+              sentido === "izquierda" ? "cintaIzquierda" : "cintaDerecha",
+          }}
+        >
+          {[0, 1].map((copia) => (
+            <div key={copia} className="flex gap-3 pr-3">
+              {pases.map((pase) =>
+                piezas.map((p) => (
+                  <Pieza
+                    key={`${copia}-${pase}-${p.slug}`}
+                    project={p}
+                    locale={locale}
+                    // Sólo la primera pasada de la primera copia son enlaces
+                    // de verdad; el resto está para que el bucle no tenga
+                    // costura, y un lector de pantalla no tiene por qué oír
+                    // los mismos trabajos cuatro veces.
+                    duplicada={copia !== 0 || pase !== 0}
+                  />
+                ))
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HomeSliders({
   projects,
   locale,
@@ -164,46 +288,15 @@ export function HomeSliders({
         const piezas = projects.filter((p) => p.categories.includes(categoria));
         if (piezas.length === 0) return null;
 
-        const duracion = piezas.length * SEGUNDOS_POR_PIEZA;
-
         return (
-          <section key={categoria} aria-label={dict.portfolio.categories[categoria]}>
-            <p className="label shell mb-2">{dict.portfolio.categories[categoria]}</p>
-
-            {/* `overflow-x-auto` y no `hidden`: con «reducir movimiento» la
-                cinta no se desliza sola, y si no fuera desplazable a mano el
-                contenido quedaría inalcanzable. */}
-            <div className="cinta overflow-x-auto">
-              {/* CADA COPIA VA EN SU PROPIO GRUPO, y el grupo lleva un
-                  `pr-3` igual al hueco entre piezas.
-
-                  Con las dos copias sueltas dentro de la misma fila, el ancho
-                  total era `2 × piezas + (2n − 1) huecos`, mientras que la
-                  animación desplaza justo el 50 %. Falta medio hueco por
-                  copia: la cinta pegaba un saltito de 6 px en cada vuelta.
-                  Agrupando, cada grupo mide `piezas + n huecos` exactos y el
-                  50 % cae clavado donde empieza la copia. */}
-              <div
-                className="cinta-pista flex w-max"
-                style={{
-                  ["--cinta-duracion" as string]: `${duracion}s`,
-                  ["--cinta-sentido" as string]:
-                    sentido === "izquierda" ? "cintaIzquierda" : "cintaDerecha",
-                }}
-              >
-                <div className="flex gap-3 pr-3">
-                  {piezas.map((p) => (
-                    <Pieza key={p.slug} project={p} locale={locale} duplicada={false} />
-                  ))}
-                </div>
-                <div className="flex gap-3 pr-3">
-                  {piezas.map((p) => (
-                    <Pieza key={`copia-${p.slug}`} project={p} locale={locale} duplicada />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
+          <Fila
+            key={categoria}
+            piezas={piezas}
+            categoria={categoria}
+            sentido={sentido}
+            locale={locale}
+            dict={dict}
+          />
         );
       })}
     </div>

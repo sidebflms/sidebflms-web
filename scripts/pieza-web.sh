@@ -22,6 +22,20 @@
 # su encuadre. Recortar el vertical a partir del apaisado sería recortar
 # un recorte: se pierde cielo y suelo que en el máster están.
 #
+# ── EL AUDIO SE CONSERVA (desde el 2026-09-15) ───────────────────────
+# Hasta esa fecha esto llevaba `-an` y las piezas salían MUDAS. Tenía su
+# lógica —son bucles de fondo, y un vídeo que arranca solo tiene que ir
+# en silencio o el navegador ni lo reproduce—, pero el efecto fue que en
+# TODA la web no había un solo vídeo con sonido, ni siquiera el del
+# reproductor con controles de la ficha de cada trabajo, donde el
+# visitante sí puede darle al volumen.
+#
+# Ahora se conserva en AAC a 128 kb/s. Los bucles de fondo siguen mudos
+# igual, porque lo decide el `muted` del HTML, no el fichero; la
+# diferencia es que donde hay controles, ahora hay algo que oír.
+#
+# Cuesta unos 16 kB por segundo de pieza — nada al lado del vídeo.
+#
 # ── LA TRAMPA DE ESTOS FICHEROS ──────────────────────────────────────
 # Los HEVC de DJI declaran DOS flujos de vídeo. Sin `-map 0:v:0` ffmpeg
 # intenta servir los dos y falla con «Error reinitializing filters», que
@@ -50,7 +64,7 @@ DUR=${DUR:-12}
 if [ "$DUR" -gt "$MAX" ]; then DESDE=$(( DUR * 20 / 100 )); else DESDE=0; fi
 POSTER_EN="${3:-$(( MAX * 45 / 100 ))}"
 
-comun=(-ss "$DESDE" -t "$MAX" -map 0:v:0 -an -c:v libx264 -profile:v high -pix_fmt yuv420p -r 25 -b:v 1700k -maxrate 2200k -bufsize 4000k -movflags +faststart)
+comun=(-ss "$DESDE" -t "$MAX" -map 0:v:0 -map 0:a:0? -c:a aac -b:a 128k -c:v libx264 -profile:v high -pix_fmt yuv420p -r 25 -b:v 1700k -maxrate 2200k -bufsize 4000k -movflags +faststart)
 
 echo "==> $NOMBRE  (máster: $(basename "$MASTER"), ${DUR}s -> desde ${DESDE}s, ${MAX}s; póster en el ${POSTER_EN})"
 

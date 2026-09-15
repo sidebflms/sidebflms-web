@@ -5,6 +5,68 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (57) — Las cintas ya no dejan hueco, y por qué no suena ningún vídeo
+
+### El hueco de la fila de multicámara
+
+Mario: «en multicam sale un hueco, tiene que salir siempre la línea entera de
+contenido y que se repita tipo bucle».
+
+**La causa.** El bucle funciona pintando la lista dos veces y desplazando el
+50 %. Eso sólo se ve continuo si **una copia es más ancha que la pantalla**. Si
+no lo es, llega un momento en que la segunda copia ya ha entrado entera y
+detrás no hay nada: hueco a la derecha. Multicámara tiene tres piezas —unos
+1.230 px— y él lo miraba en una pantalla de 2.000.
+
+**La solución.** Cada copia lleva la lista repetida las veces que hagan falta
+para cubrir la fila. Se calcula midiendo una pieza de verdad, no suponiendo su
+ancho: cambia con el tamaño de pantalla (`h-40` / `lg:h-56`) y suponerlo sería
+volver a tener el fallo en el siguiente ajuste de maqueta.
+
+La duración se multiplica por las repeticiones, porque la distancia también:
+sin eso, repetir la lista haría la fila el doble o el triple de rápida. Las
+tres siguen moviéndose a la misma velocidad aparente.
+
+**`ResizeObserver`, no el evento `resize`**: avisa de cualquier cambio de ancho
+de la fila —zoom, barra de desplazamiento, cambio de maqueta— y no sólo de que
+se redimensione la ventana. Con `resize` había casos en los que no llegaba a
+recalcularse (comprobado a 2560 px).
+
+Medido: a 1440 px las copias miden 4923 / 2461 / 2461 y a 2560 pasan a 4923 /
+4923 / 3692, cubriendo la fila en los dos casos.
+
+La fila pasa a ser su propio componente (`Fila`), porque necesita estado y
+medir, y eso no se puede hacer dentro de un `map`.
+
+### Por qué no suena ningún vídeo
+
+**No es la web: los ficheros no tienen sonido.** Los 44 vídeos de
+`public/media/` y también el reel están codificados **sin pista de audio**. Lo
+hacía `scripts/pieza-web.sh`, que llevaba un `-an`.
+
+Tenía su lógica —son bucles de fondo, y un vídeo que arranca solo tiene que ir
+mudo o el navegador ni lo reproduce—, pero el efecto colateral fue que en toda
+la web no hay un solo vídeo con sonido, **ni siquiera el reproductor con
+controles de la ficha de cada trabajo**, que es donde el visitante sí puede
+subir el volumen.
+
+**Lo que se ha hecho ahora:** el script conserva el audio en AAC a 128 kb/s
+(`-map 0:a:0?`, con el `?` para que no falle si un máster viene mudo). Cuesta
+unos 16 kB por segundo de pieza, nada al lado del vídeo. Los bucles de fondo
+siguen mudos igual, porque eso lo decide el `muted` del HTML, no el fichero.
+
+**Lo que falta, y no se puede hacer sin Mario:**
+
+1. **Volver a codificar las piezas desde los másters.** El disco de producción
+   no está conectado ahora mismo (`/Volumes/@SIDEB404L` no aparece). Son 22
+   piezas × 2 recortes.
+2. **Decidir qué pasa con el reel de la portada.** Aunque se recodifique con
+   audio, seguirá sonando a nada: arranca solo, así que va `muted` a la fuerza,
+   y el botón de «Activar sonido» se quitó esta mañana. Si se quiere que el
+   visitante pueda oírlo, hay que devolver ese control.
+
+---
+
 ## 2026-09-15 (56) — En la barra, a la izquierda, sólo el casete
 
 Ajuste de lo anterior. Al llevarse el menú el centro, el logotipo completo se
