@@ -78,13 +78,6 @@ export const en: Dictionary = {
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
     sub: "Drone, live production, cablecam and multicam. Based in Spain.",
-    ctaReel: "Watch the reel",
-    ctaContact: "Tell us about your event",
-    scrollHint: "Scroll to see the work",
-    playReel: "Play the reel",
-    pauseReel: "Pause the reel",
-    unmute: "Unmute",
-    mute: "Mute",
   },
 
   brands: {

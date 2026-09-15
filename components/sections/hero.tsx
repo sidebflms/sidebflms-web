@@ -37,8 +37,6 @@ const SOURCES = {
 // que construía rutas. El componente ya no necesita saber el idioma.
 export function Hero({ dict }: { dict: Dictionary }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
   const [elapsed, setElapsed] = useState(0);
   const [hasVideo, setHasVideo] = useState(false);
 
@@ -75,39 +73,6 @@ export function Hero({ dict }: { dict: Dictionary }) {
     frame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame);
   }, [hasVideo]);
-
-  /**
-   * Sólo pide. NO toca `playing`.
-   *
-   * Antes hacía `void video.play(); setPlaying(true)`: lanzaba la promesa, la
-   * tiraba, y daba por hecho que había funcionado. Cuando el navegador se
-   * negaba —que pasa más de lo que parece: políticas de autoplay, pestaña en
-   * segundo plano, ahorro de energía— el botón pasaba a decir «Pausar el reel»
-   * con el vídeo parado. El control mentía, y encima quedaba una promesa
-   * rechazada sin capturar.
-   *
-   * Ahora el estado lo dictan `onPlay` y `onPause` del propio elemento, así
-   * que el botón no puede decir otra cosa de la que está pasando: da igual
-   * quién lo arranque o lo pare.
-   */
-  const toggle = () => {
-    const video = videoRef.current;
-    if (!video || !hasVideo) return;
-    if (video.paused) {
-      // El `catch` no es adorno: sin él, una negativa del navegador sale por
-      // consola como error no capturado y tapa los que sí importan.
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  };
-
-  const toggleSound = () => {
-    const video = videoRef.current;
-    if (!video || !hasVideo) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
-  };
 
   return (
     <section
@@ -158,9 +123,6 @@ export function Hero({ dict }: { dict: Dictionary }) {
         tabIndex={-1}
         aria-hidden="true"
         onLoadedData={() => setHasVideo(true)}
-        // La verdad sobre si suena o no está aquí, no en quien pulsó el botón.
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
         onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)}
       />
 
@@ -194,42 +156,31 @@ export function Hero({ dict }: { dict: Dictionary }) {
         <p className="text-lead mt-6 max-w-lg text-bone">{dict.hero.sub}</p>
       </div>
 
-      {/* Fila de timecode + controles. Se alinea con el estado horizontal de la
-          regleta, que cruza el hero justo por encima. */}
-      {/* `bottom-8` en móvil y `bottom-24` a partir de `md`: desde ahí aparece
-          la cápsula del menú, que flota a 24 px del borde, y esta fila le
-          quedaba justo debajo — se solapaban. En móvil no hay cápsula, así que
-          no hace falta subirla. */}
-      <div className="shell absolute inset-x-0 bottom-8 flex items-center justify-between gap-4 md:bottom-24">
+      {/* SÓLO EL TIMECODE.
+          Aquí había tres rótulos más a la derecha: «Pausar el reel»,
+          «Activar sonido» y «Desplázate para ver el trabajo». Mario los quitó
+          el 2026-09-15. El timecode se queda: es lo que hace que la esquina se
+          lea como una línea de tiempo y no como un vídeo de fondo cualquiera.
+
+          Dos consecuencias que conviene tener presentes:
+
+          1. EL REEL YA NO SE PUEDE PAUSAR NI OÍR. Queda mudo y en bucle para
+             siempre. Lo de oírlo es una decisión de contenido y es suya; lo de
+             pausarlo roza el criterio 2.2.2 de la WCAG (todo lo que se mueve
+             solo más de cinco segundos debería poder pararse). Lo que salva la
+             situación es que con «reducir movimiento» activado el vídeo NO
+             arranca —ver el efecto de arriba—, que es justo el caso por el que
+             existe ese criterio. Si algún día vuelve el control, vuelve aquí.
+
+          2. `hasVideo` ya no decide nada visible; sigue haciendo falta para el
+             timecode de la maqueta (cuando no hay vídeo, corre solo).
+
+          `bottom-8` en móvil y `bottom-24` a partir de `md`: desde ahí aparece
+          la cápsula del menú, que flota a 24 px del borde. */}
+      <div className="shell absolute inset-x-0 bottom-8 md:bottom-24">
         <p className="text-xs font-medium tracking-[0.08em] text-smoke tabular-nums">
           {timecode(elapsed)}
         </p>
-
-        <div className="flex items-center gap-6">
-          {/* Controles accesibles por teclado. Solo se ofrecen si hay vídeo:
-              un botón de pausa sobre un fondo estático es ruido. */}
-          {hasVideo && (
-            <>
-              <button
-                type="button"
-                onClick={toggle}
-                className="text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
-              >
-                {playing ? dict.hero.pauseReel : dict.hero.playReel}
-              </button>
-              <button
-                type="button"
-                onClick={toggleSound}
-                className="text-xs font-medium tracking-[0.08em] text-smoke uppercase transition-colors hover:text-rust-300"
-              >
-                {muted ? dict.hero.unmute : dict.hero.mute}
-              </button>
-            </>
-          )}
-          <p className="hidden text-xs font-medium tracking-[0.08em] text-smoke uppercase sm:block">
-            {dict.hero.scrollHint}
-          </p>
-        </div>
       </div>
     </section>
   );

@@ -398,6 +398,14 @@
 }
 
 .cinta-pista {
+  /* El sentido y la duración los pone cada componente en dos variables, no en
+     `style={{ animationName }}`. El motivo es la regla de abajo: un estilo en
+     línea gana a cualquier hoja de estilos, así que con la animación puesta en
+     línea el `animation: none` de `prefers-reduced-motion` no llegaba a
+     aplicarse nunca. Con variables, la declaración vive aquí y la cascada
+     funciona. */
+  animation-name: var(--cinta-sentido, cintaIzquierda);
+  animation-duration: var(--cinta-duracion, 40s);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   will-change: transform;

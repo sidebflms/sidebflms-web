@@ -6,10 +6,15 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 /**
- * EL MENÚ, ABAJO Y CENTRADO.
+ * EL MENÚ, ABAJO Y A LA DERECHA.
  *
- * Estaba arriba a la derecha. Mario lo bajó el 2026-09-15: «las pestañas de
- * work contact y demás las ponemos en la parte de abajo en medio centradas».
+ * Estaba arriba a la derecha. Mario lo bajó el 2026-09-15 —«las pestañas de
+ * work contact y demás las ponemos en la parte de abajo»— y ese mismo día lo
+ * mandó al lado derecho: «lo de work services about lo ponemos a la derecha».
+ *
+ * A la derecha vuelve a alinearse con la columna de la cabecera (los iconos de
+ * redes) y, sobre todo, deja libre el centro de la pantalla, que es por donde
+ * cae el titular del hero.
  *
  * ── LO QUE ESO DESBLOQUEÓ ────────────────────────────────────────────────
  * Al vaciarse la derecha de la cabecera, el logotipo cabe centrado en
@@ -40,7 +45,10 @@ export function BottomNav({
   return (
     <nav
       aria-label="Principal"
-      className="pointer-events-none fixed inset-x-0 bottom-6 z-50 hidden justify-center md:flex"
+      // `pr-[var(--edge)]`: el mismo margen derecho que usa `.shell`, para que
+      // la cápsula caiga a plomo con el resto de la columna derecha en vez de
+      // pegarse al borde del navegador.
+      className="pointer-events-none fixed inset-x-0 bottom-6 z-50 hidden justify-end pr-[var(--edge)] md:flex"
     >
       <div className="pointer-events-auto flex items-center gap-8 rounded-full border border-ink-600 bg-ink-900/80 px-8 py-3 backdrop-blur-md">
         {links.map((link) => {

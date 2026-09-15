@@ -174,19 +174,33 @@ export function HomeSliders({
                 cinta no se desliza sola, y si no fuera desplazable a mano el
                 contenido quedaría inalcanzable. */}
             <div className="cinta overflow-x-auto">
+              {/* CADA COPIA VA EN SU PROPIO GRUPO, y el grupo lleva un
+                  `pr-3` igual al hueco entre piezas.
+
+                  Con las dos copias sueltas dentro de la misma fila, el ancho
+                  total era `2 × piezas + (2n − 1) huecos`, mientras que la
+                  animación desplaza justo el 50 %. Falta medio hueco por
+                  copia: la cinta pegaba un saltito de 6 px en cada vuelta.
+                  Agrupando, cada grupo mide `piezas + n huecos` exactos y el
+                  50 % cae clavado donde empieza la copia. */}
               <div
-                className="cinta-pista flex w-max gap-3"
+                className="cinta-pista flex w-max"
                 style={{
-                  animationDuration: `${duracion}s`,
-                  animationName: sentido === "izquierda" ? "cintaIzquierda" : "cintaDerecha",
+                  ["--cinta-duracion" as string]: `${duracion}s`,
+                  ["--cinta-sentido" as string]:
+                    sentido === "izquierda" ? "cintaIzquierda" : "cintaDerecha",
                 }}
               >
-                {piezas.map((p) => (
-                  <Pieza key={p.slug} project={p} locale={locale} duplicada={false} />
-                ))}
-                {piezas.map((p) => (
-                  <Pieza key={`copia-${p.slug}`} project={p} locale={locale} duplicada />
-                ))}
+                <div className="flex gap-3 pr-3">
+                  {piezas.map((p) => (
+                    <Pieza key={p.slug} project={p} locale={locale} duplicada={false} />
+                  ))}
+                </div>
+                <div className="flex gap-3 pr-3">
+                  {piezas.map((p) => (
+                    <Pieza key={`copia-${p.slug}`} project={p} locale={locale} duplicada />
+                  ))}
+                </div>
               </div>
             </div>
           </section>

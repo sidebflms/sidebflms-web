@@ -80,13 +80,6 @@ export const es = {
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
     sub: "Drone, producción en directo, cablecam y multicámara. Con base en España.",
-    ctaReel: "Ver el reel",
-    ctaContact: "Hablemos de tu evento",
-    scrollHint: "Desplázate para ver el trabajo",
-    playReel: "Reproducir el reel",
-    pauseReel: "Pausar el reel",
-    unmute: "Activar sonido",
-    mute: "Silenciar",
   },
 
   brands: {

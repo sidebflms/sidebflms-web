@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Reveal } from "@/components/motion/reveal";
+import { Faq } from "@/components/sections/faq";
 import { ContactForm } from "@/components/ui/contact-form";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
@@ -88,6 +89,8 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
           <ContactForm locale={locale} dict={dict} />
         </Reveal>
       </div>
+      {/* Las preguntas, debajo del formulario. Ver components/sections/faq.tsx. */}
+      <Faq locale={locale} dict={dict} />
     </main>
   );
 }

@@ -5,6 +5,90 @@ reciente arriba.
 
 ---
 
+## 2026-09-15 (50) — Las marcas en cinta, el FAQ a Contacto, y el hero desnudo
+
+Cuatro peticiones de Mario: «un slider con las marcas también, lo del FAQ en
+contact» y, un rato después, «también tenemos que quitar lo de pause the reel,
+unmute y scroll to see the work; y lo de work services about lo ponemos a la
+derecha».
+
+### Las marcas, en cinta
+
+`components/sections/brand-strip.tsx` deja de ser una rejilla. Los nueve
+nombres a seis columnas dejaban una segunda fila con tres y seis huecos; en
+cinta no hay filas que cuadrar, da igual que sean nueve que veinte, y además
+se lee como lo que es —una lista que sigue— en vez de como un cuadro cerrado.
+
+Reutiliza el mecanismo de las cintas de la portada (`.cinta` / `.cinta-pista`
+en `app/globals.css`), así que no hay CSS nuevo.
+
+### Dos fallos del mecanismo de cinta, que venían de antes
+
+**Uno: `prefers-reduced-motion` no se estaba respetando.** La hoja de estilos
+tiene un `@media (prefers-reduced-motion: reduce) { .cinta-pista { animation:
+none } }`, pero el componente ponía la animación en `style={{ animationName }}`
+—en línea—, y un estilo en línea gana a cualquier hoja de estilos. O sea que
+la regla estaba escrita y no llegaba a aplicarse nunca: con «reducir
+movimiento» activado, las cintas de la portada se seguían deslizando.
+
+Ahora el componente sólo pasa dos variables (`--cinta-sentido`,
+`--cinta-duracion`) y la declaración vive en el CSS, donde la cascada sí
+funciona. Comprobado.
+
+**Dos: el bucle pegaba un salto en cada vuelta.** La lista se pinta dos veces
+y se desplaza el 50 %, pero con las dos copias sueltas dentro de la misma fila
+el ancho total es `2 × piezas + (2n − 1) huecos`: falta medio hueco por copia.
+En la portada eran 6 px de salto cada vuelta; en las marcas habrían sido 32.
+
+Cada copia pasa a ir en su propio grupo con un `padding-right` igual al hueco,
+así que cada grupo mide exactamente la mitad de la pista. Medido en el
+navegador: grupo 4922,6 px contra mitad de pista 4922,5.
+
+### El FAQ se muda a Contacto
+
+`app/[locale]/faq/` era una página huérfana: no la enlazaba nadie, ni el menú
+ni el pie. Las preguntas que contiene —qué zonas cubrimos, cuánto tardamos,
+qué hace falta para volar— son exactamente las que alguien se hace justo antes
+de escribir, así que ahora van al final de `/contact`, debajo del formulario.
+
+Se ha sacado a `components/sections/faq.tsx` para que la página de contacto no
+crezca, y el JSON-LD de tipo `FAQPage` se va con ella: su `@id` apunta ya a
+`/contact`, que es donde vive el contenido. Si se quedara apuntando a una URL
+que devuelve 404, Google lo descarta.
+
+Fuera también de `lib/routes.ts` y de `STATIC_KEYS` en `app/sitemap.ts`.
+
+**Al traerse el repo:** `/es/faq` y `/en/faq` ahora devuelven 404. No había
+enlaces internos, pero si alguien había guardado la URL, se la encuentra rota.
+
+### El hero se queda sólo con el timecode
+
+Fuera «Pausar el reel», «Activar sonido» y «Desplázate para ver el trabajo».
+Con ellos se van del componente el estado `playing`/`muted` y los dos
+manejadores, y de los diccionarios siete claves que ya no usa nadie (las cinco
+de los controles más `ctaReel` y `ctaContact`, huérfanas desde que se quitaron
+los botones).
+
+**Dos consecuencias que conviene tener presentes:**
+
+1. **El reel queda mudo y en bucle, sin forma de pararlo.** Lo de oírlo es una
+   decisión de contenido. Lo de pausarlo roza el criterio 2.2.2 de la WCAG:
+   todo lo que se mueve solo más de cinco segundos debería poder pararse. Lo
+   que salva la situación es que con «reducir movimiento» activado el vídeo no
+   arranca siquiera, que es el caso por el que existe ese criterio. Si algún
+   día vuelve el control, vuelve a esa misma esquina.
+2. El timecode se queda: es lo que hace que la esquina se lea como una línea
+   de tiempo y no como un vídeo de fondo cualquiera.
+
+### El menú, a la derecha
+
+La cápsula pasa de `justify-center` a `justify-end` con el mismo margen
+derecho que usa `.shell`, así que cae a plomo con los iconos de redes de la
+cabecera. Y deja libre el centro de la pantalla, que es por donde cae el
+titular del hero.
+
+---
+
 ## 2026-09-15 (49) — El menú baja al pie de la ventana y el hero se queda solo
 
 Tres peticiones de Mario que encajan entre sí: «watch the reel y tell us lo
