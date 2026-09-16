@@ -339,7 +339,8 @@ export const en: Dictionary = {
   },
 
   footer: {
-    tagline: ["Side B", "of every", "night"],
+    // «of every night» until 2026-09-16 — ver la nota de es.ts.
+    tagline: ["Side B", "of every", "shoot"],
     social: "Follow us",
     legalLinks: "Legal",
     rights: "All rights reserved.",

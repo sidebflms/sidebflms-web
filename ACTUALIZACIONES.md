@@ -5,6 +5,24 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (66) — El lema del pie: de «cada noche» a «cada rodaje»
+
+Mario: «Side B of every night no tiene sentido porque no sólo hacemos noche».
+
+- ES: **«Cara B / de cada / rodaje»** (era «de cada noche»).
+- EN: **«Side B / of every / shoot»** (era «of every night»).
+
+«Rodaje» cubre la noche de club y también el anuncio, el podcast y el plano de
+dron a mediodía. Se descartó «de cada historia»: rima con el titular de la
+portada, pero es justo el tipo de frase que podría estar en la web de cualquier
+agencia, que es lo que las reglas de redacción de `es.ts` vetan.
+
+**El ancho no cambia**: la línea más larga sigue siendo «de cada» / «of every»,
+que es la que calibra el cuerpo del lema (ver el comentario de `footer.tsx`).
+Comprobado a 390, 1024 y 1280 px: ninguna línea partida, sin desbordamiento.
+
+---
+
 ## 2026-09-16 (65) — Fuera el manifiesto de la portada
 
 Mario, sobre el bloque «We arrive before doors open» y sus cuatro frases:

@@ -35,8 +35,8 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             {/* `en-columna` con su propio número: esto no ocupa el ancho de la
                 página, es un ítem flex al que la tabla de enlaces sólo le deja
                 276px a 1024 y 371px a 1280. Con la escala normal (61-64px) la
-                línea más ancha, «de cada», pedía 367-382px y «NOCHE» acababa
-                partida en dos. 4.4vw cabe en todo el rango. Ver globals.css. */}
+                línea más ancha, «de cada», pedía 367-382px y la última palabra
+                acababa partida en dos. 4.4vw cabe en todo el rango. Ver globals.css. */}
             {/* Bajado de 4.4vw a 3vw el 2026-09-15: «esta parte de abajo es
                 muy grande». Con 4.4 el lema medía tres líneas enormes y el pie
                 se comía una pantalla entera para decir cuatro enlaces. */}

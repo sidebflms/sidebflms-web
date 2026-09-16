@@ -377,7 +377,10 @@ export const es = {
   },
 
   footer: {
-    tagline: ["Cara B", "de cada", "noche"],
+    // «de cada noche» hasta el 2026-09-16. Mario: «no tiene sentido porque no
+    // sólo hacemos noche». Rodaje cubre la noche de club y también el anuncio,
+    // el podcast y el plano de dron a mediodía.
+    tagline: ["Cara B", "de cada", "rodaje"],
     social: "Síguenos",
     legalLinks: "Legal",
     rights: "Todos los derechos reservados.",
