@@ -93,6 +93,16 @@ function cuerpoDeLaPeticion(array &$cabeceras): string
 
 const DESTINO = 'http://127.0.0.1:3200';
 
+/**
+ * VERSIÓN DE PRUEBAS «GLASS» (2026-09-16). Lo que empieza por esta ruta va a
+ * su propio proceso, en el 3201, compilado con esa ruta como `basePath`
+ * (rama `glass`, despliegue/publicar-glass.sh). Todo lo demás, a la web.
+ * Para retirarla, borrar estas dos constantes y `$esPrueba` más abajo, y la
+ * línea de la ruta en el .htaccess.
+ */
+const RUTA_PRUEBAS = '/prueba-glass-47f47ad5';
+const DESTINO_PRUEBAS = 'http://127.0.0.1:3201';
+
 // Cabeceras que describen ESTA conexión, no el mensaje. Reenviarlas rompe
 // cosas: `Connection` y `Upgrade` hablan del salto Apache↔PHP, y
 // `Content-Length` deja de ser cierto en cuanto curl toca el cuerpo.
@@ -103,7 +113,11 @@ const NO_REENVIAR = [
 ];
 
 $ruta = $_SERVER['REQUEST_URI'] ?? '/';
-$ch = curl_init(DESTINO . $ruta);
+// La ruta exacta, o seguida de «/» o «?»: `/prueba-glass-47f47ad5x` no cuenta.
+$siguiente = substr($ruta, strlen(RUTA_PRUEBAS), 1);
+$esPrueba = strncmp($ruta, RUTA_PRUEBAS, strlen(RUTA_PRUEBAS)) === 0
+    && ($siguiente === '' || $siguiente === false || $siguiente === '/' || $siguiente === '?');
+$ch = curl_init(($esPrueba ? DESTINO_PRUEBAS : DESTINO) . $ruta);
 
 $cabeceras = [];
 foreach ($_SERVER as $clave => $valor) {

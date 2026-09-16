@@ -5,6 +5,38 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (73) — Versión de pruebas «glass» dentro del dominio, sin contraseña
+
+Joan: montar la versión glass (rama `glass`) en una página interna a la que
+sólo se llegue con el enlace, para que cualquiera pueda probarla.
+
+**Enlace:** `https://sidebflms.com/prueba-glass-47f47ad5/es`
+
+Lo que cambia en ESTA rama es sólo el reparto de la puerta:
+
+- `despliegue/proxy-php/proxy.php`: lo que empieza por `/prueba-glass-47f47ad5`
+  va a `127.0.0.1:3201`; todo lo demás, al 3200 de siempre.
+- `despliegue/proxy-php/htaccess`: esa ruta entra **sin contraseña**. El resto
+  de la web la sigue pidiendo. Se compara con `THE_REQUEST` y no con
+  `REQUEST_URI` porque, tras reescribir a `/proxy.php`, Apache vuelve a
+  comprobar el acceso con la URI ya cambiada.
+
+La versión de pruebas en sí vive en la rama `glass` y se despliega sola en cada
+empujón a esa rama (`.github/workflows/publicar-glass.yml`): la sube a
+`~/sidebflms-glass`, la compila con `basePath` = la ruta, la arranca en el 3201
+con el mismo `sidebflms-web.sh` (puerto por variable) y le pone su propio
+vigilante en el cron. No toca la carpeta, el proceso ni el `public_html` de la
+web. Va con `X-Robots-Tag: noindex`, y sus formularios llegan al buzón de
+siempre con «[PRUEBA GLASS]» delante del asunto.
+
+**Para retirarla:** quitar su línea del crontab (la de `sidebflms-glass`),
+parar el 3201 (`SIDEB_PUERTO=3201 ~/sidebflms-glass/despliegue/sidebflms-web.sh
+parar`), borrar `~/sidebflms-glass`, y aquí deshacer las dos piezas de arriba.
+
+**Ojo el día que se quite la contraseña:** la regla del `.htaccess` está dentro
+del `<IfFile>`, así que deja de aplicar; la ruta de pruebas seguiría abierta
+igual que el resto.
+
 ## 2026-09-16 (72) — Nosotros: las cifras en ficha técnica, contando al aparecer
 
 Mario: «he visto una web que es prácticamente lo mismo, lo de los proyectos y
