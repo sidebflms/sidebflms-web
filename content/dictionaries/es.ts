@@ -501,9 +501,6 @@ export const es = {
     scaleBody:
       "El núcleo son once personas, pero no todos los trabajos caben en once. Para Monegros ampliamos el equipo hasta dieciocho y lo dirigimos como uno solo: mismo plan de rodaje, mismo flujo de trabajo y el mismo plazo de entrega. Montar un equipo grande y que funcione es parte de lo que hacemos.",
     scaleAlt: "El equipo ampliado de SIDEBFLMS en Monegros",
-    workLabel: "En faena",
-    // TODO (cliente): quitar cuando cada foto tenga nombre. Ver content/team.ts.
-    workNote: "Sin identificar todavía",
     ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
   },
 

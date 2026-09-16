@@ -5,6 +5,29 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (63) — Fuera «En faena»
+
+Mario: «las de en faena vamos a quitar todas». Se quita la sección entera de
+Nosotros —la tira de fotos del equipo trabajando—, y con ella lo que sólo
+existía para ella:
+
+- `FOTOS_TRABAJANDO` y su tipo, de `content/team.ts`.
+- Los textos `workLabel` y `workNote`, de los dos diccionarios.
+
+**Los ficheros NO se han borrado.** Las fotos de
+`public/media/equipo/trabajando/` se siguen usando en otros sitios, y
+comprobado en el navegador que siguen cargando:
+
+- `emisora-recinto.jpg`, `camara-grada.jpg` y `piloto-inspire.jpg` ilustran
+  las etapas de Servicios (`content/etapas-fotos.ts`).
+- `gafas-fpv.jpg` es la foto provisional de Galoguin, marcada como «Ejemplo»,
+  hasta que llegue una suya de frente.
+
+La rama `mejoras-cuatro-paginas` también tenía esas fotos (en Nosotros y en
+Trabaja con nosotros); se quitan allí igual para que no vuelvan al juntarlas.
+
+---
+
 ## 2026-09-16 (62) — Rubén ya tiene retrato; Galoguin sigue sin él
 
 Mario pasó dos fotos en Descargas, `ruben.jpeg` y `galo.jpeg`.

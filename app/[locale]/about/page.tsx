@@ -7,7 +7,6 @@ import Image from "next/image";
 
 import {
   EQUIPO,
-  FOTOS_TRABAJANDO,
   FOTO_AMPLIACION,
   FOTO_GRUPO,
   HAY_EJEMPLOS,
@@ -276,40 +275,12 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             </Reveal>
           )}
 
-          {/* EL EQUIPO EN FAENA.
-              Va DESPUÉS de la rejilla de nombres, no antes: mientras no haya
-              retratos, la rejilla es una lista de nombres sueltos y estas fotos
-              son lo que le pone cara al equipo. Cuando cada uno tenga la suya
-              (ver FOTOS_TRABAJANDO en content/team.ts) esta tira sobra.
-
-              Sin pie de foto a propósito: las fotos llegaron sin nombres y
-              poner el que no es sería peor que no poner ninguno. */}
-          {FOTOS_TRABAJANDO.length > 0 && (
-            <>
-              <Reveal>
-                <div className="mt-20 flex flex-wrap items-baseline justify-between gap-4 border-t border-ink-600 pt-14">
-                  <p className="label">{dict.about.workLabel}</p>
-                  {!HAY_RETRATOS && <p className="label text-ink-600">{dict.about.workNote}</p>}
-                </div>
-              </Reveal>
-
-              <Reveal stagger>
-                <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {FOTOS_TRABAJANDO.map((foto) => (
-                    <li key={foto.src} className="relative aspect-[4/5] overflow-hidden bg-ink-900">
-                      <Image
-                        src={foto.src}
-                        alt={foto.alt[locale]}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        className="object-cover"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            </>
-          )}
+          {/* Aquí iba «En faena», una tira de fotos del equipo trabajando. Mario
+              la quitó entera el 2026-09-16: «las de en faena vamos a quitar
+              todas». Las fotos NO se han borrado del disco: las de
+              `public/media/equipo/trabajando/` siguen ilustrando las etapas de
+              Servicios (content/etapas-fotos.ts) y la ficha provisional de
+              Galoguin. */}
         </section>
       )}
 
