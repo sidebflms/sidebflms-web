@@ -41,7 +41,11 @@ set -uo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REGISTRO="$RAIZ/sidebflms-web.log"
-PUERTO=3200
+# 3200 es la web. La versión de pruebas (despliegue/publicar-glass.sh) usa este
+# mismo script desde su propia carpeta con `SIDEB_PUERTO=3201` y
+# `SIDEB_RUTA=/prueba-glass-…`, que es donde contesta su portada.
+PUERTO="${SIDEB_PUERTO:-3200}"
+RUTA="${SIDEB_RUTA:-}"
 
 # Ruta completa a propósito. En nastos conviven dos instalaciones de Node
 # (/usr/bin/npm es npm 9 sobre Node 18; /usr/local/bin/npm es npm 11 sobre
@@ -219,7 +223,7 @@ case "${1:-}" in
     if esta_viva; then
       echo "en marcha (escuchando en 127.0.0.1:$PUERTO, pid $(pids_del_puerto | tr '\n' ' '))"
       echo -n "responde con HTTP "
-      curl -s -o /dev/null -w '%{http_code}\n' --max-time 10 "http://127.0.0.1:$PUERTO/es"
+      curl -s -o /dev/null -w '%{http_code}\n' --max-time 10 "http://127.0.0.1:$PUERTO$RUTA/es"
     else
       echo "parada"
     fi ;;

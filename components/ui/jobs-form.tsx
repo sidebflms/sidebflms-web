@@ -4,16 +4,17 @@ import { useActionState } from "react";
 import Link from "next/link";
 
 import { submitJobs, type JobsState } from "@/app/[locale]/work-with-us/actions";
+import { chipClasses, fieldClasses } from "@/components/ui/campos-cristal";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
-import { cn } from "@/lib/utils";
 
 /**
  * Formulario de candidaturas.
  *
- * Mismo aspecto y mismo comportamiento que el de contacto —línea inferior,
- * foco en `rust-300`, honeypot, acuse de recibo que sustituye al formulario—
- * para que se lea como parte del mismo sitio y no como un añadido.
+ * Mismo aspecto y mismo comportamiento que el de contacto —campos y casillas
+ * de cristal (`campos-cristal.ts`), foco con halo naranja, honeypot, acuse de
+ * recibo que sustituye al formulario— para que se lea como parte del mismo
+ * sitio y no como un añadido.
  *
  * ── LO QUE ES DISTINTO, Y POR QUÉ ────────────────────────────────────────
  * Sólo cuatro campos son obligatorios: nombre, correo, especialidad y el
@@ -24,8 +25,10 @@ import { cn } from "@/lib/utils";
 
 const initialState: JobsState = { status: "idle" };
 
-const campo =
-  "w-full border-b border-ink-600 bg-transparent py-3 text-bone placeholder:text-ink-600 focus:border-rust-300 focus:outline-none transition-colors";
+/* La marca «· Opcional / · Obligatorio» junto al rótulo. Era `ink-600`, que
+   sobre negro liso se leía; sobre cristal casi desaparecía, y esa marca es
+   justo la que evita que la gente abandone (ver arriba). */
+const marca = "text-smoke/60";
 
 const mensajeError = (dict: Dictionary, code: string | undefined) => {
   if (code === "email") return dict.jobs.form.errorEmail;
@@ -40,22 +43,22 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
 
   if (state.status === "success") {
     return (
-      <div role="status" className="border-l-2 border-rust-500 bg-ink-700 p-6">
+      <div role="status" className="glass glass-strong rounded-[1.5rem] p-6 lg:p-8">
         <p className="font-display text-display-m text-bone">{f.successTitle}</p>
-        <p className="measure mt-2 text-smoke">{f.successBody}</p>
+        <p className="mt-2 text-smoke">{f.successBody}</p>
       </div>
     );
   }
 
   return (
-    <form action={formAction} noValidate className="space-y-10">
+    <form action={formAction} noValidate className="space-y-8">
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       {state.status === "error" && !state.fieldErrors && (
-        <div role="alert" className="border-l-2 border-rust-500 bg-ink-700 p-5">
+        <div role="alert" className="rounded-2xl border border-rust-300/40 bg-rust-500/10 p-5">
           <p className="text-bone">{f.errorTitle}</p>
           <p className="mt-1 text-sm text-smoke">{f.errorBody}</p>
         </div>
@@ -127,17 +130,14 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
           si es un «no» o si no la ha visto. */}
       <fieldset>
         <legend className="label">
-          {f.licence} <span className="text-ink-600">· {f.optional}</span>
+          {f.licence} <span className={marca}>· {f.optional}</span>
         </legend>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+        {/* Las mismas pastillas que las casillas: `has-[:checked]` también
+            enciende la del botón de radio marcado. */}
+        <div className="mt-4 flex flex-wrap gap-2">
           {f.licenceOptions.map((opcion) => (
-            <label key={opcion} className="flex items-center gap-2 text-sm text-bone">
-              <input
-                type="radio"
-                name="licence"
-                value={opcion}
-                className="h-4 w-4 border-ink-600 accent-rust-500"
-              />
+            <label key={opcion} className={chipClasses}>
+              <input type="radio" name="licence" value={opcion} className="h-3.5 w-3.5 accent-rust-500" />
               {opcion}
             </label>
           ))}
@@ -158,28 +158,39 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
       </div>
 
       <div>
-        <label className="flex items-start gap-3 text-sm text-smoke">
+        <label className="flex items-start gap-3 text-sm text-bone">
           <input
             type="checkbox"
             name="consent"
             className="mt-1 h-4 w-4 shrink-0 border-ink-600 accent-rust-500"
+            aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
           />
+          {/* Como en contacto: el enlace va DENTRO de la frase. Antes se
+              añadía detrás y «política de privacidad» salía dos veces. */}
           <span>
-            {f.consent}{" "}
-            <Link href={path(locale, "privacy")} className="text-rust-300 underline">
+            {f.consent.split(f.consentLink)[0]}
+            <Link
+              href={path(locale, "privacy")}
+              className="text-rust-300 underline underline-offset-2 hover:text-bone"
+            >
               {f.consentLink}
             </Link>
+            {f.consent.split(f.consentLink)[1]}
           </span>
         </label>
         {state.fieldErrors?.consent && (
-          <p className="mt-2 text-sm text-rust-300">{mensajeError(dict, state.fieldErrors.consent)}</p>
+          <p id="consent-error" className="mt-2 text-sm text-rust-300">
+            {mensajeError(dict, state.fieldErrors.consent)}
+          </p>
         )}
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="bg-brand-600 px-8 py-4 text-sm font-semibold tracking-[0.04em] text-bone transition-colors hover:bg-rust-500 disabled:opacity-60"
+        // Pastilla como el resto de CTA glass. `brand-600` y no `rust-500` de
+        // fondo: con texto bone es el que cumple contraste (ver button.tsx).
+        className="w-full rounded-full bg-brand-600 px-7 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-300 hover:bg-rust-500 disabled:opacity-60 sm:w-auto"
       >
         {pending ? f.submitting : f.submit}
       </button>
@@ -212,11 +223,15 @@ function Campo({
   autoComplete?: string;
   error?: string;
 }) {
+  // Columna flexible con el rótulo empujado hacia abajo (`mt-auto`): en las
+  // filas de dos y tres campos, un rótulo con la marca de «opcional» puede
+  // ocupar dos líneas y el de al lado una. Así los rótulos quedan pegados a su
+  // campo y las cajas de cristal alineadas en la misma línea.
   return (
-    <div>
-      <label htmlFor={id} className="label">
+    <div className="flex flex-col">
+      <label htmlFor={id} className="label mt-auto">
         {label}{" "}
-        <span className="text-ink-600">
+        <span className={marca}>
           · {required ? dict.jobs.form.required : dict.jobs.form.optional}
         </span>
       </label>
@@ -230,7 +245,9 @@ function Campo({
         autoComplete={autoComplete}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={cn(campo, error && "border-rust-300")}
+        // El borde de error lo pone `aria-invalid` dentro de `fieldClasses`:
+        // añadir aquí otra clase de borde chocaría con la suya (`cn` no fusiona).
+        className={`${fieldClasses} mt-2`}
       />
       {error && (
         <p id={`${id}-error`} className="mt-2 text-sm text-rust-300">
@@ -259,23 +276,19 @@ function Casillas({
   error?: string;
 }) {
   return (
-    <fieldset>
+    // El `id` es el ancla de la tarjeta de especialidades de la mesa.
+    <fieldset id={`${nombre}-grupo`} className="scroll-mt-28">
       <legend className="label">
         {leyenda}{" "}
-        <span className="text-ink-600">
+        <span className={marca}>
           · {requerido ? dict.jobs.form.required : dict.jobs.form.optional}
         </span>
       </legend>
       <p className="mt-1 text-xs text-smoke">{pista}</p>
-      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+      <div className="mt-4 flex flex-wrap gap-2">
         {opciones.map((opcion) => (
-          <label key={opcion} className="flex items-center gap-2 text-sm text-bone">
-            <input
-              type="checkbox"
-              name={nombre}
-              value={opcion}
-              className="h-4 w-4 border-ink-600 accent-rust-500"
-            />
+          <label key={opcion} className={chipClasses}>
+            <input type="checkbox" name={nombre} value={opcion} className="h-3.5 w-3.5 accent-rust-500" />
             {opcion}
           </label>
         ))}

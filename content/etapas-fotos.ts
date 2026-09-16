@@ -1,3 +1,5 @@
+import { conBase } from "@/lib/base";
+
 /**
  * LA FOTO DE CADA ETAPA DE «CÓMO LO HACEMOS».
  *
@@ -22,7 +24,7 @@
  * La clave es el NÚMERO de la etapa, que es lo estable: los títulos están en
  * los diccionarios y cambian con el idioma.
  */
-export const FOTO_ETAPA: Record<string, string | null> = {
+export const FOTO_ETAPA: Record<string, string | null> = conBase({
   // 01 Preproducción — reconociendo el recinto, con la emisora en la mano.
   "01": "/media/equipo/trabajando/emisora-recinto.jpg",
   // 02 Rodaje en directo — cámara al hombro en la grada.
@@ -31,4 +33,4 @@ export const FOTO_ETAPA: Record<string, string | null> = {
   "03": "/media/equipo/trabajando/piloto-inspire.jpg",
   // 04 Postproducción — PENDIENTE: hace falta una foto de alguien montando.
   "04": null,
-};
+});

@@ -1,3 +1,4 @@
+import { conBase } from "@/lib/base";
 import type { Locale } from "@/lib/routes";
 
 /**
@@ -87,6 +88,12 @@ export type Project = {
      * frame de póster que la horizontal. `undefined` si la pieza no la tiene.
      */
     vertical?: { video: string | null; poster: string };
+    /**
+     * Sólo fotografía: la serie publicada, en orden, como JPG de 1600 (al
+     * lado existen `-1600.webp` y `-800.webp`). La primera es el póster.
+     * El reproductor de /portfolio la pasa como diapositivas.
+     */
+    gallery?: string[];
   };
   title: Record<Locale, string>;
   date: Record<Locale, string>;
@@ -95,7 +102,7 @@ export type Project = {
   delivered: Record<Locale, string[]>;
 };
 
-export const PROJECTS: Project[] = [
+const PROYECTOS: Project[] = [
   {
     // FUENTE DEL NOMBRE: `DRONE/@sidebflms_HOLIKA.mov`.
     // FECHA: el fichero no lleva ninguna. Sin confirmar.
@@ -403,7 +410,25 @@ export const PROJECTS: Project[] = [
     featured: false,
     year: "2026",
     venue: "Por confirmar",
-    media: { video: null, poster: "/media/foto/fitz-rick-ross-1600.jpg" },
+    media: {
+      video: null,
+      poster: "/media/foto/fitz-rick-ross-1600.jpg",
+      // Las doce publicadas (`FOTO/FITZ/`), con el orden de artistas del texto.
+      gallery: [
+        "/media/foto/fitz-rick-ross-1600.jpg",
+        "/media/foto/fitz-arcangel-1600.jpg",
+        "/media/foto/fitz-arcangel-sala-1600.jpg",
+        "/media/foto/fitz-sech-1600.jpg",
+        "/media/foto/fitz-sech-sala-1600.jpg",
+        "/media/foto/fitz-offset-1600.jpg",
+        "/media/foto/fitz-kapo-1600.jpg",
+        "/media/foto/fitz-kapo-sala-1600.jpg",
+        "/media/foto/fitz-maikel-de-la-calle-1600.jpg",
+        "/media/foto/fitz-ye-1600.jpg",
+        "/media/foto/fitz-after-the-weekend-1600.jpg",
+        "/media/foto/fitz-after-the-weekend-xo-1600.jpg",
+      ],
+    },
     title: { es: "FITZ — directos", en: "FITZ — live shows" },
     date: { es: "2026", en: "2026" },
     hardFact: {
@@ -431,7 +456,17 @@ export const PROJECTS: Project[] = [
     featured: false,
     year: "2026",
     venue: "Monegros",
-    media: { video: null, poster: "/media/foto/mdf-indira-paganotto-1600.jpg" },
+    media: {
+      video: null,
+      poster: "/media/foto/mdf-indira-paganotto-1600.jpg",
+      // Sólo las `mdf-*`: `viviana-llamas` está en la misma carpeta pero no
+      // lleva el prefijo y no consta que sea de este festival.
+      gallery: [
+        "/media/foto/mdf-indira-paganotto-1600.jpg",
+        "/media/foto/mdf-escenario-noche-1600.jpg",
+        "/media/foto/mdf-carpa-noche-1600.jpg",
+      ],
+    },
     title: { es: "Monegros — fotografía", en: "Monegros — stills" },
     date: { es: "Julio de 2026", en: "July 2026" },
     hardFact: {
@@ -797,6 +832,9 @@ export const PROJECTS: Project[] = [
     },
   },
 ];
+
+/** Con la ruta base delante de cada fichero (lib/base.ts). */
+export const PROJECTS: Project[] = conBase(PROYECTOS);
 
 export function getProject(slug: string): Project | undefined {
   return PROJECTS.find((project) => project.slug === slug);

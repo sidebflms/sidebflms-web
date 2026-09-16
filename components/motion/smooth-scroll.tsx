@@ -34,6 +34,9 @@ export function SmoothScroll() {
     });
 
     lenis.on("scroll", ScrollTrigger.update);
+    // Para que un modal (el reel, el menú) pueda pararlo sin importar nada:
+    // ver `bloqueaScroll` en lib/scroll-lock.ts.
+    window.__lenis = lenis;
 
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
@@ -41,6 +44,7 @@ export function SmoothScroll() {
 
     return () => {
       gsap.ticker.remove(raf);
+      window.__lenis = undefined;
       lenis.destroy();
     };
   }, []);

@@ -23,15 +23,17 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     // Aquí hubo un `md:pb-20` para que la cápsula del menú no tapara la línea
     // del copyright. Se quita con ella: el menú pasó a ser una columna en el
     // lado derecho y ya no vuela sobre el borde inferior.
-    <footer className="grain border-t border-ink-600 bg-ink-900">
-      <div className="shell relative z-1 pt-24 pb-12">
+    // VERSIÓN GLASS: el pie es otro panel de cristal, separado de los bordes
+    // como el marco del hero, con la luz ambiente por detrás.
+    <footer className="px-3 pt-8 pb-3 lg:pt-12 lg:pr-4 lg:pb-4 lg:pl-[var(--gutter)]">
+      <div className="glass relative overflow-hidden rounded-[var(--radius-frame)] px-6 pt-14 pb-8 lg:px-12 lg:pt-20">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           {/* `lg:shrink-0`: sin esto el ítem encoge en proporción a su
               contenido, así que al bajar el cuerpo del lema la caja bajaba
               también y el lema seguía sin caber — un lazo que no converge.
               Con la base fija, la caja es la que pide el texto y ya está. */}
           <div className="lg:shrink-0">
-            <LogoMark className="h-6 w-auto" />
+            <LogoMark blanco className="h-7 w-auto" />
             {/* `en-columna` con su propio número: esto no ocupa el ancho de la
                 página, es un ítem flex al que la tabla de enlaces sólo le deja
                 276px a 1024 y 371px a 1280. Con la escala normal (61-64px) la
@@ -149,7 +151,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         {/* Cierre de la regleta: la línea de tiempo termina aquí. */}
-        <div className="mt-14 flex flex-col gap-4 border-t border-ink-600 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="label">
             © {year} SIDEBFLMS · {dict.footer.rights}
           </p>

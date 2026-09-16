@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Reveal } from "@/components/motion/reveal";
-import { Faq } from "@/components/sections/faq";
-import { ContactForm } from "@/components/ui/contact-form";
+import { ContactoTarjetas } from "@/components/sections/contacto/contacto-tarjetas";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -17,80 +15,15 @@ export async function generateMetadata({
   return buildMetadata({ locale, route: "contact", copy: dict.meta.contact });
 }
 
+/**
+ * «CONTACTO» — versión glass: tarjetas de contacto directo, formulario por
+ * pasos y preguntas en mosaico. Ver
+ * components/sections/contacto/contacto-tarjetas.tsx.
+ */
 export default async function ContactPage({ params }: PageProps<"/[locale]/contact">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
-
-  return (
-    <main id="main" className="pt-40 pb-28">
-      <div data-reglet={dict.contact.label} className="shell grid gap-16 lg:grid-cols-12">
-        <div className="lg:col-span-5">
-          <Reveal>
-            <p className="label">{dict.contact.label}</p>
-            {/* `en-columna`: este titular vive en `lg:col-span-5`, no en el
-                ancho de la página. Sin eso, a partir de `lg` pedía un cuerpo
-                que no cabe y «CUÉNTANOS» se partía. Ver app/globals.css. */}
-            <h1 className="font-display text-display-l en-columna mt-4 text-bone">
-              {dict.contact.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </h1>
-            <p className="text-lead measure mt-6 text-smoke">{dict.contact.intro}</p>
-          </Reveal>
-
-          <Reveal className="mt-12 border-t border-ink-600 pt-8">
-            <p className="label">{dict.contact.directLabel}</p>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <a
-                  href={`mailto:${dict.contact.email}`}
-                  className="text-lead text-bone transition-colors hover:text-rust-300"
-                >
-                  {dict.contact.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://instagram.com/sidebflms"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-bone transition-colors hover:text-rust-300"
-                >
-                  {dict.contact.instagram}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/company/sidebflms"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-bone transition-colors hover:text-rust-300"
-                >
-                  {dict.contact.linkedin}
-                </a>
-                <a
-                  href="https://www.youtube.com/@sidebflms"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-bone transition-colors hover:text-rust-300"
-                >
-                  {dict.contact.youtube}
-                </a>
-              </li>
-            </ul>
-          </Reveal>
-        </div>
-
-        <Reveal className="lg:col-span-7">
-          <ContactForm locale={locale} dict={dict} />
-        </Reveal>
-      </div>
-      {/* Las preguntas, debajo del formulario. Ver components/sections/faq.tsx. */}
-      <Faq locale={locale} dict={dict} />
-    </main>
-  );
+  return <ContactoTarjetas locale={locale} dict={dict} />;
 }

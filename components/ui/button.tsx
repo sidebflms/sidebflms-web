@@ -66,3 +66,77 @@ export function Arrow() {
     </span>
   );
 }
+
+/* ============================================================================
+   BOTONES DE LA VERSIÓN GLASS
+   ========================================================================== */
+
+/** Flecha diagonal ↗ que gira a → al pasar el ratón (`.flecha-giro`). */
+export function ArrowUpRight({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={cn("flecha-giro h-4 w-4", className)}
+    >
+      <path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" />
+    </svg>
+  );
+}
+
+const pillBase =
+  "group relative inline-flex items-center gap-3 rounded-full text-xs font-medium uppercase tracking-[0.08em] transition-colors duration-300";
+
+const pillVariants = {
+  /* Cristal con texto claro y círculo naranja a la derecha: el CTA principal. */
+  glass: "glass py-1.5 pr-1.5 pl-6 text-bone",
+  /* Pastilla clara, como «Start» en las referencias. Texto oscuro sobre bone:
+     contraste de sobra. */
+  light: "bg-bone py-1.5 pr-1.5 pl-5 text-ink-900 hover:bg-white",
+  /* Sólo el texto con el círculo, sin caja. */
+  bare: "py-1 pr-1 pl-0 text-bone hover:text-rust-300",
+} as const;
+
+const circleVariants = {
+  glass: "bg-brand-600 text-bone group-hover:bg-rust-500",
+  light: "bg-ink-900 text-bone",
+  bare: "border border-bone/30 text-bone group-hover:border-rust-300",
+} as const;
+
+type PillVariant = keyof typeof pillVariants;
+
+/**
+ * Pastilla con un círculo al final que lleva la flecha. El círculo es el
+ * `brand-600` del botón primario (4.57:1 con bone) y sube a `rust-500` al
+ * pasar el ratón, igual que el primario de siempre.
+ */
+export function PillLink({
+  variant = "glass",
+  className,
+  children,
+  icon,
+  ...props
+}: ComponentProps<typeof Link> & { variant?: PillVariant; children: ReactNode; icon?: ReactNode }) {
+  return (
+    <Link className={cn(pillBase, pillVariants[variant], className)} {...props}>
+      <span>{children}</span>
+      <span
+        className={cn(
+          "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300",
+          circleVariants[variant]
+        )}
+      >
+        {icon ?? <ArrowUpRight />}
+      </span>
+    </Link>
+  );
+}
+
+/** Botón redondo de cristal para iconos: redes, menú, anterior/siguiente. */
+export const circleButton =
+  "glass inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-bone transition-colors duration-300 hover:text-rust-300";

@@ -7,12 +7,10 @@ import { submitContact, type ContactState } from "@/app/[locale]/contact/actions
 import type { Dictionary } from "@/lib/dictionaries";
 import { CATEGORIES } from "@/content/projects";
 import { path, type Locale } from "@/lib/routes";
+import { chipClasses, fieldClasses } from "@/components/ui/campos-cristal";
 import { cn } from "@/lib/utils";
 
 const initialState: ContactState = { status: "idle" };
-
-const fieldClasses =
-  "w-full border-b border-ink-600 bg-transparent py-3 text-bone placeholder:text-ink-600 focus:border-rust-300 focus:outline-none transition-colors";
 
 const errorMessage = (dict: Dictionary, code: string | undefined) => {
   if (code === "email") return dict.contact.form.errorEmail;
@@ -26,7 +24,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
 
   if (state.status === "success") {
     return (
-      <div role="status" className="border-l-2 border-rust-500 bg-ink-700 p-6">
+      <div role="status" className="glass glass-strong rounded-[1.5rem] p-6 lg:p-8">
         <p className="font-display text-display-m text-bone">
           {dict.contact.form.successTitle}
         </p>
@@ -80,14 +78,14 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       <fieldset>
         <legend className="label">{dict.contact.form.coverage}</legend>
         <p className="mt-1 text-xs text-smoke">{dict.contact.form.coverageHint}</p>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+        <div className="mt-4 flex flex-wrap gap-2">
           {CATEGORIES.map((category) => (
-            <label key={category} className="flex items-center gap-2 text-sm text-bone">
+            <label key={category} className={chipClasses}>
               <input
                 type="checkbox"
                 name="coverage"
                 value={category}
-                className="h-4 w-4 border-ink-600 accent-rust-500"
+                className="h-3.5 w-3.5 accent-rust-500"
               />
               {dict.portfolio.categories[category]}
             </label>
@@ -102,12 +100,12 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
               quiere el que escribe, no cómo archivamos lo que ya hicimos. Una
               boda o un podcast no encajan en ninguna de las cinco, y sin esta
               casilla esa consulta llega sin decir de qué va. */}
-          <label className="flex items-center gap-2 text-sm text-bone">
+          <label className={chipClasses}>
             <input
               type="checkbox"
               name="coverage"
               value="otros"
-              className="h-4 w-4 border-ink-600 accent-rust-500"
+              className="h-3.5 w-3.5 accent-rust-500"
             />
             {dict.contact.form.coverageOther}
           </label>
@@ -118,7 +116,16 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
         <label htmlFor="budget" className="label">
           {dict.contact.form.budget}
         </label>
-        <select id="budget" name="budget" defaultValue="" className={cn(fieldClasses, "mt-2")}>
+        {/* `appearance-none` + flecha propia: la nativa no respeta el radio ni el
+            relleno. Las opciones del desplegable las pinta el sistema, así que
+            llevan fondo oscuro explícito para que no salgan en blanco. */}
+        <div className="relative mt-2">
+          <select
+            id="budget"
+            name="budget"
+            defaultValue=""
+            className={cn(fieldClasses, "appearance-none pr-11 [&>option]:bg-ink-900")}
+          >
           <option value="" disabled>
             {dict.contact.form.select}
           </option>
@@ -127,7 +134,20 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
               {option}
             </option>
           ))}
-        </select>
+          </select>
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-smoke"
+          >
+            <path d="m4 6 4 4 4-4" />
+          </svg>
+        </div>
       </div>
 
       <div>
@@ -175,7 +195,9 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       <button
         type="submit"
         disabled={pending}
-        className="w-full bg-rust-500 px-6 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors hover:bg-rust-300 hover:text-ink-900 disabled:opacity-60 sm:w-auto"
+        // Pastilla como el resto de CTA glass. `brand-600` y no `rust-500` de
+        // fondo: con texto bone es el que cumple contraste (ver button.tsx).
+        className="w-full rounded-full bg-brand-600 px-7 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-300 hover:bg-rust-500 disabled:opacity-60 sm:w-auto"
       >
         {pending ? dict.contact.form.submitting : dict.contact.form.submit}
       </button>

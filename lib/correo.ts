@@ -39,6 +39,13 @@ const PUERTO = Number(process.env.SMTP_PORT ?? 25);
 const DESTINO = process.env.CORREO_DESTINO ?? "contact@sidebflms.com";
 
 /**
+ * Delante de cada asunto. Vacío en la web normal; la versión de pruebas
+ * (despliegue/publicar-glass.sh) pone «[PRUEBA GLASS] » para que lo que manden
+ * quienes la prueban se distinga en el buzón de una consulta de verdad.
+ */
+const PREFIJO_ASUNTO = process.env.CORREO_PREFIJO_ASUNTO ?? "";
+
+/**
  * El remitente es una dirección NUESTRA, no la del visitante.
  *
  * Poner al visitante en el `From` es la tentación evidente —así se puede
@@ -105,7 +112,7 @@ function acuse(asunto: string, destino: string, texto: string): void {
       from: `"SIDEBFLMS" <${REMITENTE}>`,
       to: destino,
       replyTo: DESTINO,
-      subject: asunto,
+      subject: PREFIJO_ASUNTO + asunto,
       text: texto,
     })
     .catch((error) => {
@@ -167,7 +174,7 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
       replyTo: `"${c.nombre}" <${c.email}>`,
       // El nombre del evento en el asunto para poder buscarlo luego en el
       // buzón sin abrir cada mensaje.
-      subject: `Consulta web: ${c.evento || "sin nombre de evento"}`,
+      subject: `${PREFIJO_ASUNTO}Consulta web: ${c.evento || "sin nombre de evento"}`,
       text: cuerpo(c),
     });
 
@@ -292,7 +299,7 @@ export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
       to: DESTINO,
       replyTo: `"${c.nombre}" <${c.email}>`,
       // Sin nombre en el asunto, a propósito: ver la nota de arriba.
-      subject: `Candidatura: ${c.especialidad[0] ?? "sin especialidad"}`,
+      subject: `${PREFIJO_ASUNTO}Candidatura: ${c.especialidad[0] ?? "sin especialidad"}`,
       text: cuerpoCandidatura(c),
     });
 

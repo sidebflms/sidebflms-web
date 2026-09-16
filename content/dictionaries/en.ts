@@ -242,7 +242,29 @@ export const en: Dictionary = {
       disciplines: "Disciplines",
       hardFact: "Fact",
       next: "Next project",
+      prev: "Previous project",
+      sound: "Sound",
       watch: "Watch the piece",
+    },
+    player: {
+      upNext: "Up next",
+      nowPlaying: "Now playing",
+      play: "Play",
+      pause: "Pause",
+      mute: "Mute",
+      unmute: "Unmute",
+      next: "Next",
+      prev: "Previous",
+      seek: "Video position",
+      showMore: "…more",
+      showLess: "Show less",
+      seeProject: "See the project",
+      still: "Still",
+      goToPhoto: "Go to photo {n}",
+      prevPhoto: "Previous photo",
+      nextPhoto: "Next photo",
+      fullscreen: "Full screen",
+      exitFullscreen: "Exit full screen",
     },
   },
 
@@ -252,6 +274,7 @@ export const en: Dictionary = {
     intro:
       "We don't run occasional call-outs: this form is always open and we go through it when a job comes in that matches what you do. The more specific you are, the easier it is for us to remember you.",
     formLabel: "Tell us who you are",
+    steps: { who: "Who you are", what: "What you do", where: "Where to see you" },
     form: {
       name: "Full name",
       age: "Age",
@@ -496,6 +519,20 @@ export const en: Dictionary = {
     safetyBody:
       "With a certified pilot and a safety perimeter coordinated with production. Airspace restrictions at the location are dealt with in pre-production, not on the day of the shoot.",
     ctaTitle: ["Tell us", "what you want", "to shoot"],
+  },
+
+  // GLASS VERSION (`glass` branch): copy used only by this layout.
+  glass: {
+    watchReel: "Watch the reel",
+    closeReel: "Close the reel",
+    pills: ["Drone for film and events", "Live multicam"],
+    tcLabels: ["Hours", "Min", "Sec", "Frames"],
+    tcCaption: "Local time · 25 fps",
+    featuredHeadline: ["From the sky", "to the booth"],
+    featuredIntro:
+      "Drones above the venue, cameras in the pit and the edit ready while everyone is still talking about the night. These are some of the nights we have told.",
+    openMenu: "Open the menu",
+    goToSlide: "Go to piece",
   },
 
   common: {

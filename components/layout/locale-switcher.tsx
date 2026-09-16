@@ -57,9 +57,10 @@ export function LocaleSwitcher({
       // ratón y sí lee el idioma en el que está.
       title={`${label}: ${NOMBRE[otro]}`}
       className={cn(
-        "inline-flex h-8 min-w-10 items-center justify-center rounded-full border border-ink-500 px-3",
+        // Versión glass: círculo de cristal del mismo tamaño que los de redes.
+        "glass inline-flex h-11 w-11 items-center justify-center rounded-full",
         "text-xs font-medium tracking-[0.08em] text-bone uppercase",
-        "transition-colors duration-200 hover:border-rust-300 hover:text-rust-300",
+        "transition-colors duration-300 hover:text-rust-300",
         className
       )}
     >

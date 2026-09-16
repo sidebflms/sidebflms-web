@@ -1,3 +1,5 @@
+import { conBase } from "@/lib/base";
+
 /**
  * EL EQUIPO.
  *
@@ -130,7 +132,7 @@ export type Miembro = {
  * llevan `roleEsEjemplo`. Cuando se confirmen, se apaga y cae el freno para
  * abrir la web.
  */
-export const EQUIPO: Miembro[] = [
+const MIEMBROS: Miembro[] = [
   { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Dirección", en: "Direction" }, roleEsEjemplo: true, foto: "/media/equipo/mario-bote.jpg" },
   { nombre: "Fernando", slug: "fernando", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/fernando.jpg" },
   // Foto real desde el 2026-09-16, y DE ESPALDAS: en la mesa de control de
@@ -155,6 +157,9 @@ export const EQUIPO: Miembro[] = [
   { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/sergio.jpg" },
 ];
 
+/** Con la ruta base delante de cada foto (lib/base.ts). */
+export const EQUIPO: Miembro[] = conBase(MIEMBROS);
+
 /**
  * La foto de grupo. Va a ancho completo encima de la rejilla.
  * `null` mientras no exista: la página simplemente no la pinta.
@@ -169,7 +174,7 @@ export const EQUIPO: Miembro[] = [
  * RAVE, pero es vertical y salen 18 personas, que no cuadra con las 11 de la
  * lista de aquí abajo. Está guardada por si se aclara.
  */
-export const FOTO_GRUPO: string | null = "/media/equipo/grupo.jpg";
+export const FOTO_GRUPO: string | null = conBase("/media/equipo/grupo.jpg");
 
 /**
  * LA FOTO DE MONEGROS — el equipo ampliado.
@@ -182,7 +187,7 @@ export const FOTO_GRUPO: string | null = "/media/equipo/grupo.jpg";
  * Por eso va con su propio texto al lado y no mezclada con las de grupo: sin
  * explicación, dieciocho caras encima de una lista de once se lee como un error.
  */
-export const FOTO_AMPLIACION: string | null = "/media/equipo/monegros.jpg";
+export const FOTO_AMPLIACION: string | null = conBase("/media/equipo/monegros.jpg");
 
 /**
  * ¿Se pintan los retratos individuales?

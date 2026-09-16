@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+
+import { BASE_PATH } from "@/lib/base";
 import { notFound } from "next/navigation";
 
 import "@/app/globals.css";
+import { FondoRelieve } from "@/components/glass/fondos/fondo-relieve";
+import { GlassSpotlight } from "@/components/glass/spotlight";
 import { Analitica } from "@/components/layout/analitica";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
@@ -23,7 +27,8 @@ export async function generateStaticParams() {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  icons: { icon: "/icon.svg" },
+  // Con ruta base delante: Next no se la pone a un `href` escrito a mano (lib/base.ts).
+  icons: { icon: `${BASE_PATH}/icon.svg` },
 };
 
 export default async function LocaleLayout({
@@ -37,7 +42,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={fontVariables}>
-      <body className="min-h-dvh bg-ink-800 text-bone">
+      {/* SIN fondo en el body (versión glass): lo pone el <html> en
+          globals.css. Con fondo aquí, el fondo de curvas de nivel —que va en z-index
+          negativo— quedaría pintado por debajo y no se vería. */}
+      <body className="min-h-dvh text-bone">
         <a
           href="#main"
           className="sr-only text-xs uppercase tracking-[0.08em] focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-rust-500 focus:px-4 focus:py-3 focus:text-bone"
@@ -45,8 +53,10 @@ export default async function LocaleLayout({
           {dict.nav.skipToContent}
         </a>
 
+        <FondoRelieve />
         <SmoothScroll />
         <Cursor />
+        <GlassSpotlight />
 
         <Header locale={locale} nav={dict.nav} />
         <Reglet />

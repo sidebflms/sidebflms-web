@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { ContactCta } from "@/components/sections/contact-cta";
-import { Hero } from "@/components/sections/hero";
+import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
+import { ContactCta } from "@/components/sections/contact-cta";
+import { HeroFrame } from "@/components/sections/hero-frame";
 import { HomeSliders } from "@/components/sections/home-sliders";
-import { ButtonLink, Arrow } from "@/components/ui/button";
+import { PillLink } from "@/components/ui/button";
+import { CIFRAS_CON_DATO } from "@/content/cifras";
 import { PROJECTS } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
@@ -20,84 +22,71 @@ export async function generateMetadata({
   return buildMetadata({ locale, route: "home", copy: dict.meta.home });
 }
 
+/**
+ * PORTADA — VERSIÓN GLASS (rama `glass`).
+ *
+ *   1. El marco con muescas (hero-frame.tsx): reel, menú, cifras y destacados.
+ *   2. La entrada al trabajo: titular, descripción y «Ver todo el trabajo».
+ *   3. Las tres cintas de proyectos, las mismas de `main`
+ *      (home-sliders.tsx). Hubo un bento de tarjetas en su lugar; se quitó a
+ *      petición del cliente.
+ *   4. La llamada final en cristal.
+ */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
-
+  const featured = PROJECTS.filter((p) => p.featured && p.media.video);
 
   return (
     <main id="main">
-      <Hero dict={dict} locale={locale} />
-      {/* LOS TRABAJOS, DIRECTAMENTE.
-          Hasta el 2026-09-15 aquí había dos cosas: el `Showpiece` —una sección
-          fijada que contaba UNA pieza plano a plano— y debajo seis
-          `EditorialBlock`, uno por cada destacado, a pantalla por proyecto.
-          Entre las dos, había que bajar siete pantallas para ver siete
-          trabajos. Los dos componentes siguen en `components/sections/`, sin
-          usar, por si se quieren recuperar.
+      <HeroFrame dict={dict} locale={locale} featured={featured} cifras={CIFRAS_CON_DATO} />
 
-          Después fue un mosaico de doce piezas, y ahora son TRES CINTAS, una
-          por disciplina. Ver components/sections/home-sliders.tsx.
+      <section data-reglet={dict.featured.label} className="overflow-hidden pt-24 pb-10 lg:pt-32">
+        {/* Titular a la izquierda; descripción y botón a la derecha, pegados
+            a la base del titular para que se lean como su pie. */}
+        <div className="shell grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-6">
+          <Reveal bidirectional stagger className="lg:col-span-7">
+            <p className="glass inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-[11px] tracking-[0.1em] text-bone uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-rust-500" aria-hidden="true" />
+              {dict.featured.label}
+            </p>
+            <h2 className="font-display mt-6 text-[clamp(2rem,4.6vw,4.5rem)] leading-[0.95] text-rust-500">
+              {dict.glass.featuredHeadline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+          </Reveal>
 
-          SIN `shell`: una cinta que empieza y acaba en el margen no se lee como
-          una cinta, se lee como una fila cortada. Tiene que salirse por los dos
-          lados de la pantalla. El rótulo de cada fila sí lleva `shell` por
-          dentro, para que quede alineado con el resto de la página.
+          <Reveal bidirectional stagger className="lg:col-span-4 lg:col-start-9">
+            <p className="measure text-smoke">{dict.glass.featuredIntro}</p>
+            <div className="mt-7">
+              <Magnetic>
+                <span className="relative inline-flex">
+                  <PillLink href={path(locale, "portfolio")}>{dict.featured.viewAll}</PillLink>
+                  <svg
+                    aria-hidden="true"
+                    className="trazo-borde pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+                  >
+                    <rect x="0" y="0" width="100%" height="100%" rx="26" pathLength={100} />
+                  </svg>
+                </span>
+              </Magnetic>
+            </div>
+          </Reveal>
+        </div>
 
-          Se le pasan TODAS las piezas y cada fila filtra la suya: al añadir un
-          trabajo nuevo al portfolio entra solo en la cinta que le toca. */}
-      <section data-reglet={dict.featured.label} className="overflow-hidden pt-24 pb-10">
-        <Reveal>
-          <p className="label shell">{dict.featured.label}</p>
-        </Reveal>
-        <div className="mt-8">
+        {/* Las cintas, sin `shell`: tienen que salirse por los dos lados.
+            Ver la nota completa en la portada de `main`. */}
+        <div className="mt-14 lg:mt-20">
           <HomeSliders projects={PROJECTS} locale={locale} dict={dict} />
         </div>
       </section>
 
-      {/* «VER TODO EL TRABAJO», CENTRADO Y CON UN TRAZO QUE LO RODEA.
-          Mario, 2026-09-16: «en el medio, con menos espacio arriba y abajo, y
-          que el cuadrado tenga animación de líneas naranjas rodeándolo».
-
-          Espacio: arriba 40 px (era 64, el `pb` de las cintas) y abajo lo que
-          ya da la llamada final (era 64 + 64 = 128, porque este bloque tenía
-          su propio `pb-16` además del de la sección de abajo).
-
-          El trazo: ver `.trazo-borde` en app/globals.css.
-
-          SIN `.shell`: sus márgenes izquierdo y derecho son distintos a
-          propósito (72 y 48 px), así que centrar dentro de él dejaba el botón
-          12 px a la derecha del centro real. Medido. Con un padding simétrico
-          cae en el medio. */}
-      <div className="flex justify-center px-5">
-        <span className="relative inline-flex">
-          <ButtonLink href={path(locale, "portfolio")} variant="outline">
-            {dict.featured.viewAll}
-            <Arrow />
-          </ButtonLink>
-          <svg
-            aria-hidden="true"
-            className="trazo-borde pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-          >
-            <rect x="0" y="0" width="100%" height="100%" pathLength={100} />
-          </svg>
-        </span>
-      </div>
-
-      {/* Aquí iba el manifiesto —«We arrive before doors open» y sus cuatro
-          frases—. Mario lo quitó el 2026-09-16: ocupaba demasiada pantalla entre
-          los trabajos y la llamada final. El componente sigue en
-          `components/sections/manifesto.tsx` sin usar, como `Showpiece` y
-          `EditorialBlock`, y las cuatro frases siguen publicadas en Nosotros,
-          bajo «Cómo trabajamos». */}
-      <ContactCta
-        locale={locale}
-        dict={dict}
-        headline={dict.contact.headline}
-        intro={dict.contact.intro}
-      />
+      <ContactCta locale={locale} dict={dict} headline={dict.contact.headline} intro={dict.contact.intro} />
     </main>
   );
 }

@@ -15,6 +15,12 @@ type RevealProps = {
   delay?: number;
   as?: ElementType;
   className?: string;
+  /**
+   * VERSIÓN GLASS: entra y sale en los dos sentidos. Al bajar entra desde
+   * abajo y, al pasarlo, se va hacia arriba; al volver a subir entra desde
+   * arriba. Ver la nota de más abajo.
+   */
+  bidirectional?: boolean;
 };
 
 /**
@@ -33,6 +39,7 @@ export function Reveal({
   delay = 0,
   as: Tag = "div",
   className,
+  bidirectional = false,
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -48,6 +55,39 @@ export function Reveal({
 
     const ctx = gsap.context(() => {
       gsap.set(targets, { opacity: 0, y: MOTION.reveal.distance });
+
+      /* EN LOS DOS SENTIDOS (rama glass).
+         La versión original entra UNA vez a propósito. En la versión glass se
+         pidió que el scroll hacia arriba también anime, así que aquí cada
+         cruce del umbral tiene su movimiento, y el sentido de entrada es el
+         del scroll: lo que aparece por abajo sube, lo que aparece por arriba
+         baja. `overwrite` corta la animación anterior si se cruza el umbral
+         a medio camino. */
+      if (bidirectional) {
+        const d = MOTION.reveal.distance;
+        const entra = () =>
+          gsap.to(targets, {
+            opacity: 1,
+            y: 0,
+            duration: MOTION.reveal.duration,
+            ease: MOTION.reveal.ease,
+            stagger: stagger ? MOTION.reveal.stagger : 0,
+            overwrite: true,
+          });
+        const sale = (y: number) =>
+          gsap.to(targets, { opacity: 0, y, duration: 0.35, ease: "power2.in", overwrite: true });
+
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 90%",
+          end: "bottom 8%",
+          onEnter: entra,
+          onEnterBack: entra,
+          onLeave: () => sale(-d),
+          onLeaveBack: () => sale(d),
+        });
+        return;
+      }
 
       gsap.to(targets, {
         opacity: 1,
@@ -70,7 +110,7 @@ export function Reveal({
       ctx.revert();
       ScrollTrigger.refresh();
     };
-  }, [stagger, delay]);
+  }, [stagger, delay, bidirectional]);
 
   return (
     <Tag ref={ref} className={className}>

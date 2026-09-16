@@ -276,7 +276,31 @@ export const es = {
       disciplines: "Disciplinas",
       hardFact: "Dato",
       next: "Siguiente proyecto",
+      prev: "Proyecto anterior",
+      sound: "Sonido",
       watch: "Ver la pieza",
+    },
+    // Reproductor de la página de trabajo (components/sections/trabajo/trabajo-youtube.tsx):
+    // los mandos del vídeo y la caja de descripción, al estilo de YouTube.
+    player: {
+      upNext: "A continuación",
+      nowPlaying: "Reproduciendo",
+      play: "Reproducir",
+      pause: "Pausar",
+      mute: "Silenciar",
+      unmute: "Activar sonido",
+      next: "Siguiente",
+      prev: "Anterior",
+      seek: "Posición del vídeo",
+      showMore: "…más",
+      showLess: "Mostrar menos",
+      seeProject: "Ver el proyecto",
+      still: "Foto",
+      goToPhoto: "Ir a la foto {n}",
+      prevPhoto: "Foto anterior",
+      nextPhoto: "Foto siguiente",
+      fullscreen: "Pantalla completa",
+      exitFullscreen: "Salir de pantalla completa",
     },
   },
 
@@ -286,6 +310,10 @@ export const es = {
     intro:
       "No hacemos convocatorias cada cierto tiempo: el formulario está siempre abierto y lo miramos cuando entra un trabajo que encaja con lo que sabes hacer. Cuanto más concreto seas, más fácil es que nos acordemos de ti.",
     formLabel: "Cuéntanos quién eres",
+    // Los rótulos del carril de pasos del formulario (ver
+    // components/sections/trabaja/trabaja-tarjetas.tsx). Agrupan los trece
+    // campos en tres tramos; el cuarto paso es el botón de enviar.
+    steps: { who: "Quién eres", what: "Qué haces", where: "Dónde verte" },
     form: {
       name: "Nombre completo",
       age: "Edad",
@@ -568,6 +596,22 @@ export const es = {
     safetyBody:
       "Con piloto certificado y perímetro de seguridad coordinado con producción. Las restricciones de espacio aéreo del lugar se resuelven en preproducción, no el mismo día del rodaje.",
     ctaTitle: ["Cuéntanos", "qué quieres", "grabar"],
+  },
+
+  // VERSIÓN GLASS (rama `glass`): textos nuevos que sólo usa esta estructura.
+  glass: {
+    watchReel: "Ver reel",
+    closeReel: "Cerrar el reel",
+    pills: ["Drone para cine y eventos", "Multicámara en directo"],
+    tcLabels: ["Horas", "Min", "Seg", "Frames"],
+    tcCaption: "Hora local · 25 fps",
+    // Sustituyen a «Cuatro noches que no se repiten» sólo en la portada de
+    // esta rama. 2-3 palabras por línea: es Akira.
+    featuredHeadline: ["Del cielo", "a la cabina"],
+    featuredIntro:
+      "Drone sobre el recinto, cámaras en el foso y el montaje listo mientras el evento sigue en boca de todos. Estas son algunas de las noches que hemos contado.",
+    openMenu: "Abrir el menú",
+    goToSlide: "Ir a la pieza",
   },
 
   common: {

@@ -1,0 +1,51 @@
+name: Publicar versión de pruebas (glass)
+
+# Cada empujón a `glass` sube la rama al VPS, en ~/sidebflms-glass, la compila
+# con su ruta y reinicia su proceso (127.0.0.1:3201). No toca la web: ni su
+# carpeta, ni su proceso, ni `public_html`. Ver despliegue/publicar-glass.sh.
+on:
+  push:
+    branches: [glass]
+  workflow_dispatch: {}
+
+concurrency:
+  group: publicar-glass
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cargar la llave del VPS
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Subir el código
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'mkdir -p ~/sidebflms-glass'
+          # Rsync SIN git: el .git no hace falta en el servidor.
+          rsync -az --delete \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude '.next' \
+            --exclude '.env' \
+            --exclude '*.log' \
+            --exclude '.vigilante.lock' \
+            --exclude '.operacion.lock' \
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/sidebflms-glass/"
+
+      - name: Compilar y reiniciar
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd ~/sidebflms-glass && ./despliegue/publicar-glass.sh'
+
+      - name: Comprobar que responde desde fuera, sin contraseña
+        run: |
+          codigo=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://sidebflms.com/prueba-glass-47f47ad5/es)
+          echo "GET https://sidebflms.com/prueba-glass-47f47ad5/es -> $codigo"
+          [ "$codigo" = "200" ] || { echo "No responde 200"; exit 1; }
