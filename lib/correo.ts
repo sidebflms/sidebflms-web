@@ -51,6 +51,71 @@ const DESTINO = process.env.CORREO_DESTINO ?? "contact@sidebflms.com";
  */
 const REMITENTE = process.env.CORREO_REMITENTE ?? "contact@sidebflms.com";
 
+/**
+ * El transporte, en un solo sitio.
+ *
+ * Los dos envíos lo construían igual, copiado. Con los acuses de recibo serían
+ * cuatro copias de la misma configuración, y el día que cambie el puerto habría
+ * que acordarse de las cuatro.
+ */
+function transporte() {
+  return nodemailer.createTransport({
+    host: HOST,
+    port: PUERTO,
+    // El 25 en local va en claro y no hace falta más: el mensaje no sale de la
+    // máquina. `ignoreTLS` evita que nodemailer intente STARTTLS contra el
+    // certificado del propio servidor y falle por el nombre.
+    secure: false,
+    ignoreTLS: true,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
+  });
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  ACUSES DE RECIBO — la copia que se le manda a quien rellena el formulario
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Mario, 2026-09-16: que quien escribe reciba «un correo de resumen o
+ * confirmación de lo que ha rellenado», y que la candidatura confirme que se
+ * ha completado.
+ *
+ * ── TRES COSAS QUE HAY QUE SABER ────────────────────────────────────────
+ *
+ * 1. **Estos correos SÍ salen a internet.** Los avisos internos van a un buzón
+ *    de esta misma máquina y no atraviesan nada; un acuse va al Gmail de quien
+ *    escribió. Ahí la entrega depende del SPF y el DKIM del dominio. Están
+ *    puestos, pero conviene mirar el primero que salga y comprobar que no cae
+ *    en spam.
+ *
+ * 2. **Si el acuse falla, la consulta NO falla.** Lo que importa es que el
+ *    aviso interno llegue: ahí está el encargo. El acuse es cortesía, así que
+ *    se manda después, aparte, y un fallo suyo sólo queda en el registro. Al
+ *    revés sería absurdo: perder una consulta porque el cliente tiene el buzón
+ *    lleno.
+ *
+ * 3. **No lleva nada que no haya escrito esa persona.** Es su propia copia.
+ */
+function acuse(asunto: string, destino: string, texto: string): void {
+  // Sin `await` a propósito, y con el fallo tragado: ver el punto 2.
+  transporte()
+    .sendMail({
+      from: `"SIDEBFLMS" <${REMITENTE}>`,
+      to: destino,
+      replyTo: DESTINO,
+      subject: asunto,
+      text: texto,
+    })
+    .catch((error) => {
+      console.error("[acuse] no se pudo enviar la confirmación", {
+        destino,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    });
+}
+
 export type Consulta = {
   nombre: string;
   email: string;
@@ -96,20 +161,7 @@ function cuerpo(c: Consulta): string {
  */
 export async function enviarConsulta(c: Consulta): Promise<boolean> {
   try {
-    const transporte = nodemailer.createTransport({
-      host: HOST,
-      port: PUERTO,
-      // El 25 en local va en claro y no hace falta más: el mensaje no sale de
-      // la máquina. `ignoreTLS` evita que nodemailer intente STARTTLS contra
-      // el certificado del propio servidor y falle por el nombre.
-      secure: false,
-      ignoreTLS: true,
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-      socketTimeout: 20_000,
-    });
-
-    await transporte.sendMail({
+    await transporte().sendMail({
       from: `"Web SIDEBFLMS" <${REMITENTE}>`,
       to: DESTINO,
       replyTo: `"${c.nombre}" <${c.email}>`,
@@ -118,6 +170,10 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
       subject: `Consulta web: ${c.evento || "sin nombre de evento"}`,
       text: cuerpo(c),
     });
+
+    // El acuse va DESPUÉS y sólo si el aviso interno salió: si no hemos
+    // recibido la consulta, decirle a alguien «la hemos recibido» es mentira.
+    acuseConsulta(c);
 
     return true;
   } catch (error) {
@@ -130,6 +186,46 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
     });
     return false;
   }
+}
+
+/** El resumen que recibe quien escribe: lo suyo, tal como lo mandó. */
+function acuseConsulta(c: Consulta): void {
+  const linea = (etiqueta: string, valor: string) =>
+    valor.trim() ? `${etiqueta}: ${valor.trim()}` : null;
+
+  const resumen = [
+    linea("Evento", c.evento),
+    linea("Fecha", c.fecha),
+    linea("Aforo", c.aforo),
+    linea("Escenarios", c.escenarios),
+    linea("Cobertura", c.cobertura.join(", ")),
+    linea("Presupuesto", c.presupuesto),
+  ].filter((l): l is string => l !== null);
+
+  acuse(
+    `Hemos recibido tu consulta${c.evento ? `: ${c.evento}` : ""}`,
+    c.email,
+    [
+      `Hola${c.nombre ? " " + c.nombre.split(" ")[0] : ""},`,
+      "",
+      "Hemos recibido tu consulta y te respondemos en 24 horas laborables.",
+      "",
+      "Esto es lo que nos has contado:",
+      "",
+      // Sólo lo que rellenó. Una lista con seis «—» no informa de nada y hace
+      // pensar que se ha perdido algo.
+      ...(resumen.length ? resumen : ["(sin datos adicionales)"]),
+      "",
+      "Tu mensaje:",
+      c.mensaje.trim() || "(sin mensaje)",
+      "",
+      "Si algo no cuadra o quieres añadir cualquier cosa, responde a este",
+      "correo directamente.",
+      "",
+      "SIDEBFLMS",
+      DESTINO,
+    ].join("\n")
+  );
 }
 
 /**
@@ -191,17 +287,7 @@ function cuerpoCandidatura(c: Candidatura): string {
 /** Igual que `enviarConsulta`: devuelve booleano y NO lanza. */
 export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
   try {
-    const transporte = nodemailer.createTransport({
-      host: HOST,
-      port: PUERTO,
-      secure: false,
-      ignoreTLS: true,
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-      socketTimeout: 20_000,
-    });
-
-    await transporte.sendMail({
+    await transporte().sendMail({
       from: `"Web SIDEBFLMS" <${REMITENTE}>`,
       to: DESTINO,
       replyTo: `"${c.nombre}" <${c.email}>`,
@@ -209,6 +295,8 @@ export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
       subject: `Candidatura: ${c.especialidad[0] ?? "sin especialidad"}`,
       text: cuerpoCandidatura(c),
     });
+
+    acuseCandidatura(c);
 
     return true;
   } catch (error) {
@@ -220,4 +308,34 @@ export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
     });
     return false;
   }
+}
+
+/**
+ * El «completado» de la candidatura.
+ *
+ * Más corto que el de contacto y a propósito: aquí lo que hace falta es saber
+ * que se ha enviado y que no hay que esperar respuesta por sistema. Repetirle
+ * a alguien sus propios datos personales por correo —edad, nacionalidad,
+ * teléfono— no le sirve de nada y multiplica dónde vive ese dato.
+ *
+ * Y NO promete plazo ni respuesta: no hay ninguno acordado. Dice exactamente
+ * lo mismo que la pantalla que ve al enviar.
+ */
+function acuseCandidatura(c: Candidatura): void {
+  acuse("Candidatura recibida — SIDEBFLMS", c.email, [
+    `Hola${c.nombre ? " " + c.nombre.split(" ")[0] : ""},`,
+    "",
+    "Tu candidatura se ha enviado correctamente y queda guardada.",
+    "",
+    c.especialidad.length ? `Especialidad: ${c.especialidad.join(", ")}` : null,
+    c.portfolio ? `Portfolio: ${c.portfolio}` : null,
+    "",
+    "No respondemos a todas, pero se leen: si entra un trabajo que encaja con",
+    "lo que haces, te escribimos.",
+    "",
+    "SIDEBFLMS",
+    DESTINO,
+  ]
+    .filter((l): l is string => l !== null)
+    .join("\n"));
 }

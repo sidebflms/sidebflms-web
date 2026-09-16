@@ -5,6 +5,70 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (61) — Acuse de recibo por correo, y el casete en el naranja bueno
+
+### El casete no era del mismo naranja. Y era verdad
+
+Mario: «cambiar logo casete, no es el mismo color». Comprobado con los
+ficheros del manual delante:
+
+- El logotipo (`wordmark.png`, sacado de `PNG-15.png`) usa **`#e8451d`**, que
+  es el `brand-500` del manual. Contadas las piezas de marca una a una, todas
+  usan ese naranja o el `#bb4223` de las versiones a dos tonos.
+- El casete (`public/logo/mark.svg` y `app/icon.svg`, que es el favicon) usaba
+  **`#D8693F`**. Ese color **no aparece en ninguna pieza del manual**: es un
+  resto del teja apagado que tenía el sitio antes del 2026-09-10, cuando entró
+  la paleta de verdad. El SVG se quedó sin actualizar y desde entonces la
+  cabecera llevaba dos naranjas distintos a diez centímetros uno del otro.
+
+Los dos ficheros pasan a `#E8451D`. Comprobado en el navegador: el casete de
+la cabecera ya devuelve ese único color.
+
+### Quien escribe recibe copia de lo que ha rellenado
+
+Mario pidió dos cosas: que la candidatura confirme que se ha completado y que
+la consulta de contacto llegue con «un correo de resumen o confirmación de lo
+que ha rellenado». Las dos van en `lib/correo.ts`.
+
+**Contacto** recibe el resumen: evento, fecha, aforo, escenarios, cobertura,
+presupuesto y su mensaje. **Sólo lo que rellenó** — una lista con seis rayas no
+informa de nada y hace pensar que se ha perdido algo. El `Reply-To` apunta a
+nuestro buzón, así que si responde, responde a donde tiene que responder.
+
+**La candidatura** recibe un «se ha enviado y queda guardada», con la
+especialidad y el enlace al portfolio. Deliberadamente más corto: aquí lo que
+hace falta es saber que salió. Devolverle por correo sus propios datos
+personales —edad, nacionalidad, teléfono— no le sirve de nada y multiplica
+dónde vive ese dato. Y **no promete plazo ni respuesta**, porque no hay ninguno
+acordado: dice lo mismo que la pantalla.
+
+### Tres decisiones de esos correos que conviene conocer
+
+1. **Si el acuse falla, la consulta NO falla.** Lo que importa es que el aviso
+   interno llegue: ahí está el encargo. El acuse se manda después, aparte, y un
+   fallo suyo sólo queda en el registro del servidor. Al revés sería absurdo:
+   perder una consulta porque el cliente tiene el buzón lleno.
+2. **Sólo se manda si el aviso interno salió.** Decir «la hemos recibido»
+   cuando no ha llegado a nadie es mentira.
+3. **Estos correos SÍ salen a internet**, al contrario que los internos, que se
+   entregan en un buzón de la propia máquina. La entrega depende del SPF y el
+   DKIM del dominio: están puestos, pero **conviene mirar el primero que salga
+   de verdad y comprobar que no cae en spam.**
+
+De paso, el transporte SMTP deja de estar copiado en cada envío y vive en una
+función. Con los acuses habrían sido cuatro copias de la misma configuración.
+
+### Cómo se ha probado, sin mandarle un correo a nadie
+
+Con un buzón SMTP de mentira en el puerto 2525 (`scratchpad/smtp-falso.js`) y
+un `.env.local` temporal apuntando ahí. Se rellenaron los dos formularios en el
+navegador y se leyó lo que llegó: **cuatro mensajes, los dos avisos internos y
+los dos acuses**, con los destinatarios, los asuntos y los cuerpos correctos, y
+el resumen mostrando sólo los campos rellenados. Ni un correo salió de la
+máquina; el `.env.local` se borró al terminar.
+
+---
+
 ## 2026-09-16 (60) — La portada pesaba 52 MB de vídeo. Ahora 24
 
 Mario: «los vídeos de la página de inicio tardan mucho en cargar la primera
