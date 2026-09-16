@@ -5,6 +5,42 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (62) — Rubén ya tiene retrato; Galoguin sigue sin él
+
+Mario pasó dos fotos en Descargas, `ruben.jpeg` y `galo.jpeg`.
+
+### Rubén: retrato real
+
+La foto con la emisora del dron, sentado junto a la valla entre el confeti. Se
+le ve la cara de perfil, que es la condición de la rejilla. Sale a
+`public/media/equipo/ruben.jpg`, 800×1000 como las otras nueve.
+
+**Recortada a mano, no con `scripts/fotos-equipo.sh`.** El script recorta por
+el centro, y en el original (3414×5120) Rubén está desplazado a la derecha
+entre la valla y el público: el recorte centrado le partía. El encuadre a mano
+coge cabeza, torso y la emisora, y deja casi fuera al público de la valla.
+
+En `content/team.ts` se le quita `fotoEsEjemplo`: deja de salir con el rótulo
+«Ejemplo» y con la foto de otra persona.
+
+**Ojo con el cargo:** en la foto está pilotando, y su cargo provisional dice
+«Etalonaje». Los once cargos siguen sin confirmar.
+
+### Galoguin: sigue sin retrato, y es a propósito
+
+`galo.jpeg` es la foto de espaldas en la mesa de control de ITRAMUN, con el
+chaquetón de SIDEBFLMS. **No se le ve la cara**, así que no sirve como retrato
+en una rejilla de caras: seguiría sin decir quién es. Galoguin conserva la foto
+de ejemplo marcada como tal hasta que llegue una de frente.
+
+(Antes de renombrarlas, los dos ficheros eran esa misma foto de espaldas con
+distinto recorte. Se avisó, Mario lo corrigió, y ya están bien.)
+
+La foto de espaldas es buena para «En faena», donde las fotos van sin nombre.
+Queda pendiente de que Mario diga si la quiere ahí.
+
+---
+
 ## 2026-09-16 (61) — Acuse de recibo por correo, y el casete en el naranja bueno
 
 ### El casete no era del mismo naranja. Y era verdad

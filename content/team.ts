@@ -137,7 +137,13 @@ export const EQUIPO: Miembro[] = [
   { nombre: "María", slug: "maria", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/maria.jpg" },
   { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Montaje", en: "Editing" }, roleEsEjemplo: true, foto: "/media/equipo/nacho-lopez.jpg" },
   { nombre: "Natalia", slug: "natalia", role: { es: "Fotografía", en: "Stills" }, roleEsEjemplo: true, foto: "/media/equipo/natalia.jpg" },
-  { nombre: "Rubén", slug: "ruben", role: { es: "Etalonaje", en: "Colour" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  // Retrato real desde el 2026-09-16: la foto con la emisora del dron, entre
+  // el confeti, junto a la valla. Recortada A MANO a 4:5 y no con
+  // `scripts/fotos-equipo.sh`, que recorta por el centro: en el original está
+  // desplazado a la derecha entre la valla y el público, y el recorte centrado
+  // le partía. OJO: en la foto está pilotando, y el cargo provisional dice
+  // «Etalonaje». Los cargos siguen todos sin confirmar.
+  { nombre: "Rubén", slug: "ruben", role: { es: "Etalonaje", en: "Colour" }, roleEsEjemplo: true, foto: "/media/equipo/ruben.jpg" },
   { nombre: "Sergio", slug: "sergio", role: { es: "Sonido", en: "Sound" }, roleEsEjemplo: true, foto: "/media/equipo/sergio.jpg" },
 ];
 
