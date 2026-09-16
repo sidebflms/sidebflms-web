@@ -5,6 +5,28 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (67) — El rótulo vertical de la regleta chocaba con los números
+
+Mario, con un recorte del FAQ: «esto choca bastante, está muy cerca». El nombre
+de la sección, escrito en vertical junto al carril, se montaba sobre el «04».
+
+**La causa, medida y no supuesta.** El rótulo vivía en una caja de 72 px (el
+ancho del margen) con `text-center`, pensando que así quedaba centrado sobre el
+carril. Con `writing-mode: vertical-rl`, `text-center` centra **de arriba
+abajo, no de lado**, así que la columna de letras se pegaba al borde derecho de
+la caja: letras de 58 a 70 px, y el contenido de la página empieza en 72. **Dos
+píxeles de separación.**
+
+No era sólo el FAQ: pasaba en todas las páginas con números grandes en la
+primera columna — las etapas de Servicios y la flota de Drone también.
+
+**El arreglo**, en `components/layout/reglet.tsx`: la caja deja de tener ancho
+fijo y se ciñe a la columna de letras, a 12 px del borde. Ahora las letras van
+de 14 a 26 px, **a la izquierda del carril** (x=36) y a **46 px del contenido**.
+Comprobado a 1440 px sobre el FAQ de Contacto.
+
+---
+
 ## 2026-09-16 (66) — El lema del pie: de «cada noche» a «cada rodaje»
 
 Mario: «Side B of every night no tiene sentido porque no sólo hacemos noche».

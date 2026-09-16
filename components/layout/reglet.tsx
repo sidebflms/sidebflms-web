@@ -284,10 +284,24 @@ export function Reglet() {
         </g>
       </svg>
 
-      {/* Readout de contexto: el nombre de la sección en curso, en vertical. */}
+      {/* Readout de contexto: el nombre de la sección en curso, en vertical.
+
+          A LA IZQUIERDA DEL CARRIL, no a la derecha. Estaba en una caja de
+          72 px con `text-center`, pensando que así quedaba centrado sobre el
+          carril. No: con `writing-mode: vertical-rl`, `text-center` centra de
+          arriba abajo, no de lado, y la columna de letras se pegaba al borde
+          derecho de la caja. Medido a 1440 px: letras de 58 a 70 y el
+          contenido de la página empezando en 72. En las páginas con números
+          en la primera columna —las preguntas frecuentes, las etapas de
+          Servicios, la flota de Drone— el rótulo quedaba a dos píxeles del
+          número. Mario: «choca bastante, está muy cerca».
+
+          Ahora la caja se ciñe a la columna de letras (sin ancho fijo) y se
+          coloca a 12 px del borde: letras de 12 a 24, a la izquierda del
+          carril (x=36) y a 48 px del contenido. */}
       <div
         ref={readoutRef}
-        className="absolute top-1/2 left-0 w-18 -translate-y-1/2 text-center text-[10px] font-medium tracking-[0.18em] text-smoke uppercase opacity-0 transition-opacity duration-300 [writing-mode:vertical-rl]"
+        className="absolute top-1/2 left-3 -translate-y-1/2 text-[10px] font-medium tracking-[0.18em] text-smoke uppercase opacity-0 transition-opacity duration-300 [writing-mode:vertical-rl]"
       />
     </div>
   );
