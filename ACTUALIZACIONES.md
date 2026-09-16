@@ -5,6 +5,53 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (72) — Nosotros: las cifras en ficha técnica, contando al aparecer
+
+Mario: «he visto una web que es prácticamente lo mismo, lo de los proyectos y
+horas; cambiemos la disposición de todo esto, y que cuando se vean los números
+haga una cuenta subiendo hasta llegar al número».
+
+### La disposición
+
+Eran dos secciones: una fila de cinco números enormes con la etiqueta debajo
+—la plantilla que lleva medio sector— y, más abajo, «Dónde operamos» y «Cómo
+trabajamos» a dos columnas.
+
+Ahora es **una sola ficha técnica**, como la de un rodaje: el texto de dónde y
+cómo a la izquierda y, a la derecha, las cifras en renglones, con la etiqueta a
+un lado y el número al otro. Los números van alineados por la derecha y, con
+`tabular-nums`, las unidades de las cinco filas caen en la misma columna
+(comprobado: los cinco terminan en x=1377 a 1440 px). En móvil las cifras salen
+primero, que son el gancho. De paso, dos bordes y dos márgenes grandes se
+quedan en uno.
+
+### La cuenta
+
+`components/motion/contador.tsx`. Al entrar en pantalla, cada número cuenta
+desde cero en 1,6 s, rápido al principio y frenando al final, que es donde se
+lee. Tres decisiones que conviene conocer:
+
+1. **El HTML lleva la cifra de verdad**, no un cero. La cuenta la hace el
+   navegador después. Buscadores y lectores de pantalla ven «329».
+2. **El cero sólo aparece si el navegador va a dibujar.** La primera versión lo
+   ponía nada más cargar, y en una pestaña oculta —donde no corren los
+   fotogramas— la página se quedaba enseñando «0 proyectos» para siempre. Lo
+   mismo le pasaría a una vista previa de enlace. Ahora el cero se pone dentro
+   de un fotograma: si no hay fotogramas, se queda la cifra real.
+3. **El punto de millar se pone a mano.** `toLocaleString("es-ES")` no pone
+   punto en cifras de cuatro dígitos (es la norma), así que contaría hasta
+   «2000» y saltaría a «+2.000» al final. Comprobado: termina en «+2.000».
+
+Con «reducir movimiento» no cuenta: la cifra final desde el principio.
+
+### El aviso de «provisional»
+
+Decía «las fotos marcadas no son de esa persona y los cargos con * están sin
+confirmar». Desde hoy las once fichas llevan la foto de quien dicen ser, así
+que ahora dice sólo **«Provisional: los cargos con * están sin confirmar»**.
+
+---
+
 ## 2026-09-16 (71) — Nosotros: la foto de Monegros, más baja, y otro texto
 
 Mario: «esta foto es demasiado grande, córtala por arriba y abajo, y el texto es

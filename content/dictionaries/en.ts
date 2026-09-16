@@ -427,7 +427,7 @@ export const en: Dictionary = {
     groupAlt: "The SIDEBFLMS crew",
     photoExample: "Placeholder",
     roleExample: "Role to confirm",
-    photoExampleNote: "Provisional: marked photos are not that person, and roles with * are unconfirmed",
+    photoExampleNote: "Provisional: roles marked * are unconfirmed",
     scaleLabel: "When the job needs more crew",
     // Ver la nota de es.ts: reescrito el 2026-09-16.
     scaleBody:

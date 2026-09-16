@@ -499,7 +499,9 @@ export const es = {
     // TODO (cliente): fuera en cuanto cada foto sea de quien dice ser.
     photoExample: "Ejemplo",
     roleExample: "Cargo por confirmar",
-    photoExampleNote: "Provisional: las fotos marcadas no son de esa persona y los cargos con * están sin confirmar",
+    // Hasta el 2026-09-16 decía también «las fotos marcadas no son de esa persona»,
+    // pero desde ese día las once fichas llevan la foto de quien dicen ser.
+    photoExampleNote: "Provisional: los cargos con * están sin confirmar",
     scaleLabel: "Cuando hace falta más equipo",
     // Reescrito el 2026-09-16 a petición de Mario: que diga que el equipo
     // resuelve solo la mayoría de trabajos y que, cuando un proyecto lo exige,

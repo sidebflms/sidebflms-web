@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
+import { Contador } from "@/components/motion/contador";
 import { Reveal } from "@/components/motion/reveal";
 import Image from "next/image";
 
@@ -79,67 +80,69 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         </div>
       </header>
 
-      {/* LAS CIFRAS.
-          No se pinta nada mientras no haya ni una: ver content/cifras.ts, donde
-          está explicado por qué están todas a `null` y no se deducen del
-          portfolio. */}
-      {CIFRAS_CON_DATO.length > 0 && (
-        <section className="shell mt-24 border-t border-ink-600 pt-14">
-          <Reveal>
+      {/* ── LAS CIFRAS, DÓNDE Y CÓMO: UNA SOLA FICHA ────────────────────────
+          Eran dos secciones: una fila de cinco números enormes con la etiqueta
+          debajo, y más abajo «dónde operamos» y «cómo trabajamos» a dos
+          columnas. Mario, 2026-09-16: «he visto una web que es prácticamente lo
+          mismo, cambiemos la disposición de todo esto». Y es verdad que esa
+          fila de cifras es la plantilla que lleva medio sector.
+
+          Ahora es una ficha técnica, como la de un rodaje: el texto a la
+          izquierda y, a la derecha, las cifras en renglones —la etiqueta a un
+          lado, el número al otro— con los números alineados por la derecha,
+          que con `tabular-nums` cuadran las unidades de todas las filas. Al
+          entrar en pantalla cada número cuenta desde cero; ver
+          `components/motion/contador.tsx`.
+
+          ORDEN: en el DOM van primero las cifras, que son el gancho, así que
+          en el móvil salen arriba. A partir de `lg` la rejilla las pasa a la
+          derecha. De paso, dos bordes y dos márgenes grandes se quedan en uno.
+
+          El manifiesto NO se reescribe aquí: se reutiliza `dict.manifesto`.
+          Desde el 2026-09-16 éste es el ÚNICO sitio donde sale —se quitó de la
+          portada—, así que si algún día se toca, se toca en el diccionario. */}
+      <section className="shell mt-24 grid gap-14 border-t border-ink-600 pt-14 lg:grid-cols-12 lg:gap-6">
+        {CIFRAS_CON_DATO.length > 0 && (
+          <Reveal className="lg:col-span-6 lg:col-start-7 lg:row-start-1">
             <p className="label">{dict.about.figuresLabel}</p>
-          </Reveal>
-          <Reveal stagger>
-            {/* Mismo centrado que la rejilla del equipo, y por lo mismo: el
-                número de cifras no tiene por qué cuadrar con el de columnas.
-                Ahora son cinco y con cuatro columnas quedaba una suelta a la
-                izquierda. Con `flex-wrap` y `justify-center`, sobren las que
-                sobren, la última fila queda centrada. */}
-            <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-10">
+            <dl className="mt-6 border-t border-ink-600">
               {CIFRAS_CON_DATO.map((cifra) => (
-                <li
+                <div
                   key={cifra.etiqueta.es}
-                  className="basis-[calc(50%-0.75rem)] sm:basis-[calc(33.333%-1rem)] lg:basis-[calc(20%-1.2rem)]"
+                  className="flex items-baseline justify-between gap-6 border-b border-ink-600 py-4"
                 >
-                  {/* `text-display-m` y no `-l`, y sin partir.
-                      Con `-l`, «1.200+» no cabía en una columna de cinco y el
-                      «+» se caía a la línea de abajo él solo. `whitespace-nowrap`
-                      es el cinturón: si algún día entra una cifra más larga,
-                      preferimos verla desbordar en desarrollo a que se parta en
-                      producción sin que nadie se entere. */}
-                  <p className="font-display text-display-m whitespace-nowrap text-bone tabular-nums">
-                    {cifra.valor}
-                  </p>
-                  <p className="label mt-2">{cifra.etiqueta[locale]}</p>
+                  <dt className="label">{cifra.etiqueta[locale]}</dt>
+                  {/* `whitespace-nowrap`: «+2.000» no puede partirse y dejar el
+                      «+» colgando en una línea para él solo. */}
+                  <dd className="font-display text-[clamp(1.75rem,3.2vw,2.75rem)] leading-none whitespace-nowrap text-bone tabular-nums">
+                    <Contador valor={cifra.valor ?? ""} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        )}
+
+        <div className="flex flex-col gap-12 lg:col-span-5 lg:col-start-1 lg:row-start-1">
+          <Reveal>
+            <p className="label">{dict.about.whereLabel}</p>
+            <p className="measure mt-4 text-bone">{dict.about.whereBody}</p>
+          </Reveal>
+
+          <Reveal>
+            <p className="label">{dict.about.howLabel}</p>
+            <ul className="mt-4 space-y-3">
+              {dict.manifesto.lines.map((line) => (
+                <li key={line} className="measure flex gap-3 text-bone">
+                  <span aria-hidden="true" className="text-rust-500">
+                    —
+                  </span>
+                  {line}
                 </li>
               ))}
             </ul>
           </Reveal>
-        </section>
-      )}
-
-      {/* Dónde operamos y cómo trabajamos, en dos columnas.
-          El manifiesto NO se reescribe aquí: se reutiliza `dict.manifesto`.
-          Desde el 2026-09-16 éste es el ÚNICO sitio donde sale —se quitó de la
-          portada—, así que si algún día se toca, se toca en el diccionario. */}
-      <section className="shell mt-24 grid gap-12 border-t border-ink-600 pt-14 lg:grid-cols-12 lg:gap-6">
-        <Reveal className="lg:col-span-5">
-          <p className="label">{dict.about.whereLabel}</p>
-          <p className="measure mt-4 text-bone">{dict.about.whereBody}</p>
-        </Reveal>
-
-        <Reveal className="lg:col-span-6 lg:col-start-7">
-          <p className="label">{dict.about.howLabel}</p>
-          <ul className="mt-4 space-y-3">
-            {dict.manifesto.lines.map((line) => (
-              <li key={line} className="measure flex gap-3 text-bone">
-                <span aria-hidden="true" className="text-rust-500">
-                  —
-                </span>
-                {line}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        </div>
       </section>
 
       {hayEquipo && (
