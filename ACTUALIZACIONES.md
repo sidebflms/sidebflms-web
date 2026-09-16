@@ -5,6 +5,37 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (71) — Nosotros: la foto de Monegros, más baja, y otro texto
+
+Mario: «esta foto es demasiado grande, córtala por arriba y abajo, y el texto es
+un poco mierda».
+
+### La foto
+
+De 4:3 a **16:9**. A 1440 px baja de 563 a **423 px de alto**.
+
+El recorte **no va centrado**: la gente ocupa la franja de abajo del original
+(cabezas en y=400 y pies en y=985 de 1050 px), y un recorte centrado se comía
+los pies de la fila de abajo. Con `object-position: 50% 88%` se pierde el cielo
+y la parte de arriba de las letras de RAVE, y quedan los dieciocho enteros.
+Comprobado reproduciendo ese mismo recorte sobre la imagen original.
+
+### El texto
+
+Lo que pidió que dijera: que el equipo es de profesionales y que, cuando un
+proyecto lo exige, hay una lista larga de colaboradores externos de confianza.
+
+> Somos un equipo de profesionales que saca adelante la mayoría de los trabajos
+> por su cuenta. Cuando un proyecto lo exige, contamos con una larga lista de
+> colaboradores externos de confianza que se suman con nuestro plan de rodaje y
+> nuestros plazos. En Monegros fuimos dieciocho.
+
+Se mantiene la frase de Monegros a propósito: la foto de al lado son dieciocho
+personas, y sin esa línea se lee como un descuadre con los once de la rejilla.
+Traducido igual en `en.ts`.
+
+---
+
 ## 2026-09-16 (70) — El trazo del botón, a la mitad de velocidad
 
 Mario: «que vaya un poco más lento, va muy rápido». De una vuelta cada 4

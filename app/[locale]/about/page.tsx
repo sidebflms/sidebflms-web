@@ -258,13 +258,19 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           {FOTO_AMPLIACION && (
             <Reveal>
               <div className="mt-20 grid items-center gap-8 border-t border-ink-600 pt-14 lg:grid-cols-12 lg:gap-6">
-                <div className="relative aspect-[4/3] overflow-hidden bg-ink-900 lg:col-span-7">
+                {/* 16:9 y no 4:3: Mario, 2026-09-16, «esta foto es demasiado grande,
+                    córtala por arriba y abajo». A 1440 px baja de ~600 a ~450 de
+                    alto. El recorte NO va centrado: la gente ocupa la franja de
+                    abajo del original (cabezas a y=400, pies a y=985 de 1050), y
+                    centrado se comía los pies de la fila de abajo. Con el 88 %
+                    se pierde cielo arriba y queda la fila entera. */}
+                <div className="relative aspect-video overflow-hidden bg-ink-900 lg:col-span-7">
                   <Image
                     src={FOTO_AMPLIACION}
                     alt={dict.about.scaleAlt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 58vw"
-                    className="object-cover"
+                    className="object-cover object-[50%_88%]"
                   />
                 </div>
                 <div className="lg:col-span-4 lg:col-start-9">

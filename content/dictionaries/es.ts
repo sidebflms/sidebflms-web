@@ -501,8 +501,13 @@ export const es = {
     roleExample: "Cargo por confirmar",
     photoExampleNote: "Provisional: las fotos marcadas no son de esa persona y los cargos con * están sin confirmar",
     scaleLabel: "Cuando hace falta más equipo",
+    // Reescrito el 2026-09-16 a petición de Mario: que diga que el equipo
+    // resuelve solo la mayoría de trabajos y que, cuando un proyecto lo exige,
+    // hay una lista larga de colaboradores externos de confianza. Se conserva
+    // Monegros porque la foto de al lado son dieciocho personas y sin la
+    // explicación se lee como un descuadre con los once de la rejilla.
     scaleBody:
-      "El núcleo son once personas, pero no todos los trabajos caben en once. Para Monegros ampliamos el equipo hasta dieciocho y lo dirigimos como uno solo: mismo plan de rodaje, mismo flujo de trabajo y el mismo plazo de entrega. Montar un equipo grande y que funcione es parte de lo que hacemos.",
+      "Somos un equipo de profesionales que saca adelante la mayoría de los trabajos por su cuenta. Cuando un proyecto lo exige, contamos con una larga lista de colaboradores externos de confianza que se suman con nuestro plan de rodaje y nuestros plazos. En Monegros fuimos dieciocho.",
     scaleAlt: "El equipo ampliado de SIDEBFLMS en Monegros",
     ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
   },
