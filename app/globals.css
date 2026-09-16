@@ -457,7 +457,9 @@
   stroke: var(--color-rust-500);
   stroke-width: 1.5;
   stroke-dasharray: 18 32;
-  animation: trazoBorde 4s linear infinite;
+  /* 8 s por vuelta. Empezó en 4 y Mario lo vio «muy rápido» (2026-09-16):
+     a esa velocidad llamaba la atención más que el propio botón. */
+  animation: trazoBorde 8s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

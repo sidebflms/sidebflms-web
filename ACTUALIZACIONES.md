@@ -5,6 +5,14 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (70) — El trazo del botón, a la mitad de velocidad
+
+Mario: «que vaya un poco más lento, va muy rápido». De una vuelta cada 4
+segundos a **una cada 8**. A 4 s llamaba más la atención que el propio botón.
+Es un único número, en `.trazo-borde` de `app/globals.css`.
+
+---
+
 ## 2026-09-16 (69) — Menú en naranja, y el botón de la portada con su trazo
 
 ### El menú, al revés
