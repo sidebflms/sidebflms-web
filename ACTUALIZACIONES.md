@@ -5,6 +5,23 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (65) — Fuera el manifiesto de la portada
+
+Mario, sobre el bloque «We arrive before doors open» y sus cuatro frases:
+«esto ocupa demasiado en la pantalla, quítalo».
+
+La portada queda en cuatro piezas: reel, las tres cintas de trabajos, el botón
+«ver todo el trabajo» y la llamada final. Medido a 1440 px: 2.688 px de alto,
+unos 450 menos.
+
+**No se pierde el texto.** Las cuatro frases viven en `dict.manifesto` y siguen
+publicadas en Nosotros, bajo «Cómo trabajamos», que desde ahora es el único
+sitio donde salen. El componente `components/sections/manifesto.tsx` se queda
+en el repositorio sin usar, igual que `Showpiece` y `EditorialBlock`, por si se
+quiere recuperar.
+
+---
+
 ## 2026-09-16 (64) — Galoguin, con su foto; ya no queda ninguna de otra persona
 
 `public/media/equipo/galoguin.jpg`, 800×1000, sacada de `galo.jpeg`.

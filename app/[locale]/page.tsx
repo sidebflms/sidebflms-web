@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Hero } from "@/components/sections/hero";
 import { Reveal } from "@/components/motion/reveal";
-import { Manifesto } from "@/components/sections/manifesto";
 import { HomeSliders } from "@/components/sections/home-sliders";
 import { ButtonLink, Arrow } from "@/components/ui/button";
 import { PROJECTS } from "@/content/projects";
@@ -65,7 +64,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </ButtonLink>
       </div>
 
-      <Manifesto dict={dict} />
+      {/* Aquí iba el manifiesto —«We arrive before doors open» y sus cuatro
+          frases—. Mario lo quitó el 2026-09-16: ocupaba demasiada pantalla entre
+          los trabajos y la llamada final. El componente sigue en
+          `components/sections/manifesto.tsx` sin usar, como `Showpiece` y
+          `EditorialBlock`, y las cuatro frases siguen publicadas en Nosotros,
+          bajo «Cómo trabajamos». */}
       <ContactCta
         locale={locale}
         dict={dict}

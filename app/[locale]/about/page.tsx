@@ -118,9 +118,9 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
       )}
 
       {/* Dónde operamos y cómo trabajamos, en dos columnas.
-          El manifiesto NO se reescribe aquí: se reutiliza `dict.manifesto`,
-          que es el mismo que sale en la portada. Duplicar ese texto es cómo
-          se acaba con dos versiones que dicen cosas distintas. */}
+          El manifiesto NO se reescribe aquí: se reutiliza `dict.manifesto`.
+          Desde el 2026-09-16 éste es el ÚNICO sitio donde sale —se quitó de la
+          portada—, así que si algún día se toca, se toca en el diccionario. */}
       <section className="shell mt-24 grid gap-12 border-t border-ink-600 pt-14 lg:grid-cols-12 lg:gap-6">
         <Reveal className="lg:col-span-5">
           <p className="label">{dict.about.whereLabel}</p>
