@@ -122,15 +122,23 @@ export type Miembro = {
  *     inservible. Ella sale pequeña en el encuadre original, así que se recortó
  *     a mano (`crop=1280:1600:1250:1464`).
  *
- * **Quedan DOS de relleno**: Galoguin y Rubén, los dos con la misma foto de
- * otra persona (`gafas-fpv.jpg`) y con `fotoEsEjemplo: true`. En cuanto lleguen
- * las suyas se quita esa marca y pasan a color y sin aviso — y con eso
- * `HAY_EJEMPLOS` se apaga y cae el freno para abrir la web.
+ * **Ya no queda ninguna de relleno** (2026-09-16). Galoguin y Rubén llevaban
+ * los dos la foto de otra persona (`gafas-fpv.jpg`) con `fotoEsEjemplo: true`;
+ * ahora tienen la suya —la de Galoguin, de espaldas, por decisión de Mario—.
+ *
+ * `HAY_EJEMPLOS` sigue encendido, pero ya sólo por los CARGOS: los once
+ * llevan `roleEsEjemplo`. Cuando se confirmen, se apaga y cae el freno para
+ * abrir la web.
  */
 export const EQUIPO: Miembro[] = [
   { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Dirección", en: "Direction" }, roleEsEjemplo: true, foto: "/media/equipo/mario-bote.jpg" },
   { nombre: "Fernando", slug: "fernando", role: { es: "Producción", en: "Production" }, roleEsEjemplo: true, foto: "/media/equipo/fernando.jpg" },
-  { nombre: "Galoguin", slug: "galoguin", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/trabajando/gafas-fpv.jpg", fotoEsEjemplo: true },
+  // Foto real desde el 2026-09-16, y DE ESPALDAS: en la mesa de control de
+  // ITRAMUN, con el casete de SIDEBFLMS en el chaquetón. Se avisó de que en una
+  // rejilla de caras no se le reconoce, y Mario decidió ponerla igual: es él, y
+  // es mejor que la foto de OTRA persona que llevaba hasta ahora con el rótulo
+  // de «Ejemplo». Si llega una de frente, se cambia aquí.
+  { nombre: "Galoguin", slug: "galoguin", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/galoguin.jpg" },
   { nombre: "Iván", slug: "ivan", role: { es: "Piloto de drone", en: "Drone pilot" }, roleEsEjemplo: true, foto: "/media/equipo/ivan.jpg" },
   { nombre: "Jota", slug: "jota", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/jota.jpg" },
   { nombre: "Kenny", slug: "kenny", role: { es: "Cámara", en: "Camera" }, roleEsEjemplo: true, foto: "/media/equipo/kenny.jpg" },

@@ -5,6 +5,23 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (64) — Galoguin, con su foto; ya no queda ninguna de otra persona
+
+`public/media/equipo/galoguin.jpg`, 800×1000, sacada de `galo.jpeg`.
+
+**Es de espaldas**: en la mesa de control de ITRAMUN, con el casete de
+SIDEBFLMS en el chaquetón y el escenario detrás. Se le avisó a Mario de que en
+una rejilla de caras no se le reconoce, y decidió ponerla igual. Tiene sentido:
+**es él**, y lo que llevaba hasta ahora era la foto de otra persona con el
+rótulo de «Ejemplo», que era peor.
+
+Con esto **las once fichas llevan la foto de quien dicen ser**. Ya no queda
+ninguna con `fotoEsEjemplo`. Lo que sigue provisional son los **cargos**: los
+once llevan `roleEsEjemplo`, así que el aviso de «provisional» de Nosotros
+sigue saliendo, ahora sólo por eso.
+
+---
+
 ## 2026-09-16 (63) — Fuera «En faena»
 
 Mario: «las de en faena vamos a quitar todas». Se quita la sección entera de
