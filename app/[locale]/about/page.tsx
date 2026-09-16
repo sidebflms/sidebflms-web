@@ -7,7 +7,6 @@ import { ContactCta } from "@/components/sections/contact-cta";
 import { CIFRAS_2026, CIFRAS_ACUMULADAS } from "@/content/cifras";
 import {
   EQUIPO,
-  FOTOS_EDITORIAL,
   FOTO_AMPLIACION,
   FOTO_GRUPO,
   RETRATOS_PENDIENTES,
@@ -256,35 +255,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             </Reveal>
           )}
 
-          {/* EN FAENA — CUATRO, NO SIETE.
-              Eran siete y se leían como un volcado de carpeta: la primera dice
-              algo y la séptima ya no. Estas cuatro cuentan cosas distintas.
-              Ver FOTOS_EDITORIAL en content/team.ts. */}
-          {FOTOS_EDITORIAL.length > 0 && (
-            <>
-              <Reveal>
-                <h3 className="label mt-20 border-t border-ink-600 pt-14">{a.workLabel}</h3>
-              </Reveal>
-              <Reveal stagger>
-                <ul className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                  {FOTOS_EDITORIAL.map((foto) => (
-                    <li
-                      key={foto.src}
-                      className="relative aspect-[4/5] overflow-hidden rounded-lg bg-ink-900"
-                    >
-                      <Image
-                        src={foto.src}
-                        alt={foto.alt[locale]}
-                        fill
-                        sizes="(max-width: 1024px) 50vw, 25vw"
-                        className="object-cover"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            </>
-          )}
+          {/* Aquí iba «En faena», una tira de fotos del equipo trabajando. Mario
+              la quitó entera el 2026-09-16: «las de en faena vamos a quitar
+              todas». Los ficheros siguen en disco: ilustran las etapas de
+              Servicios y la ficha provisional de Galoguin. */}
         </section>
       )}
 

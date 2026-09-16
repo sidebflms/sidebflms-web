@@ -456,7 +456,6 @@ export const en: Dictionary = {
     scaleBody:
       "The core is eleven people, but not every job fits in eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery window. Building a bigger crew and making it work is part of the job.",
     scaleAlt: "The extended SIDEBFLMS crew at Monegros",
-    workLabel: "On set",
     ctaTitle: ["Tell us", "what project", "you have"],
     ctaSecondary: "Want to work with us?",
   },

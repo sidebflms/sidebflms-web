@@ -184,6 +184,17 @@ botón primario en `brand-600`, que es el que cumple AA con `bone` encima.
 
 ---
 
+## 2026-09-16 — Fuera «En faena» también en esta rama
+
+Mismo cambio que en `rendimiento` (entrada 63 de esa rama), aplicado aquí para
+que las fotos no vuelvan al juntar las dos: fuera la tira de fotos de equipo
+trabajando de **Nosotros** y de **Trabaja con nosotros**, y fuera
+`FOTOS_TRABAJANDO`, `FOTOS_EDITORIAL` y el texto `workLabel`, que sólo existían
+para ellas. Los ficheros siguen en disco: los usan las etapas de Servicios y la
+ficha provisional de Galoguin.
+
+---
+
 ## 2026-09-15 (59) — Seis piezas ya suenan. Y una corrección a la entrada anterior
 
 ### Lo que decía la entrada 58 estaba mal

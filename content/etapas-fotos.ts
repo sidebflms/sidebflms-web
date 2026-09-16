@@ -33,5 +33,5 @@ export const FOTO_ETAPA: Record<string, string | null> = {
   // La antigua etapa 04 ya no existe: el proceso pasó de cuatro fases a tres
   // el 2026-09-15, con la cobertura aérea integrada dentro del rodaje. La foto
   // del piloto con el Inspire, que ilustraba la etapa aérea, no se pierde:
-  // sigue en FOTOS_TRABAJANDO (content/team.ts) y en la página de drone.
+  // sigue en `public/media/equipo/trabajando/` y en la página de drone.
 };

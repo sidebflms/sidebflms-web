@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Reveal } from "@/components/motion/reveal";
 import { JobsForm } from "@/components/ui/jobs-form";
-import { FOTOS_EDITORIAL } from "@/content/team";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -33,10 +31,9 @@ export async function generateMetadata({
  * condiciones, porque nada de eso está decidido. Lo único que se explica es
  * qué ayuda a leer una candidatura, que sí se puede afirmar.
  *
- * ── LAS FOTOS SON LAS MISMAS QUE EN NOSOTROS ─────────────────────────────
- * `FOTOS_EDITORIAL`, la misma selección y el mismo recorte 4:5. Quien mira
- * esta página viene casi siempre de allí, y repetir el tratamiento hace que se
- * lean como la misma casa. Fotos de rodaje de verdad, no de archivo.
+ * ── SIN FOTOS ────────────────────────────────────────────────────────────
+ * Llevaba debajo la misma tira de fotos de equipo trabajando que Nosotros.
+ * Se quitó de las dos páginas el 2026-09-16, a petición de Mario.
  */
 export default async function WorkWithUsPage({ params }: PageProps<"/[locale]/work-with-us">) {
   const { locale } = await params;
@@ -103,28 +100,6 @@ export default async function WorkWithUsPage({ params }: PageProps<"/[locale]/wo
         </div>
       </div>
 
-      {FOTOS_EDITORIAL.length > 0 && (
-        <section className="shell mt-24">
-          <Reveal stagger>
-            <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-              {FOTOS_EDITORIAL.map((foto) => (
-                <li
-                  key={foto.src}
-                  className="relative aspect-[4/5] overflow-hidden rounded-lg bg-ink-900"
-                >
-                  <Image
-                    src={foto.src}
-                    alt={foto.alt[locale]}
-                    fill
-                    sizes="(max-width: 1024px) 50vw, 25vw"
-                    className="object-cover"
-                  />
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </section>
-      )}
     </main>
   );
 }

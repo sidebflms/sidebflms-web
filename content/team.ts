@@ -221,99 +221,14 @@ export const HAY_EJEMPLOS = EQUIPO.some(
   (m) => m.fotoEsEjemplo === true || m.roleEsEjemplo === true
 );
 
-/**
- * EL EQUIPO TRABAJANDO — la tira de fotos de la página de Nosotros.
+/*
+ * «EN FAENA» — RETIRADA el 2026-09-16.
  *
- * ── POR QUÉ ESTO EXISTE Y NO SON YA LOS RETRATOS ─────────────────────────
- * Las fotos llegaron (2026-09-12) pero llegaron SIN NOMBRES: se ve quién está
- * en cada una, pero no se sabe cuál de las once personas de `EQUIPO` es. Y un
- * retrato con el nombre cambiado es peor que no poner retrato.
+ * Aquí estaban `FOTOS_TRABAJANDO` y la selección `FOTOS_EDITORIAL`, que se
+ * pintaban en Nosotros y en Trabaja con nosotros. Mario las quitó: «las de en
+ * faena vamos a quitar todas». Se borran las listas porque ya no las usa nadie.
  *
- * Así que de momento van como tira, sin pie de foto y sin nombre. Enseñan lo
- * que hay que enseñar —el equipo en faena, que es lo que se decidió arriba—
- * sin afirmar quién es quién.
- *
- * ── QUÉ HACER CUANDO LLEGUEN LOS NOMBRES ─────────────────────────────────
- * Renombrar cada fichero con el slug de la persona, volver a pasar
- * `scripts/fotos-equipo.sh` y rellenar su `foto`. Cuando las once estén,
- * `HAY_RETRATOS` se pone solo a `true` y la rejilla pasa a enseñar caras con
- * nombre. Esta tira se puede quitar entonces, o dejarse: no estorba.
- *
- * El texto alternativo describe lo que se ve, no quién es. Es lo único que se
- * puede escribir con verdad ahora mismo.
+ * Los FICHEROS siguen en `public/media/equipo/trabajando/`: tres ilustran las
+ * etapas de Servicios (content/etapas-fotos.ts) y `gafas-fpv.jpg` es la foto
+ * provisional de Galoguin.
  */
-export type FotoTrabajando = { src: string; alt: { es: string; en: string } };
-
-export const FOTOS_TRABAJANDO: FotoTrabajando[] = [
-  {
-    src: "/media/equipo/trabajando/camara-grada.jpg",
-    alt: {
-      es: "Operador con la cámara al hombro en la grada de un estadio",
-      en: "Operator shouldering a camera in a stadium stand",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/emisora-retrato.jpg",
-    alt: {
-      es: "Piloto con la emisora del dron en las manos",
-      en: "Pilot holding the drone controller",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/gafas-fpv.jpg",
-    alt: {
-      es: "Piloto con las gafas de FPV puestas junto al escenario",
-      en: "Pilot wearing FPV goggles beside the stage",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/piloto-inspire.jpg",
-    alt: {
-      es: "Piloto con el dron de cine posado en la carretera al atardecer",
-      en: "Pilot with the cinema drone on the road at sunset",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/emisora-humo.jpg",
-    alt: {
-      es: "Piloto de perfil entre el humo del escenario",
-      en: "Pilot in profile through stage haze",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/equipo-tres.jpg",
-    alt: {
-      es: "Tres del equipo en el recinto, con la cámara y la emisora",
-      en: "Three of the crew on site, with camera and controller",
-    },
-  },
-  {
-    src: "/media/equipo/trabajando/emisora-recinto.jpg",
-    alt: {
-      es: "Dos del equipo montando entre los contenedores del recinto",
-      en: "Two of the crew setting up among the site containers",
-    },
-  },
-];
-
-/**
- * LA SELECCIÓN EDITORIAL DE «EN FAENA».
- *
- * `FOTOS_TRABAJANDO` tiene siete y se pintaban las siete en una rejilla. Siete
- * fotos seguidas del mismo equipo en el mismo tipo de sitio dejan de leerse
- * como una selección y pasan a leerse como un volcado de carpeta: la primera
- * dice algo y la séptima ya no.
- *
- * Estas cuatro son las que cuentan cosas distintas —cámara, dron en mano, el
- * dron de cine en el suelo y el equipo en grupo— y son las que se publican.
- * Las otras tres siguen en la lista de arriba y se usan en otros sitios del
- * sitio; no se han borrado.
- */
-export const FOTOS_EDITORIAL: FotoTrabajando[] = [
-  "/media/equipo/trabajando/camara-grada.jpg",
-  "/media/equipo/trabajando/emisora-humo.jpg",
-  "/media/equipo/trabajando/piloto-inspire.jpg",
-  "/media/equipo/trabajando/equipo-tres.jpg",
-]
-  .map((src) => FOTOS_TRABAJANDO.find((f) => f.src === src))
-  .filter((f): f is FotoTrabajando => f !== undefined);
