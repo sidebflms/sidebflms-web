@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (69) — Menú en naranja, y el botón de la portada con su trazo
+
+### El menú, al revés
+
+Mario: «el menú que sea en naranja y que se ilumine en blanco». Aplicado en los
+dos menús de escritorio —el del hero de la portada y el centrado de la barra—:
+**naranja (`rust-300`) en reposo, blanco al pasar el ratón**. La página en la
+que estás va en blanco: si siguiera en naranja no se distinguiría de las demás.
+`rust-300` da 5,9:1 sobre el fondo, así que vale para texto de ese tamaño.
+Comprobado leyendo el color real de cada enlace en reposo, al pasar y activo.
+
+El menú de móvil (pantalla completa) no se ha tocado.
+
+### «See all the work», centrado, más apretado y con trazo
+
+Mario: «en el medio, con menos espacio arriba y abajo, y que el cuadrado tenga
+animación de líneas naranjas rodeándolo».
+
+- **Centrado de verdad.** El primer intento lo metía en `.shell` y salía 12 px
+  a la derecha: sus márgenes son 72 y 48 px a propósito. Con un padding
+  simétrico, medido: centro del botón en 720 a 1440 px y en 195 a 390.
+- **Menos aire.** 40 px desde la última cinta (eran 64) y 88 hasta el titular
+  de la llamada final (eran unos 150: este bloque tenía su propio `pb-16`
+  además del de la sección de abajo).
+- **El trazo.** Dos segmentos naranjas recorren el borde, uno enfrente del
+  otro, una vuelta cada 4 segundos. Es un `<rect>` de SVG encima del botón con
+  `pathLength="100"`, así que no depende de medir el botón con JavaScript; ver
+  `.trazo-borde` en `app/globals.css`. No intercepta el ratón. Con «reducir
+  movimiento» se queda quieto, con el borde entero en naranja.
+
+Comprobación del trazo: la pestaña de pruebas estaba oculta y el navegador no
+avanza el reloj de las animaciones ahí, así que se adelantó a mano: el
+desplazamiento va de 0 a −25, −50 y −100 en 0, 1, 2 y 4 segundos, y se repite
+sin fin.
+
+---
+
 ## 2026-09-16 (68) — El idioma, en un solo botón
 
 Mario: «el botón de EN / ES, ¿puede ser el mismo y que al darle una vez cambie

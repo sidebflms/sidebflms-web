@@ -424,3 +424,45 @@
     animation: none;
   }
 }
+
+/* ============================================================================
+   TRAZO QUE RODEA UN RECUADRO — el botón «ver todo el trabajo» de la portada.
+
+   Dos segmentos naranjas que recorren el borde, uno enfrente del otro, como
+   una traza de dron dando vueltas a un perímetro. Mario, 2026-09-16.
+
+   ── CÓMO VA ─────────────────────────────────────────────────────────────
+   Un `<rect>` de SVG encima del botón, al 100 % de su tamaño, con
+   `pathLength="100"`: así el perímetro mide 100 sea cual sea el ancho del
+   botón, y el trazo no depende de medir nada con JavaScript. `18 32` son dos
+   tramos de 18 separados 32 (18+32=50, dos veces = 100), y desplazar el
+   `dashoffset` 100 es una vuelta completa. Como 50 divide a 100, el bucle
+   empalma sin salto.
+
+   Va POR FUERA del texto y sin eventos de ratón (`pointer-events-none` en el
+   SVG): el botón se pulsa igual que antes.
+
+   ── «REDUCIR MOVIMIENTO» ────────────────────────────────────────────────
+   Quieto: se queda el borde entero en naranja. Se ve igual de marcado, pero
+   no hay nada dando vueltas en la periferia de la vista mientras se lee.
+   ========================================================================== */
+@keyframes trazoBorde {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.trazo-borde rect {
+  fill: none;
+  stroke: var(--color-rust-500);
+  stroke-width: 1.5;
+  stroke-dasharray: 18 32;
+  animation: trazoBorde 4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trazo-borde rect {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}

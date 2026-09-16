@@ -48,7 +48,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
           Se le pasan TODAS las piezas y cada fila filtra la suya: al añadir un
           trabajo nuevo al portfolio entra solo en la cinta que le toca. */}
-      <section data-reglet={dict.featured.label} className="overflow-hidden pt-24 pb-16">
+      <section data-reglet={dict.featured.label} className="overflow-hidden pt-24 pb-10">
         <Reveal>
           <p className="label shell">{dict.featured.label}</p>
         </Reveal>
@@ -57,11 +57,33 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </div>
       </section>
 
-      <div className="shell pb-16">
-        <ButtonLink href={path(locale, "portfolio")} variant="outline">
-          {dict.featured.viewAll}
-          <Arrow />
-        </ButtonLink>
+      {/* «VER TODO EL TRABAJO», CENTRADO Y CON UN TRAZO QUE LO RODEA.
+          Mario, 2026-09-16: «en el medio, con menos espacio arriba y abajo, y
+          que el cuadrado tenga animación de líneas naranjas rodeándolo».
+
+          Espacio: arriba 40 px (era 64, el `pb` de las cintas) y abajo lo que
+          ya da la llamada final (era 64 + 64 = 128, porque este bloque tenía
+          su propio `pb-16` además del de la sección de abajo).
+
+          El trazo: ver `.trazo-borde` en app/globals.css.
+
+          SIN `.shell`: sus márgenes izquierdo y derecho son distintos a
+          propósito (72 y 48 px), así que centrar dentro de él dejaba el botón
+          12 px a la derecha del centro real. Medido. Con un padding simétrico
+          cae en el medio. */}
+      <div className="flex justify-center px-5">
+        <span className="relative inline-flex">
+          <ButtonLink href={path(locale, "portfolio")} variant="outline">
+            {dict.featured.viewAll}
+            <Arrow />
+          </ButtonLink>
+          <svg
+            aria-hidden="true"
+            className="trazo-borde pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+          >
+            <rect x="0" y="0" width="100%" height="100%" pathLength={100} />
+          </svg>
+        </span>
       </div>
 
       {/* Aquí iba el manifiesto —«We arrive before doors open» y sus cuatro
