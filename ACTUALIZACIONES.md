@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (68) — El idioma, en un solo botón
+
+Mario: «el botón de EN / ES, ¿puede ser el mismo y que al darle una vez cambie
+al otro idioma?». Eran dos enlaces, «ES · EN», con el actual resaltado.
+
+### Qué hace ahora
+
+Un único botón que **enseña el idioma al que vas, no en el que estás**: en la
+web en castellano pone «EN»; en la inglesa, «ES». Un botón tiene que decir lo
+que hace al pulsarlo — si pusiera el actual, quien no lee castellano vería «ES»
+y no sabría que ahí está su versión.
+
+Sigue conservando la página: desde Servicios en castellano lleva a
+`/en/services`, no a la portada. Comprobado en los dos sentidos.
+
+Para un lector de pantalla, «EN» a secas se lee como la preposición. El nombre
+accesible es el del idioma escrito en ese idioma —«English», «Español»— con su
+`lang`, para que se pronuncie bien.
+
+### En móvil va dentro del menú
+
+Con borde y relleno el botón mide 46 px, y a 390 px **se montaba 12 px sobre el
+logotipo centrado** (botón de 258 a 303, logotipo hasta 270; medido). Por debajo
+de `lg` se quita de la barra y va arriba a la izquierda del menú a pantalla
+completa, lejos de «Cerrar». En escritorio sigue en la barra: a 1024 px queda a
+24 px del último icono de redes y lejos del menú centrado.
+
+Nota para quien toque esto: se esconde envolviéndolo en un `<span>`, no
+pasándole `hidden` al componente. `cn` en este proyecto sólo concatena clases
+(no hay `tailwind-merge`), así que `hidden` junto al `inline-flex` del botón lo
+decidiría el orden del CSS, no el de las clases.
+
+Si algún día hay un tercer idioma, el conmutador deja de tener sentido y hay
+que volver a una lista.
+
+---
+
 ## 2026-09-16 (67) — El rótulo vertical de la regleta chocaba con los números
 
 Mario, con un recorte del FAQ: «esto choca bastante, está muy cerca». El nombre

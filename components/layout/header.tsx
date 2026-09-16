@@ -200,7 +200,19 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           ))}
         </div>
 
-        <LocaleSwitcher locale={locale} label={nav.languageLabel} />
+        {/* EL IDIOMA, SÓLO A PARTIR DE `lg` EN LA BARRA.
+            Desde que es un botón con borde (2026-09-16) ocupa 46 px, y a 390 px
+            se montaba 12 px sobre el logotipo centrado: medido, botón de 258 a
+            303 y logotipo hasta 270. Por debajo de `lg` va dentro del menú a
+            pantalla completa, donde sobra sitio y no hay que encoger nada.
+
+            Envuelto en un `<span>` y no pasándole `hidden` al componente: `cn`
+            sólo concatena, no resuelve conflictos, y `hidden` junto al
+            `inline-flex` del botón lo decidiría el orden del CSS, no el de las
+            clases. */}
+        <span className="hidden lg:block">
+          <LocaleSwitcher locale={locale} label={nav.languageLabel} />
+        </span>
 
         <button
           type="button"
@@ -223,7 +235,11 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           aria-label={nav.menu}
           className="fixed inset-0 z-50 flex flex-col bg-ink-900 lg:hidden"
         >
-          <div className="shell flex h-18 items-center justify-end">
+          {/* El botón de idioma, aquí en móvil y tableta: ver la nota de la
+              barra. A la izquierda, lejos de «Cerrar», para no pulsar uno
+              queriendo el otro. */}
+          <div className="shell flex h-18 items-center justify-between">
+            <LocaleSwitcher locale={locale} label={nav.languageLabel} />
             <button
               ref={closeRef}
               type="button"
