@@ -195,9 +195,13 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
                   <Link
                     href={link.href}
                     aria-current={activo ? "page" : undefined}
+                    // NARANJA EN REPOSO, BLANCO AL PASAR — al revés de como estaba.
+                    // Mario, 2026-09-16. La página en la que estás también va en blanco:
+                    // si siguiera en naranja no se distinguiría de las demás. El naranja
+                    // es `rust-300`, que da 5,9:1 sobre el fondo y vale para texto pequeño.
                     className={cn(
                       "text-sm font-medium tracking-[0.1em] uppercase transition-colors duration-200",
-                      activo ? "text-rust-300" : "text-bone hover:text-rust-300"
+                      activo ? "text-bone" : "text-rust-300 hover:text-bone"
                     )}
                   >
                     {link.label}
