@@ -109,21 +109,6 @@ const T = {
  */
 const CRECE = 28;
 
-/**
- * LOS GROSORES DEL TRAZO, en unidades del dibujo. Los de partida son los mismos
- * que pone la hoja de estilos —ahí están explicados—; los «finos» son a los que
- * se encoge el trazo mientras vira al color de la lámina.
- *
- * Mario, 2026-09-18: «que se encojan los bordes negros del exterior y se cambie
- * al color, así se funde bien».
- */
-const GRUESO = {
-  detalle: 9,
-  detalleFino: 4,
-  contorno: 18,
-  contornoFino: 7,
-} as const;
-
 /** Qué parte del lado corto de la pantalla ocupa el casete, como el CSS. */
 const PARTE_DE_PANTALLA = 0.72;
 const PARTE_EN_MOVIL = 0.88;
@@ -207,29 +192,19 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
         easing: "cubic-bezier(0.45, 0, 0.55, 1)",
         fill: "both" as const,
       };
-      // El color y el adelgazamiento van juntos: el trazo negro se encoge a la
-      // vez que vira, y por eso parece que se funde con la lámina en vez de
-      // cambiar de color de una pieza.
+      // SÓLO EL COLOR: el grosor no se toca. Hubo una versión en la que el
+      // trazo adelgazaba a la vez que viraba, para que pareciera que se fundía
+      // con la lámina, y Mario la descartó al verla: «me gustaría que fueran
+      // igual de gordas que cuando está el contorno en negro».
       animaciones.push(
         dibujo.animate(
           [
-            { stroke: tono("--color-ink-900", "#141414"), strokeWidth: GRUESO.detalle },
-            { stroke: tono("--color-rust-500", "#e8451d"), strokeWidth: GRUESO.detalleFino },
+            { stroke: tono("--color-ink-900", "#141414") },
+            { stroke: tono("--color-rust-500", "#e8451d") },
           ],
           paso
         )
       );
-      // El contorno lleva su propio grosor en la hoja, así que el heredado no
-      // le llega: se le anima aparte.
-      const contorno = dibujo.querySelector<SVGPathElement>(".intro-casete-contorno");
-      if (contorno) {
-        animaciones.push(
-          contorno.animate(
-            [{ strokeWidth: GRUESO.contorno }, { strokeWidth: GRUESO.contornoFino }],
-            paso
-          )
-        );
-      }
     }
 
     /* 3 · LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina. */
