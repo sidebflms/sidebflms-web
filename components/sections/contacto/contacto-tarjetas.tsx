@@ -4,14 +4,14 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 import { IconoRed } from "@/components/layout/social-icons";
 import { Reveal } from "@/components/motion/reveal";
-import { ArrowUpRight, PillLink, circleButton } from "@/components/ui/button";
+import { ArrowUpRight, PillLink } from "@/components/ui/button";
 import { ContactForm } from "@/components/ui/contact-form";
 import { FaqJsonLd, irAAncla, redesContacto } from "@/components/sections/contacto/comun";
 import { FormularioPorPasos, type PasoFormulario } from "@/components/sections/contacto/formulario-por-pasos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
 import { type Locale } from "@/lib/routes";
-import { pad } from "@/lib/utils";
+import { cn, pad } from "@/lib/utils";
 
 /**
  * «CONTACTO». Estructura elegida entre tres el 2026-09-16.
@@ -29,8 +29,9 @@ import { pad } from "@/lib/utils";
  *      carril viven en `formulario-por-pasos.tsx`, que comparte con «Trabaja
  *      con nosotros».
  *
- *   3. LAS PREGUNTAS EN MOSAICO. Tarjetas de cristal claro en columnas, que
- *      se ciñen a lo que mide cada respuesta.
+ *   3. LAS PREGUNTAS FRECUENTES, en desplegables de una sola columna
+ *      (cliente, 2026-09-17). Eran un mosaico de tarjetas en tres columnas;
+ *      con desplegables, al abrir uno los demás saltarían de columna.
  */
 
 const ID_FORM = "contacto-formulario";
@@ -93,15 +94,12 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
         <ContactForm locale={locale} dict={dict} />
       </FormularioPorPasos>
 
-      {/* ── 3. LAS PREGUNTAS EN MOSAICO ──────────────────────────────────── */}
+      {/* ── 3. LAS PREGUNTAS FRECUENTES ──────────────────────────────────── */}
       <section id={ID_FAQ} data-reglet={dict.faq.label} className="shell seccion scroll-mt-28">
-        <div ref={faqRef} className="gap-3 sm:columns-2 lg:columns-3">
-          {/* La cabecera ocupa TODAS las columnas (`column-span: all`): en una
-              columna de un tercio, el titular a cuerpo `display-m` partía
-              «PREGUNTAN» por la mitad. */}
+        <div ref={faqRef}>
           <div
             data-v3-faq
-            className="glass glass-strong relative mb-3 grid gap-5 overflow-hidden rounded-[var(--radius-frame)] p-6 [column-span:all] sm:p-8 lg:grid-cols-12 lg:items-end lg:p-12"
+            className="glass glass-strong relative mb-3 grid gap-5 overflow-hidden rounded-[var(--radius-frame)] p-6 sm:p-8 lg:grid-cols-12 lg:items-end lg:p-12"
           >
             <div
               aria-hidden="true"
@@ -121,18 +119,26 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
             <p className="measure text-smoke lg:col-span-5">{dict.faq.intro}</p>
           </div>
 
+          {/* DESPLEGABLES (cliente, 2026-09-17): la pregunta a la vista y la
+              respuesta al tocarla. `<details>` nativo: teclado y lectores de
+              pantalla sin código, y la respuesta sigue en el HTML para buscadores. */}
           {dict.faq.items.map((item, i) => (
-            <article
-              key={item.q}
-              data-v3-faq
-              className="glass glass-clara mb-3 break-inside-avoid rounded-2xl p-6 transition-[translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1"
-            >
-              <p aria-hidden="true" className="label text-rust-300 tabular-nums">
-                {pad(i + 1)}
-              </p>
-              <h3 className="mt-3 leading-snug font-semibold text-bone">{item.q}</h3>
-              <p className="mt-2 text-smoke">{item.a}</p>
-            </article>
+            <details key={item.q} data-v3-faq className="glass glass-clara group mb-2 rounded-2xl">
+              <summary className="flex cursor-pointer list-none items-center gap-4 p-5 [&::-webkit-details-marker]:hidden">
+                <span aria-hidden="true" className="label shrink-0 text-rust-300 tabular-nums">
+                  {pad(i + 1)}
+                </span>
+                <h3 className="flex-1 leading-snug font-semibold text-bone">{item.q}</h3>
+                <span
+                  aria-hidden="true"
+                  className="relative h-8 w-8 shrink-0 rounded-full border border-white/15 transition-[rotate,border-color] duration-300 group-open:rotate-45 group-open:border-rust-300"
+                >
+                  <span className="absolute top-1/2 left-1/2 h-px w-3 -translate-1/2 bg-bone" />
+                  <span className="absolute top-1/2 left-1/2 h-3 w-px -translate-1/2 bg-bone" />
+                </span>
+              </summary>
+              <p className="-mt-1 px-5 pb-5 text-smoke sm:pl-[4.25rem]">{item.a}</p>
+            </details>
           ))}
         </div>
       </section>
@@ -143,7 +149,7 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
 }
 
 /** «Pedir presupuesto»: baja al formulario. */
-function BotonPresupuesto({ dict }: { dict: Dictionary }) {
+function BotonPresupuesto({ dict, className }: { dict: Dictionary; className?: string }) {
   return (
     <PillLink
       href={`#${ID_FORM}`}
@@ -151,7 +157,7 @@ function BotonPresupuesto({ dict }: { dict: Dictionary }) {
         e.preventDefault();
         irAAncla(ID_FORM);
       }}
-      className="shrink-0"
+      className={cn("shrink-0", className)}
       icon={<ArrowUpRight className="rotate-90" />}
     >
       {dict.services.cta}
@@ -189,11 +195,14 @@ function Cabecera({ dict }: { dict: Dictionary }) {
       </h1>
       <p className="text-lead measure mt-6 text-smoke">{dict.contact.intro}</p>
 
-      <div className="mt-8 flex flex-wrap items-center gap-2">
-        <BotonPresupuesto dict={dict} />
+      {/* En móvil, rejilla ordenada: botón y email a todo el ancho, las tres
+          redes en una fila de botones iguales y las preguntas debajo (cliente,
+          2026-09-17: en fila libre quedaba desordenado). Desde `sm`, en fila. */}
+      <div className="mt-8 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center">
+        <BotonPresupuesto dict={dict} className="col-span-3 w-full justify-between sm:w-auto" />
         <a
           href={`mailto:${dict.contact.email}`}
-          className="glass inline-flex h-11 items-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300"
+          className="glass col-span-3 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300 sm:justify-start"
         >
           {dict.contact.email}
         </a>
@@ -204,12 +213,12 @@ function Cabecera({ dict }: { dict: Dictionary }) {
             target="_blank"
             rel="noreferrer noopener"
             aria-label={red.nombre}
-            className={circleButton}
+            className="glass inline-flex h-11 w-full items-center justify-center rounded-full text-bone transition-colors duration-300 hover:text-rust-300 sm:w-11"
           >
             <IconoRed red={red.key} className="h-4 w-4" />
           </a>
         ))}
-        <EnlacePreguntas className="glass inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300">
+        <EnlacePreguntas className="glass col-span-3 inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300 sm:justify-start">
           {dict.faq.label}
           <ArrowUpRight className="h-3.5 w-3.5 rotate-90" />
         </EnlacePreguntas>
