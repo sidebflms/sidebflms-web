@@ -71,6 +71,8 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
         titulo={titulo}
         textoVer={copy.watch}
         textoSonido={copy.sound}
+        textoAmpliar={dict.portfolio.player.fullscreen}
+        textoReducir={dict.portfolio.player.exitFullscreen}
         muesca={
           // Aire arriba en la línea: Akira recortaría las tildes.
           <h1 className="font-display pt-[0.15em] text-[clamp(1rem,0.4rem+1.5vw,2.5rem)] leading-[1.02] text-balance text-bone">

@@ -70,6 +70,8 @@ export function FichaVisor({
   titulo,
   textoVer,
   textoSonido,
+  textoAmpliar,
+  textoReducir,
   children,
 }: {
   video: string | null;
@@ -83,11 +85,15 @@ export function FichaVisor({
   titulo: string;
   textoVer: string;
   textoSonido: string;
+  /** «Pantalla completa» / «Salir de pantalla completa». */
+  textoAmpliar: string;
+  textoReducir: string;
   /** Sin vídeo ni foto (pieza pendiente). */
   children?: ReactNode;
 }) {
   const marcoRef = useRef<HTMLDivElement>(null);
   const muescaRef = useRef<HTMLDivElement>(null);
+  const escenaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const barraRef = useRef<HTMLInputElement>(null);
   const tcRef = useRef<HTMLSpanElement>(null);
@@ -100,6 +106,7 @@ export function FichaVisor({
   const [empezado, setEmpezado] = useState(false);
   const [silencio, setSilencio] = useState(true);
   const [conAudio, setConAudio] = useState<boolean | null>(null);
+  const [ampliado, setAmpliado] = useState(false);
 
   const [w, h] = video ? dims : [16, 9];
 
@@ -200,6 +207,40 @@ export function FichaVisor({
     }
   };
 
+  /* PANTALLA COMPLETA (cliente, 2026-09-17: «que se pueda agrandar el
+     reproductor» en móvil).
+     · Android y escritorio: la ESCENA entera (vídeo con sus mandos) con la API
+       estándar; el recorte de la muesca y el `--muesca` se anulan en
+       globals.css (`[data-framed] > :fullscreen`). En el teléfono, además, se
+       intenta girar a horizontal (sólo si el navegador lo permite).
+     · iPhone: Safari no pone a pantalla completa nada que no sea un <video>,
+       así que se abre el reproductor del sistema con `webkitEnterFullscreen`. */
+  useEffect(() => {
+    const alCambiar = () => setAmpliado(document.fullscreenElement === escenaRef.current);
+    document.addEventListener("fullscreenchange", alCambiar);
+    return () => document.removeEventListener("fullscreenchange", alCambiar);
+  }, []);
+
+  const alternarPantallaCompleta = () => {
+    const escena = escenaRef.current;
+    const v = videoRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+      return;
+    }
+    if (escena && document.fullscreenEnabled && escena.requestFullscreen) {
+      escena
+        .requestFullscreen()
+        .then(() => {
+          const orientacion = screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> };
+          if (window.matchMedia("(pointer: coarse)").matches) orientacion.lock?.("landscape").catch(() => {});
+        })
+        .catch(() => {});
+      return;
+    }
+    v?.webkitEnterFullscreen?.();
+  };
+
   const alternarSonido = () => {
     const v = videoRef.current;
     if (!v) return;
@@ -216,6 +257,7 @@ export function FichaVisor({
       <FramedStage
         className="h-full w-full"
         stageClassName="bg-ink-900"
+        stageRef={escenaRef}
         notchBottomClassName="hidden max-w-[72%] pt-3 pr-5 sm:block lg:pt-3.5 lg:pr-6"
         notchBottom={muesca ? <div ref={muescaRef}>{muesca}</div> : undefined}
         notchTopClassName="hidden pb-3 pl-4 sm:block"
@@ -345,6 +387,16 @@ export function FichaVisor({
                   <span ref={duracionRef}>{timecode(0)}</span>
                 </span>
               </span>
+
+              <button
+                type="button"
+                onClick={alternarPantallaCompleta}
+                aria-label={ampliado ? textoReducir : textoAmpliar}
+                aria-pressed={ampliado}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-rust-300 hover:text-rust-300"
+              >
+                {ampliado ? <IconoReducir className="h-4 w-4" /> : <IconoAmpliar className="h-4 w-4" />}
+              </button>
             </div>
           </>
         ) : imagen ? (
@@ -378,6 +430,22 @@ function IconoPausa({ className }: { className?: string }) {
     <svg viewBox="0 0 16 16" aria-hidden="true" className={className} fill="currentColor">
       <rect x="3.5" y="2.5" width="3" height="11" rx="0.8" />
       <rect x="9.5" y="2.5" width="3" height="11" rx="0.8" />
+    </svg>
+  );
+}
+
+function IconoAmpliar({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10" />
+    </svg>
+  );
+}
+
+function IconoReducir({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2.5V6H2.5M13.5 6H10V2.5M10 13.5V10h3.5M2.5 10H6v3.5" />
     </svg>
   );
 }
