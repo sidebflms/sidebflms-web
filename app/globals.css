@@ -806,9 +806,13 @@ video::-webkit-media-controls-start-playback-button {
    al reel de la portada.
 
    ── «REDUCIR MOVIMIENTO» ────────────────────────────────────────────────
-   No sale: el script de la cabecera no pone la marca. No hay regla de CSS que
-   la esconda además, a propósito: con `?intro=1` se puede forzar para verla, y
-   una regla aquí la escondería también en ese caso.
+   LA INTRO SALE IGUAL con ese ajuste del sistema puesto. Es decisión de Mario
+   (2026-09-18), explicada en el componente. Por eso tampoco hay aquí ninguna
+   regla que la esconda.
+
+   Y por eso mismo el fundido final se anima desde JavaScript: esta hoja tiene,
+   más arriba, una regla que con «reducir movimiento» deja todas las
+   animaciones de CSS en 0,01 ms, y la intro se quedaría a cortes.
    ========================================================================== */
 
 /* OCULTA POR DEFECTO. Sólo aparece con `<html data-intro="si">`, que lo pone

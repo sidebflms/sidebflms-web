@@ -47,8 +47,15 @@ import { CASETE } from "./casete-trazos";
  *
  * ── CUÁNDO SALE ─────────────────────────────────────────────────────────
  * Sólo al CARGAR la portada, y una vez por sesión del navegador. Nunca al
- * llegar navegando desde otra página de la web, y nunca con «reducir
- * movimiento». `?intro=1` la fuerza, para poder verla cuando se quiera.
+ * llegar navegando desde otra página de la web. `?intro=1` la fuerza otra vez
+ * dentro de la misma sesión, para poder verla cuando se quiera.
+ *
+ * SALE TAMBIÉN CON «REDUCIR MOVIMIENTO» PUESTO, y eso es una decisión de Mario
+ * (2026-09-18), no un olvido: hasta entonces la intro se saltaba en equipos con
+ * ese ajuste del sistema, que es la recomendación habitual —lo activa gente a
+ * la que el movimiento le marea o le da dolor de cabeza—. Se le explicó y lo
+ * quiso así: «que salga ya directamente según entras a sidebflms.com». Queda el
+ * botón de saltar, el clic en cualquier sitio y la tecla Escape.
  *
  * Lo decide un script en la CABECERA del documento (`SCRIPT_INTRO`, puesto en
  * `app/[locale]/layout.tsx`), antes de pintar nada: si toca, marca
@@ -354,11 +361,11 @@ const baseEnRegex = BASE_PATH.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
  * El script que decide ANTES DE PINTAR si la intro sale. Va en la cabecera del
  * documento (ver `app/[locale]/layout.tsx`). Minúsculo y sin dependencias.
  *
- * Sólo en la portada (`/`, `/es`, `/en`, con la ruta base delante si la hay),
- * sólo si no salió ya en esta sesión y nunca con «reducir movimiento».
+ * Sólo en la portada (`/`, `/es`, `/en`, con la ruta base delante si la hay) y
+ * sólo si no salió ya en esta sesión.
  *
- * `?intro=1` LA FUERZA, para poder verla: tras verla una vez la sesión la
- * recuerda, y en un equipo con «reducir movimiento» no sale nunca. Se salta la
- * preferencia de movimiento sólo porque quien pone el parámetro la pide.
+ * `?intro=1` LA FUERZA: tras verla una vez, la sesión la recuerda y no vuelve a
+ * salir hasta que se cierre el navegador; con el parámetro se puede enseñar las
+ * veces que haga falta.
  */
-export const SCRIPT_INTRO = `(function(){try{var p=location.pathname;if(!new RegExp("^${baseEnRegex.replace(/\\/g, "\\\\")}(\\\\/(es|en))?\\\\/?$").test(p))return;var f=/[?&]intro=1(&|$)/.test(location.search);if(!f){if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("sb-intro"))return}sessionStorage.setItem("sb-intro","1");document.documentElement.setAttribute("data-intro","si")}catch(_){}})();`;
+export const SCRIPT_INTRO = `(function(){try{var p=location.pathname;if(!new RegExp("^${baseEnRegex.replace(/\\/g, "\\\\")}(\\\\/(es|en))?\\\\/?$").test(p))return;var f=/[?&]intro=1(&|$)/.test(location.search);if(!f&&sessionStorage.getItem("sb-intro"))return;sessionStorage.setItem("sb-intro","1");document.documentElement.setAttribute("data-intro","si")}catch(_){}})();`;
