@@ -160,7 +160,7 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
   const etapa = etapas[activo];
 
   return (
-    <section ref={sectionRef} data-reglet={dict.services.processLabel} className="shell py-16 lg:py-10">
+    <section ref={sectionRef} data-reglet={dict.services.processLabel} className="shell">
       {/* TÍTULO DE SECCIÓN GRANDE (cliente, 2026-09-16): como rótulo pequeño
           dejaba un hueco vacío encima del visor. Pasa a titular en Akira; las
           etapas de dentro bajan a h3. Cuerpo con techo de 4 rem: «CÓMO LO
@@ -228,14 +228,14 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
               <IconoServicio clave={ICONO_ETAPA[etapa.number] ?? ""} className="h-5 w-5" />
             </span>
             {/* Cuerpo calibrado para «PREPRODUCCIÓN», la palabra más ancha. */}
-            <h3 className="font-display text-[clamp(1.25rem,1.9vw,1.9rem)] leading-[0.95] text-bone">{etapa.title}</h3>
+            <h3 className="font-display text-[clamp(1.125rem,1.9vw,1.9rem)] leading-[0.95] text-bone">{etapa.title}</h3>
           </div>
           {etapa.pending && (
             <span className="label mt-3 inline-block w-fit rounded-full border border-rust-500 px-3 py-1 text-rust-300">
               {dict.services.pendingNote}
             </span>
           )}
-          <p className="mt-3 text-sm text-smoke lg:text-base">{etapa.body}</p>
+          <p className="mt-3 text-smoke">{etapa.body}</p>
           <ul className="mt-4 flex flex-wrap gap-2">
             {etapa.items.map((item) => (
               <li key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-bone">

@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SplitText } from "gsap/SplitText";
 
 import { FrameActions, FrameNav } from "@/components/glass/frame-nav";
-import { IconoCamara, IconoDrone } from "@/components/glass/iconos-servicio";
 import { FramedStage } from "@/components/glass/framed-stage";
 import { ReelModal } from "@/components/glass/reel-modal";
 import { CountUp } from "@/components/motion/count-up";
 import { ArrowUpRight, PillLink } from "@/components/ui/button";
 import type { Cifra } from "@/content/cifras";
 import type { Project } from "@/content/projects";
+import { arrancaEnSilencio } from "@/lib/autoplay";
 import { conBase } from "@/lib/base";
 import type { Dictionary } from "@/lib/dictionaries";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
@@ -24,14 +24,14 @@ import { cn, pad, timecode } from "@/lib/utils";
  * El reel dentro de un marco con dos muescas (FramedStage):
  *   · arriba a la derecha, idioma, redes y contacto;
  *   · abajo a la izquierda, las cifras de la empresa contando.
- * Dentro del marco: el menú, el titular, «Ver reel» con el timecode, dos
- * pastillas flotando sobre el vídeo y, abajo a la derecha, una tarjeta de
- * cristal que va pasando por los trabajos destacados (01 — 04 en el borde).
+ * Dentro del marco: el menú, el titular, «Ver reel» con el timecode y, abajo
+ * a la derecha, una tarjeta de cristal que va pasando por los trabajos
+ * destacados (01 — 04 en el borde).
  *
  * En móvil no hay muescas (sus contenedores se ocultan y el recorte
- * desaparece) y la composición es la de las tarjetas de app: titular partido
- * por una flecha, el timecode grande con sus rótulos y un bloque naranja con
- * un mordisco circular donde encaja el botón del reel.
+ * desaparece) y la composición es la de las tarjetas de app: el titular, el
+ * timecode con sus rótulos y un bloque naranja con las cifras y un mordisco
+ * circular donde encaja el botón del reel.
  *
  * Mismo material que el hero original: `reel-1920.mp4` / `reel-720.mp4` y el
  * póster en WebP, que sigue siendo el LCP.
@@ -70,7 +70,8 @@ export function HeroFrame({
     const video = videoRef.current;
     if (!video) return;
     video.src = window.matchMedia("(max-width: 767px)").matches ? SOURCES.mobile : SOURCES.desktop;
-    if (!prefersReducedMotion()) video.play().catch(() => {});
+    if (prefersReducedMotion()) return;
+    return arrancaEnSilencio(video);
   }, []);
 
   /* ── INTRO Y SCROLL ─────────────────────────────────────────────────────
@@ -110,13 +111,7 @@ export function HeroFrame({
         .from("[data-intro=nav]", { y: -24, opacity: 0, duration: 0.9 * k, stagger: 0.06 }, 0.35 * k)
         .from("[data-intro=notch]", { x: 36, opacity: 0, duration: 0.9 * k, stagger: 0.07 }, 0.45 * k)
         .from(split.chars, { yPercent: 115, duration: 1.1 * k, stagger: 0.016 }, 0.4 * k)
-        .from("[data-intro=arrow]", { scaleX: 0, transformOrigin: "left", duration: 1 * k }, 0.8 * k)
-        .from("[data-intro=up]", { y: 40, opacity: 0, duration: 1 * k, stagger: 0.08 }, 0.8 * k)
-        .from(
-          "[data-intro=pill]",
-          { scale: 0.6, opacity: 0, filter: "blur(12px)", duration: 1.1 * k, ease: "back.out(1.6)", stagger: 0.18, clearProps: "filter" },
-          1 * k
-        );
+        .from("[data-intro=up]", { y: 40, opacity: 0, duration: 1 * k, stagger: 0.08 }, 0.8 * k);
 
       // Al bajar, el marco se aleja y el reel se hunde; al subir, vuelve.
       gsap
@@ -135,8 +130,9 @@ export function HeroFrame({
     };
   }, []);
 
-  // En el bloque naranja del móvil va la última cifra (las horas de vuelo).
-  const ultimaCifra = cifras.at(-1);
+  // En el bloque naranja del móvil: las tres de la muesca de escritorio y las
+  // horas de vuelo. Antes sólo iban las horas y parecía un dato suelto.
+  const cifrasMovil = [...cifras.slice(0, 3), ...cifras.slice(-1)];
 
   return (
     <section
@@ -184,19 +180,15 @@ export function HeroFrame({
 
           {/* ── TITULAR ─────────────────────────────────────────────────── */}
           <div className="absolute inset-x-5 top-28 lg:top-1/2 lg:right-auto lg:left-10 lg:-translate-y-[62%]">
-            <h1 ref={headlineRef} className="font-display text-[clamp(1.6rem,8vw,2.4rem)] leading-[1.05] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
-              {dict.hero.headline.map((line, i) => {
-                const [first, ...rest] = line.split(" ");
-                return (
-                  <span key={line} className={cn("block", i > 0 && "mt-5 lg:mt-0")}>
-                    <span className="flex items-center gap-3 lg:inline">
-                      <span>{first}</span>
-                      <FlechaLarga />
-                    </span>{" "}
-                    <span className="mt-1 block text-right lg:mt-0 lg:inline lg:text-left">{rest.join(" ")}</span>
-                  </span>
-                );
-              })}
+            {/* Cada frase en UNA línea también en móvil. «CAPTURE THE ENERGY.»
+                mide ~16× el cuerpo en Akira: a 4.9vw ocupa el 79 % del ancho,
+                y el hueco del titular a 375 px es el 85 %. */}
+            <h1 ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
+              {dict.hero.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </h1>
 
             <div data-intro="up" className="mt-8 hidden items-center gap-6 lg:flex">
@@ -217,16 +209,6 @@ export function HeroFrame({
             </div>
           </div>
 
-          {/* ── PASTILLAS FLOTANTES (desktop) ───────────────────────────── */}
-          <div aria-hidden="true" className="hidden lg:block">
-            <div className="flota absolute top-[24%] left-[54%]">
-              <PillIcon data-intro="pill" label={dict.glass.pills[0]} icon={<IconoDrone className="h-5 w-5" />} />
-            </div>
-            <div className="flota absolute top-[64%] left-[40%] [animation-delay:-3s]">
-              <PillIcon data-intro="pill" label={dict.glass.pills[1]} icon={<IconoCamara className="h-5 w-5" />} />
-            </div>
-          </div>
-
           {/* ── DESTACADOS: tarjeta + indicador 01—04 (desktop) ─────────── */}
           {featured.length > 0 && (
             <DestacadosRotativos featured={featured} dict={dict} locale={locale} />
@@ -234,42 +216,44 @@ export function HeroFrame({
 
           {/* ── MÓVIL: timecode grande y bloque naranja con mordisco ────── */}
           <div className="absolute inset-x-3 bottom-3 lg:hidden">
-            <div data-intro="up" className="glass rounded-3xl px-5 py-4">
+            <div data-intro="up" className="glass rounded-2xl px-4 py-2.5">
               <TimecodeGrande labels={dict.glass.tcLabels} />
             </div>
 
             <div data-intro="up" className="relative mt-14">
               <div
-                className="flex h-40 flex-col justify-between rounded-[1.75rem] bg-brand-600 p-4"
+                className="rounded-[1.75rem] bg-brand-600 p-4"
                 style={{
                   WebkitMask: "radial-gradient(circle 54px at calc(100% - 92px) 0, transparent 53px, #000 54px)",
                   mask: "radial-gradient(circle 54px at calc(100% - 92px) 0, transparent 53px, #000 54px)",
                 }}
               >
-                <Link
-                  href={path(locale, "portfolio")}
-                  aria-label={dict.featured.viewAll}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-ink-900/20 text-bone"
-                >
-                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true" className="h-4 w-4">
-                    <circle cx="4.5" cy="4.5" r="2" />
-                    <circle cx="11.5" cy="4.5" r="2" />
-                    <circle cx="4.5" cy="11.5" r="2" />
-                    <circle cx="11.5" cy="11.5" r="2" />
-                  </svg>
-                </Link>
-                {ultimaCifra && (
-                  <div className="flex items-end justify-between gap-3 text-bone">
-                    <p className="text-xs leading-tight">
-                      {dict.about.figuresLabel}
-                      <br />
-                      {ultimaCifra.etiqueta[locale]}
-                    </p>
-                    <p className="font-display text-[2rem] leading-none whitespace-nowrap">
-                      <CountUp value={ultimaCifra.valor ?? ""} />
-                    </p>
-                  </div>
-                )}
+                {/* Arriba, lo que cabe a la izquierda del mordisco del botón. */}
+                <div className="flex max-w-[calc(100%-9.5rem)] items-center gap-3">
+                  <Link
+                    href={path(locale, "portfolio")}
+                    aria-label={dict.featured.viewAll}
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink-900/20 text-bone"
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true" className="h-4 w-4">
+                      <circle cx="4.5" cy="4.5" r="2" />
+                      <circle cx="11.5" cy="4.5" r="2" />
+                      <circle cx="4.5" cy="11.5" r="2" />
+                      <circle cx="11.5" cy="11.5" r="2" />
+                    </svg>
+                  </Link>
+                  <p className="text-[11px] leading-tight tracking-[0.08em] text-bone uppercase">{dict.about.figuresLabel}</p>
+                </div>
+                <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-bone">
+                  {cifrasMovil.map((c, i) => (
+                    <div key={c.etiqueta.es} className="flex flex-col-reverse">
+                      <dt className="mt-1 text-xs leading-tight text-bone/80">{c.etiqueta[locale]}</dt>
+                      <dd className="font-display text-xl leading-none whitespace-nowrap tabular-nums">
+                        <CountUp value={c.valor ?? ""} delay={0.9 + i * 0.12} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
               <button
                 type="button"
@@ -299,29 +283,11 @@ export function HeroFrame({
 
 /* ────────────────────────────────────────────────────────────────────────── */
 
-/** La flecha larga que parte el titular en móvil: «CAPTURE ——→». */
-function FlechaLarga() {
-  return (
-    <span aria-hidden="true" data-intro="arrow" className="relative h-px flex-1 bg-bone/80 lg:hidden">
-      <span className="absolute top-1/2 right-0 h-2.5 w-2.5 -translate-y-1/2 rotate-45 border-t border-r border-bone/80" />
-    </span>
-  );
-}
-
 function PlayIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" className={className}>
       <path d="M4 2.5v11l9.5-5.5z" />
     </svg>
-  );
-}
-
-function PillIcon({ label, icon, ...rest }: { label: string; icon: ReactNode; "data-intro"?: string }) {
-  return (
-    <div {...rest} className="glass flex items-center gap-3 rounded-full py-1.5 pr-6 pl-1.5">
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-bone/10 text-bone">{icon}</span>
-      <span className="text-sm whitespace-nowrap text-bone">{label}</span>
-    </div>
   );
 }
 
@@ -361,8 +327,8 @@ function TimecodeGrande({ labels }: { labels: readonly string[] }) {
     <div className="grid grid-cols-4 gap-2">
       {partes.map((p, i) => (
         <div key={labels[i]}>
-          <p className="font-display text-[1.75rem] leading-none text-bone tabular-nums">{p}</p>
-          <p className="mt-2 text-[10px] tracking-[0.08em] text-smoke uppercase">{labels[i]}</p>
+          <p className="text-lg leading-none font-semibold text-bone tabular-nums">{p}</p>
+          <p className="mt-1 text-[9px] tracking-[0.08em] text-smoke uppercase">{labels[i]}</p>
         </div>
       ))}
     </div>
@@ -487,7 +453,7 @@ function DestacadosRotativos({ featured, dict, locale }: { featured: Project[]; 
             <p className="mt-1 line-clamp-1 text-sm text-smoke">{p.hardFact[locale]}</p>
           </div>
           <div className="flex items-center justify-between px-2 pt-3 pb-1">
-            <span className="label">{p.venue}</span>
+            {p.venue ? <span className="label">{p.venue}</span> : <span />}
             <PillLink variant="light" href={path(locale, "portfolio", p.slug)}>
               {dict.featured.viewProject}
             </PillLink>

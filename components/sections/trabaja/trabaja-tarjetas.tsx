@@ -73,7 +73,7 @@ export function TrabajaTarjetas({ locale, dict }: { locale: Locale; dict: Dictio
   }, []);
 
   return (
-    <main id="main" className="pt-28 pb-32 lg:pt-32">
+    <main id="main" className="pagina">
       {/* ── 1. LA MESA DE TARJETAS ───────────────────────────────────────── */}
       <section data-reglet={dict.jobs.label} className="shell">
         <div
@@ -134,7 +134,7 @@ export function TrabajaTarjetas({ locale, dict }: { locale: Locale; dict: Dictio
                 <ArrowUpRight />
               </span>
             </div>
-            <span className="mt-8 block text-[clamp(1rem,1.3vw,1.375rem)] break-all text-bone transition-colors group-hover:text-rust-300">
+            <span className="mt-8 block break-all text-bone transition-colors group-hover:text-rust-300">
               {dict.contact.email}
             </span>
           </a>

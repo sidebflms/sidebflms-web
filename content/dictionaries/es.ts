@@ -22,9 +22,9 @@ export const es = {
         "Producción en directo, drone para cine y publicidad, cablecam, multicámara, aftermovies y fotografía. Con base en España.",
     },
     portfolio: {
-      title: "Portfolio de festivales y clubes — SIDEBFLMS",
+      title: "Trabajo: drone, aftermovies, multicámara y fotografía — SIDEBFLMS",
       description:
-        "Aftermovies, multicámara, drone y fotografía para festivales y clubes de música electrónica.",
+        "Proyectos para eventos, marcas y productoras: drone, aftermovies, multicámara, publicidad y fotografía.",
     },
     services: {
       title: "Drone, cablecam, directo y multicámara — SIDEBFLMS",
@@ -251,9 +251,9 @@ export const es = {
 
   portfolio: {
     label: "Trabajo",
-    headline: ["Festivales, clubes", "y todo lo", "que hay dentro"],
+    headline: ["Lo que", "hemos rodado"],
     intro:
-      "Filtra por disciplina. Cada ficha lleva la fecha, el venue y el dato concreto de lo que se rodó.",
+      "Una selección de proyectos para eventos, marcas y productoras. Elige una disciplina, dale al play y entra en cada proyecto para conocer la historia que hay detrás.",
     filterLabel: "Filtrar por disciplina",
     all: "Todo",
     empty: "No hay proyectos en esta disciplina todavía.",
@@ -268,13 +268,8 @@ export const es = {
     },
     detail: {
       backToAll: "Volver al trabajo",
-      briefing: "El encargo",
-      delivered: "Qué entregamos",
-      credits: "Ficha",
+      about: "Sobre el proyecto",
       venue: "Venue",
-      date: "Fecha",
-      disciplines: "Disciplinas",
-      hardFact: "Dato",
       next: "Siguiente proyecto",
       prev: "Proyecto anterior",
       sound: "Sonido",
@@ -602,14 +597,13 @@ export const es = {
   glass: {
     watchReel: "Ver reel",
     closeReel: "Cerrar el reel",
-    pills: ["Drone para cine y eventos", "Multicámara en directo"],
     tcLabels: ["Horas", "Min", "Seg", "Frames"],
     tcCaption: "Hora local · 25 fps",
-    // Sustituyen a «Cuatro noches que no se repiten» sólo en la portada de
-    // esta rama. 2-3 palabras por línea: es Akira.
-    featuredHeadline: ["Del cielo", "a la cabina"],
+    // 2-3 palabras por línea: es Akira. Sin atarlo a la noche ni a los
+    // festivales (cliente, 2026-09-17: «reduce mucho nuestro nicho»).
+    featuredHeadline: ["Energía", "en cada plano"],
     featuredIntro:
-      "Drone sobre el recinto, cámaras en el foso y el montaje listo mientras el evento sigue en boca de todos. Estas son algunas de las noches que hemos contado.",
+      "Eventos, marcas, cine y publicidad. Drone, multicámara, aftermovies y fotografía con el mismo cuidado en cada encargo. Esto es una parte de lo que hemos rodado.",
     openMenu: "Abrir el menú",
     goToSlide: "Ir a la pieza",
   },

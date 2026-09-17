@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import type { Category, Project } from "@/content/projects";
+import { arrancaEnSilencio } from "@/lib/autoplay";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 
@@ -67,7 +68,6 @@ function Pieza({
   locale: Locale;
   duplicada: boolean;
 }) {
-  const marcoRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   /**
@@ -85,14 +85,18 @@ function Pieza({
   const video = project.media.video?.replace(/\.mp4$/, "-cinta.mp4") ?? null;
   const poster = project.media.poster?.replace(/\.jpg$/, "-cinta.webp") ?? null;
 
+  // Se observa el propio vídeo y no el enlace: las copias del bucle no son
+  // enlace, y antes se quedaban sin observar y NUNCA arrancaban. En el móvil,
+  // con pieza y media por pantalla, eran casi todo lo que se veía.
   useEffect(() => {
-    const marco = marcoRef.current;
-    if (!marco) return;
+    const v = videoRef.current;
+    if (!v) return;
+    let enVista = false;
+    const suelta = arrancaEnSilencio(v, () => enVista);
     const obs = new IntersectionObserver(
       ([e]) => {
-        const v = videoRef.current;
-        if (!v) return;
-        if (e.isIntersecting) {
+        enVista = e.isIntersecting;
+        if (enVista) {
           if (v.preload !== "auto") v.preload = "auto";
           v.play().catch(() => {});
         } else {
@@ -101,8 +105,11 @@ function Pieza({
       },
       { rootMargin: "10% 0px", threshold: 0.01 }
     );
-    obs.observe(marco);
-    return () => obs.disconnect();
+    obs.observe(v);
+    return () => {
+      obs.disconnect();
+      suelta();
+    };
   }, []);
 
   const contenido = (
@@ -172,7 +179,6 @@ function Pieza({
 
   return (
     <Link
-      ref={marcoRef}
       href={path(locale, "portfolio", project.slug)}
       className="group relative aspect-video h-40 shrink-0 overflow-hidden rounded-lg bg-ink-900 lg:h-56"
     >

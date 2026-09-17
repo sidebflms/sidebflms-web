@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import { FramedStage } from "@/components/glass/framed-stage";
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { Reveal } from "@/components/motion/reveal";
-import { PillLink } from "@/components/ui/button";
-import type { Project } from "@/content/projects";
+import { ArrowUpRight, PillLink } from "@/components/ui/button";
+import { venueYFecha, type Project } from "@/content/projects";
 import { gsap, hasFinePointer, prefersReducedMotion, registerGsap } from "@/lib/gsap";
 import { path, type Locale } from "@/lib/routes";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -465,9 +466,45 @@ export function TrabajoYoutube({
 
   return (
     <section ref={seccionRef} data-reglet={copy.label} className="shell overflow-x-clip">
-      <Reveal bidirectional className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="label">{copy.label}</p>
-        <p className="label hidden lg:block" aria-live="polite">
+      {/* LAS DISCIPLINAS, ENCIMA DEL REPRODUCTOR (cliente, 2026-09-17). Iban en
+          una fila con scroll lateral dentro de la columna de la lista, y con
+          un ratón normal no había forma de desplazarla. Aquí caben todas a la
+          vista, parten línea si hace falta y la lista queda sólo para los
+          proyectos. Sólo escritorio: el feed de móvil lleva las suyas. */}
+      <Reveal bidirectional className="hidden flex-wrap items-center justify-between gap-x-6 gap-y-3 lg:flex">
+        <nav aria-label={copy.filterLabel}>
+          <ul className="flex flex-wrap gap-2">
+            {opciones.map((o) => {
+              const activa = o.key === filtro;
+              return (
+                <li key={o.key}>
+                  <button
+                    type="button"
+                    aria-pressed={activa}
+                    onClick={() => cambiarFiltro(o.key)}
+                    className={cn(
+                      "group inline-flex items-center gap-2 rounded-full py-2 pr-4 pl-2.5 text-xs font-medium tracking-[0.06em] whitespace-nowrap uppercase transition-colors duration-300",
+                      activa ? "bg-bone text-ink-900" : "glass text-bone/80 hover:text-bone"
+                    )}
+                  >
+                    {o.key === "all" ? (
+                      <span aria-hidden="true" className="grid h-4 w-4 grid-cols-2 place-content-center gap-0.5">
+                        {[0, 1, 2, 3].map((n) => (
+                          <span key={n} className="h-1 w-1 rounded-[1px] bg-current" />
+                        ))}
+                      </span>
+                    ) : (
+                      <IconoServicio clave={o.key} className="icono-servicio h-4 w-4" />
+                    )}
+                    {o.label}
+                    <span className="text-[10px] tabular-nums opacity-60">{o.count}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <p className="label" aria-live="polite">
           {textoResultados(lista.length, copy)}
         </p>
       </Reveal>
@@ -478,7 +515,7 @@ export function TrabajoYoutube({
           fotos dentro (trabajo-feed.tsx). El reproductor, sólo en escritorio:
           oculto con `display:none` no carga vídeo (`preload="none"` y su
           IntersectionObserver nunca lo da por visible). */}
-      <TrabajoFeed projects={projects} locale={locale} copy={copy} className="mt-6 lg:hidden" />
+      <TrabajoFeed projects={projects} locale={locale} copy={copy} className="lg:hidden" />
 
       <div className="mt-6 hidden gap-6 lg:grid lg:grid-cols-[minmax(0,72fr)_minmax(0,28fr)] lg:gap-5 xl:gap-6">
         {/* ═══ COLUMNA PRINCIPAL: reproductor, título y descripción ═══════ */}
@@ -499,9 +536,9 @@ export function TrabajoYoutube({
                   <div ref={infoRef}>
                     {/* Aire arriba en la línea: con interlineado apretado Akira
                         recortaría las tildes de FÁTIMA o ADRIÁN. */}
-                    <h1 className="font-display pt-[0.15em] text-[clamp(1rem,0.55rem+1.2vw,1.9rem)] leading-[1.02] text-bone uppercase">
+                    <h2 className="font-display pt-[0.15em] text-[clamp(1rem,0.55rem+1.2vw,1.9rem)] leading-[1.02] text-bone uppercase">
                       {actual.title[locale]}
-                    </h1>
+                    </h2>
                   </div>
                 </div>
               }
@@ -827,9 +864,9 @@ export function TrabajoYoutube({
             <div ref={cajaRef}>
               {/* Primera línea en negrita, como las visualizaciones y la fecha
                   en YouTube: aquí venue y fecha. */}
-              <p className="text-sm font-semibold tracking-[0.02em] text-bone">
-                {actual.venue} · {actual.date[locale]}
-              </p>
+              {venueYFecha(actual, locale) && (
+                <p className="text-sm font-semibold tracking-[0.02em] text-bone">{venueYFecha(actual, locale)}</p>
+              )}
 
               {/* Categorías como los hashtags de YouTube: filtran la lista. */}
               <ul className="mt-3 flex flex-wrap gap-2">
@@ -848,10 +885,10 @@ export function TrabajoYoutube({
                 ))}
               </ul>
 
-              <p className="mt-4 text-base leading-snug font-medium text-bone">{actual.hardFact[locale]}</p>
+              <p className="mt-4 leading-snug font-medium text-bone">{actual.hardFact[locale]}</p>
               <p
                 id="yt-descripcion"
-                className={cn("mt-2 text-sm leading-relaxed text-bone/75", !expandido && "line-clamp-2")}
+                className={cn("mt-2 whitespace-pre-line text-bone/75", !expandido && "line-clamp-2")}
               >
                 {actual.brief[locale]}
               </p>
@@ -911,52 +948,13 @@ export function TrabajoYoutube({
             data-yt-entra
             className="glass flex flex-col rounded-[var(--radius-frame)] p-2 lg:absolute lg:inset-x-0 lg:top-0 lg:max-h-full"
           >
-            {/* Sin cabecera (cliente, 2026-09-16): la cantidad de proyectos
-                ya está fuera, encima de la columna, y aquí se repetía. */}
-
-            {/* Chips de filtro en una fila con scroll lateral, como los de
-                YouTube. No son cristal: así el fundido del borde derecho
-                (máscara) no deja sin desenfoque a nadie. */}
-            <nav aria-label={copy.filterLabel} className="pt-1">
-              <ul className="flex gap-1.5 overflow-x-auto px-1 pb-1 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {opciones.map((o) => {
-                  const activa = o.key === filtro;
-                  return (
-                    <li key={o.key} className="shrink-0">
-                      <button
-                        type="button"
-                        aria-pressed={activa}
-                        onClick={() => cambiarFiltro(o.key)}
-                        className={cn(
-                          "group inline-flex items-center gap-1.5 rounded-full py-1.5 pr-3 pl-2 text-[11px] font-medium tracking-[0.06em] whitespace-nowrap uppercase transition-colors duration-300",
-                          activa ? "bg-bone text-ink-900" : "bg-white/[0.07] text-bone/80 hover:bg-white/[0.12] hover:text-bone"
-                        )}
-                      >
-                        {o.key === "all" ? (
-                          <span aria-hidden="true" className="grid h-4 w-4 grid-cols-2 place-content-center gap-0.5">
-                            {[0, 1, 2, 3].map((n) => (
-                              <span key={n} className="h-1 w-1 rounded-[1px] bg-current" />
-                            ))}
-                          </span>
-                        ) : (
-                          <IconoServicio clave={o.key} className="icono-servicio h-4 w-4" />
-                        )}
-                        {o.label}
-                        <span className="text-[10px] tabular-nums opacity-60">{o.count}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-
             {lista.length === 0 ? (
               <p className="px-2 py-6 text-sm text-smoke">{copy.empty}</p>
             ) : (
               <ol
                 ref={listaRef}
                 data-lenis-prevent
-                className="relative mt-2 grid min-h-0 flex-1 content-start gap-1 overscroll-contain sm:grid-cols-2 lg:grid-cols-1 lg:overflow-y-auto lg:pr-1 [scrollbar-color:rgb(242_236_228/0.22)_transparent] [scrollbar-width:thin]"
+                className="relative grid min-h-0 flex-1 content-start gap-1 overscroll-contain sm:grid-cols-2 lg:grid-cols-1 lg:overflow-y-auto lg:pr-1 [scrollbar-color:rgb(242_236_228/0.22)_transparent] [scrollbar-width:thin]"
               >
                 {lista.map((p, i) => {
                   const activa = p.slug === slugActual;
@@ -964,7 +962,7 @@ export function TrabajoYoutube({
                   const conPrevia = previa === p.slug && !activa && ligero.video;
                   const serie = galeriaFotos(p);
                   return (
-                    <li key={p.slug} data-slug={p.slug} data-yt-fila>
+                    <li key={p.slug} data-slug={p.slug} data-yt-fila className="group/fila relative">
                       <button
                         type="button"
                         aria-pressed={activa}
@@ -974,7 +972,9 @@ export function TrabajoYoutube({
                         }}
                         onPointerLeave={() => setPrevia((s) => (s === p.slug ? null : s))}
                         className={cn(
-                          "group grid w-full grid-cols-[minmax(0,53%)_minmax(0,1fr)] items-start gap-3 rounded-[1.25rem] p-1.5 text-left transition-colors duration-300",
+                          // Miniatura arriba y texto debajo: con el contenedor al 70 %, la
+                          // columna mide ~230 px y en dos columnas los títulos no cabían.
+                          "group grid w-full grid-cols-1 gap-2.5 rounded-[1.25rem] p-1.5 pb-2.5 text-left transition-colors duration-300",
                           activa ? "bg-white/[0.08]" : "hover:bg-white/[0.05]"
                         )}
                       >
@@ -1053,7 +1053,7 @@ export function TrabajoYoutube({
                             </span>
                           </span>
                         </span>
-                        <span className="block min-w-0 pt-0.5">
+                        <span className="block min-w-0 px-1 pr-9">
                           <span
                             className={cn(
                               "line-clamp-2 text-xs leading-tight font-semibold tracking-[0.04em] uppercase transition-colors duration-300",
@@ -1070,11 +1070,22 @@ export function TrabajoYoutube({
                             </span>
                             <span className="truncate">{disciplinas(p, copy)}</span>
                           </span>
-                          <span className="label mt-1 block truncate text-[10px]">
-                            {p.venue} · {p.date[locale]}
-                          </span>
+                          {venueYFecha(p, locale) && (
+                            <span className="label mt-1 block truncate text-[10px]">{venueYFecha(p, locale)}</span>
+                          )}
                         </span>
                       </button>
+                      {/* ENTRAR DIRECTO A LA FICHA (cliente, 2026-09-17), sin tener
+                          que ponerla antes en el reproductor. Hermano del botón
+                          de la fila y no hijo: un enlace no puede ir dentro de un
+                          botón. */}
+                      <Link
+                        href={path(locale, "portfolio", p.slug)}
+                        aria-label={`${t.seeProject}: ${p.title[locale]}`}
+                        className="absolute right-2 bottom-2 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/15 text-bone/60 transition-[color,background-color,border-color,opacity] duration-300 group-hover/fila:border-white/30 group-hover/fila:text-bone hover:border-brand-600 hover:bg-brand-600 hover:text-bone"
+                      >
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </Link>
                     </li>
                   );
                 })}

@@ -20,9 +20,9 @@ export const en: Dictionary = {
         "Live production, drone for film and advertising, cablecam, multicam, aftermovies and stills. Based in Spain.",
     },
     portfolio: {
-      title: "Festival and club portfolio — SIDEBFLMS",
+      title: "Work: drone, aftermovies, multicam and stills — SIDEBFLMS",
       description:
-        "Aftermovies, multicam, aerial and stills for electronic music festivals and clubs.",
+        "Projects for events, brands and production companies: drone, aftermovies, multicam, advertising and stills.",
     },
     services: {
       title: "Drone, cablecam, live and multicam — SIDEBFLMS",
@@ -217,9 +217,9 @@ export const en: Dictionary = {
 
   portfolio: {
     label: "Work",
-    headline: ["Festivals, clubs", "and everything", "inside them"],
+    headline: ["What", "we've shot"],
     intro:
-      "Filter by discipline. Every card carries the date, the venue and a hard fact about what was shot.",
+      "A selection of projects for events, brands and production companies. Pick a discipline, hit play and open any project to find out the story behind it.",
     filterLabel: "Filter by discipline",
     all: "All",
     empty: "No projects in this discipline yet.",
@@ -234,13 +234,8 @@ export const en: Dictionary = {
     },
     detail: {
       backToAll: "Back to the work",
-      briefing: "The brief",
-      delivered: "What we delivered",
-      credits: "Credits",
+      about: "About the project",
       venue: "Venue",
-      date: "Date",
-      disciplines: "Disciplines",
-      hardFact: "Fact",
       next: "Next project",
       prev: "Previous project",
       sound: "Sound",
@@ -525,12 +520,11 @@ export const en: Dictionary = {
   glass: {
     watchReel: "Watch the reel",
     closeReel: "Close the reel",
-    pills: ["Drone for film and events", "Live multicam"],
     tcLabels: ["Hours", "Min", "Sec", "Frames"],
     tcCaption: "Local time · 25 fps",
-    featuredHeadline: ["From the sky", "to the booth"],
+    featuredHeadline: ["Energy", "in every shot"],
     featuredIntro:
-      "Drones above the venue, cameras in the pit and the edit ready while everyone is still talking about the night. These are some of the nights we have told.",
+      "Events, brands, film and advertising. Drone, multicam, aftermovies and stills, with the same care on every job. This is part of what we have shot.",
     openMenu: "Open the menu",
     goToSlide: "Go to piece",
   },

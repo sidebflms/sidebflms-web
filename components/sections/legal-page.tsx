@@ -5,7 +5,7 @@ type Entry = { heading: string; text: string };
 /** Layout compartido por Aviso legal y Privacidad: mismo tratamiento tipográfico. */
 export function LegalPage({ title, entries }: { title: readonly string[]; entries: readonly Entry[] }) {
   return (
-    <main id="main" className="pt-40 pb-28">
+    <main id="main" className="pagina">
       <div className="shell max-w-3xl">
         <Reveal>
           <h1 className="font-display text-display-l text-bone">

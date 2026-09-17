@@ -13,9 +13,10 @@ import { cn } from "@/lib/utils";
  * El tratamiento del cierre de la versión 4 (póster a sangre desenfocado y
  * oscuro, pastilla de cristal con la dirección y el título grande; al pasar el
  * ratón o llegar con el tabulador se enfoca y arranca su cinta muda), metido
- * en el contenedor de cristal de la versión 2: las dos piezas apiladas dentro
- * de un mismo panel, anterior alineada a la izquierda y siguiente a la derecha
- * (cliente, 2026-09-16).
+ * en el contenedor de cristal de la versión 2: las dos piezas dentro de un
+ * mismo panel, anterior alineada a la izquierda y siguiente a la derecha
+ * (cliente, 2026-09-16). Lado a lado desde `md`, desde que la ficha va a todo
+ * el ancho (2026-09-17); en móvil, apiladas.
  *
  * ── QUÉ SE SIRVE ─────────────────────────────────────────────────────────
  * Las versiones ligeras (`-cinta.mp4` y el póster en WebP, o el `-800.webp`
@@ -150,7 +151,7 @@ function Pieza({ lado }: { lado: LadoVecino }) {
 
 export function FichaVecinos({ etiqueta, lados }: { etiqueta: string; lados: LadoVecino[] }) {
   return (
-    <nav aria-label={etiqueta} className="flex flex-col gap-2">
+    <nav aria-label={etiqueta} className="flex flex-col gap-2 md:grid md:grid-cols-2">
       {lados.map((lado) => (
         <Pieza key={lado.sentido} lado={lado} />
       ))}

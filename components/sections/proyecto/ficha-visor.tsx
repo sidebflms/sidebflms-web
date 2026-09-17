@@ -2,32 +2,36 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
+import { FramedStage } from "@/components/glass/framed-stage";
+import { arrancaEnSilencio } from "@/lib/autoplay";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
 import { cn, timecode } from "@/lib/utils";
 
 /**
- * EL VISOR DE LA FICHA DE PROYECTO («hoja de rodaje»).
+ * EL VISOR DE LA FICHA DE PROYECTO.
  *
- * Marco de cristal con la pieza dentro y mandos propios, también de cristal:
- * reproducir/pausa, sonido, barra de progreso y timecode de montaje. Sin los
- * `controls` del navegador porque cada uno pinta los suyos (y en Safari tapan
- * el cuarto inferior de un vídeo vertical).
+ * El marco mordido del hero y del reproductor de /portfolio (FramedStage), con
+ * el nombre del proyecto en la muesca de abajo a la izquierda y mandos
+ * propios: reproducir/pausa, sonido, barra de progreso y timecode. Sin los
+ * `controls` del navegador porque cada uno pinta los suyos.
  *
- * Sin vídeo (fotografía, pieza pendiente) pinta el mismo marco con lo que le
- * pase la página como `children` y sin mandos.
+ * ── A TODO EL ANCHO DE SU CONTENEDOR (cliente, 2026-09-17) ───────────────
+ * Un vídeo va en su proporción real, que el marco toma en cuanto el navegador
+ * la lee (`loadedmetadata`; hasta entonces, 16:9, que es la de todo el
+ * material). Una foto va en un marco 16:9, entera y sin recortar, sobre una
+ * copia suya desenfocada: una foto vertical a todo el ancho mediría más que la
+ * pantalla.
  *
  * ── CUÁNDO SUENA Y CUÁNDO SE MUEVE ───────────────────────────────────────
- *   · Arranca solo y en silencio (el navegador no deja otra cosa), salvo con
- *     «reducir movimiento»: ahí se queda en el póster hasta que se pulse.
- *   · Fuera de pantalla se pausa —en móvil, al bajar a la hoja— y vuelve
- *     al entrar SÓLO si estaba sonando. Si lo pausó el usuario, se respeta.
- *   · El botón de sonido sólo aparece si la pieza trae audio. El 15-09 se le
- *     puso a seis piezas y las demás son mudas: un botón de sonido que no hace
- *     nada es peor que no tenerlo.
+ *   · Arranca solo y en silencio, salvo con «reducir movimiento».
+ *   · Fuera de pantalla se pausa y vuelve al entrar SÓLO si estaba sonando.
+ *   · El botón de sonido sólo aparece si la pieza trae audio.
+ *
+ * En móvil las muescas no se pintan (el vídeo es demasiado bajo): lo que iba
+ * en ellas lo pone la página fuera del marco.
  */
 
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
-
 
 type VideoConAudio = HTMLVideoElement & {
   mozHasAudio?: boolean;
@@ -38,23 +42,31 @@ type VideoConAudio = HTMLVideoElement & {
 /**
  * ¿Trae pista de audio? No hay una API común: Firefox lo dice directamente,
  * Safari cuenta pistas y Chromium sólo sabe cuántos bytes de audio lleva
- * decodificados (cuenta aunque esté en silencio). `null` = aún no se sabe.
+ * decodificados. `null` = aún no se sabe.
  */
 function detectaAudio(v: VideoConAudio): boolean | null {
   if (typeof v.mozHasAudio === "boolean") return v.mozHasAudio;
   if (v.audioTracks) return v.audioTracks.length > 0;
   if (typeof v.webkitAudioDecodedByteCount === "number") {
     if (v.webkitAudioDecodedByteCount > 0) return true;
-    // Tras medio segundo reproducido sin un byte de audio, no hay audio.
     return v.currentTime > 0.5 ? false : null;
   }
   return true;
 }
 
+/** «16:9», «3:4»… a partir de los píxeles. */
+function rotuloProporcion(w: number, h: number): string {
+  const mcd = (a: number, b: number): number => (b ? mcd(b, a % b) : a);
+  const d = mcd(w, h) || 1;
+  return `${w / d}:${h / d}`;
+}
+
 export function FichaVisor({
   video,
   poster,
-  formato,
+  imagen,
+  muesca,
+  muescaArriba,
   titulo,
   textoVer,
   textoSonido,
@@ -62,29 +74,35 @@ export function FichaVisor({
 }: {
   video: string | null;
   poster: string | null;
-  formato: "vertical" | "apaisado";
+  /** Sin vídeo: la foto que se enseña. */
+  imagen?: string | null;
+  /** Lo que va en la muesca de abajo a la izquierda (el nombre del proyecto). */
+  muesca?: ReactNode;
+  /** Lo que va en la muesca de arriba a la derecha. */
+  muescaArriba?: ReactNode;
   titulo: string;
-  /** «Ver la pieza»: nombre del botón de reproducir. */
   textoVer: string;
-  /** «Sonido»: nombre del botón de silenciar / activar el audio. */
   textoSonido: string;
+  /** Sin vídeo ni foto (pieza pendiente). */
   children?: ReactNode;
 }) {
   const marcoRef = useRef<HTMLDivElement>(null);
+  const muescaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const barraRef = useRef<HTMLInputElement>(null);
   const tcRef = useRef<HTMLSpanElement>(null);
   const duracionRef = useRef<HTMLSpanElement>(null);
-  /** Si quien manda (el arranque solo o el usuario) quiere que esté sonando. */
   const quiereRef = useRef(false);
   const arrastrandoRef = useRef(false);
 
+  const [dims, setDims] = useState<[number, number]>([16, 9]);
   const [enMarcha, setEnMarcha] = useState(false);
   const [empezado, setEmpezado] = useState(false);
   const [silencio, setSilencio] = useState(true);
   const [conAudio, setConAudio] = useState<boolean | null>(null);
 
-  /** Lleva barra, timecode y relleno al punto actual del vídeo. */
+  const [w, h] = video ? dims : [16, 9];
+
   const pinta = (conTexto: boolean) => {
     const v = videoRef.current;
     const barra = barraRef.current;
@@ -94,37 +112,49 @@ export function FichaVisor({
     if (!arrastrandoRef.current) barra.value = String(Math.round(fraccion * 1000));
     barra.style.setProperty("--p", `${fraccion * 100}%`);
     if (tcRef.current) tcRef.current.textContent = timecode(v.currentTime);
-    // El texto para lectores de pantalla va a ritmo de `timeupdate` (cuatro
-    // veces por segundo), no a 60 fps: si no, un lector con la barra enfocada
-    // no terminaría nunca de leer.
+    // El texto para lectores de pantalla va a ritmo de `timeupdate`, no a
+    // 60 fps: si no, un lector con la barra enfocada no terminaría de leer.
     if (conTexto) {
       barra.setAttribute("aria-valuetext", `${timecode(v.currentTime)} / ${timecode(d)}`);
       if (duracionRef.current) duracionRef.current.textContent = timecode(d);
     }
   };
 
-  /* Entrada del marco. Se anima la opacidad del PROPIO cristal (la trampa del
-     desenfoque) y los mandos llegan después: mientras el marco se funde, un
-     cristal dentro de él se quedaría sin fondo que desenfocar. Los cristales
-     de encima del vídeo (rótulo y mandos) llevan `data-visor-sobre`. */
+  /* Entrada: el marco sube sin fundido (su recorte es el fondo de los
+     cristales de encima) y los mandos, que sí son cristal, se funden solos. */
   useIsoLayoutEffect(() => {
     const marco = marcoRef.current;
     if (!marco || prefersReducedMotion()) return;
     registerGsap();
     const ctx = gsap.context(() => {
-      gsap.from(marco, { opacity: 0, y: 32, scale: 0.97, duration: 1.1, ease: "expo.out" });
-      gsap.from("[data-visor-sobre]", { opacity: 0, y: 14, duration: 0.7, ease: "power3.out", delay: 0.6, stagger: 0.08 });
+      gsap.from(marco, { y: 32, scale: 0.97, duration: 1.1, ease: "expo.out" });
+      gsap.from("[data-visor-sobre]", { opacity: 0, y: 14, duration: 0.7, ease: "power3.out", delay: 0.5, stagger: 0.08 });
     }, marco);
     return () => ctx.revert();
   }, []);
 
-  /* Arranque y pausa fuera de pantalla. El primer aviso del observer llega al
-     montar con el marco visible, así que ese mismo aviso hace de autoplay. */
+  /* Alto de la muesca → `--muesca`: la barra de mandos se apoya encima para
+     que el título no la tape. En móvil la muesca está oculta y mide 0. */
+  useEffect(() => {
+    const muescaEl = muescaRef.current;
+    const marco = marcoRef.current;
+    const contenedor = muescaEl?.parentElement;
+    if (!muescaEl || !marco || !contenedor) {
+      marco?.style.setProperty("--muesca", "0px");
+      return;
+    }
+    const obs = new ResizeObserver(() => marco.style.setProperty("--muesca", `${contenedor.offsetHeight}px`));
+    obs.observe(contenedor);
+    return () => obs.disconnect();
+  }, []);
+
+  /* Arranque y pausa fuera de pantalla. */
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     quiereRef.current = !prefersReducedMotion();
     let enVista = false;
+    const suelta = arrancaEnSilencio(v, () => enVista && quiereRef.current);
     const obs = new IntersectionObserver(
       ([e]) => {
         enVista = e.isIntersecting;
@@ -137,24 +167,16 @@ export function FichaVisor({
       { threshold: 0.2 }
     );
     obs.observe(v);
-    // Con `preload="metadata"` la duración puede llegar ANTES de hidratar, y
-    // entonces su evento no lo oye nadie: se pinta aquí una vez.
-    if (v.readyState >= 1) pinta(true);
-    // Abierta en una pestaña de fondo, el navegador rechaza ese primer `play()`
-    // y el observer no vuelve a avisar al traerla delante (el marco no se ha
-    // movido). Por eso se reintenta al hacerse visible la pestaña.
-    const alVolver = () => {
-      if (!document.hidden && enVista && quiereRef.current && v.paused) v.play().catch(() => {});
-    };
-    document.addEventListener("visibilitychange", alVolver);
+    if (v.readyState >= 1) {
+      pinta(true);
+      if (v.videoWidth) setDims([v.videoWidth, v.videoHeight]);
+    }
     return () => {
       obs.disconnect();
-      document.removeEventListener("visibilitychange", alVolver);
+      suelta();
     };
   }, []);
 
-  // A 60 fps sólo mientras suena: `timeupdate` va a saltos de 250 ms y la
-  // barra se vería a tirones.
   useEffect(() => {
     if (!enMarcha) return;
     let id = 0;
@@ -185,33 +207,22 @@ export function FichaVisor({
     setSilencio(v.muted);
   };
 
-  const cuadro = formato === "vertical" ? "aspect-[4/5]" : "aspect-video";
-
   return (
     <div
       ref={marcoRef}
-      className={cn(
-        "glass mx-auto w-full rounded-[var(--radius-frame)] p-2",
-        // El 4:5 manda por ALTO: en escritorio el marco tiene que caber entero
-        // bajo el header (top-28), así que el ancho se deriva del alto
-        // disponible; en pantallas normales llena su media columna (a
-        // 1440×900: 608 px de ancho y 776 de alto). En móvil, lo mismo con
-        // menos resta, para que no ocupe más de una pantalla.
-        formato === "vertical" &&
-          "max-w-[max(16rem,calc((100svh_-_11rem)*0.8_+_1rem))] lg:max-w-[max(18rem,calc((100svh_-_9.5rem)*0.8_+_1rem))]"
-      )}
+      className="w-full"
+      style={{ aspectRatio: `${w} / ${h}` }}
     >
-      <div
-        className={cn(
-          "relative isolate overflow-hidden rounded-[calc(var(--radius-frame)_-_0.5rem)] bg-ink-900",
-          cuadro
-        )}
+      <FramedStage
+        className="h-full w-full"
+        stageClassName="bg-ink-900"
+        notchBottomClassName="hidden max-w-[72%] pt-3 pr-5 sm:block lg:pt-3.5 lg:pr-6"
+        notchBottom={muesca ? <div ref={muescaRef}>{muesca}</div> : undefined}
+        notchTopClassName="hidden pb-3 pl-4 sm:block"
+        notchTop={muescaArriba}
       >
         {video ? (
           <>
-            {/* `aria-hidden` y fuera del tabulador: los mandos de abajo son la
-                interfaz. Pulsar el propio vídeo alterna igual que el botón
-                (cómodo con ratón); el teclado ya tiene el botón. */}
             <video
               ref={videoRef}
               src={video}
@@ -225,6 +236,10 @@ export function FichaVisor({
               data-cursor="media"
               data-cursor-label={textoVer}
               onClick={alternar}
+              onLoadedMetadata={(e) => {
+                const v = e.currentTarget;
+                if (v.videoWidth) setDims([v.videoWidth, v.videoHeight]);
+              }}
               onPlaying={() => {
                 setEnMarcha(true);
                 setEmpezado(true);
@@ -232,17 +247,15 @@ export function FichaVisor({
               onPause={() => setEnMarcha(false)}
               onDurationChange={() => pinta(true)}
               onTimeUpdate={(e) => {
-                const v = e.currentTarget;
-                if (conAudio === null) setConAudio(detectaAudio(v));
+                if (conAudio === null) setConAudio(detectaAudio(e.currentTarget));
                 pinta(true);
               }}
               onSeeked={() => pinta(true)}
               className="absolute inset-0 h-full w-full cursor-pointer object-cover"
             />
 
-            {/* Botón grande mientras no ha arrancado nunca (reducir movimiento,
-                o si el navegador bloquea el autoplay). Decorativo para lectores
-                y teclado: el botón con nombre está en los mandos. */}
+            {/* Botón grande mientras no ha arrancado nunca. Decorativo: el
+                botón con nombre está en los mandos. */}
             <span
               aria-hidden="true"
               className={cn(
@@ -255,25 +268,23 @@ export function FichaVisor({
               </span>
             </span>
 
-            {/* Rótulo de formato, arriba a la izquierda, con el piloto de
-                grabación encendido mientras suena. */}
+            {/* Rótulo de formato, con el piloto encendido mientras suena. */}
             <span
               data-visor-sobre
-              className="glass glass-strong pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-medium tracking-[0.1em] text-bone uppercase tabular-nums">
+              className="glass glass-strong pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-medium tracking-[0.1em] text-bone uppercase tabular-nums"
+            >
               <span
                 aria-hidden="true"
-                className={cn(
-                  "h-1.5 w-1.5 rounded-full transition-colors duration-300",
-                  enMarcha ? "bg-rust-500" : "bg-smoke"
-                )}
+                className={cn("h-1.5 w-1.5 rounded-full transition-colors duration-300", enMarcha ? "bg-rust-500" : "bg-smoke")}
               />
-              {formato === "vertical" ? "4:5" : "16:9"}
+              {rotuloProporcion(w, h)}
             </span>
 
-            {/* ── LOS MANDOS ── */}
+            {/* ── LOS MANDOS ── encima de la muesca (`--muesca`). */}
             <div
               data-visor-sobre
-              className="glass glass-strong absolute inset-x-2 bottom-2 flex items-center gap-2 rounded-full p-1.5 sm:inset-x-3 sm:bottom-3"
+              style={{ bottom: "calc(var(--muesca, 0px) + 0.5rem)" }}
+              className="glass glass-strong absolute inset-x-2 flex items-center gap-2 rounded-full p-1.5 sm:inset-x-3"
             >
               <button
                 type="button"
@@ -297,9 +308,8 @@ export function FichaVisor({
                 </button>
               )}
 
-              {/* Barra de progreso: un `range` de verdad, así se maneja con
-                  flechas y los lectores la anuncian como control deslizante.
-                  El tramo recorrido lo pinta `--p` desde `pinta()`. */}
+              {/* Barra de progreso: un `range` de verdad (flechas y lectores de
+                  pantalla). El tramo recorrido lo pinta `--p`. */}
               <input
                 ref={barraRef}
                 type="range"
@@ -328,12 +338,7 @@ export function FichaVisor({
                 )}
               />
 
-              {/* Timecode de montaje. `aria-hidden`: lo mismo ya lo lee la
-                  barra en `aria-valuetext`. La duración, sólo con sitio. */}
-              <span
-                aria-hidden="true"
-                className="shrink-0 pr-3 text-[11px] font-medium tracking-[0.04em] text-bone tabular-nums"
-              >
+              <span aria-hidden="true" className="shrink-0 pr-3 text-[11px] font-medium tracking-[0.04em] text-bone tabular-nums">
                 <span ref={tcRef}>{timecode(0)}</span>
                 <span className="hidden text-smoke sm:inline">
                   {" / "}
@@ -342,16 +347,23 @@ export function FichaVisor({
               </span>
             </div>
           </>
+        ) : imagen ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element -- fondo desenfocado de la misma foto. */}
+            <img src={imagen} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl brightness-50" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- la foto entera, a su proporción. */}
+            <img src={imagen} alt={titulo} fetchPriority="high" className="absolute inset-0 h-full w-full object-contain" />
+          </>
         ) : (
           children
         )}
-      </div>
+      </FramedStage>
     </div>
   );
 }
 
-/* Iconos de los mandos: mismo lenguaje que iconos-servicio (trazo 1.5,
-   `currentColor`), rellenos donde a 16 px el trazo no se leería. */
+/* Iconos de los mandos: trazo 1.5 y `currentColor`, rellenos donde a 16 px el
+   trazo no se leería. */
 
 function IconoPlay({ className }: { className?: string }) {
   return (
@@ -383,11 +395,7 @@ function IconoSonido({ silencio, className }: { silencio: boolean; className?: s
       strokeLinejoin="round"
     >
       <path d="M2.5 6v4h2.5l3.5 3V3L5 6z" fill="currentColor" />
-      {silencio ? (
-        <path d="M11 6l3.5 4M14.5 6L11 10" />
-      ) : (
-        <path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.8a6 6 0 0 1 0 8.4" />
-      )}
+      {silencio ? <path d="M11 6l3.5 4M14.5 6L11 10" /> : <path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.8a6 6 0 0 1 0 8.4" />}
     </svg>
   );
 }

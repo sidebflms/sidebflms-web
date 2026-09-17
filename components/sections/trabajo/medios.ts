@@ -1,6 +1,5 @@
 import { CATEGORIES, type Category, type Project } from "@/content/projects";
 import type { Dictionary } from "@/lib/dictionaries";
-import type { Locale } from "@/lib/routes";
 
 /**
  * DATOS DE LA PÁGINA «TRABAJO» (trabajo-youtube.tsx y trabajo-feed.tsx): qué fichero ligero
@@ -66,9 +65,4 @@ export function textoResultados(n: number, copy: CopyTrabajo): string {
 
 export function disciplinas(project: Project, copy: CopyTrabajo): string {
   return project.categories.map((c) => copy.categories[c]).join(" · ");
-}
-
-/** «Drone · Holika · Por confirmar»: la línea de metadatos de siempre. */
-export function lineaMeta(project: Project, copy: CopyTrabajo, locale: Locale): string {
-  return `${disciplinas(project, copy)} · ${project.venue} · ${project.date[locale]}`;
 }

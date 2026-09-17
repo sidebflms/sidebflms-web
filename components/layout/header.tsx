@@ -166,19 +166,21 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
         // desplazamiento como `y` en píxeles y lo sumaría al `yPercent`.
         // Escondida, además, no recibe clics ni foco (`inert`): si no, una
         // pastilla transparente taparía el menú del marco.
-        className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 lg:top-4"
+        // `.shell`: la pastilla mide lo mismo que el contenido de la página
+        // (cliente, 2026-09-17), también con el 70 % de las pantallas grandes.
+        className="shell pointer-events-none fixed inset-x-0 top-3 z-50 lg:top-4"
         style={{ opacity: 0 }}
         inert={!visible}
       >
         <header
           className={cn(
-            "glass glass-strong flex h-16 w-full max-w-5xl items-center justify-between gap-6 rounded-full pr-2 pl-5",
+            "glass glass-strong flex h-16 w-full items-center justify-between gap-6 rounded-full pr-2 pl-5",
             visible ? "pointer-events-auto" : "pointer-events-none"
           )}
         >
           <Link href={path(locale, "home")} aria-label="SIDEBFLMS" className="flex items-center gap-3">
-            <LogoMark blanco className="h-6 w-auto" />
-            <Wordmark className="hidden h-3 sm:block" />
+            <LogoMark blanco className="hidden h-6 w-auto lg:block" />
+            <Wordmark className="block h-3.5 lg:h-3" />
           </Link>
 
           <nav aria-label="Principal" className="hidden lg:block">

@@ -130,7 +130,7 @@ export function ServiciosVisor({
       data-reglet={dict.services.offerLabel}
       // `mt-*` y más relleno arriba: la cuadrícula empezaba justo debajo de las
       // pastillas de disciplinas de la cabecera y parecía que las cortaba.
-      className="relative isolate mt-16 overflow-hidden pt-20 pb-20 lg:mt-24 lg:pt-28 lg:pb-24"
+      className="relative isolate mt-4 overflow-hidden py-16 lg:mt-6"
       style={{ ["--vx" as string]: "70%", ["--vy" as string]: "35%" }}
     >
       {/* ── FONDO: visor ───────────────────────────────────────────────────── */}
@@ -278,7 +278,7 @@ export function ServiciosVisor({
                   >
                     {servicio.title}
                   </h2>
-                  <p className={cn("mt-2 text-sm leading-snug text-bone/80", esDrone && "measure")}>{servicio.body}</p>
+                  <p className={cn("mt-2 leading-snug text-bone/80", esDrone && "measure")}>{servicio.body}</p>
                   {esDrone && (
                     <Link
                       href={path(locale, "drone")}

@@ -33,7 +33,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
   const dict = await getDictionary(locale);
 
   return (
-    <main id="main" className="pt-40 pb-28">
+    <main id="main" className="pagina">
       <header data-reglet={dict.drone.label} className="shell">
         <Reveal>
           <p className="label">{dict.drone.label}</p>
@@ -62,7 +62,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
       </header>
 
       {/* LA FLOTA */}
-      <section className="shell mt-24 border-t border-ink-600 pt-14">
+      <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
           <p className="label">{dict.drone.fleetLabel}</p>
           <p className="measure mt-3 text-smoke">{dict.drone.fleetNote}</p>
@@ -97,14 +97,14 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
       </section>
 
       {/* CAPACIDADES — cada una respaldada por un fichero del archivo. */}
-      <section className="shell mt-24 border-t border-ink-600 pt-14">
+      <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
           <p className="label">{dict.drone.capsLabel}</p>
         </Reveal>
         <Reveal stagger>
           <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
             {CAPACIDADES.map((cap) => (
-              <li key={cap.es} className="bg-ink-800 p-7 text-lg text-bone">
+              <li key={cap.es} className="bg-ink-800 p-7 text-bone">
                 {cap[locale]}
               </li>
             ))}
@@ -112,7 +112,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </Reveal>
       </section>
 
-      <section className="shell mt-24 grid gap-6 border-t border-ink-600 pt-14 lg:grid-cols-12">
+      <section className="shell seccion grid gap-6 border-t border-ink-600 pt-14 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
           <p className="label">{dict.drone.safetyLabel}</p>
         </Reveal>

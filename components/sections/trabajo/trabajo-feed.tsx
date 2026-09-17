@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { Reveal } from "@/components/motion/reveal";
 import { PillLink } from "@/components/ui/button";
-import type { Project } from "@/content/projects";
+import { venueYFecha, type Project } from "@/content/projects";
 import { prefersReducedMotion } from "@/lib/gsap";
 import { path, type Locale } from "@/lib/routes";
 import { cn, pad } from "@/lib/utils";
@@ -231,10 +231,8 @@ function Tarjeta({
         <h2 className="font-display mt-3 pt-[0.15em] text-[clamp(1.25rem,5.2vw,1.75rem)] leading-[1.05] text-bone uppercase">
           {p.title[locale]}
         </h2>
-        <p className="label mt-2">
-          {p.venue} · {p.date[locale]}
-        </p>
-        <p className="mt-3 text-[0.9375rem] leading-snug text-bone/85">{p.hardFact[locale]}</p>
+        {venueYFecha(p, locale) && <p className="label mt-2">{venueYFecha(p, locale)}</p>}
+        <p className="mt-3 leading-snug text-bone/85">{p.hardFact[locale]}</p>
 
         <div className="mt-5 flex items-center justify-between gap-3">
           <span className="label tabular-nums">

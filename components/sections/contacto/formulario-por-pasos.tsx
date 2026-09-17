@@ -33,8 +33,11 @@ export function FormularioPorPasos({
   titulo,
   pasos,
   dict,
+  separado = false,
   children,
 }: {
+  /** Sin tarjetas encima, se separa como una sección y no pegado a ellas. */
+  separado?: boolean;
   id: string;
   reglet: string;
   titulo: string;
@@ -158,22 +161,23 @@ export function FormularioPorPasos({
       id={id}
       data-reglet={reglet}
       aria-labelledby={`${id}-titulo`}
-      className="shell mt-3 scroll-mt-28 lg:mt-16"
+      className={cn("shell scroll-mt-28", separado ? "seccion" : "mt-3")}
     >
       <div
         ref={panelRef}
-        className="glass grid gap-8 overflow-clip rounded-[var(--radius-frame)] p-5 sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-12"
+        className="glass grid gap-8 overflow-clip rounded-[var(--radius-frame)] p-5 sm:p-8 lg:grid-cols-12 lg:gap-10 lg:p-10"
       >
         {/* `min-w-0`: sin él, en móvil la fila de pasos (que hace scroll
             horizontal por dentro) ensanchaba la columna hasta su ancho
             natural, más de 1000 px, y el panel recortaba el formulario. */}
         <div className="min-w-0 lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            {/* Columna 4/12 dentro del relleno del panel: mismo cálculo que
-                en V1 con «PRESUPUESTO» (10.14× el cuerpo). */}
+            {/* Columna 4/12 dentro del relleno de un panel del 70 % de la
+                ventana: a 1024 px da ~200 px, y «PRESUPUESTO» mide 10.14× el
+                cuerpo. De ahí el 1,4vw. */}
             <h2
               id={`${id}-titulo`}
-              className="font-display text-display-m text-bone lg:text-[clamp(1.25rem,2vw,2.25rem)]"
+              className="font-display text-display-m text-bone lg:text-[clamp(1rem,1.4vw,2.25rem)]"
             >
               {titulo}
             </h2>
@@ -232,7 +236,7 @@ export function FormularioPorPasos({
 
             <div className="mt-10 hidden border-t border-white/10 pt-6 lg:block">
               <p className="label">{dict.contact.directLabel}</p>
-              <a href={`mailto:${dict.contact.email}`} className="mt-2 block text-sm break-all text-bone transition-colors hover:text-rust-300">
+              <a href={`mailto:${dict.contact.email}`} className="mt-2 block break-all text-bone transition-colors hover:text-rust-300">
                 {dict.contact.email}
               </a>
             </div>

@@ -38,24 +38,26 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
   const [cifraGrande, ...cifrasResto] = CIFRAS_CON_DATO;
 
   return (
-    <main id="main" className="pt-32 pb-28 lg:pt-36">
+    <main id="main" className="pagina">
       {/* ── 1. QUIÉNES SOMOS ───────────────────────────────────────────── */}
       <section data-reglet={dict.about.label} className="shell">
         <BentoRejilla className="grid gap-3 lg:grid-cols-12 lg:gap-4">
+          {/* Titular y entradilla SIN tarjeta (cliente, 2026-09-17): sobre el
+              fondo de la página, como la cabecera de las demás páginas, y con
+              las piezas del tablero alrededor. */}
           <header
             data-pieza
             className={cn(
-              pieza,
-              "glass-strong flex flex-col justify-between gap-10 rounded-[1.75rem] p-7 lg:p-10",
+              "flex flex-col justify-between gap-10 py-2 lg:pr-6",
               FOTO_GRUPO ? "lg:col-span-7" : "lg:col-span-12"
             )}
           >
             <p className="label">{dict.about.label}</p>
             <div>
-              {/* Tope 4vw: la pieza es 7/12 de la página y «ESTÁ DETRÁS» mide
-                  ~9,5 veces el cuerpo; con el 6vw de .text-display-l, a 1024 px
-                  saltaría el corte de palabra. */}
-              <h1 className="font-display text-[clamp(1.625rem,4vw,4rem)] leading-[0.92] text-bone">
+              {/* 3,6vw: la columna es 7/12 del contenedor del 70 % (≈0,41 de la
+                  ventana, menos hueco y margen) y «ESTÁ DETRÁS» mide ~9,5 veces
+                  el cuerpo. */}
+              <h1 className="font-display text-[clamp(1.625rem,3.6vw,4rem)] leading-[0.92] text-bone">
                 <LineasTitular lineas={dict.about.headline} />
               </h1>
               <p className="text-lead measure mt-6 text-smoke">{dict.about.intro}</p>
@@ -150,7 +152,7 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
               {dict.manifesto.lines.map((linea, i) => (
                 <li key={linea} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <span className="text-xs text-rust-300 tabular-nums">{pad(i + 1)}</span>
-                  <p className="mt-2 text-sm leading-snug text-bone">{linea}</p>
+                  <p className="mt-2 leading-snug text-bone">{linea}</p>
                 </li>
               ))}
             </ol>
@@ -168,7 +170,7 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
           El ancho de cada baldosa se fija con `basis` restando su parte del
           hueco, para que `flex` no estire la última fila. */}
       {EQUIPO.length > 0 && (
-        <section data-reglet={dict.about.teamLabel} className="shell mt-20 lg:mt-28">
+        <section data-reglet={dict.about.teamLabel} className="shell seccion">
           <Reveal bidirectional className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <h2 className="label">{dict.about.teamLabel}</h2>
             <AvisoEquipo dict={dict} className="max-w-[40rem]" />

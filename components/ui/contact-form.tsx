@@ -7,7 +7,7 @@ import { submitContact, type ContactState } from "@/app/[locale]/contact/actions
 import type { Dictionary } from "@/lib/dictionaries";
 import { CATEGORIES } from "@/content/projects";
 import { path, type Locale } from "@/lib/routes";
-import { chipClasses, fieldClasses } from "@/components/ui/campos-cristal";
+import { chipClasses, fieldClassesCompact as fieldClasses } from "@/components/ui/campos-cristal";
 import { cn } from "@/lib/utils";
 
 const initialState: ContactState = { status: "idle" };
@@ -34,14 +34,17 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
   }
 
   return (
-    <form action={formAction} noValidate className="space-y-8">
+    <form action={formAction} noValidate className="space-y-5">
       {/* Honeypot — oculto para personas, visible para bots que rellenan todo. */}
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-2">
+      {/* En pantalla ancha, dos filas de tres: con seis campos en tres filas de
+          dos, el formulario no cabía en una pantalla. Por debajo de `xl` la
+          columna (70 % de la ventana, menos el carril) no da para tres. */}
+      <div className="grid items-end gap-x-4 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
         <Field
           id="name"
           name="name"
@@ -57,9 +60,6 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           required
           error={errorMessage(dict, state.fieldErrors?.email)}
         />
-      </div>
-
-      <div className="grid gap-8 sm:grid-cols-2">
         <Field
           id="eventName"
           name="eventName"
@@ -67,10 +67,10 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           required
           error={errorMessage(dict, state.fieldErrors?.eventName)}
         />
-        <Field id="eventDate" name="eventDate" type="date" label={dict.contact.form.eventDate} />
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-2">
+      <div className="grid items-end gap-x-4 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
+        <Field id="eventDate" name="eventDate" type="date" label={dict.contact.form.eventDate} />
         <Field id="capacity" name="capacity" type="number" min={0} label={dict.contact.form.capacity} />
         <Field id="stages" name="stages" type="number" min={0} label={dict.contact.form.stages} />
       </div>
@@ -78,7 +78,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       <fieldset>
         <legend className="label">{dict.contact.form.coverage}</legend>
         <p className="mt-1 text-xs text-smoke">{dict.contact.form.coverageHint}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-2">
           {CATEGORIES.map((category) => (
             <label key={category} className={chipClasses}>
               <input
@@ -157,50 +157,53 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
         <textarea
           id="message"
           name="message"
-          rows={4}
+          rows={3}
           placeholder={dict.contact.form.messagePlaceholder}
           className={cn(fieldClasses, "mt-2 resize-none")}
         />
       </div>
 
-      {/* RGPD: consentimiento explícito, sin casilla premarcada. */}
-      <div>
-        <label className="flex items-start gap-3 text-sm text-bone">
-          <input
-            type="checkbox"
-            name="consent"
-            required
-            defaultChecked={false}
-            className="mt-1 h-4 w-4 border-ink-600 accent-rust-500"
-            aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
-          />
-          <span>
-            {dict.contact.form.consent.split(dict.contact.form.consentLink)[0]}
-            <Link
-              href={path(locale, "privacy")}
-              className="text-rust-300 underline underline-offset-2 hover:text-bone"
-            >
-              {dict.contact.form.consentLink}
-            </Link>
-            {dict.contact.form.consent.split(dict.contact.form.consentLink)[1]}
-          </span>
-        </label>
-        {state.fieldErrors?.consent && (
-          <p id="consent-error" className="mt-2 text-sm text-rust-300">
-            {errorMessage(dict, state.fieldErrors.consent)}
-          </p>
-        )}
-      </div>
+      {/* RGPD: consentimiento explícito, sin casilla premarcada. En escritorio
+          comparte fila con el botón de enviar. */}
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <label className="flex items-start gap-3 text-sm text-bone">
+            <input
+              type="checkbox"
+              name="consent"
+              required
+              defaultChecked={false}
+              className="mt-1 h-4 w-4 border-ink-600 accent-rust-500"
+              aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
+            />
+            <span>
+              {dict.contact.form.consent.split(dict.contact.form.consentLink)[0]}
+              <Link
+                href={path(locale, "privacy")}
+                className="text-rust-300 underline underline-offset-2 hover:text-bone"
+              >
+                {dict.contact.form.consentLink}
+              </Link>
+              {dict.contact.form.consent.split(dict.contact.form.consentLink)[1]}
+            </span>
+          </label>
+          {state.fieldErrors?.consent && (
+            <p id="consent-error" className="mt-2 text-sm text-rust-300">
+              {errorMessage(dict, state.fieldErrors.consent)}
+            </p>
+          )}
+        </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        // Pastilla como el resto de CTA glass. `brand-600` y no `rust-500` de
-        // fondo: con texto bone es el que cumple contraste (ver button.tsx).
-        className="w-full rounded-full bg-brand-600 px-7 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-300 hover:bg-rust-500 disabled:opacity-60 sm:w-auto"
-      >
-        {pending ? dict.contact.form.submitting : dict.contact.form.submit}
-      </button>
+        <button
+          type="submit"
+          disabled={pending}
+          // Pastilla como el resto de CTA glass. `brand-600` y no `rust-500` de
+          // fondo: con texto bone es el que cumple contraste (ver button.tsx).
+          className="w-full shrink-0 rounded-full bg-brand-600 px-7 py-4 text-xs font-medium tracking-[0.08em] text-bone uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] transition-colors duration-300 hover:bg-rust-500 disabled:opacity-60 sm:w-auto"
+        >
+          {pending ? dict.contact.form.submitting : dict.contact.form.submit}
+        </button>
+      </div>
 
       {state.status === "error" && !Object.keys(state.fieldErrors ?? {}).length && (
         <p role="alert" className="text-sm text-rust-300">

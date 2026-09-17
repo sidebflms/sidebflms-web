@@ -21,28 +21,26 @@ import type { Locale } from "@/lib/routes";
  * original o de rótulos legibles dentro del propio metraje — cada uno está
  * anotado en su ficha con de dónde sale.
  *
- * `brief` describe ÚNICAMENTE lo que se ve en pantalla. Ni una palabra sobre
- * lo que pidió el cliente, porque eso no está en el metraje.
+ * ── `brief`: PROVISIONAL (2026-09-17) ────────────────────────────────────
+ * El cliente pidió textos que cuenten el TRABAJO y no el plano en pantalla.
+ * Los de ahora son provisionales: se escribieron sólo con lo que ya consta
+ * (título, venue, fecha, disciplina, lo que se ve) y sin inventar encargos,
+ * equipos ni cifras. Se sustituyen por los reales cuando producción pase la
+ * información de cada trabajo. Dos párrafos, separados por una línea en
+ * blanco (`\n\n`); la ficha los pinta como párrafos.
  *
- * ── QUÉ NO ESTÁ CONFIRMADO, Y HAY QUE CONFIRMAR ─────────────────────────
- * `delivered` se titula «Qué entregamos» en la web: es una afirmación sobre
- * un encargo real y **sólo la puede escribir quien hizo el trabajo**. Lo que
- * hay ahora son afirmaciones sobre la PIEZA, verificables mirándola, no sobre
- * la entrega. Sustitúyelas por lo que se entregó de verdad.
- *
- * Tres fichas no tienen fecha porque **no se puede saber**:
- *   - `holika-portal` y `monegros-hora-dorada`: el nombre del fichero no
- *     lleva fecha.
+ * ── LO QUE NO SE SABE VA A `null` Y NO SE ENSEÑA ────────────────────────
+ * `venue` y `date` desconocidos son `null` (antes decían «Por confirmar»).
+ * Donde se pintan, se omiten. Casos sin fecha:
+ *   - `holika-portal`, `monegros-hora-dorada`, `duro-pyroshow`,
+ *     `metropolitano`: el nombre del fichero no lleva fecha.
  *   - `prospa-multicam`: el fichero se llama `31132026`, que sería el 31 del
- *     mes 13. **Ese mes no existe**, así que el nombre está mal puesto y no
- *     sirve como fuente.
- * En esas tres, `date` dice «Por confirmar» a propósito. Es preferible a un
- * mes inventado en la ficha de un cliente.
+ *     mes 13. **Ese mes no existe**, así que no sirve como fuente.
  *
  * ── AMPLIACIÓN DEL 2026-09-13: TRES PIEZAS MÁS ──────────────────────────
  * Salen del material que Mario fue pasando por el chat y que está en
  * `~/Desktop/PARA-LA-WEB/`. Mismo criterio que las nueve primeras: lo medible
- * se mide, lo que no se sabe pone «Por confirmar».
+ * se mide, lo que no se sabe va a `null`.
  *
  * Lo medible aquí incluye la FECHA, que en estas tres sí es fiable: los
  * másters conservan la etiqueta `creation_time` del aparato, que es la del
@@ -76,7 +74,7 @@ export type Project = {
   /** La pieza central de la sección pineada. Solo una puede tenerlo. */
   showpiece?: boolean;
   year: string;
-  venue: string;
+  venue: string | null;
   /** Rutas al material real. `null` mientras no exista. */
   media: {
     video: string | null;
@@ -96,10 +94,9 @@ export type Project = {
     gallery?: string[];
   };
   title: Record<Locale, string>;
-  date: Record<Locale, string>;
+  date: Record<Locale, string> | null;
   hardFact: Record<Locale, string>;
   brief: Record<Locale, string>;
-  delivered: Record<Locale, string[]>;
 };
 
 const PROYECTOS: Project[] = [
@@ -120,20 +117,15 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/holika-portal-vertical.mp4", poster: "/media/holika-portal-vertical.jpg" },
     },
     title: { es: "Holika — el portal", en: "Holika — the portal" },
-    date: { es: "Por confirmar", en: "To confirm" },
+    date: null,
     hardFact: {
       // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
       es: "Doce segundos, un solo vuelo, ni un corte",
       en: "Twelve seconds, one flight, not a single cut",
     },
     brief: {
-      es: "Un FPV que arranca por encima del público con los lanzallamas encendidos, gira sobre el escenario y entra por el aro del portal hasta encuadrar la cabina desde dentro. Es un plano único: lo que se ve es el vuelo entero, sin montaje.",
-      en: "An FPV run that starts above the crowd with the flame jets firing, banks over the stage and flies through the portal ring to frame the booth from inside. It is a single take: what you see is the whole flight, no editing.",
-    },
-    delivered: {
-      // PENDIENTE (producción): esto describe la PIEZA, no la entrega.
-      es: ["Plano secuencia aéreo, sin cortes", "Máster de 39 s del que sale este corte"],
-      en: ["Single-take aerial, no cuts", "39 s master this cut comes from"],
+      es: "Para Holika planteamos el drone como una cámara más del espectáculo y no como un plano de recurso. La idea era meter al espectador dentro del show: arrancar por encima del público, cruzar el escenario con los lanzallamas encendidos y terminar dentro de la cabina.\n\nUn vuelo así se prepara antes de rodarse: recorrido, alturas, tiempos del show y seguridad del público. El resultado es un plano secuencia FPV que resume la energía de la noche en unos segundos y que funciona igual de bien en redes que dentro de un aftermovie.",
+      en: "For Holika we treated the drone as another camera in the show rather than a cutaway. The idea was to put the viewer inside it: start above the crowd, cross the stage with the flame jets firing and finish inside the booth.\n\nA flight like that is prepared before it is shot: route, heights, show timings and crowd safety. The result is a single FPV take that sums up the energy of the night in a few seconds and works just as well on social media as inside an aftermovie.",
     },
   },
   {
@@ -159,13 +151,8 @@ const PROYECTOS: Project[] = [
       en: "3840×2880 master at 25p — open matte for reframing",
     },
     brief: {
-      es: "Aftermovie de una noche de techno en Fabrik. El máster se rodó en encuadre abierto 4:3, que es lo que permite sacar el horizontal de la web y el vertical de redes del mismo material sin volver a montar.",
-      en: "Aftermovie from a techno night at Fabrik. The master was shot open-matte 4:3, which is what lets the horizontal web cut and the vertical social cut come out of the same footage without re-editing.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Aftermovie", "Máster 4K abierto, apto para corte vertical"],
-      en: ["Aftermovie", "Open-matte 4K master, ready for a vertical cut"],
+      es: "Aftermovie de la noche de Fátima Hajji en Fabrik. El objetivo de una pieza así es que quien no estuvo entienda en un minuto por qué tenía que haber ido: la artista, la sala y la reacción del público contadas al ritmo de la propia sesión.\n\nRodamos pensando ya en la entrega: el material se grabó con encuadre abierto para sacar del mismo metraje la versión horizontal y los cortes verticales para redes, sin volver a montar desde cero.",
+      en: "Aftermovie of Fátima Hajji's night at Fabrik. The aim of a piece like this is that anyone who wasn't there understands within a minute why they should have been: the artist, the venue and the crowd, told at the pace of the set itself.\n\nWe shot with the delivery already in mind: the footage was recorded open-matte so the horizontal version and the vertical social cuts come out of the same material, without re-editing from scratch.",
     },
   },
   {
@@ -186,19 +173,14 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/monegros-hora-dorada-vertical.mp4", poster: "/media/monegros-hora-dorada-vertical.jpg" },
     },
     title: { es: "Monegros — hora dorada", en: "Monegros — golden hour" },
-    date: { es: "Por confirmar", en: "To confirm" },
+    date: null,
     hardFact: {
       es: "Una de doce postales aéreas rodadas en el mismo recinto",
       en: "One of twelve aerial postcards shot at the same site",
     },
     brief: {
-      es: "Plano aéreo del recinto con el sol bajo, rodado como pieza suelta y no como parte de un montaje. La escala del público es lo que hace el plano: es lo que un dossier de patrocinio necesita enseñar y una cámara de tierra no puede.",
-      en: "Aerial of the site with the sun low, shot as a standalone piece rather than as part of an edit. The scale of the crowd is what makes the shot: it is what a sponsorship deck needs to show and a ground camera cannot.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Postal aérea de 12 s", "Serie de doce piezas del mismo recinto"],
-      en: ["12 s aerial postcard", "Series of twelve pieces from the same site"],
+      es: "Parte de la cobertura aérea de Monegros: una serie de postales rodadas en el recinto para enseñar la escala del evento en momentos concretos del día, como esta hora dorada.\n\nSon piezas cortas pensadas para usarse solas —en redes, en la web o en un dossier para patrocinadores— y también como material de apoyo para el aftermovie. Desde el aire se ve lo que en tierra no cabe en un plano: el público, los escenarios y el paisaje a la vez.",
+      en: "Part of the aerial coverage at Monegros: a series of postcards shot on site to show the scale of the event at specific moments of the day, like this golden hour.\n\nThey are short pieces meant to work on their own —on social media, on the website or in a sponsorship deck— and also as supporting footage for the aftermovie. From the air you get what no ground shot can hold: the crowd, the stages and the landscape at once.",
     },
   },
   {
@@ -221,20 +203,15 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/duro-pyroshow-vertical.mp4", poster: "/media/duro-pyroshow-vertical.jpg" },
     },
     title: { es: "DURO — el show de fuego", en: "DURO — the pyro show" },
-    date: { es: "Por confirmar", en: "To confirm" },
+    date: null,
     hardFact: {
       // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
       es: "Doce segundos de un máster de 4:22, y ni un corte dentro",
       en: "Twelve seconds out of a 4:22 master, and not a cut inside",
     },
     brief: {
-      es: "Aéreo nocturno sobre el escenario mientras suben los fuegos. El plano aguanta entero: el abanico de pirotecnia, el público iluminado por la pantalla y las luces de la ciudad al fondo, en la misma toma y sin cortar.",
-      en: "Night aerial over the stage as the fireworks go up. The shot holds throughout: the fan of pyrotechnics, the crowd lit by the screen and the city lights behind, all in one take and never cutting.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Aéreo del show de fuego", "Máster de 4:22 en 4K del que sale este corte"],
-      en: ["Pyro show aerial", "4K 4:22 master this cut comes from"],
+      es: "Cobertura aérea del espectáculo de pirotecnia de DURO. En un show así no hay segunda oportunidad: los fuegos suben una sola vez, así que el vuelo se coordina con los tiempos del espectáculo para estar en la posición correcta cuando empiezan.\n\nEl plano junta en la misma imagen la pirotecnia, el escenario, el público iluminado por las pantallas y la ciudad al fondo. Es material que sirve tanto para la pieza resumen del evento como para comunicar la siguiente edición.",
+      en: "Aerial coverage of DURO's pyrotechnics show. There are no second chances in a show like this: the fireworks go up once, so the flight is timed to the show to be in the right position when they start.\n\nThe shot brings the pyrotechnics, the stage, the crowd lit by the screens and the city behind into a single frame. It is footage that works both for the event recap and for promoting the next edition.",
     },
   },
   {
@@ -254,20 +231,15 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/metropolitano-vertical.mp4", poster: "/media/metropolitano-vertical.jpg" },
     },
     title: { es: "Metropolitano", en: "Metropolitano" },
-    date: { es: "Por confirmar", en: "To confirm" },
+    date: null,
     hardFact: {
       // VERIFICADO: 0 cortes de escena en la pieza publicada.
       es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
       en: "From outside the stadium down to the pitch in one flight, no cuts",
     },
     brief: {
-      es: "Un descenso continuo: entra desde fuera con la ciudad detrás, pasa por encima del anillo y baja hasta el campo, con el estadio entero encendido en magenta. Un recinto de este tamaño sólo se entiende desde el aire.",
-      en: "One continuous descent: it comes in from outside with the city behind, crosses the rim and drops to the pitch, the whole stadium lit magenta. A venue this size only reads from the air.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Plano aéreo de descenso, sin cortes"],
-      en: ["Single-take descending aerial"],
+      es: "Vuelo en el estadio Metropolitano. En un recinto de este tamaño el drone es la única forma de contar el espacio completo: la llegada desde fuera, el anillo del estadio y el campo, en un único recorrido.\n\nUn vuelo en un estadio se planifica con tiempo: coordinación con el recinto y un recorrido ensayado para que el plano salga limpio y sin cortes. El resultado es un plano de apertura que sitúa al espectador antes de entrar en el contenido.",
+      en: "A flight at the Metropolitano stadium. In a venue this size the drone is the only way to tell the whole space: the approach from outside, the stadium rim and the pitch, in a single run.\n\nA stadium flight is planned well ahead: coordination with the venue and a rehearsed route so the shot comes out clean and uncut. The result is an opening shot that places the viewer before the content begins.",
     },
   },
   {
@@ -278,7 +250,7 @@ const PROYECTOS: Project[] = [
     tone: 3,
     featured: true,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/gordo-lebanon.mp4",
       poster: "/media/gordo-lebanon.jpg",
@@ -291,13 +263,8 @@ const PROYECTOS: Project[] = [
       en: "3840×2160 master at 25p, booth and screen in the same frame",
     },
     brief: {
-      es: "Multicámara de cabina al aire libre, de noche, con la pantalla LED de fondo. La dificultad de este tipo de plano es que la pantalla no reviente mientras el artista, mucho menos iluminado, sigue siendo visible.",
-      en: "Outdoor booth multicam at night with the LED wall behind. The difficulty in this kind of shot is keeping the screen from blowing out while the artist, far less lit, stays visible.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Corte multicámara", "Segunda cámara de la misma noche en el archivo"],
-      en: ["Multicam cut", "Second camera from the same night on file"],
+      es: "Grabación multicámara de la actuación de GORDO, al aire libre y de noche. La cobertura de cabina en directo tiene que servir para dos cosas: tener la actuación completa bien grabada y sacar después los mejores momentos para redes.\n\nEl reto técnico de este tipo de escenario es equilibrar la pantalla LED del fondo con el artista, mucho menos iluminado, para que no se pierda ninguno de los dos. Se resuelve con la exposición y la colocación de las cámaras, antes de que empiece la sesión.",
+      en: "Multicam recording of GORDO's set, outdoors and at night. Live booth coverage has to do two things: capture the whole performance properly and provide the best moments for social media afterwards.\n\nThe technical challenge with this kind of stage is balancing the LED wall behind with the far less lit artist, so neither gets lost. It is solved through exposure and camera placement, before the set begins.",
     },
   },
   {
@@ -323,13 +290,8 @@ const PROYECTOS: Project[] = [
       en: "The stage name is legible in the footage itself, not in the run sheet",
     },
     brief: {
-      es: "Aftermovie de una noche en el escenario Area 19 de Fabrik. Rodado en el mismo formato abierto que el resto de la serie del club.",
-      en: "Aftermovie from a night on Fabrik's Area 19 stage. Shot in the same open-matte format as the rest of the club series.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Aftermovie", "Máster 4K abierto"],
-      en: ["Aftermovie", "Open-matte 4K master"],
+      es: "Aftermovie de Adrián Mills en el escenario Area 19 de Fabrik. Forma parte de la serie de piezas rodadas para el club, así que mantiene el mismo lenguaje visual que el resto: quien sigue a Fabrik reconoce el estilo desde el primer plano.\n\nTrabajar varias noches en el mismo sitio permite afinar cada vez más: conocer la luz de la sala, los mejores puntos de cámara y los momentos de la sesión que no se pueden escapar.",
+      en: "Aftermovie of Adrián Mills on Fabrik's Area 19 stage. It belongs to the series of pieces shot for the club, so it keeps the same visual language as the rest: anyone who follows Fabrik recognises the style from the first shot.\n\nWorking several nights in the same place lets you fine-tune every time: knowing the room's light, the best camera positions and the moments in the set you cannot miss.",
     },
   },
   {
@@ -354,13 +316,8 @@ const PROYECTOS: Project[] = [
       en: "Third night of the same series shot at the club",
     },
     brief: {
-      es: "Aftermovie de la edición 150. Es la tercera pieza de una serie continuada en el mismo club, y eso se nota en el rodaje: el equipo ya sabe dónde ponerse antes de que abran.",
-      en: "Aftermovie for the 150th edition. It is the third piece in an ongoing series at the same club, and that shows on the shoot: the crew already knows where to stand before doors.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Aftermovie", "Máster 4K abierto"],
-      en: ["Aftermovie", "Open-matte 4K master"],
+      es: "Aftermovie de la edición 150 de Fabrik, una fecha señalada para el club. Una noche así pide algo más que un resumen: tiene que transmitir que no era una fiesta cualquiera.\n\nEs una de las piezas de la serie rodada en Fabrik, y se nota en el resultado. Conocer la sala permite anticipar los momentos clave y estar colocados antes de que ocurran, en vez de ir detrás de ellos.",
+      en: "Aftermovie of Fabrik's 150th edition, a landmark date for the club. A night like that needs more than a recap: it has to show it was no ordinary party.\n\nIt is one of the pieces in the series shot at Fabrik, and it shows. Knowing the room lets you anticipate the key moments and be in position before they happen, instead of chasing them.",
     },
   },
   {
@@ -373,26 +330,21 @@ const PROYECTOS: Project[] = [
     tone: 0,
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/prospa-multicam.mp4",
       poster: "/media/prospa-multicam.jpg",
       vertical: { video: "/media/prospa-multicam-vertical.mp4", poster: "/media/prospa-multicam-vertical.jpg" },
     },
     title: { es: "Prospa — multicámara", en: "Prospa — multicam" },
-    date: { es: "Por confirmar", en: "To confirm" },
+    date: null,
     hardFact: {
       es: "De día y a plena luz: el caso contrario al de cabina de noche",
       en: "Daylight, wide open: the opposite case to a night booth",
     },
     brief: {
-      es: "Multicámara de cabina de día, en recinto arbolado y con el público delante. A plena luz no hay pantalla que ayude a separar al artista del fondo, así que el trabajo está en el encuadre y no en la iluminación.",
-      en: "Daytime booth multicam in a wooded venue with the crowd in front. In full daylight there is no screen helping to separate the artist from the background, so the work is in the framing, not the lighting.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Corte multicámara"],
-      en: ["Multicam cut"],
+      es: "Grabación multicámara de la actuación de Prospa, de día y en un recinto al aire libre con el público delante. Es el caso contrario a una cabina de noche: no hay pantallas ni focos que ayuden a separar al artista del fondo.\n\nPor eso el trabajo está en el encuadre y en la posición de cada cámara. El objetivo es el mismo que en cualquier directo: tener la sesión entera bien cubierta y material para sacar después los cortes para redes.",
+      en: "Multicam recording of Prospa's set, in daylight at an outdoor venue with the crowd in front. It is the opposite of a booth at night: there are no screens or lights to help separate the artist from the background.\n\nSo the work lies in framing and in where each camera sits. The goal is the same as for any live show: the whole set properly covered, plus footage for the social cuts afterwards.",
     },
   },
   {
@@ -409,7 +361,7 @@ const PROYECTOS: Project[] = [
     // bloque de más y el titular dejaba de cuadrar con lo que se ve.
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: null,
       poster: "/media/foto/fitz-rick-ross-1600.jpg",
@@ -436,13 +388,8 @@ const PROYECTOS: Project[] = [
       en: "Eight different artists, twelve published frames from a larger set",
     },
     brief: {
-      es: "Fotografía de directo en una serie de conciertos: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye y After the Weekend. Casi todo a contraluz y con luz de espectáculo, que cambia de color cada pocos segundos y no espera a nadie.",
-      en: "Live photography across a run of shows: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye and After the Weekend. Almost all of it backlit and under show lighting, which changes colour every few seconds and waits for no one.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Doce fotos publicadas", "Selección hecha sobre un archivo mayor"],
-      en: ["Twelve published frames", "Selected from a larger set"],
+      es: "Fotografía de directo en una serie de conciertos: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye y After the Weekend. En este tipo de trabajo se trata de tener imágenes de cada artista listas para prensa y redes, noche tras noche.\n\nLa luz de espectáculo cambia de color cada pocos segundos y casi todo se dispara a contraluz, así que el trabajo está en anticipar el momento. La selección publicada es una parte de un archivo mucho mayor.",
+      en: "Live photography across a series of concerts: Rick Ross, Arcángel, Sech, Offset, Kapo, Maikel de la Calle, Ye and After the Weekend. This kind of work is about having images of every artist ready for press and social media, night after night.\n\nShow lighting changes colour every few seconds and almost everything is shot against the light, so the job is anticipating the moment. The published selection is part of a much larger archive.",
     },
   },
   {
@@ -474,13 +421,8 @@ const PROYECTOS: Project[] = [
       en: "Same site as the aerial postcards, from the ground",
     },
     brief: {
-      es: "Fotografía de cabina y de recinto en el mismo festival del que salen las postales aéreas. Cubrir un sitio desde el aire y desde el suelo en la misma jornada es lo que permite contar la escala y la cara en el mismo entregable.",
-      en: "Booth and site photography at the same festival the aerial postcards come from. Covering a place from the air and from the ground on the same day is what lets scale and faces live in the same delivery.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Fotografía de cabina y de recinto", "Cobertura aérea del mismo recinto"],
-      en: ["Booth and site stills", "Aerial coverage of the same site"],
+      es: "Fotografía de cabina y de recinto en Monegros, dentro de la misma cobertura de la que salen las postales aéreas. Combinar foto desde el suelo y drone en el mismo evento permite contar dos cosas a la vez: la escala del sitio y la cara de quien está en él.\n\nLas imágenes cubren artistas, escenario y ambiente, pensadas para la comunicación del evento durante y después de las fechas.",
+      en: "Booth and site photography at Monegros, as part of the same coverage the aerial postcards come from. Combining ground photography and drone at the same event tells two things at once: the scale of the place and the faces of the people in it.\n\nThe images cover artists, stage and atmosphere, meant for the event's communication during and after the dates.",
     },
   },
   {
@@ -490,7 +432,7 @@ const PROYECTOS: Project[] = [
     tone: 1,
     featured: true,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/mitt-motors.mp4",
       poster: "/media/mitt-motors.jpg",
@@ -503,13 +445,8 @@ const PROYECTOS: Project[] = [
       en: "Eleven shots filmed the same day, all in open-matte 4:3 so both landscape and vertical could be delivered",
     },
     brief: {
-      es: "La moto rodando por carreteras de montaña, seguida desde el aire y desde tierra. El plano frontal con el faro encendido es el que sostiene la pieza: la carretera vacía a los lados da la escala que un plano cerrado no daría.",
-      en: "The bike running mountain roads, followed from the air and from the ground. The head-on shot with the headlight on is what holds the piece together: the empty road on either side gives a sense of scale a tight shot could not.",
-    },
-    delivered: {
-      // PENDIENTE (producción): esto describe la PIEZA, no la entrega.
-      es: ["Pieza de marca", "Versión vertical para redes", "Seguimiento aéreo y desde coche"],
-      en: ["Brand film", "Vertical cut for social", "Aerial and car-to-car tracking"],
+      es: "Pieza publicitaria para MITT MOTORS, rodada en carreteras de montaña combinando drone y cámara en tierra. La protagonista es la moto, y el paisaje está para darle escala y contexto.\n\nTodo se rodó en una sola jornada, planificando los planos según la luz y el recorrido. Grabamos con encuadre abierto para poder entregar la pieza en horizontal y en vertical sin perder los planos buenos al recortar.",
+      en: "An advertising piece for MITT MOTORS, shot on mountain roads combining drone and ground camera. The bike is the star, and the landscape is there to give it scale and context.\n\nEverything was shot in a single day, planning each shot around the light and the route. We recorded open-matte so the piece could be delivered in horizontal and vertical without losing the good shots when reframing.",
     },
   },
   {
@@ -532,13 +469,8 @@ const PROYECTOS: Project[] = [
       en: "One of eight Madrid postcards shot over two evenings, all eleven seconds long",
     },
     brief: {
-      es: "El skyline con Torrespaña recortada contra el cielo del atardecer. Rodado como plano de recurso: es el tipo de plano que una productora necesita tener hecho antes de que un cliente lo pida con dos días de margen.",
-      en: "The skyline with the Torrespaña tower cut against the evening sky. Shot as stock: the kind of shot a production company needs to already have when a client asks for it at two days' notice.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Postal aérea de 11 s", "Serie de ocho planos de Madrid", "Apaisado y vertical"],
-      en: ["11 s aerial postcard", "Series of eight Madrid shots", "Landscape and vertical"],
+      es: "Serie de planos aéreos de Madrid rodados al atardecer, con el skyline y Torrespaña recortados contra el cielo. Es material de recurso: planos de ciudad listos para usar en piezas corporativas, publicidad o contenido para redes.\n\nTenerlos rodados con calma, eligiendo la luz, es lo que marca la diferencia frente a un plano de ciudad hecho con prisa el día que alguien lo necesita.",
+      en: "A series of aerial shots of Madrid at sunset, with the skyline and Torrespaña cut out against the sky. It is stock footage: city shots ready to use in corporate pieces, advertising or social content.\n\nHaving them shot calmly, choosing the light, is what sets them apart from a city shot rushed out on the day someone needs it.",
     },
   },
   {
@@ -548,7 +480,7 @@ const PROYECTOS: Project[] = [
     tone: 0,
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/costa-aerea.mp4",
       poster: "/media/costa-aerea.jpg",
@@ -561,13 +493,8 @@ const PROYECTOS: Project[] = [
       en: "Shot on the same run as the Madrid postcards, four days later",
     },
     brief: {
-      es: "Una bahía con los barcos fondeados y el agua cambiando de color con la profundidad. El plano se sostiene sobre esa transición de turquesa a azul, que es exactamente lo que se pierde rodando desde tierra.",
-      en: "A bay with boats at anchor and the water changing colour with depth. The shot rests on that turquoise-to-blue transition, which is exactly what gets lost when you shoot from the ground.",
-    },
-    delivered: {
-      // PENDIENTE (producción).
-      es: ["Postal aérea de 11 s", "Apaisado y vertical"],
-      en: ["11 s aerial postcard", "Landscape and vertical"],
+      es: "Plano aéreo de una bahía con barcos fondeados, rodado en la misma salida que otras postales de costa. El plano se sostiene en el color del agua, que pasa de turquesa a azul según la profundidad, algo que solo se aprecia desde arriba.\n\nComo el resto de postales, es material pensado para turismo, marcas y contenido de destino: planos limpios, estables y listos para montar.",
+      en: "An aerial shot of a bay with anchored boats, filmed on the same trip as other coastal postcards. The shot rests on the colour of the water, shifting from turquoise to blue with depth, something you only see from above.\n\nLike the other postcards, it is footage meant for tourism, brands and destination content: clean, steady shots ready to edit.",
     },
   },
   {
@@ -590,13 +517,8 @@ const PROYECTOS: Project[] = [
       en: "Native vertical master at 2160×3840: the shot was filmed vertical, not cropped afterwards",
     },
     brief: {
-      es: "Las tres torres del escenario encendidas sobre el campo a oscuras, con las luces del pueblo al fondo. El plano funciona porque enseña a la vez la instalación y el sitio donde está: a ras de suelo no se puede contar esa relación.",
-      en: "The three stage towers lit over a dark field, with the town lights behind. The shot works because it shows the rig and the place it sits in at once: from the ground you cannot tell that relationship.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano aéreo nocturno", "Vertical nativo"],
-      en: ["Night aerial", "Native vertical"],
+      es: "Plano aéreo nocturno del escenario de DURO, con sus tres torres encendidas y las luces del pueblo al fondo. Enseña a la vez la instalación y el lugar donde está, una relación que desde el suelo no se puede contar.\n\nSe rodó directamente en vertical, pensando en redes desde el principio, en lugar de recortar después un plano horizontal.",
+      en: "A night aerial of DURO's stage, its three towers lit with the town lights behind. It shows the installation and the place it stands in at once, a relationship you cannot tell from the ground.\n\nIt was shot natively in vertical, with social media in mind from the start, instead of cropping a horizontal shot afterwards.",
     },
   },
   {
@@ -606,7 +528,7 @@ const PROYECTOS: Project[] = [
     tone: 1,
     featured: true,
     year: "2025",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/recinto-desde-el-aire.mp4",
       poster: "/media/recinto-desde-el-aire.jpg",
@@ -619,13 +541,8 @@ const PROYECTOS: Project[] = [
       en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
     },
     brief: {
-      es: "El público entero en un solo plano, con el escenario a un lado y la montaña detrás. Es el plano que pide un dossier de patrocinio: la cifra de asistentes se discute, una imagen del recinto lleno no.",
-      en: "The whole crowd in a single shot, stage to one side and the mountain behind. It is the shot a sponsorship deck asks for: attendance figures get argued over, a picture of a full site does not.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano aéreo del recinto", "Apaisado y vertical"],
-      en: ["Aerial of the site", "Landscape and vertical"],
+      es: "El recinto lleno visto desde el aire, con el escenario a un lado y la montaña detrás. Es el tipo de plano que necesita cualquier organizador: una imagen que demuestra la afluencia de un vistazo y que sirve para comunicación, patrocinadores y la siguiente edición.\n\nSe rodó con encuadre abierto para sacar del mismo vuelo la versión horizontal y la vertical.",
+      en: "The site at capacity seen from the air, with the stage on one side and the mountain behind. It is the kind of shot every organiser needs: an image that proves the turnout at a glance and works for communication, sponsors and the next edition.\n\nIt was shot open-matte so the horizontal and vertical versions come out of the same flight.",
     },
   },
   {
@@ -635,7 +552,7 @@ const PROYECTOS: Project[] = [
     tone: 0,
     featured: false,
     year: "2025",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/cabina-y-publico.mp4",
       poster: "/media/cabina-y-publico.jpg",
@@ -648,13 +565,8 @@ const PROYECTOS: Project[] = [
       en: "Cut from a 65 s master: the piece keeps 12, which is how long the gesture lasts",
     },
     brief: {
-      es: "El artista de espaldas con el público delante, en contraluz. El encuadre pone al que mira en el sitio del que pincha, que es lo que diferencia un aftermovie de un vídeo de móvil.",
-      en: "The artist from behind with the crowd in front, backlit. The framing puts the viewer where the DJ stands, which is what separates an aftermovie from a phone video.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano de cabina", "Versión vertical"],
-      en: ["Booth shot", "Vertical cut"],
+      es: "Pieza de aftermovie con el artista de espaldas y el público delante, a contraluz. El encuadre coloca a quien mira en el lugar del que pincha, que es lo que diferencia un aftermovie cuidado de un vídeo grabado con el móvil.\n\nEn una cobertura así se buscan esos momentos de conexión entre la cabina y la pista, que son los que mejor cuentan cómo fue la noche.",
+      en: "An aftermovie piece with the artist from behind and the crowd ahead, against the light. The framing puts the viewer in the DJ's place, which is what separates a crafted aftermovie from a phone video.\n\nCoverage like this hunts for those moments of connection between the booth and the floor, which tell best what the night was like.",
     },
   },
   {
@@ -664,7 +576,7 @@ const PROYECTOS: Project[] = [
     tone: 3,
     featured: false,
     year: "2025",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/sala-llena.mp4",
       poster: "/media/sala-llena.jpg",
@@ -677,13 +589,8 @@ const PROYECTOS: Project[] = [
       en: "Filmed at 3840×2880, ten days after the previous piece and on the same circuit",
     },
     brief: {
-      es: "Manos arriba bajo la luz azul, con el público ocupando todo el cuadro. No hay escenario ni cabina: sólo la reacción, que es la mitad de lo que un promotor quiere enseñar.",
-      en: "Hands up under blue light, the crowd filling the frame. No stage, no booth: just the reaction, which is half of what a promoter wants to show.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano de público", "Versión vertical"],
-      en: ["Crowd shot", "Vertical cut"],
+      es: "Manos arriba bajo la luz azul y el público llenando todo el cuadro. En un aftermovie la reacción de la gente cuenta tanto como el artista: es lo que convence a quien no estuvo de que la próxima vez tiene que ir.\n\nRodada dentro de una serie de fechas del mismo circuito, con el mismo criterio visual en cada noche.",
+      en: "Hands up under the blue light, with the crowd filling the whole frame. In an aftermovie the crowd's reaction counts as much as the artist: it is what convinces anyone who missed it that next time they have to go.\n\nShot within a run of dates on the same circuit, with the same visual approach every night.",
     },
   },
   {
@@ -693,7 +600,7 @@ const PROYECTOS: Project[] = [
     tone: 2,
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/sala-en-rojo.mp4",
       poster: "/media/sala-en-rojo.jpg",
@@ -706,13 +613,8 @@ const PROYECTOS: Project[] = [
       en: "A single wide of the whole room, no cuts",
     },
     brief: {
-      es: "La sala entera bañada en rojo desde el fondo, con el techo y el público en el mismo plano. Es el plano que sitúa: después de éste, cualquier primer plano se entiende.",
-      en: "The whole room washed in red from the back, ceiling and crowd in the same frame. It is the establishing shot: after it, any close-up makes sense.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano general de sala", "Versión vertical"],
-      en: ["Room wide", "Vertical cut"],
+      es: "Un plano general de la sala entera bañada en rojo, con el techo y el público en la misma imagen. Es el plano que sitúa al espectador: después de verlo, cualquier primer plano del aftermovie se entiende.\n\nEn una cobertura de sala, estos planos abiertos se buscan en los picos de la sesión, cuando la luz y el público están en su mejor momento.",
+      en: "A wide shot of the whole room bathed in red, with the ceiling and the crowd in the same frame. It is the shot that places the viewer: after it, any close-up in the aftermovie makes sense.\n\nIn club coverage, these wide shots are caught at the peaks of the set, when the light and the crowd are at their best.",
     },
   },
   {
@@ -722,7 +624,7 @@ const PROYECTOS: Project[] = [
     tone: 1,
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/en-cabina.mp4",
       poster: "/media/en-cabina.jpg",
@@ -735,13 +637,8 @@ const PROYECTOS: Project[] = [
       en: "Cut from a 69 s master, the longest of the batch",
     },
     brief: {
-      es: "Plano lateral desde dentro de la cabina, con el público asomando por detrás. La posición es la que sólo se consigue estando dentro, y es la que distingue una cobertura con acceso de una grabada desde la valla.",
-      en: "A side angle from inside the booth, the crowd showing behind. It is a position you only get from inside, and it is what tells apart coverage with access from coverage shot at the barrier.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano de cabina", "Versión vertical"],
-      en: ["Booth angle", "Vertical cut"],
+      es: "Cobertura multicámara desde dentro de la cabina, con el público asomando detrás del artista. Es una posición que solo se consigue con acceso, y es lo que diferencia una grabación de directo profesional de una hecha desde la valla.\n\nLas cámaras de cabina recogen la actuación de cerca y dan el material más buscado para redes: el artista, sus gestos y la pista reaccionando al fondo.",
+      en: "Multicam coverage from inside the booth, with the crowd peeking out behind the artist. It is a position you only get with access, and it is what separates professional live coverage from footage shot from the barrier.\n\nBooth cameras capture the performance up close and provide the most sought-after social footage: the artist, their gestures and the floor reacting behind.",
     },
   },
   {
@@ -764,13 +661,8 @@ const PROYECTOS: Project[] = [
       en: "Second of the eight Madrid postcards from that evening",
     },
     brief: {
-      es: "Las cuatro torres recortadas contra la sierra con el cielo todavía naranja. Rodado como plano de recurso, que es material que hay que tener hecho antes de que alguien lo pida.",
-      en: "The four towers cut against the mountains with the sky still orange. Shot as stock, which is material you need to already have before anyone asks.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Postal aérea de 12 s", "Apaisado y vertical"],
-      en: ["12 s aerial postcard", "Landscape and vertical"],
+      es: "Las Cuatro Torres de Madrid recortadas contra la sierra, con el cielo todavía naranja. Forma parte de la misma serie de postales aéreas de la ciudad rodadas al atardecer.\n\nSon planos de recurso para marcas, agencias y productoras: material de ciudad bien resuelto y disponible antes de que un proyecto lo necesite con prisa.",
+      en: "Madrid's four towers cut out against the mountains, the sky still orange. It belongs to the same series of aerial city postcards shot at sunset.\n\nThey are stock shots for brands, agencies and production companies: well-crafted city footage available before a project needs it in a hurry.",
     },
   },
   {
@@ -780,7 +672,7 @@ const PROYECTOS: Project[] = [
     tone: 3,
     featured: false,
     year: "2026",
-    venue: "Por confirmar",
+    venue: null,
     media: {
       video: "/media/pueblo-sobre-el-mar.mp4",
       poster: "/media/pueblo-sobre-el-mar.jpg",
@@ -793,13 +685,8 @@ const PROYECTOS: Project[] = [
       en: "Same run as the other coastal piece, four days after the Madrid ones",
     },
     brief: {
-      es: "Las casas bajando hacia el agua con el cabo al fondo y el cielo encendido. El plano se sostiene sobre la profundidad: tres planos de distancia en una sola imagen.",
-      en: "Houses stepping down towards the water with the headland behind and the sky alight. The shot rests on depth: three distances in a single image.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Postal aérea de 12 s", "Apaisado y vertical"],
-      en: ["12 s aerial postcard", "Landscape and vertical"],
+      es: "Un pueblo que baja hacia el agua, con el cabo al fondo y el cielo encendido. El plano funciona por la profundidad: tres distancias distintas en una misma imagen, algo que solo da la altura del drone.\n\nEs parte de la misma salida de postales de costa, material pensado para turismo, marcas y contenido de destino.",
+      en: "A town running down to the water, with the cape behind and the sky ablaze. The shot works through depth: three different distances in one image, something only the drone's height gives you.\n\nIt is part of the same coastal postcard trip, footage meant for tourism, brands and destination content.",
     },
   },
   {
@@ -822,13 +709,8 @@ const PROYECTOS: Project[] = [
       en: "The most recent piece in the archive",
     },
     brief: {
-      es: "El recinto entero desde arriba, con la noria, los escenarios y el público repartido por el llano. Enseña de un vistazo la escala de la producción, que es lo que no cabe en ningún plano de tierra.",
-      en: "The whole site from above, with the wheel, the stages and the crowd spread across the plain. It shows the scale of the production at a glance, which no ground shot can hold.",
-    },
-    delivered: {
-      // PENDIENTE (producción): describe la PIEZA, no la entrega.
-      es: ["Plano aéreo del recinto", "Apaisado y vertical"],
-      en: ["Aerial of the site", "Landscape and vertical"],
+      es: "El recinto de Monegros entero desde arriba, con la noria, los escenarios y el público repartido por el llano. Enseña de un vistazo la escala de la producción, algo que no cabe en ningún plano de tierra.\n\nEs uno de los planos más recientes del archivo y forma parte de la cobertura aérea del evento, pensada tanto para el aftermovie como para la comunicación de la siguiente edición.",
+      en: "The whole Monegros site from above, with the wheel, the stages and the crowd spread across the plain. It shows the scale of the production at a glance, something no ground shot can hold.\n\nIt is one of the most recent shots in the archive and part of the event's aerial coverage, meant both for the aftermovie and for promoting the next edition.",
     },
   },
 ];
@@ -838,6 +720,11 @@ export const PROJECTS: Project[] = conBase(PROYECTOS);
 
 export function getProject(slug: string): Project | undefined {
   return PROJECTS.find((project) => project.slug === slug);
+}
+
+/** «Fabrik · 17 de enero de 2026», sólo con lo que se sabe. */
+export function venueYFecha(project: Project, locale: Locale): string {
+  return [project.venue, project.date?.[locale]].filter(Boolean).join(" · ");
 }
 
 /** Los que salen en los destacados de la home, en el orden del array. */

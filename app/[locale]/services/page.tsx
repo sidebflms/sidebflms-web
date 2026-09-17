@@ -36,7 +36,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
     : null;
 
   return (
-    <main id="main" className="pt-40 pb-28">
+    <main id="main" className="pagina">
       <header data-reglet={dict.services.label} className="shell">
         <Reveal>
           <p className="label">{dict.services.label}</p>

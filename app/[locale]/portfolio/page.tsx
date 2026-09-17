@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { Reveal } from "@/components/motion/reveal";
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
 import { PROJECTS } from "@/content/projects";
@@ -35,13 +36,30 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
   const dict = await getDictionary(locale);
 
   return (
-    <main id="main" className="pt-40 pb-28">
+    <main id="main" className="pagina">
+      {/* Titular y descripción, como el resto de páginas interiores. */}
+      <header data-reglet={dict.portfolio.label} className="shell">
+        <Reveal>
+          <p className="label">{dict.portfolio.label}</p>
+          <h1 className="font-display text-display-l mt-4 text-bone">
+            {dict.portfolio.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p className="text-lead measure mt-6 text-smoke">{dict.portfolio.intro}</p>
+        </Reveal>
+      </header>
+
       {/* Sólo la parte del diccionario que usa: es componente de cliente y el
           diccionario entero viajaría como prop. */}
-      <TrabajoYoutube projects={PROJECTS} locale={locale} copy={dict.portfolio} />
+      <div className="mt-10 lg:mt-12">
+        <TrabajoYoutube projects={PROJECTS} locale={locale} copy={dict.portfolio} />
+      </div>
 
       {/* La credencial, justo después del trabajo que la respalda. */}
-      <div className="mt-24">
+      <div className="seccion">
         <BrandStrip dict={dict} />
       </div>
     </main>

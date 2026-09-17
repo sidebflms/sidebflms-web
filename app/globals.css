@@ -282,9 +282,12 @@
     color: var(--color-smoke);
   }
 
+  /* Entradilla. Mismo cuerpo que el texto corrido (17 px): el cliente pidió
+     el 2026-09-17 un solo tamaño para todo lo que no es titular. Lo que la
+     distingue es el sitio donde va, no la talla. */
   .text-lead {
-    font-size: clamp(1.0625rem, 1.4vw, 1.375rem);
-    line-height: 1.5;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   /* Medida de lectura. Los bloques editoriales no se centran: se alinean a la
@@ -294,11 +297,55 @@
   }
 
   /* --------------------------------------------------------------------------
-     SHELL — la asimetría estructural permanente.
+     SHELL — el contenedor de contenido de todas las páginas.
+
+     En pantallas de MÁS de 1440 px ocupa el 70 % del ancho de la ventana,
+     centrado (cliente, 2026-09-17). Hasta 1440 px, los márgenes de siempre.
+     Se quedan a todo el ancho, y por eso NO llevan `.shell`: el marco del hero
+     de la portada, las cintas de vídeo de la portada y el pie. La cabecera
+     flotante SÍ lo lleva: mide lo mismo que el contenido.
+
+     OJO con los titulares calibrados con `vw` (`.en-columna` y los `clamp` de
+     cada página): el caso más estrecho es justo por encima de 1440 px, donde
+     el contenedor mide ~1009 px. Si se toca este porcentaje o el corte, hay
+     que recalibrarlos.
      ------------------------------------------------------------------------ */
   .shell {
     padding-left: var(--gutter);
     padding-right: var(--edge);
+  }
+  @media (min-width: 1441px) {
+    .shell {
+      width: 70%;
+      margin-inline: auto;
+      padding-inline: 0;
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     RITMO VERTICAL — un solo juego de márgenes para todo el sitio.
+     Cliente, 2026-09-17: entre bloques había de 64 a 176 px según la página
+     (la llamada final sumaba su `py-16` al `pb-28` de la página).
+
+     · `.pagina`: el `main` de las páginas interiores. Arriba, lo que ocupa la
+       cabecera flotante (80 px) más aire; abajo, 2rem que con el `pt` del pie
+       dan la misma separación que entre secciones.
+     · `.seccion`: la distancia entre dos bloques de una misma página.
+     ------------------------------------------------------------------------ */
+  .pagina {
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .seccion {
+    margin-top: 4rem;
+  }
+  @media (min-width: 1024px) {
+    .pagina {
+      padding-top: 8rem;
+    }
+    .seccion {
+      margin-top: 5rem;
+    }
   }
 
   /* Para bloques cuyo media sangra por la derecha hasta el borde. */
@@ -598,15 +645,6 @@
   }
 }
 
-/* Pastillas que flotan sobre el vídeo del hero. */
-@keyframes flota {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -10px, 0); }
-}
-.flota {
-  animation: flota 6s ease-in-out infinite;
-}
-
 /* CRISTAL TRANSPARENTE — las piezas de «Qué hacemos» en Servicios
    (components/sections/servicios-visor.tsx).
    Casi sin tinte, poco desenfoque y sin la sombra grande del cristal normal,
@@ -673,8 +711,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .foto-acerca,
-  .flota {
+  .foto-acerca {
     animation: none;
   }
 }

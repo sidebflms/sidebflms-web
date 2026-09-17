@@ -19,9 +19,11 @@ import { cn } from "@/lib/utils";
  * `data-frame-nav` es la señal que usa la cabecera flotante para saber si
  * tiene que esconderse: mientras esto se ve, sobra otra barra encima.
  *
- * En móvil no caben los enlaces: queda la marca y el botón de menú, que abre
- * la hoja de la cabecera mediante un evento (así sólo hay UNA hoja de menú en
- * todo el sitio).
+ * Por debajo de `xl` no caben los enlaces: queda la marca y el botón de menú,
+ * que abre la hoja de la cabecera mediante un evento (así sólo hay UNA hoja de
+ * menú en todo el sitio). Medido el 2026-09-17: entre 1024 y ~1200 px los
+ * enlaces se metían debajo de la muesca de idioma, redes y contacto; a 1280 px
+ * sobran 120 px, lo justo para la curva de la muesca.
  */
 export function FrameNav({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const pathname = usePathname();
@@ -30,11 +32,12 @@ export function FrameNav({ locale, dict }: { locale: Locale; dict: Dictionary })
   return (
     <div data-frame-nav className="flex w-full items-center justify-between gap-8 lg:w-auto lg:justify-start lg:gap-12">
       <Link href={path(locale, "home")} aria-label="SIDEBFLMS" data-intro="nav" className="flex items-center gap-3">
-        <LogoMark blanco className="h-7 w-auto" />
-        <Wordmark className="h-3 lg:h-[13px]" />
+        {/* En móvil sólo el logotipo en texto, sin el casete (cliente, 2026-09-17). */}
+        <LogoMark blanco className="hidden h-7 w-auto lg:block" />
+        <Wordmark className="block h-3.5 lg:h-[13px]" />
       </Link>
 
-      <nav aria-label="Principal" className="hidden lg:block">
+      <nav aria-label="Principal" className="hidden xl:block">
         <ul className="flex items-center gap-8">
           {links.map((link) => {
             const activo = pathname.startsWith(link.href);
@@ -60,7 +63,7 @@ export function FrameNav({ locale, dict }: { locale: Locale; dict: Dictionary })
         type="button"
         data-intro="nav"
         onClick={() => window.dispatchEvent(new Event(EVENTO_MENU))}
-        className="glass inline-flex h-12 items-center gap-3 rounded-full pr-1.5 pl-5 text-xs font-medium tracking-[0.08em] text-bone uppercase lg:hidden"
+        className="glass inline-flex h-12 items-center gap-3 rounded-full pr-1.5 pl-5 text-xs font-medium tracking-[0.08em] text-bone uppercase xl:hidden"
       >
         {dict.nav.menu}
         <MenuIcon claro />

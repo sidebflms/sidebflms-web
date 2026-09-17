@@ -39,7 +39,7 @@ export function Faq({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   };
 
   return (
-    <section data-reglet={dict.faq.label} className="mt-24 border-t border-ink-600 pt-16">
+    <section data-reglet={dict.faq.label} className="seccion border-t border-ink-600 pt-16">
       <Reveal>
         <div className="shell">
           <p className="label">{dict.faq.label}</p>

@@ -19,7 +19,7 @@ export async function generateMetadata({
 
   const l = locale as Locale;
   const title = `${project.title[l]} — SIDEBFLMS`;
-  const description = project.brief[l];
+  const description = project.brief[l].split("\n\n")[0];
 
   return {
     title,
@@ -51,8 +51,8 @@ export default async function ProjectDetailPage({
         "@context": "https://schema.org",
         "@type": "VideoObject",
         name: project.title[locale],
-        description: project.brief[locale],
-        uploadDate: project.date[locale],
+        description: project.brief[locale].split("\n\n")[0],
+        uploadDate: project.date?.[locale],
         thumbnailUrl: project.media.poster ? `${SITE_URL}${project.media.poster}` : undefined,
         contentUrl: project.media.video ? `${SITE_URL}${project.media.video}` : undefined,
       }

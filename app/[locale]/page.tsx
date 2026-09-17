@@ -40,10 +40,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const featured = PROJECTS.filter((p) => p.featured && p.media.video);
 
   return (
-    <main id="main">
+    <main id="main" className="pb-8">
       <HeroFrame dict={dict} locale={locale} featured={featured} cifras={CIFRAS_CON_DATO} />
 
-      <section data-reglet={dict.featured.label} className="overflow-hidden pt-24 pb-10 lg:pt-32">
+      <section data-reglet={dict.featured.label} className="seccion overflow-hidden">
         {/* Titular a la izquierda; descripción y botón a la derecha, pegados
             a la base del titular para que se lean como su pie. */}
         <div className="shell grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-6">
@@ -52,7 +52,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               <span className="h-1.5 w-1.5 rounded-full bg-rust-500" aria-hidden="true" />
               {dict.featured.label}
             </p>
-            <h2 className="font-display mt-6 text-[clamp(2rem,4.6vw,4.5rem)] leading-[0.95] text-rust-500">
+            {/* Efecto diferencia (cliente, 2026-09-17): las curvas de nivel del
+                fondo se ven invertidas al cruzar las letras. Funciona porque
+                ningún antepasado aísla la mezcla: este Reveal anima a sus hijos
+                (`stagger`), no a sí mismo. Si se le quita el `stagger` o se
+                envuelve en algo con opacidad, filtro o `isolate`, se pierde. */}
+            <h2 className="font-display mt-6 text-[clamp(2rem,4.6vw,4.5rem)] leading-[0.95] text-rust-500 mix-blend-difference">
               {dict.glass.featuredHeadline.map((line) => (
                 <span key={line} className="block">
                   {line}
@@ -81,7 +86,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
         {/* Las cintas, sin `shell`: tienen que salirse por los dos lados.
             Ver la nota completa en la portada de `main`. */}
-        <div className="mt-14 lg:mt-20">
+        <div className="mt-10 lg:mt-12">
           <HomeSliders projects={PROJECTS} locale={locale} dict={dict} />
         </div>
       </section>
