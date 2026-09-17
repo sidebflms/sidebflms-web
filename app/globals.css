@@ -848,20 +848,20 @@ html[data-intro="si"] .intro-casete {
    que ser más gordos». */
 .intro-casete-dibujo path {
   fill: none;
-  /* NARANJA SOBRE NARANJA, y por eso el claro (`rust-300`) y no el de la
-     lámina: tiene que leerse en los dos momentos de la intro, sobre el naranja
-     mientras se dibuja y sobre el vídeo de la portada cuando la ventana se
-     abre. Probados los otros dos: en negro y en naranja oscuro el casete
-     desaparece en cuanto se ve el vídeo por dentro. */
-  stroke: var(--color-rust-300);
+  /* TODO EL CASETE EN NEGRO sobre el naranja (Mario, 2026-09-17). Se pasó por
+     naranja claro por el camino: lo que se gana ahí es que el dibujo se sigue
+     leyendo cuando la ventana se abre sobre el vídeo, y lo que se pierde en
+     negro es justo eso —los detalles de dentro se apagan contra el vídeo, y
+     queda leyendo la silueta—. Se hace como lo pide; queda anotado por si
+     algún día se echa en falta. */
+  stroke: var(--color-ink-900);
   stroke-width: 9;
   stroke-linecap: butt;
   stroke-linejoin: miter;
 }
-/* EL CONTORNO, en negro (Mario, 2026-09-17). Es el que dibuja la silueta del
-   casete y el que queda enmarcando la ventana cuando se abre. */
+/* EL CONTORNO, el doble de gordo que los detalles: es el que dibuja la silueta
+   y el que queda enmarcando la ventana cuando se abre. */
 .intro-casete-dibujo .intro-casete-contorno {
-  stroke: var(--color-ink-900);
   stroke-width: 18;
 }
 
