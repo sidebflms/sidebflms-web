@@ -29,7 +29,7 @@ import { CASETE } from "./casete-trazos";
  *      ventana: el cuerpo del casete se cala en la lámina y por dentro aparece
  *      la portada, con el dibujo naranja encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
- *      funde. Quedan unos 2,9 s en total.
+ *      funde. Quedan unos 3,3 s en total.
  *
  * El negro y el naranja no son a capricho: el negro es lo que mejor se lee
  * sobre la lámina naranja mientras el casete se dibuja, y el naranja lo que se
@@ -80,15 +80,21 @@ const ID_MASCARA = "intro-casete-mascara";
 const T = {
   contorno: { espera: 0, dura: 550 },
   detalles: { espera: 300, dura: 420, tramo: 28 },
-  // El último detalle acaba de dibujarse sobre los 1.360 ms (ver el reparto de
-  // arriba), así que el cambio de color arranca justo ahí.
-  color: { espera: 1350, dura: 350 },
-  ventana: { espera: 1300, dura: 350 },
-  zoom: { espera: 1850, dura: 900 },
+  // UNA COSA DETRÁS DE OTRA, Y NO A LA VEZ. El último detalle acaba de
+  // dibujarse sobre los 1.360 ms, así que ahí cambia el color; la ventana no
+  // se abre hasta que el color ha terminado.
+  //
+  // Las dos iban solapadas y Mario lo cazó: «no veo la transición fluida». En
+  // ese medio segundo coincidían el trazo a medio camino —un tono terroso, que
+  // es por donde pasa el negro yendo al naranja— y el vídeo a media opacidad.
+  // Juntos se veían sucios; por separado, cada paso se lee.
+  color: { espera: 1360, dura: 500 },
+  ventana: { espera: 1900, dura: 320 },
+  zoom: { espera: 2300, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
   // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
   // antes de que se fundiera.
-  salida: { espera: 2350, dura: 550 },
+  salida: { espera: 2800, dura: 550 },
 } as const;
 
 /**
@@ -164,14 +170,20 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
        vuelva naranja». Se dibuja en negro, que es lo que mejor se lee sobre la
        lámina naranja, y al terminar pasa al naranja de marca, justo cuando la
        ventana se abre y el dibujo queda sobre el vídeo de la portada —donde el
-       negro se apagaría—. El color va en el grupo, así que es una animación y
-       no veinticinco. */
+       negro se apagaría—.
+
+       EL NARANJA ES EL CLARO (`rust-300`) Y NO EL DE LA LÁMINA. Con el de la
+       lámina el casete terminaba de volverse naranja... y desaparecía, porque
+       era exactamente el mismo color del fondo: quedaba medio segundo de
+       naranja liso hasta que se abría la ventana. Era el corte que Mario veía.
+
+       El color va en el grupo, así que es una animación y no veinticinco. */
     if (dibujo instanceof SVGElement) {
       animaciones.push(
-        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-500", "#e8451d") }], {
+        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-300", "#ff6a3d") }], {
           duration: T.color.dura,
           delay: T.color.espera,
-          easing: "ease-out",
+          easing: "ease-in-out",
           fill: "both",
         })
       );
