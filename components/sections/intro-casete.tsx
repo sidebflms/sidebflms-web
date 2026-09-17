@@ -80,16 +80,12 @@ const ID_MASCARA = "intro-casete-mascara";
 const T = {
   contorno: { espera: 0, dura: 550 },
   detalles: { espera: 300, dura: 420, tramo: 28 },
-  // UNA COSA DETRÁS DE OTRA, Y NO A LA VEZ. El último detalle acaba de
-  // dibujarse sobre los 1.360 ms, así que ahí cambia el color; la ventana no
-  // se abre hasta que el color ha terminado.
-  //
-  // Las dos iban solapadas y Mario lo cazó: «no veo la transición fluida». En
-  // ese medio segundo coincidían el trazo a medio camino —un tono terroso, que
-  // es por donde pasa el negro yendo al naranja— y el vídeo a media opacidad.
-  // Juntos se veían sucios; por separado, cada paso se lee.
+  // El último detalle acaba de dibujarse sobre los 1.360 ms, así que ahí
+  // empieza el cambio de color. La ventana se abre ENCADENADA, no después: el
+  // casete acaba del color del fondo, y si la apertura esperase a que el color
+  // terminara habría medio segundo de naranja liso.
   color: { espera: 1360, dura: 500 },
-  ventana: { espera: 1900, dura: 320 },
+  ventana: { espera: 1620, dura: 520 },
   zoom: { espera: 2300, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
   // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
@@ -172,15 +168,17 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
        ventana se abre y el dibujo queda sobre el vídeo de la portada —donde el
        negro se apagaría—.
 
-       EL NARANJA ES EL CLARO (`rust-300`) Y NO EL DE LA LÁMINA. Con el de la
-       lámina el casete terminaba de volverse naranja... y desaparecía, porque
-       era exactamente el mismo color del fondo: quedaba medio segundo de
-       naranja liso hasta que se abría la ventana. Era el corte que Mario veía.
+       EL NARANJA ES EL DE LA LÁMINA, el de marca (Mario: «tiene que ser del
+       color del fondo»). Eso quiere decir que al final del cambio el casete se
+       funde con el fondo y desaparece; lo que lo devuelve es la ventana, que
+       se abre encima y deja las líneas naranjas sobre el vídeo. Por eso la
+       apertura empieza ANTES de que el color termine: si se esperase, habría
+       medio segundo de naranja liso, que es el corte que Mario veía.
 
        El color va en el grupo, así que es una animación y no veinticinco. */
     if (dibujo instanceof SVGElement) {
       animaciones.push(
-        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-300", "#ff6a3d") }], {
+        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-500", "#e8451d") }], {
           duration: T.color.dura,
           delay: T.color.espera,
           easing: "ease-in-out",
@@ -193,10 +191,15 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
     const cuerpo = el.querySelector<SVGElement>(".intro-casete-cuerpo");
     if (cuerpo) {
       animaciones.push(
-        cuerpo.animate([{ opacity: 0 }, { opacity: 1 }], {
+        // SE ABRE CRECIENDO DESDE EL CENTRO, no apareciendo. Con un fundido, la
+        // ventana pasaba medio segundo a media opacidad y se veía el vídeo
+        // translúcido y sucio por encima del naranja. Creciendo no hay término
+        // medio: cada punto está abierto del todo o cerrado del todo.
+        // A escala 0 no se pinta nada, así que no hace falta esconderla antes.
+        cuerpo.animate([{ transform: "scale(0)" }, { transform: "scale(1)" }], {
           duration: T.ventana.dura,
           delay: T.ventana.espera,
-          easing: "ease-out",
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
           fill: "both",
         })
       );
