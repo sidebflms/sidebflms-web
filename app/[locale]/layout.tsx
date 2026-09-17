@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { BASE_PATH } from "@/lib/base";
 import { notFound } from "next/navigation";
 
+import { SCRIPT_INTRO } from "@/components/sections/intro-casete";
+
 import "@/app/globals.css";
 import { FondoRelieve } from "@/components/glass/fondos/fondo-relieve";
 import { GlassSpotlight } from "@/components/glass/spotlight";
@@ -41,7 +43,16 @@ export default async function LocaleLayout({
   const dict = await getDictionary(locale);
 
   return (
-    <html lang={locale} className={fontVariables}>
+    // `suppressHydrationWarning`: el script de la cabecera puede poner
+    // `data-intro` en esta etiqueta antes de que React hidrate. Sin esto,
+    // React avisaría de que el HTML no coincide. Sólo afecta a esta etiqueta,
+    // no a lo que tiene dentro.
+    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* Decide si sale la intro del casete ANTES de pintar. Tiene que ir
+            aquí y no en la página: ver la nota de intro-casete.tsx. */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_INTRO }} />
+      </head>
       {/* SIN fondo en el body (versión glass): lo pone el <html> en
           globals.css. Con fondo aquí, el fondo de curvas de nivel —que va en z-index
           negativo— quedaría pintado por debajo y no se vería. */}

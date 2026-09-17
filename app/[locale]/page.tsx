@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Magnetic } from "@/components/motion/magnetic";
+import { IntroCasete } from "@/components/sections/intro-casete";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { HeroFrame } from "@/components/sections/hero-frame";
@@ -41,6 +42,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <main id="main" className="pb-8">
+      {/* LA INTRO DEL CASETE. Ver components/sections/intro-casete.tsx; el
+          script que decide si sale está en la cabecera, en layout.tsx. */}
+      <IntroCasete textoSaltar={dict.intro.skip} />
       <HeroFrame dict={dict} locale={locale} featured={featured} cifras={CIFRAS_CON_DATO} />
 
       <section data-reglet={dict.featured.label} className="seccion overflow-hidden">

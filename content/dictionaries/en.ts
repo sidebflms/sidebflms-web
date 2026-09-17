@@ -73,6 +73,11 @@ export const en: Dictionary = {
     languageLabel: "Language",
   },
 
+  // El botón para saltarse la intro del casete. Ver intro-casete.tsx.
+  intro: {
+    skip: "Skip intro",
+  },
+
   hero: {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file

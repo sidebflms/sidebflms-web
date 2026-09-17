@@ -763,3 +763,118 @@ video::-webkit-media-controls-start-playback-button {
     animation: none;
   }
 }
+
+/* ============================================================================
+   INTRO DE LA PORTADA — el casete como ventana del reel.
+   Componente: components/sections/intro-casete.tsx. Mario, 2026-09-17.
+
+     0,0 – 0,7 s   el casete aparece (sólo opacidad; ver «iPhone» abajo)
+     0,7 – 2,4 s   quieto, con el reel corriendo dentro
+     2,4 – 3,5 s   el casete crece hasta que el vídeo llena la pantalla
+                   (esto lo anima el componente, no esta hoja)
+     3,3 – 3,8 s   la capa se funde y queda la portada
+
+   ── EL TAMAÑO FINAL DE LA MÁSCARA, 2000vmin, NO ES A OJO ─────────────────
+   Al crecer, los huecos del casete (bobinas, etiqueta, ranura) también crecen,
+   y si alguno cae en el centro de la pantalla al final, se ve un borrón
+   naranja justo cuando debería verse sólo vídeo. El centro del dibujo cae en
+   el cuerpo, entre las bobinas; la bobina derecha empieza 34 unidades a la
+   derecha de ese centro. Con 2000vmin, en una pantalla de 1440×900 se ven sólo
+   ±24 unidades a cada lado, y en un móvil de 390 px, ±15. Con 900vmin —el
+   primer valor— la bobina derecha asomaba por el borde.
+
+   ── iPHONE: NADA DE TRANSFORMACIONES EN EL CONTENEDOR DEL VÍDEO ──────────
+   Joan comprobó el 2026-09-17 que WebKit no arranca un vídeo con
+   transformaciones encima (quitó por eso las del reel de la portada). La
+   entrada del casete es sólo de opacidad, y el botón se centra con márgenes y
+   no con `translate`.
+
+   ── «REDUCIR MOVIMIENTO» ────────────────────────────────────────────────
+   No sale: el script de la cabecera no pone la marca. No hay regla de CSS que
+   la esconda además, a propósito: con `?intro=1` se puede forzar para verla, y
+   una regla aquí la escondería también en ese caso.
+   ========================================================================== */
+
+/* OCULTA POR DEFECTO. Sólo aparece con `<html data-intro="si">`, que lo pone
+   el script de la cabecera antes de pintar. Así, sin esa marca —recarga en la
+   misma sesión, navegación interna, «reducir movimiento», JavaScript
+   desactivado— no hay ni un fotograma naranja. */
+.intro-casete {
+  display: none;
+}
+html[data-intro="si"] .intro-casete {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--color-rust-500);
+  cursor: pointer;
+  animation: introSale 0.5s ease-in 3.3s forwards;
+}
+
+/* La URL de la máscara llega por `--intro-mascara` desde el componente: con
+   la ruta base de la versión de pruebas, una URL fija aquí apuntaría a la web
+   original. */
+.intro-casete-ventana {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: var(--intro-mascara);
+  mask-image: var(--intro-mascara);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 72vmin;
+  mask-size: 72vmin;
+  animation: introAparece 0.7s var(--ease-out-strong) both;
+}
+.intro-casete-ventana video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-ink-900);
+}
+
+/* Tinta oscura sobre el naranja: `ink-900` da 4,65:1 ahí; el blanco se queda
+   en 3,2 y no cumple para texto de este tamaño. */
+.intro-casete-saltar {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: max-content;
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-900);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  animation: introAparece 0.7s var(--ease-out-strong) 0.4s both;
+}
+.intro-casete-saltar:focus-visible {
+  outline-color: var(--color-ink-900);
+}
+
+@keyframes introAparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes introSale {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+
+

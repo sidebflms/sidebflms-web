@@ -75,6 +75,11 @@ export const es = {
     languageLabel: "Idioma",
   },
 
+  // El botón para saltarse la intro del casete. Ver intro-casete.tsx.
+  intro: {
+    skip: "Saltar intro",
+  },
+
   hero: {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba

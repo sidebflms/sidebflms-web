@@ -5,6 +5,97 @@ reciente arriba.
 
 ---
 
+## 2026-09-17 (74) — Intro de la portada: el casete como ventana del reel
+
+Mario, con una referencia de unas letras gigantes que dejan ver un vídeo por
+dentro: «me gustaría que la web tuviera esto de intro, pero con nuestro logo
+del casete, y obviamente en naranja».
+
+### Cómo se ve
+
+Fondo naranja de marca a pantalla completa. En el centro, **el casete hace de
+ventana**: el cuerpo deja ver el reel y los detalles —bobinas, etiqueta,
+ranura, la zona de la cinta, los tornillos— quedan recortados en naranja. A los
+2,4 s el casete crece acelerando hasta que el vídeo llena la pantalla, y la
+capa naranja se funde con la portada, que tiene ese mismo reel de fondo. Unos
+3,8 s en total. Se salta con un clic en cualquier sitio, con Escape o con el
+botón «Saltar intro».
+
+### La silueta: dibujada en macizo
+
+`public/logo/intro-mascara.svg`. **El casete del manual está hecho de líneas
+finas**, y como ventana apenas dejaría ver vídeo: la referencia funciona porque
+las letras son muy gruesas. Así que es el mismo casete, con las proporciones del
+PNG-05 del manual, pero macizo. Comprobado en navegador leyendo la transparencia
+punto a punto (cuerpo y discos de las bobinas dejan ver; etiqueta, anillos,
+ranura, cinta y tornillos no) y con una vista previa real compuesta en canvas.
+
+Ojo si se toca: los huecos se hacen con una `<mask>` interna del SVG, porque
+`mask-image` lee la TRANSPARENCIA y no el color. Y la vista rápida de macOS no
+entiende esa máscara y lo enseña como un cuadrado: para mirarlo, un navegador.
+
+### Cuándo sale
+
+- **Sólo al cargar la portada** (`/`, `/es`, `/en`), **una vez por sesión** del
+  navegador.
+- **Nunca al llegar navegando** desde otra página de la web: esa persona ya
+  está dentro. Comprobado con la sesión limpia.
+- **Nunca con «reducir movimiento»** activado en el sistema.
+- **`?intro=1` la fuerza** —`sidebflms.com/es?intro=1`—, para poder verla
+  cuando ya salió en la sesión o en un equipo con «reducir movimiento».
+
+### Tres cosas del montaje que costaron y conviene saber
+
+1. **El script que decide va en la CABECERA del documento** (`layout.tsx`),
+   y marca `<html data-intro="si">`. El CSS la esconde salvo con esa marca, así
+   que al recargar no hay ni un fotograma naranja. La primera versión ponía el
+   script junto a la intro, en la página, y **no se ejecutaba nunca**: Next
+   manda el contenido de la página por partes y lo encaja con JavaScript, y un
+   `<script>` en línea que llega así no corre.
+   Tampoco sirve `next/script` con `beforeInteractive`: según su propia
+   documentación, no garantiza ejecutarse antes de pintar, y eso traería el
+   fogonazo.
+2. **El crecimiento del casete lo anima JavaScript, no `@keyframes`.** Con
+   `@keyframes`, el tamaño de la máscara saltaba de golpe a mitad de camino:
+   `-webkit-mask-size` no interpola en Chrome. Con la Web Animations API y
+   píxeles explícitos crece suave; medido: 648 → 702 → 1.345 → 3.228 → 10.009
+   → 18.000 px entre los 2,4 y los 3,5 s.
+3. **El tamaño final (2000vmin) está calculado**, no a ojo: al crecer, los
+   huecos crecen también, y con un valor menor la bobina derecha asomaba por el
+   borde justo al final. Explicado en `globals.css`.
+
+El vídeo de la intro es el mismo fichero que el de la portada según el ancho
+(`reel-1920` o `reel-720`), para que la caché lo reutilice y no se descargue
+dos veces. Si la intro no sale, su vídeo no lleva `src` y no descarga nada.
+
+
+### Integrada sobre la versión glass de Joan
+
+Cuando fue a subirse, `main` tenía diecisiete cambios de Joan del 16 y el 17
+—la versión glass, arreglos de autoplay en móvil y ajustes en varias páginas—
+que tocaban los mismos cinco ficheros. Se juntó encima de lo suyo, sin pisar
+nada, y se adaptó la intro a lo que él había resuelto:
+
+- **Ruta base.** La versión glass se puede publicar bajo una ruta
+  (`lib/base.ts`). Todo lo que la intro pide a `public/` pasa por `conBase`, la
+  máscara llega al CSS por la variable `--intro-mascara` (una URL fija en la
+  hoja apuntaría a la web original), y el script de la cabecera reconoce la
+  portada con la ruta delante. Comprobado compilando con
+  `NEXT_PUBLIC_BASE_PATH`: la expresión y la URL de la máscara salen con el
+  prefijo.
+- **iPhone.** El vídeo arranca con `arrancaEnSilencio` (`lib/autoplay.ts`), y el
+  contenedor del vídeo **no lleva transformaciones**: Joan comprobó que con
+  ellas WebKit no arranca el reel. La entrada es sólo de opacidad.
+- **El botón «Saltar intro»** se centra con márgenes: la animación de entrada
+  con `transform` le pisaba el `translateX(-50%)` y lo descentraba al acabar.
+- El reel es el mismo fichero que usa `hero-frame.tsx`, para que la caché lo
+  reutilice.
+
+**Sin probar en un iPhone de verdad**: en el Mac donde se hizo no hay Xcode ni
+simulador. La máscara es imprescindible para el efecto; si algún iPhone no
+arrancara el vídeo bajo ella, se vería el póster, que es un fotograma del reel.
+Conviene mirarlo en un teléfono con `sidebflms.com/es?intro=1`.
+---
 ## 2026-09-16 (73) — Versión de pruebas «glass» dentro del dominio, sin contraseña
 
 Joan: montar la versión glass (rama `glass`) en una página interna a la que
