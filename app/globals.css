@@ -842,23 +842,28 @@ html[data-intro="si"] .intro-casete {
   fill: var(--color-rust-500);
 }
 
-/* EL CASETE, en el naranja de marca, y LOS GROSORES. Los grosores van aquí y
-   no en los vectores: el casete del manual está trazado a 3 puntos (y 6 el
-   borde), que a este tamaño son un pelo. Mario: «los bordes del logo tienen
-   que ser más gordos». */
-.intro-casete-dibujo path {
+/* EL CASETE Y LOS GROSORES.
+
+   El color va en el GRUPO y no en cada trazo, a propósito: los veinticinco lo
+   heredan, y así el cambio de negro a naranja del final es una sola animación
+   en vez de veinticinco.
+
+   Empieza en negro: mientras se dibuja, está sobre la lámina naranja y es
+   donde mejor se lee. Al terminar de formarse pasa al naranja de marca (lo
+   hace el componente), que es justo cuando la ventana se abre y el dibujo pasa
+   a estar sobre el vídeo de la portada, donde el negro se apagaría.
+
+   Los grosores van aquí y no en los vectores: el casete del manual está
+   trazado a 3 puntos (y 6 el borde), que a este tamaño son un pelo. Mario:
+   «los bordes del logo tienen que ser más gordos». */
+.intro-casete-dibujo {
   fill: none;
-  /* TODO EL CASETE EN NEGRO sobre el naranja (Mario, 2026-09-17). Se pasó por
-     naranja claro por el camino: lo que se gana ahí es que el dibujo se sigue
-     leyendo cuando la ventana se abre sobre el vídeo, y lo que se pierde en
-     negro es justo eso —los detalles de dentro se apagan contra el vídeo, y
-     queda leyendo la silueta—. Se hace como lo pide; queda anotado por si
-     algún día se echa en falta. */
   stroke: var(--color-ink-900);
   stroke-width: 9;
   stroke-linecap: butt;
   stroke-linejoin: miter;
 }
+
 /* EL CONTORNO, el doble de gordo que los detalles: es el que dibuja la silueta
    y el que queda enmarcando la ventana cuando se abre. */
 .intro-casete-dibujo .intro-casete-contorno {

@@ -17,18 +17,23 @@ import { CASETE } from "./casete-trazos";
  * que funcione y se vea más parte del fondo de la web». Y por último: «los
  * bordes del logo tienen que ser más gordos y haz una animación que se vaya
  * construyendo el logo a base de las líneas y luego que entre a la web». Y, al
- * verlo: «y ahora fondo negro y logo en naranja», y luego «fondo naranja,
- * casete naranja», que es como está.
+ * verlo: «y ahora fondo negro y logo en naranja», «fondo naranja, casete
+ * naranja», «todas las líneas del casete en negro» y, por fin, «puede ser que
+ * cuando termina ya de formar el logo se vuelva naranja», que es como está.
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
  * Una lámina naranja de marca tapa la portada entera. Encima:
  *
- *   1. EL CASETE SE DIBUJA, trazo a trazo, empezando por el borde. Va en el
- *      naranja claro de marca sobre el de la lámina: tono sobre tono.
- *   2. LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina y por
- *      dentro aparece la portada, con el dibujo naranja encima.
+ *   1. EL CASETE SE DIBUJA en negro, trazo a trazo, empezando por el borde.
+ *   2. AL TERMINAR DE FORMARSE SE VUELVE NARANJA, y a la vez se abre la
+ *      ventana: el cuerpo del casete se cala en la lámina y por dentro aparece
+ *      la portada, con el dibujo naranja encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
  *      funde. Quedan unos 2,9 s en total.
+ *
+ * El negro y el naranja no son a capricho: el negro es lo que mejor se lee
+ * sobre la lámina naranja mientras el casete se dibuja, y el naranja lo que se
+ * lee sobre el vídeo de la portada cuando la ventana ya está abierta.
  *
  * No hay vídeo propio: lo que se ve por la ventana ES la portada, con su reel.
  *
@@ -75,6 +80,9 @@ const ID_MASCARA = "intro-casete-mascara";
 const T = {
   contorno: { espera: 0, dura: 550 },
   detalles: { espera: 300, dura: 420, tramo: 28 },
+  // El último detalle acaba de dibujarse sobre los 1.360 ms (ver el reparto de
+  // arriba), así que el cambio de color arranca justo ahí.
+  color: { espera: 1350, dura: 350 },
   ventana: { espera: 1300, dura: 350 },
   zoom: { espera: 1850, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
@@ -121,6 +129,12 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
 
     const animaciones: Animation[] = [];
 
+    // Los colores se leen de las variables de la hoja de estilos, para que
+    // cambiar el naranja de marca en un sitio valga también aquí.
+    const estiloRaiz = getComputedStyle(raiz);
+    const tono = (variable: string, porSiAcaso: string) =>
+      estiloRaiz.getPropertyValue(variable).trim() || porSiAcaso;
+
     /* 1 · EL CASETE SE DIBUJA.
        Cada trazo empieza con la línea «gastada» entera (`stroke-dasharray` del
        largo del trazo y el mismo desplazamiento) y la va recuperando. El largo
@@ -145,7 +159,25 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       );
     });
 
-    /* 2 · LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina. */
+    /* 2 · YA FORMADO, EL CASETE SE VUELVE NARANJA.
+       Mario, 2026-09-17: «puede ser que cuando termina ya de formar el logo se
+       vuelva naranja». Se dibuja en negro, que es lo que mejor se lee sobre la
+       lámina naranja, y al terminar pasa al naranja de marca, justo cuando la
+       ventana se abre y el dibujo queda sobre el vídeo de la portada —donde el
+       negro se apagaría—. El color va en el grupo, así que es una animación y
+       no veinticinco. */
+    if (dibujo instanceof SVGElement) {
+      animaciones.push(
+        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-500", "#e8451d") }], {
+          duration: T.color.dura,
+          delay: T.color.espera,
+          easing: "ease-out",
+          fill: "both",
+        })
+      );
+    }
+
+    /* 3 · LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina. */
     const cuerpo = el.querySelector<SVGElement>(".intro-casete-cuerpo");
     if (cuerpo) {
       animaciones.push(
@@ -158,7 +190,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       );
     }
 
-    /* 3 · SE ENTRA EN LA WEB.
+    /* 4 · SE ENTRA EN LA WEB.
        El dibujo se coloca y se agranda con `transform`, no con el tamaño de la
        máscara: así el navegador no tiene que volver a rasterizar un dibujo de
        miles de píxeles en cada fotograma. `transform-box`/`transform-origin`
@@ -197,7 +229,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       );
     });
 
-    /* 4 · LA LÁMINA SE VA, y con ella la intro.
+    /* 5 · LA LÁMINA SE VA, y con ella la intro.
        El fundido se anima aquí y no en CSS por una razón concreta: la hoja
        tiene una regla global que, con «reducir movimiento» del sistema puesto,
        deja TODAS las animaciones de CSS en 0,01 ms. Como la intro se puede
