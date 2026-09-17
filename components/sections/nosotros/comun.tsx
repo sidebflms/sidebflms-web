@@ -1,19 +1,16 @@
 import Image from "next/image";
 
-import { EQUIPO, HAY_EJEMPLOS, type Miembro } from "@/content/team";
+import type { Miembro } from "@/content/team";
 import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 /**
  * PIEZAS DE «NOSOTROS» QUE LLEVAN REGLAS: cómo se pinta una foto de relleno,
- * un cargo sin confirmar y el aviso de arriba del equipo. Viven aparte para
+ * y un cargo sin confirmar. Viven aparte para
  * que nadie las rehaga a mano y se olvide, por ejemplo, de la marca «Ejemplo»
  * (una cara saldría bajo un nombre que no es el suyo).
  */
-
-/** Hay algún cargo vacío (no provisional: vacío). */
-export const FALTAN_CARGOS = EQUIPO.some((m) => m.role === null);
 
 /** Titular partido a mano en líneas, como en el resto del sitio. */
 export function LineasTitular({ lineas, lineaClassName }: { lineas: readonly string[]; lineaClassName?: string }) {
@@ -26,18 +23,6 @@ export function LineasTitular({ lineas, lineaClassName }: { lineas: readonly str
       ))}
     </>
   );
-}
-
-/**
- * El aviso del equipo: el de fotos/cargos provisionales en naranja legible
- * (es un freno, no una pendiente cualquiera) y, si no, el de cargos vacíos en
- * gris. Desaparece solo cuando se completan los datos de content/team.ts.
- */
-export function AvisoEquipo({ dict, className }: { dict: Dictionary; className?: string }) {
-  if (HAY_EJEMPLOS) return <p className={cn("label text-rust-300", className)}>{dict.about.photoExampleNote}</p>;
-  // `smoke` y no `ink-600`: sobre el fondo glass el gris oscuro no se leía.
-  if (FALTAN_CARGOS) return <p className={cn("label text-smoke", className)}>{dict.about.teamNote}</p>;
-  return null;
 }
 
 /**

@@ -206,7 +206,9 @@ export const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== 
  *
  * **Esto es un freno, no un adorno.** Mientras sea `true` hay caras publicadas
  * bajo un nombre que no es el suyo, y eso no puede salir de detrás de la
- * contraseña. La página lo avisa arriba y marca cada ficha afectada.
+ * contraseña. La página marca cada ficha afectada; el aviso de arriba de la
+ * sección se quitó a petición del cliente (2026-09-17), así que el freno vive
+ * sólo aquí.
  */
 export const HAY_EJEMPLOS = EQUIPO.some(
   (m) => m.fotoEsEjemplo === true || m.roleEsEjemplo === true

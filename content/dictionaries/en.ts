@@ -441,11 +441,9 @@ export const en: Dictionary = {
       "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
     howLabel: "How we work",
     teamLabel: "The crew",
-    teamNote: "Roles and photos pending",
     groupAlt: "The SIDEBFLMS crew",
     photoExample: "Placeholder",
     roleExample: "Role to confirm",
-    photoExampleNote: "Provisional: marked photos are not that person, and roles with * are unconfirmed",
     scaleLabel: "When the job needs more crew",
     scaleBody:
       "The core is eleven people, but not every job fits into eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery date. Building a large crew and making it work is part of what we do.",

@@ -8,18 +8,16 @@ import { conBase } from "@/lib/base";
  * es lo que hace que nadie los lea.
  *
  * ── DE DÓNDE SALEN ───────────────────────────────────────────────────────
- * De las fotos de equipo trabajando que ya están en el sitio. No son fotos
- * puestas para ilustrar: en las tres que hay se está haciendo exactamente lo
- * que dice la etiqueta.
+ * Las tres primeras, de las fotos de equipo trabajando que ya estaban en el
+ * sitio. No son fotos puestas para ilustrar: en ellas se está haciendo
+ * exactamente lo que dice la etiqueta.
  *
- * ── LA CUARTA NO EXISTE, Y POR ESO ESTÁ A `null` ─────────────────────────
- * No hay ninguna foto del equipo montando o etalonando. Poner ahí un plano de
- * un festival sería ilustrar con lo que haya, que es justo lo que convierte
- * una web en un catálogo de fotos de archivo.
+ * ── LA CUARTA LA PASÓ EL CLIENTE (2026-09-17) ────────────────────────────
+ * Etalonaje en DaVinci Resolve. Recortada por arriba (fuera el teclado) a
+ * 16:9 y a 1600 px.
  *
- * Mientras sea `null`, esa etapa se pinta como hasta ahora —texto a todo el
- * ancho— y no deja hueco ni marco vacío. El día que haya una foto de alguien
- * montando, se pone aquí y aparece sola.
+ * Si alguna etapa se queda a `null`, se pinta con su número sobre la luz
+ * naranja en lugar de la foto, sin hueco ni marco vacío.
  *
  * La clave es el NÚMERO de la etapa, que es lo estable: los títulos están en
  * los diccionarios y cambian con el idioma.
@@ -31,6 +29,6 @@ export const FOTO_ETAPA: Record<string, string | null> = conBase({
   "02": "/media/equipo/trabajando/camara-grada.jpg",
   // 03 Cobertura aérea — piloto con el Inspire posado.
   "03": "/media/equipo/trabajando/piloto-inspire.jpg",
-  // 04 Postproducción — PENDIENTE: hace falta una foto de alguien montando.
-  "04": null,
+  // 04 Postproducción — ruedas de color en DaVinci Resolve.
+  "04": "/media/equipo/trabajando/etalonaje-davinci.jpg",
 });

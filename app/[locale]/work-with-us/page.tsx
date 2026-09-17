@@ -16,8 +16,8 @@ export async function generateMetadata({
 }
 
 /**
- * «TRABAJA CON NOSOTROS» — versión glass, con la misma estructura que
- * «Contacto»: mesa de tarjetas y formulario por pasos. Ver
+ * «TRABAJA CON NOSOTROS» — versión glass, con el mismo diseño que
+ * «Contacto»: cabecera con botones y formulario por pasos. Ver
  * components/sections/trabaja/trabaja-tarjetas.tsx.
  */
 export default async function WorkWithUsPage({ params }: PageProps<"/[locale]/work-with-us">) {

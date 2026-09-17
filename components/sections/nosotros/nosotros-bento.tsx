@@ -11,7 +11,7 @@ import type { Locale } from "@/lib/routes";
 import { cn, pad } from "@/lib/utils";
 
 import { BentoRejilla } from "./bento-rejilla";
-import { AvisoEquipo, CargoMiembro, FotoMiembro, LineasTitular } from "./comun";
+import { CargoMiembro, FotoMiembro, LineasTitular } from "./comun";
 
 /**
  * «NOSOTROS» — BENTO DE CRISTAL. Elegida entre tres estructuras el 2026-09-16.
@@ -173,7 +173,6 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
         <section data-reglet={dict.about.teamLabel} className="shell seccion">
           <Reveal bidirectional className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display subtitulo">{dict.about.teamLabel}</h2>
-            <AvisoEquipo dict={dict} className="max-w-[40rem]" />
           </Reveal>
 
           <BentoRejilla className="flex flex-wrap justify-center gap-3 lg:gap-4">
