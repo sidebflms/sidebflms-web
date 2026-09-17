@@ -36,7 +36,9 @@ export function FormularioPorPasos({
   separado = false,
   children,
 }: {
-  /** Sin tarjetas encima, se separa como una sección y no pegado a ellas. */
+  /** Sin tarjetas encima: algo de aire, pero menos que entre secciones
+   *  (cliente, 2026-09-17: con los 80 px de `.seccion` quedaba despegado de
+   *  los botones de contacto). */
   separado?: boolean;
   id: string;
   reglet: string;
@@ -161,7 +163,7 @@ export function FormularioPorPasos({
       id={id}
       data-reglet={reglet}
       aria-labelledby={`${id}-titulo`}
-      className={cn("shell scroll-mt-28", separado ? "seccion" : "mt-3")}
+      className={cn("shell scroll-mt-28", separado ? "mt-8 lg:mt-10" : "mt-3")}
     >
       <div
         ref={panelRef}

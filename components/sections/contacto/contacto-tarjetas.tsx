@@ -4,14 +4,14 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 import { IconoRed } from "@/components/layout/social-icons";
 import { Reveal } from "@/components/motion/reveal";
-import { ArrowUpRight, PillLink } from "@/components/ui/button";
+import { ArrowUpRight, PillLink, circleButton } from "@/components/ui/button";
 import { ContactForm } from "@/components/ui/contact-form";
 import { FaqJsonLd, irAAncla, redesContacto } from "@/components/sections/contacto/comun";
 import { FormularioPorPasos, type PasoFormulario } from "@/components/sections/contacto/formulario-por-pasos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
 import { type Locale } from "@/lib/routes";
-import { cn, pad } from "@/lib/utils";
+import { pad } from "@/lib/utils";
 
 /**
  * «CONTACTO». Estructura elegida entre tres el 2026-09-16.
@@ -149,7 +149,7 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
 }
 
 /** «Pedir presupuesto»: baja al formulario. */
-function BotonPresupuesto({ dict, className }: { dict: Dictionary; className?: string }) {
+function BotonPresupuesto({ dict }: { dict: Dictionary }) {
   return (
     <PillLink
       href={`#${ID_FORM}`}
@@ -157,7 +157,7 @@ function BotonPresupuesto({ dict, className }: { dict: Dictionary; className?: s
         e.preventDefault();
         irAAncla(ID_FORM);
       }}
-      className={cn("shrink-0", className)}
+      className="shrink-0"
       icon={<ArrowUpRight className="rotate-90" />}
     >
       {dict.services.cta}
@@ -195,14 +195,54 @@ function Cabecera({ dict }: { dict: Dictionary }) {
       </h1>
       <p className="text-lead measure mt-6 text-smoke">{dict.contact.intro}</p>
 
-      {/* En móvil, rejilla ordenada: botón y email a todo el ancho, las tres
-          redes en una fila de botones iguales y las preguntas debajo (cliente,
-          2026-09-17: en fila libre quedaba desordenado). Desde `sm`, en fila. */}
-      <div className="mt-8 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center">
-        <BotonPresupuesto dict={dict} className="col-span-3 w-full justify-between sm:w-auto" />
+      {/* MÓVIL (cliente, 2026-09-17): dos líneas. Arriba, las dos acciones a
+          partes iguales —presupuesto en naranja sólido, que es la principal,
+          y preguntas en cristal—, sin flecha para que quepan a 375 px. Abajo,
+          las redes en círculos a la izquierda y el correo en lo que queda. */}
+      <div className="mt-8 space-y-2 sm:hidden">
+        <div className="grid grid-cols-2 gap-2">
+          <a
+            href={`#${ID_FORM}`}
+            onClick={(e) => {
+              e.preventDefault();
+              irAAncla(ID_FORM);
+            }}
+            className="inline-flex h-12 items-center justify-center rounded-full bg-brand-600 px-2 text-center text-[10px] leading-tight font-medium tracking-[0.04em] text-bone uppercase transition-colors hover:bg-rust-500"
+          >
+            {dict.services.cta}
+          </a>
+          <EnlacePreguntas className="glass inline-flex h-12 items-center justify-center rounded-full px-2 text-center text-[10px] leading-tight font-medium tracking-[0.04em] text-bone uppercase transition-colors hover:text-rust-300">
+            {dict.faq.label}
+          </EnlacePreguntas>
+        </div>
+        <div className="flex items-center gap-2">
+          {redes.map((red) => (
+            <a
+              key={red.key}
+              href={red.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={red.nombre}
+              className={circleButton}
+            >
+              <IconoRed red={red.key} className="h-4 w-4" />
+            </a>
+          ))}
+          <a
+            href={`mailto:${dict.contact.email}`}
+            className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+          >
+            <span className="truncate">{dict.contact.email}</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Desde `sm`, todo en una fila. */}
+      <div className="mt-8 hidden flex-wrap items-center gap-2 sm:flex">
+        <BotonPresupuesto dict={dict} />
         <a
           href={`mailto:${dict.contact.email}`}
-          className="glass col-span-3 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300 sm:justify-start"
+          className="glass inline-flex h-11 items-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300"
         >
           {dict.contact.email}
         </a>
@@ -213,12 +253,12 @@ function Cabecera({ dict }: { dict: Dictionary }) {
             target="_blank"
             rel="noreferrer noopener"
             aria-label={red.nombre}
-            className="glass inline-flex h-11 w-full items-center justify-center rounded-full text-bone transition-colors duration-300 hover:text-rust-300 sm:w-11"
+            className={circleButton}
           >
             <IconoRed red={red.key} className="h-4 w-4" />
           </a>
         ))}
-        <EnlacePreguntas className="glass col-span-3 inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300 sm:justify-start">
+        <EnlacePreguntas className="glass inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300">
           {dict.faq.label}
           <ArrowUpRight className="h-3.5 w-3.5 rotate-90" />
         </EnlacePreguntas>
