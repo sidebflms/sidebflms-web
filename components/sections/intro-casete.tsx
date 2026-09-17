@@ -29,7 +29,7 @@ import { CASETE } from "./casete-trazos";
  *      ventana: el cuerpo del casete se cala en la lámina y por dentro aparece
  *      la portada, con el dibujo naranja encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
- *      funde. Quedan unos 3,3 s en total.
+ *      funde. Quedan unos 3,7 s en total.
  *
  * El negro y el naranja no son a capricho: el negro es lo que mejor se lee
  * sobre la lámina naranja mientras el casete se dibuja, y el naranja lo que se
@@ -85,13 +85,18 @@ const T = {
   // ventana se abre DENTRO de ese viraje, no después: el casete acaba del color
   // del fondo, y si la apertura esperase a que terminara habría medio segundo
   // de naranja liso, que es el corte que Mario veía.
-  color: { espera: 1360, dura: 540 },
-  ventana: { espera: 1650, dura: 300 },
-  zoom: { espera: 2300, dura: 900 },
+  //
+  // EL VIRAJE VA LARGO A PROPÓSITO (Mario, 2026-09-18: «la transición tiene que
+  // ser más suave, más alargada, que vaya poco a poco»): 1,2 s, más del doble
+  // que el resto de pasos, y con una curva simétrica y suave, sin tirón ni al
+  // entrar ni al salir.
+  color: { espera: 1360, dura: 1200 },
+  ventana: { espera: 2050, dura: 500 },
+  zoom: { espera: 2650, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
   // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
   // antes de que se fundiera.
-  salida: { espera: 2800, dura: 550 },
+  salida: { espera: 3100, dura: 550 },
 } as const;
 
 /**
@@ -196,7 +201,10 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       const paso = {
         duration: T.color.dura,
         delay: T.color.espera,
-        easing: "ease-in-out",
+        // Curva suave y simétrica (equivale a un seno): entra y sale sin tirón,
+        // que es lo que hace que el viraje se lea como algo que va pasando y no
+        // como un cambio.
+        easing: "cubic-bezier(0.45, 0, 0.55, 1)",
         fill: "both" as const,
       };
       // El color y el adelgazamiento van juntos: el trazo negro se encoge a la
@@ -236,7 +244,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
         cuerpo.animate([{ opacity: 0 }, { opacity: 1 }], {
           duration: T.ventana.dura,
           delay: T.ventana.espera,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          easing: "cubic-bezier(0.45, 0, 0.55, 1)",
           fill: "both",
         })
       );
