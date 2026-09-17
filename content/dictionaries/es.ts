@@ -202,6 +202,8 @@ export const es = {
     ],
     offerDroneLink: "Ver la flota",
     processLabel: "Cómo lo hacemos",
+    processIntro:
+      "Cuatro etapas y el mismo equipo de principio a fin: lo planificamos antes de pisar el recinto, lo rodamos en directo desde tierra y desde el aire, y te lo entregamos montado en 24-48 horas.",
     stages: [
       {
         number: "01",

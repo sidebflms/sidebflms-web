@@ -176,6 +176,8 @@ export const en: Dictionary = {
     ],
     offerDroneLink: "See the fleet",
     processLabel: "How we do it",
+    processIntro:
+      "Four stages and the same crew from start to finish: we plan it before we set foot in the venue, shoot it live from the ground and the air, and hand it over edited within 24-48 hours.",
     stages: [
       {
         number: "01",

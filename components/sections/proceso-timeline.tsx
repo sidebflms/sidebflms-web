@@ -158,6 +158,8 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
       <h2 className="font-display subtitulo">
         {dict.services.processLabel}
       </h2>
+      {/* Entradilla bajo el subtítulo (cliente, 2026-09-17). */}
+      <p className="measure mt-4 text-smoke">{dict.services.processIntro}</p>
 
       {/* Móvil y tableta: la escaleta vertical. */}
       <div className="lg:hidden">
