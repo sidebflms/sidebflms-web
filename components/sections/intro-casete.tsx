@@ -14,19 +14,27 @@ import { BASE_PATH, conBase } from "@/lib/base";
  * para que se vea la página web de fondo».
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
- * Al abrir la portada, una lámina naranja de marca la tapa entera. El casete
- * del manual está CALADO en ella: sus líneas son huecos, y por ellos se ve la
- * portada moviéndose detrás —el reel incluido—. A 1,6 s el dibujo crece, las
- * líneas se van de la pantalla y la lámina se funde. Unos 2,7 s en total.
+ * Al abrir la portada, una lámina naranja de marca la tapa entera, con el
+ * casete CALADO en ella: el cuerpo entero es una ventana por la que se ve la
+ * portada moviéndose detrás —el reel incluido—, y dentro de esa ventana quedan
+ * en naranja los detalles del dibujo: bobinas, etiqueta y ranura. A 1,6 s el
+ * casete crece hasta comerse la pantalla y la lámina se funde. Unos 2,7 s.
  *
- * No hay vídeo propio: lo que se ve por las líneas ES la portada. Antes había
+ * No hay vídeo propio: lo que se ve por la ventana ES la portada. Antes había
  * uno (el casete hacía de ventana del reel, en macizo), y sobraba en cuanto el
- * dibujo pasó a ser de líneas: se descargaba un reel para enseñarlo por unas
- * rendijas, y encima con el riesgo de que iOS no lo arrancase bajo la máscara.
+ * dibujo pasó a calarse: se descargaba un reel para enseñarlo por un hueco que
+ * ya deja ver la portada, y encima con el riesgo de que iOS no lo arrancase
+ * bajo la máscara.
  *
- * El dibujo es `public/logo/intro-mascara.svg`, sacado en vectores de la
- * página 5 del manual. El calado y los fundidos viven en CSS (`.intro-casete`
- * en app/globals.css); el crecimiento, aquí (ver más abajo por qué).
+ * ── POR QUÉ EL CUERPO ENTERO Y NO SÓLO LAS LÍNEAS ───────────────────────
+ * La primera versión calaba únicamente los trazos, y por unas líneas de tres
+ * puntos apenas se veía web. Mario lo comparó con el león de la Premier
+ * League: un logo no se pasa a negativo dándole la vuelta sin más, hay que
+ * trabajarlo «para que funcione y se vea más parte del fondo de la web». De
+ * ahí el dibujo preparado a propósito: `public/logo/intro-negativo.svg`, con
+ * el cuerpo macizo y los detalles calados dentro (el de sólo líneas sigue en
+ * `intro-mascara.svg`, que es de donde sale). El calado y los fundidos viven
+ * en CSS (`.intro-casete` en app/globals.css); el crecimiento, aquí.
  *
  * ── CUÁNDO SALE ─────────────────────────────────────────────────────────
  * Sólo al CARGAR la portada, y una vez por sesión del navegador. Nunca al
@@ -55,7 +63,7 @@ import { BASE_PATH, conBase } from "@/lib/base";
 
 export const INTRO_ID = "intro-casete";
 
-const MASCARA = conBase({ mascara: "/logo/intro-mascara.svg" }).mascara;
+const MASCARA = conBase({ mascara: "/logo/intro-negativo.svg" }).mascara;
 
 export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -95,9 +103,13 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
      * la hoja de estilos, que en móvil es mayor. Si se copiase el número, al
      * cambiarlo allí el crecimiento pegaría un salto en el primer fotograma.
      *
-     * Multiplicar por 12,5 basta de sobra: con eso la línea más cercana al
-     * centro ya ha salido de cuadro en cualquier pantalla, y además el fundido
-     * se solapa con el final del crecimiento.
+     * MULTIPLICAR POR 28 NO ES A OJO. Al crecer, los detalles del casete
+     * crecen con él, y si alguno cae dentro de la pantalla al final se ve una
+     * banda naranja justo cuando debería verse sólo la web. El centro del
+     * dibujo cae entre las dos bobinas, y la de la derecha empieza 34 unidades
+     * a la derecha de ese centro. Con 28 veces —2.000vmin saliendo de 72— en
+     * una pantalla de 1440×900 se ven sólo ±24 unidades a cada lado, y en un
+     * móvil de 390 px, ±15.
      *
      * Con prefijo y sin él: Chrome entiende el segundo, WebKit el primero.
      */
@@ -110,7 +122,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       const valor = `${tamano}px, 100% 100%`;
       return { maskSize: valor, webkitMaskSize: valor };
     };
-    const zoom = velo?.animate([paso(inicio), paso(inicio * 12.5)], {
+    const zoom = velo?.animate([paso(inicio), paso(inicio * 28)], {
       duration: 1000,
       delay: 1600,
       // Arranca despacio y acelera: parece que se entra EN el casete.

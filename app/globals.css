@@ -768,13 +768,16 @@ video::-webkit-media-controls-start-playback-button {
    INTRO DE LA PORTADA — el casete recortado en una lámina naranja.
    Componente: components/sections/intro-casete.tsx. Mario, 2026-09-17.
 
-   Una lámina naranja a pantalla completa tapa la portada, y las LÍNEAS del
-   casete del manual están caladas: por ellas se ve la web de fondo. Mario,
+   Una lámina naranja a pantalla completa tapa la portada, con el casete del
+   manual calado en ella: el cuerpo es una ventana a la web y los detalles
+   —bobinas, etiqueta, ranura— quedan dibujados en naranja dentro. Mario,
    2026-09-17: «coge el casete y lo que son las líneas naranjas sería lo que
-   iría en alfa para que se vea la página web de fondo».
+   iría en alfa para que se vea la página web de fondo», y después, con el
+   ejemplo del león de la Premier League, «en negativo así para que funcione y
+   se vea más parte del fondo de la web».
 
      0,0 – 1,6 s   la lámina naranja con el casete calado, quieta
-     1,6 – 2,6 s   el dibujo crece y las líneas se van de la pantalla
+     1,6 – 2,6 s   el casete crece hasta comerse la pantalla
                    (esto lo anima el componente, no esta hoja)
      2,1 – 2,7 s   la lámina se funde y queda la portada
 
@@ -783,10 +786,11 @@ video::-webkit-media-controls-start-playback-button {
    de que se vaya la lámina.
 
    ── CÓMO SE CALA EL DIBUJO ──────────────────────────────────────────────
-   Dos capas de máscara: el casete y un rectángulo opaco a pantalla completa,
+   Dos capas de máscara: el casete (`intro-negativo.svg`, con el cuerpo macizo
+   y los detalles ya calados dentro) y un rectángulo opaco a pantalla completa,
    combinadas con `exclude` (`xor` en WebKit). Resultado: opaco en todas partes
-   MENOS donde hay trazo. Una máscara normal haría justo lo contrario —naranja
-   sólo en las líneas—, que es la versión anterior de esta intro.
+   MENOS en el cuerpo del casete. Una máscara normal haría justo lo contrario
+   —naranja sólo en el casete y web alrededor—, que no taparía nada.
 
    Si un navegador no entendiera `mask-composite`, las dos capas se suman y la
    lámina queda naranja entera: se pierde el casete, pero la intro sigue
