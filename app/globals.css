@@ -765,29 +765,39 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 /* ============================================================================
-   INTRO DE LA PORTADA — el casete como ventana del reel.
+   INTRO DE LA PORTADA — el casete recortado en una lámina naranja.
    Componente: components/sections/intro-casete.tsx. Mario, 2026-09-17.
 
-     0,0 – 0,7 s   el casete aparece (sólo opacidad; ver «iPhone» abajo)
-     0,7 – 2,4 s   quieto, con el reel corriendo dentro
-     2,4 – 3,5 s   el casete crece hasta que el vídeo llena la pantalla
+   Una lámina naranja a pantalla completa tapa la portada, y las LÍNEAS del
+   casete del manual están caladas: por ellas se ve la web de fondo. Mario,
+   2026-09-17: «coge el casete y lo que son las líneas naranjas sería lo que
+   iría en alfa para que se vea la página web de fondo».
+
+     0,0 – 1,6 s   la lámina naranja con el casete calado, quieta
+     1,6 – 2,6 s   el dibujo crece y las líneas se van de la pantalla
                    (esto lo anima el componente, no esta hoja)
-     3,3 – 3,8 s   la capa se funde y queda la portada
+     2,1 – 2,7 s   la lámina se funde y queda la portada
 
-   ── EL TAMAÑO FINAL DE LA MÁSCARA, 2000vmin, NO ES A OJO ─────────────────
-   Al crecer, los huecos del casete (bobinas, etiqueta, ranura) también crecen,
-   y si alguno cae en el centro de la pantalla al final, se ve un borrón
-   naranja justo cuando debería verse sólo vídeo. El centro del dibujo cae en
-   el cuerpo, entre las bobinas; la bobina derecha empieza 34 unidades a la
-   derecha de ese centro. Con 2000vmin, en una pantalla de 1440×900 se ven sólo
-   ±24 unidades a cada lado, y en un móvil de 390 px, ±15. Con 900vmin —el
-   primer valor— la bobina derecha asomaba por el borde.
+   El fundido empieza antes de que el crecimiento acabe, a propósito: si no,
+   quedaría medio segundo de naranja liso —las líneas ya fuera de cuadro— antes
+   de que se vaya la lámina.
 
-   ── iPHONE: NADA DE TRANSFORMACIONES EN EL CONTENEDOR DEL VÍDEO ──────────
+   ── CÓMO SE CALA EL DIBUJO ──────────────────────────────────────────────
+   Dos capas de máscara: el casete y un rectángulo opaco a pantalla completa,
+   combinadas con `exclude` (`xor` en WebKit). Resultado: opaco en todas partes
+   MENOS donde hay trazo. Una máscara normal haría justo lo contrario —naranja
+   sólo en las líneas—, que es la versión anterior de esta intro.
+
+   Si un navegador no entendiera `mask-composite`, las dos capas se suman y la
+   lámina queda naranja entera: se pierde el casete, pero la intro sigue
+   fundiéndose y no deja nada roto por medio.
+
+   ── iPHONE: NADA DE TRANSFORMACIONES ────────────────────────────────────
    Joan comprobó el 2026-09-17 que WebKit no arranca un vídeo con
-   transformaciones encima (quitó por eso las del reel de la portada). La
-   entrada del casete es sólo de opacidad, y el botón se centra con márgenes y
-   no con `translate`.
+   transformaciones encima. Aquí ya no hay vídeo propio —lo que se ve por las
+   líneas es la portada, con su reel—, pero el botón se sigue centrando con
+   márgenes y no con `translate`, para no ponerle una capa transformada encima
+   al reel de la portada.
 
    ── «REDUCIR MOVIMIENTO» ────────────────────────────────────────────────
    No sale: el script de la cabecera no pone la marca. No hay regla de CSS que
@@ -807,32 +817,37 @@ html[data-intro="si"] .intro-casete {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: var(--color-rust-500);
   cursor: pointer;
-  animation: introSale 0.5s ease-in 3.3s forwards;
+  animation: introSale 0.6s ease-in 2.1s forwards;
 }
 
-/* La URL de la máscara llega por `--intro-mascara` desde el componente: con
+/* LA LÁMINA NARANJA CON EL CASETE CALADO.
+   La URL de la máscara llega por `--intro-mascara` desde el componente: con
    la ruta base de la versión de pruebas, una URL fija aquí apuntaría a la web
    original. */
-.intro-casete-ventana {
+.intro-casete-velo {
   position: absolute;
   inset: 0;
-  -webkit-mask-image: var(--intro-mascara);
-  mask-image: var(--intro-mascara);
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 72vmin;
-  mask-size: 72vmin;
-  animation: introAparece 0.7s var(--ease-out-strong) both;
+  background: var(--color-rust-500);
+  -webkit-mask-image: var(--intro-mascara), linear-gradient(#000, #000);
+  mask-image: var(--intro-mascara), linear-gradient(#000, #000);
+  -webkit-mask-position: center, center;
+  mask-position: center, center;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-size: 72vmin, 100% 100%;
+  mask-size: 72vmin, 100% 100%;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
-.intro-casete-ventana video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background: var(--color-ink-900);
+/* En una pantalla de móvil, alta y estrecha, 72vmin son 270 px de dibujo en
+   812 de alto: queda perdido en medio de tanto naranja. El componente lee este
+   tamaño de aquí, no lo lleva escrito, así que basta cambiarlo en un sitio. */
+@media (max-width: 767px) {
+  .intro-casete-velo {
+    -webkit-mask-size: 88vmin, 100% 100%;
+    mask-size: 88vmin, 100% 100%;
+  }
 }
 
 /* Tinta oscura sobre el naranja: `ink-900` da 4,65:1 ahí; el blanco se queda

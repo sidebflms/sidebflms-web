@@ -2,27 +2,31 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
-import { arrancaEnSilencio } from "@/lib/autoplay";
 import { BASE_PATH, conBase } from "@/lib/base";
 
 /**
- * LA INTRO: EL CASETE COMO VENTANA DEL REEL.
+ * LA INTRO: EL CASETE CALADO EN UNA LÁMINA NARANJA.
  *
- * Mario, 2026-09-17, con una referencia de unas letras enormes que dejan ver
- * un vídeo por dentro: «me gustaría que la web tuviera esto de intro, pero con
- * nuestro logo del casete y en naranja».
+ * Mario, 2026-09-17, con una referencia de unas letras enormes que dejan ver un
+ * vídeo por dentro: «me gustaría que la web tuviera esto de intro, pero con
+ * nuestro logo del casete y en naranja». Y al enseñar el manual de marca:
+ * «coge el casete y lo que son las líneas naranjas sería lo que iría en alfa
+ * para que se vea la página web de fondo».
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
- * Fondo naranja de marca a pantalla completa. En el centro, el casete hace de
- * ventana: el cuerpo deja ver el reel y los detalles (bobinas, etiqueta,
- * ranura) quedan recortados en naranja. A los 2,4 s el casete crece hasta que
- * el vídeo llena la pantalla, y el naranja se funde con la portada, que tiene
- * ese mismo reel de fondo. Unos 3,8 s en total.
+ * Al abrir la portada, una lámina naranja de marca la tapa entera. El casete
+ * del manual está CALADO en ella: sus líneas son huecos, y por ellos se ve la
+ * portada moviéndose detrás —el reel incluido—. A 1,6 s el dibujo crece, las
+ * líneas se van de la pantalla y la lámina se funde. Unos 2,7 s en total.
  *
- * La silueta es `public/logo/intro-mascara.svg`, dibujada en macizo a propósito:
- * el logotipo del manual es de líneas finas y como ventana apenas dejaría ver
- * vídeo. Los fundidos viven en CSS (`.intro-casete` en app/globals.css); el
- * crecimiento, aquí (ver más abajo por qué).
+ * No hay vídeo propio: lo que se ve por las líneas ES la portada. Antes había
+ * uno (el casete hacía de ventana del reel, en macizo), y sobraba en cuanto el
+ * dibujo pasó a ser de líneas: se descargaba un reel para enseñarlo por unas
+ * rendijas, y encima con el riesgo de que iOS no lo arrancase bajo la máscara.
+ *
+ * El dibujo es `public/logo/intro-mascara.svg`, sacado en vectores de la
+ * página 5 del manual. El calado y los fundidos viven en CSS (`.intro-casete`
+ * en app/globals.css); el crecimiento, aquí (ver más abajo por qué).
  *
  * ── CUÁNDO SALE ─────────────────────────────────────────────────────────
  * Sólo al CARGAR la portada, y una vez por sesión del navegador. Nunca al
@@ -42,18 +46,8 @@ import { BASE_PATH, conBase } from "@/lib/base";
  *
  * ── VERSIÓN GLASS Y RUTA BASE ───────────────────────────────────────────
  * Integrada sobre la versión glass de Joan (2026-09-17). Esa versión se puede
- * publicar bajo una ruta (`lib/base.ts`), así que todo lo que apunta a
- * `public/` pasa por `conBase`, y el script de la cabecera reconoce la portada
- * también con esa ruta delante. El reel es el mismo fichero que usa
- * `hero-frame.tsx`, para que la caché lo reutilice.
- *
- * ── iPHONE ──────────────────────────────────────────────────────────────
- * El vídeo arranca con `arrancaEnSilencio` (lib/autoplay.ts), lo que Joan
- * averiguó que necesita iOS. Y el contenedor del vídeo NO lleva
- * transformaciones: con ellas WebKit no arrancaba el reel de la portada. La
- * entrada es sólo de opacidad. La máscara sí es imprescindible —es el efecto—;
- * si en algún iPhone no arrancara bajo ella, se ve el póster, que es un
- * fotograma del propio reel.
+ * publicar bajo una ruta (`lib/base.ts`), así que el dibujo pasa por `conBase`,
+ * y el script de la cabecera reconoce la portada también con esa ruta delante.
  *
  * Se salta con un clic en cualquier sitio, con Escape o con el botón. Sin
  * JavaScript la marca no se pone y la intro no aparece.
@@ -61,12 +55,7 @@ import { BASE_PATH, conBase } from "@/lib/base";
 
 export const INTRO_ID = "intro-casete";
 
-const FUENTES = conBase({
-  mascara: "/logo/intro-mascara.svg",
-  desktop: "/media/reel-1920.mp4",
-  mobile: "/media/reel-720.mp4",
-  poster: "/media/reel-poster.webp",
-});
+const MASCARA = conBase({ mascara: "/logo/intro-mascara.svg" }).mascara;
 
 export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -79,9 +68,8 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
     const raiz = document.documentElement;
 
     // Sin la marca de la cabecera no toca, y no hay que hacer nada: el CSS la
-    // tiene en `display: none` y el vídeo no lleva `src`, así que no descarga
-    // ni un byte. Pasa al recargar en la misma sesión y al llegar navegando
-    // desde otra página.
+    // tiene en `display: none`. Pasa al recargar en la misma sesión y al llegar
+    // navegando desde otra página.
     if (raiz.dataset.intro !== "si") return;
 
     // Al acabar, por la vía que sea, se quita la marca: si luego se vuelve a
@@ -91,39 +79,44 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       setFuera(true);
     };
 
-    // El mismo fichero que la portada según el ancho: así la caché lo reutiliza
-    // y el reel no se descarga dos veces.
-    const video = el.querySelector("video");
-    let suelta = () => {};
-    if (video) {
-      video.src = window.matchMedia("(max-width: 767px)").matches ? FUENTES.mobile : FUENTES.desktop;
-      suelta = arrancaEnSilencio(video);
-    }
-
     /**
      * EL CASETE CRECE: animado aquí y no con `@keyframes`.
      *
      * Con `@keyframes` el tamaño de la máscara saltaba de golpe a mitad de la
-     * animación en vez de crecer. Medido en Chrome: `-webkit-mask-size` no
-     * interpola, y con los dos prefijos en el mismo fotograma clave el salto
-     * era discreto. Con la Web Animations API y valores explícitos en píxeles
-     * sí interpola: 648 → 702 → 1.345 → 3.228 → 10.009 → 18.000 px.
+     * animación en vez de crecer. Medido en Chrome: `mask-size` no interpola
+     * en una animación de hoja de estilos. Con la Web Animations API y valores
+     * explícitos en píxeles sí interpola.
      *
-     * El 72 y el 2000 son los mismos que en globals.css; el porqué de 2000
-     * está explicado allí.
+     * Se animan las DOS capas de máscara (el casete y el rectángulo opaco que
+     * lo invierte): el valor es una lista, y hay que repetir el segundo tramo
+     * tal cual o la capa que tapa la pantalla dejaría de cubrirla.
+     *
+     * El tamaño de partida NO se escribe aquí: se lee del que ya tiene puesto
+     * la hoja de estilos, que en móvil es mayor. Si se copiase el número, al
+     * cambiarlo allí el crecimiento pegaría un salto en el primer fotograma.
+     *
+     * Multiplicar por 12,5 basta de sobra: con eso la línea más cercana al
+     * centro ya ha salido de cuadro en cualquier pantalla, y además el fundido
+     * se solapa con el final del crecimiento.
+     *
+     * Con prefijo y sin él: Chrome entiende el segundo, WebKit el primero.
      */
-    const ventana = el.querySelector<HTMLElement>(".intro-casete-ventana");
-    const vmin = Math.min(window.innerWidth, window.innerHeight) / 100;
-    const zoom = ventana?.animate(
-      [{ maskSize: `${72 * vmin}px` }, { maskSize: `${2000 * vmin}px` }],
-      {
-        duration: 1100,
-        delay: 2400,
-        // Arranca despacio y acelera: parece que se entra EN el casete.
-        easing: "cubic-bezier(0.7, 0, 0.84, 0)",
-        fill: "forwards",
-      }
-    );
+    const velo = el.querySelector<HTMLElement>(".intro-casete-velo");
+    const estilo = velo && getComputedStyle(velo);
+    const inicio =
+      parseFloat((estilo?.maskSize || estilo?.webkitMaskSize || "").split(",")[0]) ||
+      Math.min(window.innerWidth, window.innerHeight) * 0.72;
+    const paso = (tamano: number) => {
+      const valor = `${tamano}px, 100% 100%`;
+      return { maskSize: valor, webkitMaskSize: valor };
+    };
+    const zoom = velo?.animate([paso(inicio), paso(inicio * 12.5)], {
+      duration: 1000,
+      delay: 1600,
+      // Arranca despacio y acelera: parece que se entra EN el casete.
+      easing: "cubic-bezier(0.7, 0, 0.84, 0)",
+      fill: "forwards",
+    });
 
     const termina = (e: AnimationEvent) => {
       if (e.animationName === "introSale") acaba();
@@ -135,7 +128,6 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
     window.addEventListener("keydown", tecla);
     return () => {
       zoom?.cancel();
-      suelta();
       el.removeEventListener("animationend", termina);
       window.removeEventListener("keydown", tecla);
     };
@@ -149,19 +141,15 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
   };
 
   return (
-    <div
-      id={INTRO_ID}
-      ref={ref}
-      className="intro-casete"
-      // La máscara va por variable y no escrita en el CSS: con ruta base
-      // delante (versión glass) una URL fija en la hoja apuntaría a la web
-      // original.
-      style={{ "--intro-mascara": `url("${FUENTES.mascara}")` } as CSSProperties}
-      onClick={salta}
-    >
-      <div className="intro-casete-ventana" aria-hidden="true">
-        <video muted playsInline loop preload="none" poster={FUENTES.poster} />
-      </div>
+    <div id={INTRO_ID} ref={ref} className="intro-casete" onClick={salta}>
+      {/* La máscara va por variable y no escrita en el CSS: con ruta base
+          delante (versión glass) una URL fija en la hoja apuntaría a la web
+          original. */}
+      <div
+        className="intro-casete-velo"
+        aria-hidden="true"
+        style={{ "--intro-mascara": `url("${MASCARA}")` } as CSSProperties}
+      />
       <button
         type="button"
         className="intro-casete-saltar"
