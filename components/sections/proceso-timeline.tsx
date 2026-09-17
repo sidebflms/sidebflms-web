@@ -161,11 +161,9 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
 
   return (
     <section ref={sectionRef} data-reglet={dict.services.processLabel} className="shell">
-      {/* TÍTULO DE SECCIÓN GRANDE (cliente, 2026-09-16): como rótulo pequeño
-          dejaba un hueco vacío encima del visor. Pasa a titular en Akira; las
-          etapas de dentro bajan a h3. Cuerpo con techo de 4 rem: «CÓMO LO
-          HACEMOS» cabe en una línea en todo el rango. */}
-      <h2 className="font-display text-[clamp(1.75rem,4.2vw,4rem)] leading-[0.95] text-bone">
+      {/* Subtítulo de sección, igual que el resto del sitio (`.subtitulo`). Las
+          etapas de dentro van en h3. */}
+      <h2 className="font-display subtitulo">
         {dict.services.processLabel}
       </h2>
 

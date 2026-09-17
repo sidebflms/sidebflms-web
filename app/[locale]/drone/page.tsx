@@ -64,7 +64,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
       {/* LA FLOTA */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
-          <p className="label">{dict.drone.fleetLabel}</p>
+          <h2 className="font-display subtitulo">{dict.drone.fleetLabel}</h2>
           <p className="measure mt-3 text-smoke">{dict.drone.fleetNote}</p>
         </Reveal>
 
@@ -78,7 +78,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
               <p aria-hidden="true" className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2">
                 {pad(i + 1)}
               </p>
-              <h2 className="font-display text-display-m text-bone lg:col-span-5">{aparato.modelo}</h2>
+              <h3 className="font-display text-display-m text-bone lg:col-span-5">{aparato.modelo}</h3>
               <p className="measure text-smoke lg:col-span-5">{aparato.uso[locale]}</p>
             </Reveal>
           ))}
@@ -99,7 +99,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
       {/* CAPACIDADES — cada una respaldada por un fichero del archivo. */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
-          <p className="label">{dict.drone.capsLabel}</p>
+          <h2 className="font-display subtitulo">{dict.drone.capsLabel}</h2>
         </Reveal>
         <Reveal stagger>
           <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
@@ -114,7 +114,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
 
       <section className="shell seccion grid gap-6 border-t border-ink-600 pt-14 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
-          <p className="label">{dict.drone.safetyLabel}</p>
+          <h2 className="font-display subtitulo">{dict.drone.safetyLabel}</h2>
         </Reveal>
         <Reveal className="lg:col-span-8">
           <p className="text-lead measure text-bone">{dict.drone.safetyBody}</p>

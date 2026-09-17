@@ -144,11 +144,20 @@
     overflow: hidden;
   }
 
+  /* Texto corrido: 12 px en móvil y 17 px desde tableta (cliente,
+     2026-09-17: en móvil no debe medir lo mismo que en escritorio y alargaba
+     las tarjetas). Los campos de formulario van aparte, a 16 px: por debajo,
+     iOS amplía la página al tocarlos (ver campos-cristal.ts). */
   body {
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
+    font-size: 0.75rem;
     line-height: 1.6;
     text-wrap: pretty;
+  }
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.0625rem;
+    }
   }
 
   /* Foco visible en rust-300 (5.1:1) en todo interactivo. */
@@ -282,12 +291,37 @@
     color: var(--color-smoke);
   }
 
-  /* Entradilla. Mismo cuerpo que el texto corrido (17 px): el cliente pidió
-     el 2026-09-17 un solo tamaño para todo lo que no es titular. Lo que la
-     distingue es el sitio donde va, no la talla. */
+  /* Entradilla. Mismo cuerpo que el texto corrido (12 px en móvil, 17 desde
+     tableta): el cliente pidió el 2026-09-17 un solo tamaño para todo lo que
+     no es titular. Lo que la distingue es el sitio donde va, no la talla. */
   .text-lead {
-    font-size: 1.0625rem;
+    font-size: 0.75rem;
     line-height: 1.6;
+  }
+  @media (min-width: 768px) {
+    .text-lead {
+      font-size: 1.0625rem;
+    }
+  }
+
+  /* SUBTÍTULO DE SECCIÓN — el mismo en todo el sitio (cliente, 2026-09-17):
+     «Qué hacemos», «Cómo lo hacemos», «El equipo», los bloques de Drone…
+     Akira en blanco, 20 px en móvil. Se usa con `.font-display`. Los rótulos
+     pequeños DENTRO de una tarjeta siguen siendo `.label`. */
+  .subtitulo {
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-bone);
+  }
+  @media (min-width: 768px) {
+    .subtitulo {
+      font-size: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .subtitulo {
+      font-size: 2rem;
+    }
   }
 
   /* Medida de lectura. Los bloques editoriales no se centran: se alinean a la
@@ -701,6 +735,20 @@
    en línea el recorte con la muesca (FramedStage) y `--muesca` para subir la
    barra: a pantalla completa no hay muesca, así que se anulan los dos. El vídeo
    pasa a verse entero en vez de recortado a 16:9. */
+/* SIN LOS CONTROLES NATIVOS DE iOS (2026-09-17). Con «modo de bajo consumo»
+   iOS no deja arrancar ningún vídeo solo, en ningún navegador, y encima de
+   cada uno pinta su reproductor: play grande, ±10 s, silencio, pantalla
+   completa. Ningún vídeo del sitio usa los controles del navegador (los que
+   tienen mandos los pintan ellos), así que se ocultan: se ve el póster y el
+   vídeo arranca con el primer toque (lib/autoplay.ts). */
+video::-webkit-media-controls,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 [data-framed] > :fullscreen {
   clip-path: none !important;
   border-radius: 0;

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SplitText } from "gsap/SplitText";
 
@@ -191,77 +190,71 @@ export function HeroFrame({
             <FrameNav locale={locale} dict={dict} />
           </div>
 
-          {/* ── TITULAR ─────────────────────────────────────────────────── */}
-          <div className="absolute inset-x-5 top-28 lg:top-1/2 lg:right-auto lg:left-10 lg:-translate-y-[62%]">
-            {/* Cada frase en UNA línea también en móvil. «CAPTURE THE ENERGY.»
-                mide ~16× el cuerpo en Akira: a 4.9vw ocupa el 79 % del ancho,
-                y el hueco del titular a 375 px es el 85 %. */}
-            <h1 ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
-              {dict.hero.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </h1>
-
-            <div data-intro="up" className="mt-8 hidden items-center gap-6 lg:flex">
-              <button
-                type="button"
-                onClick={() => setReelOpen(true)}
-                data-cursor="media"
-                data-cursor-label="Play"
-                className="group flex items-center gap-4 text-sm font-medium tracking-[0.1em] text-bone uppercase"
-              >
-                <span className="glass inline-flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110">
-                  <PlayIcon className="h-5 w-5 translate-x-0.5 text-bone" />
-                </span>
-                {dict.glass.watchReel}
-              </button>
-              <span className="h-8 w-px bg-white/15" aria-hidden="true" />
-              <Timecode className="text-xs font-medium tracking-[0.08em] text-smoke" />
-            </div>
-          </div>
-
           {/* ── DESTACADOS: tarjeta + indicador 01—04 (desktop) ─────────── */}
           {featured.length > 0 && (
             <DestacadosRotativos featured={featured} dict={dict} locale={locale} />
           )}
 
-          {/* ── MÓVIL: timecode grande y bloque naranja con mordisco ────── */}
-          <div className="absolute inset-x-3 bottom-3 lg:hidden">
-            <div data-intro="up" className="glass rounded-2xl px-4 py-2.5">
+          {/* ── TITULAR Y, EN MÓVIL, TIMECODE Y CIFRAS ──────────────────────
+              En móvil los tres van apilados abajo: el titular centrado justo
+              encima del timecode (cliente, 2026-09-17). En escritorio el
+              contenedor es `static`, así que el titular se coloca respecto al
+              marco, a media altura a la izquierda, y lo demás no se pinta. */}
+          <div className="absolute inset-x-3 bottom-3 lg:static">
+            <div className="mb-5 px-2 text-center lg:absolute lg:top-1/2 lg:left-10 lg:mb-0 lg:-translate-y-[62%] lg:px-0 lg:text-left">
+              {/* Cada frase en UNA línea también en móvil. «CAPTURE THE ENERGY.»
+                  mide ~16× el cuerpo en Akira: a 4.9vw ocupa el 79 % del ancho,
+                  y el hueco del titular a 375 px es el 85 %. */}
+              <h1 ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
+                {dict.hero.headline.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </h1>
+
+              <div data-intro="up" className="mt-8 hidden items-center gap-6 lg:flex">
+                <button
+                  type="button"
+                  onClick={() => setReelOpen(true)}
+                  data-cursor="media"
+                  data-cursor-label="Play"
+                  className="group flex items-center gap-4 text-sm font-medium tracking-[0.1em] text-bone uppercase"
+                >
+                  <span className="glass inline-flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110">
+                    <PlayIcon className="h-5 w-5 translate-x-0.5 text-bone" />
+                  </span>
+                  {dict.glass.watchReel}
+                </button>
+                <span className="h-8 w-px bg-white/15" aria-hidden="true" />
+                <Timecode className="text-xs font-medium tracking-[0.08em] text-smoke" />
+              </div>
+            </div>
+
+            <div data-intro="up" className="glass rounded-2xl px-4 py-2.5 lg:hidden">
               <TimecodeGrande labels={dict.glass.tcLabels} />
             </div>
 
-            <div data-intro="up" className="relative mt-14">
+            {/* Bloque naranja con el mordisco del botón del reel. Más bajo que
+                antes (2026-09-17): sin el icono del rótulo y con un botón de
+                68 px en vez de 92. El mordisco es un círculo de 40 px de radio
+                centrado en el del botón (34 px de radio + 6 de aire). */}
+            <div data-intro="up" className="relative mt-10 lg:hidden">
               <div
-                className="rounded-[1.75rem] bg-brand-600 p-4"
+                className="rounded-[1.5rem] bg-brand-600 px-4 py-3"
                 style={{
-                  WebkitMask: "radial-gradient(circle 54px at calc(100% - 92px) 0, transparent 53px, #000 54px)",
-                  mask: "radial-gradient(circle 54px at calc(100% - 92px) 0, transparent 53px, #000 54px)",
+                  WebkitMask: "radial-gradient(circle 40px at calc(100% - 68px) 0, transparent 39px, #000 40px)",
+                  mask: "radial-gradient(circle 40px at calc(100% - 68px) 0, transparent 39px, #000 40px)",
                 }}
               >
-                {/* Arriba, lo que cabe a la izquierda del mordisco del botón. */}
-                <div className="flex max-w-[calc(100%-9.5rem)] items-center gap-3">
-                  <Link
-                    href={path(locale, "portfolio")}
-                    aria-label={dict.featured.viewAll}
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink-900/20 text-bone"
-                  >
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true" className="h-4 w-4">
-                      <circle cx="4.5" cy="4.5" r="2" />
-                      <circle cx="11.5" cy="4.5" r="2" />
-                      <circle cx="4.5" cy="11.5" r="2" />
-                      <circle cx="11.5" cy="11.5" r="2" />
-                    </svg>
-                  </Link>
-                  <p className="text-[11px] leading-tight tracking-[0.08em] text-bone uppercase">{dict.about.figuresLabel}</p>
-                </div>
-                <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-bone">
+                <p className="max-w-[calc(100%-7.5rem)] text-[11px] leading-tight tracking-[0.08em] text-bone uppercase">
+                  {dict.about.figuresLabel}
+                </p>
+                <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-bone">
                   {cifrasMovil.map((c, i) => (
                     <div key={c.etiqueta.es} className="flex flex-col-reverse">
-                      <dt className="mt-1 text-xs leading-tight text-bone/80">{c.etiqueta[locale]}</dt>
-                      <dd className="font-display text-xl leading-none whitespace-nowrap tabular-nums">
+                      <dt className="mt-0.5 text-[11px] leading-tight text-bone/80">{c.etiqueta[locale]}</dt>
+                      <dd className="font-display text-lg leading-none whitespace-nowrap tabular-nums">
                         <CountUp value={c.valor ?? ""} delay={0.9 + i * 0.12} />
                       </dd>
                     </div>
@@ -271,9 +264,9 @@ export function HeroFrame({
               <button
                 type="button"
                 onClick={() => setReelOpen(true)}
-                className="absolute -top-[46px] right-[46px] flex h-[92px] w-[92px] flex-col items-center justify-center gap-1 rounded-full bg-bone text-[11px] font-medium text-ink-900"
+                className="absolute -top-[34px] right-[34px] flex h-[68px] w-[68px] flex-col items-center justify-center gap-0.5 rounded-full bg-bone text-[10px] font-medium text-ink-900"
               >
-                <ArrowUpRight className="h-4 w-4" />
+                <ArrowUpRight className="h-3.5 w-3.5" />
                 {dict.glass.watchReel}
               </button>
             </div>

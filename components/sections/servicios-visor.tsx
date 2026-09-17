@@ -187,7 +187,7 @@ export function ServiciosVisor({
 
       <div className="shell">
         <div className="flex items-end justify-between gap-6">
-          <p className="label">{dict.services.offerLabel}</p>
+          <h2 className="font-display subtitulo">{dict.services.offerLabel}</h2>
           <p className="label tabular-nums">{pad(dict.services.offer.length)}</p>
         </div>
 

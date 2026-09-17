@@ -172,7 +172,7 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
       {EQUIPO.length > 0 && (
         <section data-reglet={dict.about.teamLabel} className="shell seccion">
           <Reveal bidirectional className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <h2 className="label">{dict.about.teamLabel}</h2>
+            <h2 className="font-display subtitulo">{dict.about.teamLabel}</h2>
             <AvisoEquipo dict={dict} className="max-w-[40rem]" />
           </Reveal>
 
