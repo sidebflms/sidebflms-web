@@ -229,3 +229,27 @@ git log --oneline -5
 git checkout <commit-bueno>
 ./despliegue/publicar.sh
 ```
+
+Ojo: el siguiente empujón a `main` vuelve a publicar lo que haya en `main`.
+Para que la vuelta atrás dure, hay que revertir también en el repositorio.
+
+### Las copias de seguridad
+
+Cada despliegue, ANTES de subir nada, copia lo que está publicado en
+`~/copias-web/sidebflms-web-<fecha>-<commit>/` (paso «Copia de seguridad» de
+`deploy.yml`). Se guardan las tres últimas. Cada una lleva:
+
+- `codigo/`: la carpeta `~/sidebflms-web` tal cual, con `.git`, `.env` y la
+  compilación `.next` (sin `node_modules` ni la caché de Next).
+- `public_html/`: el `.htaccess`, el `proxy.php` y el `.htpasswd`.
+
+Restaurar una entera, sin depender de git:
+
+```bash
+COPIA=~/copias-web/sidebflms-web-<fecha>-<commit>
+rsync -a --delete --exclude node_modules "$COPIA/codigo/" ~/sidebflms-web/
+cd ~/sidebflms-web && ./despliegue/publicar.sh
+```
+
+Además, en GitHub, la etiqueta `web-anterior-2026-09-17` marca la última web
+publicada antes de pasar a la versión glass.

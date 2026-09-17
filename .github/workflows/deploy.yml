@@ -50,6 +50,32 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
+      - name: Copia de seguridad de lo publicado
+        # Antes de tocar nada, lo que está en el aire se copia en el propio
+        # servidor: la carpeta de la web (con su `.git` y su `.next`, sin
+        # `node_modules`, que `npm ci` rehace) y `public_html` entero, con el
+        # `.htaccess`, el proxy y el `.htpasswd`. Se guardan las TRES últimas.
+        # Si la copia falla (disco lleno, por ejemplo) el job se para aquí y no
+        # se publica nada. Cómo volver a una: despliegue/README.md.
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'bash -s' <<'COPIA'
+          set -euo pipefail
+          ORIGEN="$HOME/sidebflms-web"
+          [ -d "$ORIGEN" ] || { echo "No hay web anterior que copiar"; exit 0; }
+          commit="$(git -C "$ORIGEN" rev-parse --short HEAD 2>/dev/null || echo sin-git)"
+          DESTINO="$HOME/copias-web/sidebflms-web-$(date +%Y%m%d-%H%M%S)-$commit"
+          mkdir -p "$DESTINO"
+          rsync -a --exclude 'node_modules' --exclude '.next/cache' --exclude '*.log' \
+            --exclude '.vigilante.lock' --exclude '.operacion.lock' \
+            "$ORIGEN/" "$DESTINO/codigo/"
+          rsync -a "$HOME/web/sidebflms.com/public_html/" "$DESTINO/public_html/"
+          ls -1dt "$HOME"/copias-web/sidebflms-web-* | tail -n +4 | xargs -r rm -rf
+          echo "Copia en $DESTINO ($(du -sh "$DESTINO" | cut -f1))"
+          df -h "$HOME" | tail -1
+          COPIA
+
       - name: Subir el código
         run: |
           mkdir -p ~/.ssh
