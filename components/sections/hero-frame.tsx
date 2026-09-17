@@ -64,17 +64,35 @@ export function HeroFrame({
   const closeReel = useCallback(() => setReelOpen(false), []);
 
   // El vídeo trae sus fuentes y `autoplay` desde el HTML (ver el <video>).
-  // Aquí sólo se refuerza el arranque en móvil y, con movimiento reducido, se
-  // para: no hay forma de saber esa preferencia en el servidor.
+  // Aquí se refuerza el arranque en móvil y se corrige la fuente si hace falta.
+  //
+  // CON «REDUCIR MOVIMIENTO» TAMBIÉN SUENA (cliente, 2026-09-17). Antes se
+  // paraba, y en el iPhone del cliente, que lo tiene activado, el hero no
+  // arrancaba nunca (diagnóstico: `autoplay=no` y ningún `play()` rechazado).
+  // El reel es el contenido de la portada, mudo y sin sonido que molestar; lo
+  // que se quita con esa preferencia son las animaciones de GSAP de abajo.
+  //
+  // LA FUENTE. iOS no hizo caso a `<source media>` y cargó `reel-1920.mp4` en
+  // el teléfono. Si la elegida no es la que toca por ancho, se fuerza con
+  // `src`, que manda sobre los `<source>`. Se mira ya y al empezar a cargar,
+  // por si la selección aún no había terminado al hidratar.
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (prefersReducedMotion()) {
-      video.autoplay = false;
-      video.pause();
-      return;
-    }
-    return arrancaEnSilencio(video);
+    const corrigeFuente = () => {
+      const quiere = window.matchMedia("(max-width: 767px)").matches ? SOURCES.mobile : SOURCES.desktop;
+      if (video.currentSrc && !video.currentSrc.endsWith(quiere)) {
+        video.src = quiere;
+        video.load();
+      }
+    };
+    corrigeFuente();
+    video.addEventListener("loadstart", corrigeFuente);
+    const suelta = arrancaEnSilencio(video);
+    return () => {
+      video.removeEventListener("loadstart", corrigeFuente);
+      suelta();
+    };
   }, []);
 
   /* ── INTRO Y SCROLL ─────────────────────────────────────────────────────

@@ -33,7 +33,8 @@ import {
  * 60 %; el resto, en pausa. Un único IntersectionObserver para todo el feed.
  * Si la pieza tiene corte vertical 4:5 se usa ése —en un teléfono ocupa la
  * pantalla sin franjas—; si no, la `-cinta` en 16:9. `preload="none"` hasta
- * que le toca. Con «reducir movimiento» nada arranca solo: se toca el vídeo.
+ * que le toca. Arranca sola también con «reducir movimiento»; se pausa
+ * tocando el vídeo.
  *
  * ── FOTOGRAFÍA ───────────────────────────────────────────────────────────
  * Carrusel con deslizamiento lateral nativo (scroll-snap), cada foto entera en
@@ -267,7 +268,7 @@ function VideoTarjeta({
   t: CopyTrabajo["player"];
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  // `null` = nadie ha tocado: decide la visibilidad (y «reducir movimiento»).
+  // `null` = nadie ha tocado: decide la visibilidad.
   const [pausado, setPausado] = useState<boolean | null>(null);
   const [enMarcha, setEnMarcha] = useState(false);
 
@@ -276,7 +277,9 @@ function VideoTarjeta({
   const src = vertical?.video ?? ligero.video;
   const poster = vertical?.poster ?? ligero.poster;
 
-  const reproducir = activa && (pausado === null ? !prefersReducedMotion() : !pausado);
+  // Con «reducir movimiento» también arranca sola (cliente, 2026-09-17: lo
+  // tiene activado y en su iPhone no se movía nada). Sigue su botón de pausa.
+  const reproducir = activa && pausado !== true;
 
   useEffect(() => {
     const v = videoRef.current;
