@@ -836,11 +836,10 @@ html[data-intro="si"] .intro-casete {
   height: 100%;
 }
 
-/* LA LÁMINA, negra. Mario, 2026-09-17: «y ahora fondo negro y logo en
-   naranja»; antes era al revés. Va en `ink-900`, el negro de la web, y no en
-   negro puro: es el mismo de las secciones oscuras y del pie. */
+/* LA LÁMINA, en el naranja de marca. Mario, 2026-09-17: primero la quiso
+   negra con el casete naranja, y al verla, «fondo naranja, casete naranja». */
 .intro-casete-fondo {
-  fill: var(--color-ink-900);
+  fill: var(--color-rust-500);
 }
 
 /* EL CASETE, en el naranja de marca, y LOS GROSORES. Los grosores van aquí y
@@ -849,7 +848,12 @@ html[data-intro="si"] .intro-casete {
    que ser más gordos». */
 .intro-casete-dibujo path {
   fill: none;
-  stroke: var(--color-rust-500);
+  /* NARANJA SOBRE NARANJA, y por eso el claro (`rust-300`) y no el de la
+     lámina: tiene que leerse en los dos momentos de la intro, sobre el naranja
+     mientras se dibuja y sobre el vídeo de la portada cuando la ventana se
+     abre. Probados los otros dos: en negro y en naranja oscuro el casete
+     desaparece en cuanto se ve el vídeo por dentro. */
+  stroke: var(--color-rust-300);
   stroke-width: 9;
   stroke-linecap: butt;
   stroke-linejoin: miter;

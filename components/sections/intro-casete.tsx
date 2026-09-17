@@ -17,12 +17,14 @@ import { CASETE } from "./casete-trazos";
  * que funcione y se vea más parte del fondo de la web». Y por último: «los
  * bordes del logo tienen que ser más gordos y haz una animación que se vaya
  * construyendo el logo a base de las líneas y luego que entre a la web». Y, al
- * verlo: «y ahora fondo negro y logo en naranja» —antes era al revés—.
+ * verlo: «y ahora fondo negro y logo en naranja», y luego «fondo naranja,
+ * casete naranja», que es como está.
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
- * Una lámina negra tapa la portada entera. Encima:
+ * Una lámina naranja de marca tapa la portada entera. Encima:
  *
- *   1. EL CASETE SE DIBUJA en naranja, trazo a trazo, empezando por el borde.
+ *   1. EL CASETE SE DIBUJA, trazo a trazo, empezando por el borde. Va en el
+ *      naranja claro de marca sobre el de la lámina: tono sobre tono.
  *   2. LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina y por
  *      dentro aparece la portada, con el dibujo naranja encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
