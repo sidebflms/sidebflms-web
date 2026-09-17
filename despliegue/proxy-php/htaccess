@@ -24,6 +24,12 @@
         # plantilla, el certificado no se renovaría y el fallo aparecería
         # meses después, caducado y sin relación aparente con esta línea.
         Require expr %{REQUEST_URI} =~ m#^/\.well-known/#
+        # La versión de pruebas «glass» (proxy.php la manda al 3201) se abre
+        # SIN contraseña para quien tenga el enlace. THE_REQUEST y no
+        # REQUEST_URI: tras la reescritura a /proxy.php, Apache vuelve a
+        # comprobar el acceso con la URI ya cambiada, y la línea original de la
+        # petición es lo único que conserva la ruta de verdad.
+        Require expr %{THE_REQUEST} =~ m#^[A-Z]+\s/prueba-glass-47f47ad5([/?\s]|$)#
         Require valid-user
     </RequireAny>
 </IfFile>

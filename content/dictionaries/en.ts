@@ -445,8 +445,9 @@ export const en: Dictionary = {
     photoExample: "Placeholder",
     roleExample: "Role to confirm",
     scaleLabel: "When the job needs more crew",
+    // Ver la nota de es.ts: reescrito el 2026-09-16.
     scaleBody:
-      "The core is eleven people, but not every job fits into eleven. For Monegros we scaled the crew to eighteen and ran it as one: same shooting plan, same workflow, same delivery date. Building a large crew and making it work is part of what we do.",
+      "We're a crew of professionals who handle most jobs on our own. When a project demands more, we draw on a long list of trusted external collaborators who join us working to our shooting plan and our deadlines. At Monegros there were eighteen of us.",
     scaleAlt: "The scaled-up SIDEBFLMS crew at Monegros",
     ctaTitle: ["Tell us", "what event", "you have"],
   },

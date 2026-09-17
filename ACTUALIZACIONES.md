@@ -5,6 +5,116 @@ reciente arriba.
 
 ---
 
+## 2026-09-16 (73) — Versión de pruebas «glass» dentro del dominio, sin contraseña
+
+Joan: montar la versión glass (rama `glass`) en una página interna a la que
+sólo se llegue con el enlace, para que cualquiera pueda probarla.
+
+**Enlace:** `https://sidebflms.com/prueba-glass-47f47ad5/es`
+
+Lo que cambia en ESTA rama es sólo el reparto de la puerta:
+
+- `despliegue/proxy-php/proxy.php`: lo que empieza por `/prueba-glass-47f47ad5`
+  va a `127.0.0.1:3201`; todo lo demás, al 3200 de siempre.
+- `despliegue/proxy-php/htaccess`: esa ruta entra **sin contraseña**. El resto
+  de la web la sigue pidiendo. Se compara con `THE_REQUEST` y no con
+  `REQUEST_URI` porque, tras reescribir a `/proxy.php`, Apache vuelve a
+  comprobar el acceso con la URI ya cambiada.
+
+La versión de pruebas en sí vive en la rama `glass` y se despliega sola en cada
+empujón a esa rama (`.github/workflows/publicar-glass.yml`): la sube a
+`~/sidebflms-glass`, la compila con `basePath` = la ruta, la arranca en el 3201
+con el mismo `sidebflms-web.sh` (puerto por variable) y le pone su propio
+vigilante en el cron. No toca la carpeta, el proceso ni el `public_html` de la
+web. Va con `X-Robots-Tag: noindex`, y sus formularios llegan al buzón de
+siempre con «[PRUEBA GLASS]» delante del asunto.
+
+**Para retirarla:** quitar su línea del crontab (la de `sidebflms-glass`),
+parar el 3201 (`SIDEB_PUERTO=3201 ~/sidebflms-glass/despliegue/sidebflms-web.sh
+parar`), borrar `~/sidebflms-glass`, y aquí deshacer las dos piezas de arriba.
+
+**Ojo el día que se quite la contraseña:** la regla del `.htaccess` está dentro
+del `<IfFile>`, así que deja de aplicar; la ruta de pruebas seguiría abierta
+igual que el resto.
+
+## 2026-09-16 (72) — Nosotros: las cifras en ficha técnica, contando al aparecer
+
+Mario: «he visto una web que es prácticamente lo mismo, lo de los proyectos y
+horas; cambiemos la disposición de todo esto, y que cuando se vean los números
+haga una cuenta subiendo hasta llegar al número».
+
+### La disposición
+
+Eran dos secciones: una fila de cinco números enormes con la etiqueta debajo
+—la plantilla que lleva medio sector— y, más abajo, «Dónde operamos» y «Cómo
+trabajamos» a dos columnas.
+
+Ahora es **una sola ficha técnica**, como la de un rodaje: el texto de dónde y
+cómo a la izquierda y, a la derecha, las cifras en renglones, con la etiqueta a
+un lado y el número al otro. Los números van alineados por la derecha y, con
+`tabular-nums`, las unidades de las cinco filas caen en la misma columna
+(comprobado: los cinco terminan en x=1377 a 1440 px). En móvil las cifras salen
+primero, que son el gancho. De paso, dos bordes y dos márgenes grandes se
+quedan en uno.
+
+### La cuenta
+
+`components/motion/contador.tsx`. Al entrar en pantalla, cada número cuenta
+desde cero en 1,6 s, rápido al principio y frenando al final, que es donde se
+lee. Tres decisiones que conviene conocer:
+
+1. **El HTML lleva la cifra de verdad**, no un cero. La cuenta la hace el
+   navegador después. Buscadores y lectores de pantalla ven «329».
+2. **El cero sólo aparece si el navegador va a dibujar.** La primera versión lo
+   ponía nada más cargar, y en una pestaña oculta —donde no corren los
+   fotogramas— la página se quedaba enseñando «0 proyectos» para siempre. Lo
+   mismo le pasaría a una vista previa de enlace. Ahora el cero se pone dentro
+   de un fotograma: si no hay fotogramas, se queda la cifra real.
+3. **El punto de millar se pone a mano.** `toLocaleString("es-ES")` no pone
+   punto en cifras de cuatro dígitos (es la norma), así que contaría hasta
+   «2000» y saltaría a «+2.000» al final. Comprobado: termina en «+2.000».
+
+Con «reducir movimiento» no cuenta: la cifra final desde el principio.
+
+### El aviso de «provisional»
+
+Decía «las fotos marcadas no son de esa persona y los cargos con * están sin
+confirmar». Desde hoy las once fichas llevan la foto de quien dicen ser, así
+que ahora dice sólo **«Provisional: los cargos con * están sin confirmar»**.
+
+---
+
+## 2026-09-16 (71) — Nosotros: la foto de Monegros, más baja, y otro texto
+
+Mario: «esta foto es demasiado grande, córtala por arriba y abajo, y el texto es
+un poco mierda».
+
+### La foto
+
+De 4:3 a **16:9**. A 1440 px baja de 563 a **423 px de alto**.
+
+El recorte **no va centrado**: la gente ocupa la franja de abajo del original
+(cabezas en y=400 y pies en y=985 de 1050 px), y un recorte centrado se comía
+los pies de la fila de abajo. Con `object-position: 50% 88%` se pierde el cielo
+y la parte de arriba de las letras de RAVE, y quedan los dieciocho enteros.
+Comprobado reproduciendo ese mismo recorte sobre la imagen original.
+
+### El texto
+
+Lo que pidió que dijera: que el equipo es de profesionales y que, cuando un
+proyecto lo exige, hay una lista larga de colaboradores externos de confianza.
+
+> Somos un equipo de profesionales que saca adelante la mayoría de los trabajos
+> por su cuenta. Cuando un proyecto lo exige, contamos con una larga lista de
+> colaboradores externos de confianza que se suman con nuestro plan de rodaje y
+> nuestros plazos. En Monegros fuimos dieciocho.
+
+Se mantiene la frase de Monegros a propósito: la foto de al lado son dieciocho
+personas, y sin esa línea se lee como un descuadre con los once de la rejilla.
+Traducido igual en `en.ts`.
+
+---
+
 ## 2026-09-16 (70) — El trazo del botón, a la mitad de velocidad
 
 Mario: «que vaya un poco más lento, va muy rápido». De una vuelta cada 4
