@@ -858,7 +858,10 @@ html[data-intro="si"] .intro-casete {
   stroke-linecap: butt;
   stroke-linejoin: miter;
 }
+/* EL CONTORNO, en negro (Mario, 2026-09-17). Es el que dibuja la silueta del
+   casete y el que queda enmarcando la ventana cuando se abre. */
 .intro-casete-dibujo .intro-casete-contorno {
+  stroke: var(--color-ink-900);
   stroke-width: 18;
 }
 
