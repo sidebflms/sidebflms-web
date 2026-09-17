@@ -26,6 +26,12 @@ import { cn } from "@/lib/utils";
  *
  * El contenido de las muescas NO puede ir dentro del panel: `clip-path`
  * recorta a los hijos, y la muesca es precisamente la zona recortada.
+ *
+ * SIN MUESCAS NO HAY `clip-path` (2026-09-17). Si las dos miden 0 (móvil) el
+ * trazado es un rectángulo redondeado, y eso lo da `border-radius` sin
+ * recortar con un path. En iOS el vídeo de fondo del hero no arrancaba en
+ * ningún navegador y las cintas del carrusel, sin marco, sí: WebKit no se
+ * lleva bien con un `<video>` dentro de un `clip-path`.
  */
 
 type Geometria = { w: number; h: number; tw: number; th: number; bw: number; bh: number };
@@ -131,13 +137,14 @@ export function FramedStage({
   // En pantallas estrechas el radio no puede superar un cuarto del lado corto.
   const r = geo ? Math.min(radius, geo.w / 4, geo.h / 4) : radius;
   const d = geo ? trazado(geo, r) : null;
+  const conMuescas = Boolean(geo && ((geo.tw > 0 && geo.th > 0) || (geo.bw > 0 && geo.bh > 0)));
 
   return (
     <div ref={wrapRef} className={cn("relative", className)} data-framed={d ? "ready" : "pending"}>
       <div
         ref={stageRef}
         className={cn("relative h-full w-full overflow-hidden", stageClassName)}
-        style={d ? { clipPath: `path("${d}")` } : { borderRadius: radius }}
+        style={d && conMuescas ? { clipPath: `path("${d}")` } : { borderRadius: r }}
       >
         {children}
       </div>

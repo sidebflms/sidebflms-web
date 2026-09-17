@@ -102,6 +102,10 @@ export function HeroFrame({
       // Sin sessionStorage (modo privado estricto): intro completa siempre.
     }
     const k = primera ? 1 : 0.55;
+    // En móvil el vídeo no se escala ni se desplaza: iOS no arrancaba el reel
+    // y un `<video>` con transformaciones es de lo que peor lleva WebKit. Lo
+    // hace el marco que lo envuelve, que en pantalla viene a ser lo mismo.
+    const video = window.matchMedia("(min-width: 1024px)").matches ? videoRef.current : null;
 
     let split: SplitText | null = null;
     const ctx = gsap.context(() => {
@@ -110,20 +114,20 @@ export function HeroFrame({
 
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
       tl.from(frame, { scale: 0.92, y: 30, duration: 1.5 * k, transformOrigin: "50% 40%" }, 0)
-        .from(videoRef.current, { scale: 1.3, duration: 2.2 * k }, 0)
         .from("[data-intro=nav]", { y: -24, opacity: 0, duration: 0.9 * k, stagger: 0.06 }, 0.35 * k)
         .from("[data-intro=notch]", { x: 36, opacity: 0, duration: 0.9 * k, stagger: 0.07 }, 0.45 * k)
         .from(split.chars, { yPercent: 115, duration: 1.1 * k, stagger: 0.016 }, 0.4 * k)
         .from("[data-intro=up]", { y: 40, opacity: 0, duration: 1 * k, stagger: 0.08 }, 0.8 * k);
+      if (video) tl.from(video, { scale: 1.3, duration: 2.2 * k }, 0);
 
       // Al bajar, el marco se aleja y el reel se hunde; al subir, vuelve.
-      gsap
+      const alBajar = gsap
         .timeline({
           scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
         })
         .to(scroller, { scale: 0.9, yPercent: 8, ease: "none" }, 0)
-        .to(videoRef.current, { yPercent: 14, ease: "none" }, 0)
         .to(headline, { y: -90, ease: "none" }, 0);
+      if (video) alBajar.to(video, { yPercent: 14, ease: "none" }, 0);
     }, section);
 
     return () => {
