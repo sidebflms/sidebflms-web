@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IconoServicio } from "@/components/glass/iconos-servicio";
-import { ProcesoCarrusel, ProcesoEscaleta } from "@/components/sections/proceso-movil";
+import { ProcesoEscaleta } from "@/components/sections/proceso-movil";
 import { FOTO_ETAPA } from "@/content/etapas-fotos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { ICONO_ETAPA } from "@/lib/etapas";
@@ -23,12 +23,15 @@ import { cn, pad, timecode } from "@/lib/utils";
  * del clip que tiene debajo. Pulsar un clip lleva la página al punto del scroll
  * donde el cabezal cae sobre ese clip, así scroll y clic nunca se contradicen.
  *
- * SCROLL ANCLADO (desktop). La sección se queda fija en el centro de la
- * pantalla mientras el cabezal recorre la línea, y la página no sigue bajando
- * hasta que llega al final. Antes avanzaba con la página y, al llegar a
- * Postproducción, la sección ya se estaba yendo por arriba y no se leía. En
- * móvil la sección es más alta que la pantalla, así que no se ancla: el
- * cabezal avanza con el scroll normal.
+ * SCROLL ANCLADO. La sección se queda fija en el centro de la pantalla mientras
+ * el cabezal recorre la línea, y la página no sigue bajando hasta que llega al
+ * final. Antes avanzaba con la página y, al llegar a Postproducción, la sección
+ * ya se estaba yendo por arriba y no se leía.
+ *
+ * SÓLO ESCRITORIO. Por debajo de `lg` la sección es más alta que la pantalla y
+ * no se puede anclar: el visor cambiaba de etapa cuando su texto ya se había
+ * ido. Ahí va la ESCALETA vertical (proceso-movil.tsx), elegida por el cliente
+ * el 2026-09-17 entre dos propuestas.
  *
  * El largo de cada clip es sólo composición (no representa horas reales).
  */
@@ -44,27 +47,13 @@ const ONDA = Array.from({ length: 180 }, (_, i) =>
 );
 const SEGUNDOS_TOTALES = 4 * 60; // lo que marca el timecode al final de la línea
 
-/**
- * PROPUESTA DE MÓVIL — PROVISIONAL (2026-09-17). `?proceso=1` (carrusel) o
- * `?proceso=2` (escaleta) cambian, SÓLO por debajo de `lg`, el visor y la
- * línea de tiempo por la propuesta (ver proceso-movil.tsx). Sin parámetro, lo
- * de siempre. Cuando el cliente elija, se deja la suya y se borra esto.
- */
-const sinSuscripcion = () => () => {};
-function leePropuesta(): "" | "1" | "2" {
-  const v = new URLSearchParams(window.location.search).get("proceso");
-  return v === "1" || v === "2" ? v : "";
-}
-
 export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
   const etapas = dict.services.stages;
   const largos = etapas.length === LARGO.length ? LARGO : etapas.map(() => 1 / etapas.length);
   const inicios = largos.map((_, i) => largos.slice(0, i).reduce((a, b) => a + b, 0));
 
-  const propuesta = useSyncExternalStore(sinSuscripcion, leePropuesta, () => "" as const);
   const [activo, setActivo] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const pistaRef = useRef<HTMLDivElement>(null);
   const cabezalRef = useRef<HTMLDivElement>(null);
   const ondaRef = useRef<HTMLDivElement>(null);
   const tcRef = useRef<HTMLSpanElement>(null);
@@ -110,17 +99,6 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
         pin: true,
         anticipatePin: 1,
         refreshPriority: 1,
-        onUpdate,
-      });
-      triggerRef.current = st;
-      colocaCabezal(st.progress || 0.005);
-    });
-    // Móvil: sin anclar.
-    mm.add("(max-width: 1023px)", () => {
-      const st = ScrollTrigger.create({
-        trigger: pistaRef.current,
-        start: "top 85%",
-        end: "top 25%",
         onUpdate,
       });
       triggerRef.current = st;
@@ -181,19 +159,13 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
         {dict.services.processLabel}
       </h2>
 
-      {propuesta === "1" && (
-        <div className="lg:hidden">
-          <ProcesoCarrusel dict={dict} />
-        </div>
-      )}
-      {propuesta === "2" && (
-        <div className="lg:hidden">
-          <ProcesoEscaleta dict={dict} />
-        </div>
-      )}
+      {/* Móvil y tableta: la escaleta vertical. */}
+      <div className="lg:hidden">
+        <ProcesoEscaleta dict={dict} />
+      </div>
 
-      {/* Con una propuesta de móvil elegida, visor y línea sólo en escritorio. */}
-      <div className={cn(propuesta && "hidden lg:block")}>
+      {/* Escritorio: visor y línea de tiempo. */}
+      <div className="hidden lg:block">
         {/* ── VISOR DE PROGRAMA ───────────────────────────────────────────── */}
         {/* COMPACTO (2026-09-16, «un 30 % menos»): la foto baja de 7 a 5 columnas
             —en 16:9 eso le quita ~100 px de alto a todo el visor— y la línea de
@@ -295,7 +267,7 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
             <span className="self-center text-[10px] text-smoke">V1</span>
             {/* Clips más altos (2026-09-16): de 56 a 88 px, para que la foto de
                 cada etapa se lea dentro del clip. */}
-            <div ref={pistaRef} className="relative h-[5.5rem]">
+            <div className="relative h-[5.5rem]">
               {etapas.map((et, i) => {
                 const f = FOTO_ETAPA[et.number];
                 const sel = i === activo;
