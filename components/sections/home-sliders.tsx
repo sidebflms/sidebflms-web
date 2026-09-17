@@ -85,9 +85,9 @@ function Pieza({
   const video = project.media.video?.replace(/\.mp4$/, "-cinta.mp4") ?? null;
   const poster = project.media.poster?.replace(/\.jpg$/, "-cinta.webp") ?? null;
 
-  // Se observa el propio vídeo y no el enlace: las copias del bucle no son
-  // enlace, y antes se quedaban sin observar y NUNCA arrancaban. En el móvil,
-  // con pieza y media por pantalla, eran casi todo lo que se veía.
+  // Se observa el propio vídeo: antes se observaba el enlace, las copias del
+  // bucle no lo eran y se quedaban sin observar, y NUNCA arrancaban. En el
+  // móvil, con pieza y media por pantalla, eran casi todo lo que se veía.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -160,22 +160,16 @@ function Pieza({
     </>
   );
 
-  // La copia duplicada no es un enlace ni se anuncia: existe sólo para que el
-  // bucle no dé el tirón.
-  if (duplicada) {
-    return (
-      <div
-        aria-hidden="true"
-        className="relative aspect-video h-40 shrink-0 overflow-hidden rounded-lg bg-ink-900 lg:h-56"
-      >
-        {contenido}
-      </div>
-    );
-  }
-
+  // TODAS LAS PIEZAS SON ENLACE (cliente, 2026-09-17). Las copias del bucle
+  // no lo eran, y como son la mayor parte de lo que se ve, casi ninguna pieza
+  // llevaba a su proyecto. Siguen fuera del teclado y de los lectores de
+  // pantalla (`tabIndex={-1}` y `aria-hidden`): para ellos cada trabajo está
+  // una sola vez.
   return (
     <Link
       href={path(locale, "portfolio", project.slug)}
+      aria-hidden={duplicada || undefined}
+      tabIndex={duplicada ? -1 : undefined}
       className="group relative aspect-video h-40 shrink-0 overflow-hidden rounded-lg bg-ink-900 lg:h-56"
     >
       {contenido}
@@ -291,10 +285,10 @@ function Fila({
                     key={`${copia}-${pase}-${p.slug}`}
                     project={p}
                     locale={locale}
-                    // Sólo la primera pasada de la primera copia son enlaces
-                    // de verdad; el resto está para que el bucle no tenga
-                    // costura, y un lector de pantalla no tiene por qué oír
-                    // los mismos trabajos cuatro veces.
+                    // Todas llevan a su proyecto, pero sólo la primera pasada
+                    // de la primera copia se anuncia: el resto está para que
+                    // el bucle no tenga costura, y un lector de pantalla no
+                    // tiene por qué oír los mismos trabajos cuatro veces.
                     duplicada={copia !== 0 || pase !== 0}
                   />
                 ))
