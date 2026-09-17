@@ -16,20 +16,19 @@ import { CASETE } from "./casete-trazos";
  * web de fondo». Luego, con el león de la Premier League: «en negativo así para
  * que funcione y se vea más parte del fondo de la web». Y por último: «los
  * bordes del logo tienen que ser más gordos y haz una animación que se vaya
- * construyendo el logo a base de las líneas y luego que entre a la web».
+ * construyendo el logo a base de las líneas y luego que entre a la web». Y, al
+ * verlo: «y ahora fondo negro y logo en naranja» —antes era al revés—.
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
- * Una lámina naranja de marca tapa la portada entera. Encima:
+ * Una lámina negra tapa la portada entera. Encima:
  *
- *   1. EL CASETE SE DIBUJA, trazo a trazo, empezando por el borde. Cada línea
- *      es un hueco en la lámina, así que lo que va apareciendo es la portada
- *      de detrás asomando por el dibujo.
- *   2. LA VENTANA SE ABRE: el cuerpo entero pasa a ser hueco y las líneas se
- *      dan la vuelta —de huecos a naranja—, que es el casete en negativo.
+ *   1. EL CASETE SE DIBUJA en naranja, trazo a trazo, empezando por el borde.
+ *   2. LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina y por
+ *      dentro aparece la portada, con el dibujo naranja encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
  *      funde. Quedan unos 2,9 s en total.
  *
- * No hay vídeo propio: lo que se ve por el dibujo ES la portada, con su reel.
+ * No hay vídeo propio: lo que se ve por la ventana ES la portada, con su reel.
  *
  * ── POR QUÉ EL DIBUJO VA AQUÍ Y NO EN UN FICHERO ────────────────────────
  * Antes la lámina se calaba con `mask-image: url(...)` y un SVG de `public/`.
@@ -75,7 +74,6 @@ const T = {
   contorno: { espera: 0, dura: 550 },
   detalles: { espera: 300, dura: 420, tramo: 28 },
   ventana: { espera: 1300, dura: 350 },
-  vuelta: { espera: 1450, dura: 300 },
   zoom: { espera: 1850, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
   // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
@@ -125,8 +123,8 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
        Cada trazo empieza con la línea «gastada» entera (`stroke-dasharray` del
        largo del trazo y el mismo desplazamiento) y la va recuperando. El largo
        lo mide el propio navegador, que es lo fiable con curvas.
-       Sólo se animan los HUECOS, que son los que se dibujan; la otra copia, la
-       de los detalles en naranja, aparece después y ya entera. */
+       Se dibuja el casete naranja, que es el que se ve; el cuerpo que abre la
+       ventana no se dibuja, aparece de una pieza cuando toca. */
     const dibujo = el.querySelector(`#${ID_DIBUJO}`);
     dibujo?.querySelectorAll<SVGPathElement>("path").forEach((trazo, i) => {
       const esContorno = trazo.classList.contains("intro-casete-contorno");
@@ -145,21 +143,18 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       );
     });
 
-    /* 2 · LA VENTANA SE ABRE y las líneas se dan la vuelta. */
-    const aparece = (selector: string, paso: { espera: number; dura: number }) => {
-      const nodo = el.querySelector<SVGElement>(selector);
-      if (!nodo) return;
+    /* 2 · LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina. */
+    const cuerpo = el.querySelector<SVGElement>(".intro-casete-cuerpo");
+    if (cuerpo) {
       animaciones.push(
-        nodo.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: paso.dura,
-          delay: paso.espera,
+        cuerpo.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: T.ventana.dura,
+          delay: T.ventana.espera,
           easing: "ease-out",
           fill: "both",
         })
       );
-    };
-    aparece(".intro-casete-cuerpo", T.ventana);
-    aparece(".intro-casete-detalles", T.vuelta);
+    }
 
     /* 3 · SE ENTRA EN LA WEB.
        El dibujo se coloca y se agranda con `transform`, no con el tamaño de la
@@ -167,8 +162,11 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
        miles de píxeles en cada fotograma. `transform-box`/`transform-origin`
        están puestos en el CSS para que se comporte igual que el atributo
        `transform` de SVG y no respecto al centro de la caja. */
-    const arte = el.querySelector<SVGGElement>(".intro-casete-arte");
-    if (arte) {
+    // Van dos: el casete que se ve, en naranja, y el cuerpo que abre la ventana
+    // dentro de la máscara. Los dos tienen que estar en el mismo sitio y crecer
+    // a la vez, así que llevan la misma marca y se mueven juntos.
+    const sitios = el.querySelectorAll<SVGGElement>(".intro-casete-sitio");
+    sitios.forEach((arte) => {
       // La pantalla se mide de la propia capa, que va fija a los cuatro lados.
       // `window.innerWidth` no vale: hay contextos —el panel de pruebas del
       // navegador, sin ir más lejos— donde todavía es 0 cuando esto corre, y el
@@ -181,6 +179,11 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       const sitio = (k: number) =>
         `translate(${ancho / 2}px, ${alto / 2}px) scale(${k}) translate(${-CASETE.ancho / 2}px, ${-CASETE.alto / 2}px)`;
       arte.style.transform = sitio(escala);
+      // Ya está colocado y con los trazos sin empezar: se puede enseñar. Hasta
+      // aquí iba tapado desde el CSS, porque el dibujo llega en el HTML y
+      // durante los primeros fotogramas se veía entero, a tamaño natural y
+      // pegado a la esquina de arriba a la izquierda.
+      arte.style.visibility = "visible";
       animaciones.push(
         arte.animate([{ transform: sitio(escala) }, { transform: sitio(escala * CRECE) }], {
           duration: T.zoom.dura,
@@ -190,7 +193,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
           fill: "forwards",
         })
       );
-    }
+    });
 
     /* 4 · LA LÁMINA SE VA, y con ella la intro.
        El fundido se anima aquí y no en CSS por una razón concreta: la hoja
@@ -231,27 +234,13 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
     <div id={INTRO_ID} ref={ref} className="intro-casete" onClick={salta}>
       <svg className="intro-casete-lienzo" aria-hidden="true">
         <defs>
-          {/* Blanco = naranja opaco; negro = hueco por el que se ve la web. */}
+          {/* La máscara de la lámina negra: blanca —o sea, lámina— en todas
+              partes, menos donde esté el cuerpo del casete, que es la ventana.
+              El cuerpo empieza invisible y aparece cuando toca abrirla. */}
           <mask id={ID_MASCARA} maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
             <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-            <g className="intro-casete-arte">
-              {/* EL DIBUJO VA DOS VECES, y no una en `<defs>` con dos `<use>`.
-                  Probado: lo que se clona con `<use>` NO refleja la animación
-                  del original —los trazos salían ya dibujados de principio a
-                  fin—, mientras que lo que cuelga directo aquí sí. */}
-              <g id={ID_DIBUJO} className="intro-casete-huecos">
-                <path className="intro-casete-contorno" d={CASETE.contorno} />
-                {CASETE.trazos.map((d, i) => (
-                  <path key={i} d={d} />
-                ))}
-              </g>
+            <g className="intro-casete-sitio">
               <path className="intro-casete-cuerpo" d={CASETE.contorno} />
-              <g className="intro-casete-detalles">
-                <path className="intro-casete-contorno" d={CASETE.contorno} />
-                {CASETE.trazos.map((d, i) => (
-                  <path key={i} d={d} />
-                ))}
-              </g>
             </g>
           </mask>
         </defs>
@@ -264,6 +253,15 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
           height="100%"
           mask={`url(#${ID_MASCARA})`}
         />
+
+        {/* EL CASETE, en naranja y por encima de todo: se dibuja solo encima de
+            la lámina y sigue ahí cuando la ventana se abre, ya sobre la web. */}
+        <g id={ID_DIBUJO} className="intro-casete-sitio intro-casete-dibujo">
+          <path className="intro-casete-contorno" d={CASETE.contorno} />
+          {CASETE.trazos.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </g>
       </svg>
 
       <button

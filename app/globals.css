@@ -835,52 +835,51 @@ html[data-intro="si"] .intro-casete {
   width: 100%;
   height: 100%;
 }
+
+/* LA LÁMINA, negra. Mario, 2026-09-17: «y ahora fondo negro y logo en
+   naranja»; antes era al revés. Va en `ink-900`, el negro de la web, y no en
+   negro puro: es el mismo de las secciones oscuras y del pie. */
 .intro-casete-fondo {
-  fill: var(--color-rust-500);
+  fill: var(--color-ink-900);
 }
 
-/* LOS GROSORES DEL DIBUJO, aquí y no en los vectores: el casete del manual
-   está trazado a 3 puntos (y 6 el borde), que a este tamaño son un pelo. Mario,
-   2026-09-17: «los bordes del logo tienen que ser más gordos». Van sobre el
-   dibujo original del `<defs>`, así que valen para las dos copias. */
-.intro-casete-arte path {
+/* EL CASETE, en el naranja de marca, y LOS GROSORES. Los grosores van aquí y
+   no en los vectores: el casete del manual está trazado a 3 puntos (y 6 el
+   borde), que a este tamaño son un pelo. Mario: «los bordes del logo tienen
+   que ser más gordos». */
+.intro-casete-dibujo path {
   fill: none;
+  stroke: var(--color-rust-500);
   stroke-width: 9;
   stroke-linecap: butt;
   stroke-linejoin: miter;
 }
-.intro-casete-arte .intro-casete-contorno {
+.intro-casete-dibujo .intro-casete-contorno {
   stroke-width: 18;
 }
 
-/* El dibujo se coloca y crece con `transform`. `view-box` y el origen en la
-   esquina hacen que se comporte igual que el atributo `transform` de SVG: sin
-   esto, el navegador lo escalaría respecto al centro de su caja y el casete se
-   iría de sitio. */
-.intro-casete-arte {
-  transform-box: view-box;
-  transform-origin: 0 0;
-}
-
-/* Negro = hueco por el que se ve la web; blanco = naranja. Los detalles y el
-   cuerpo empiezan invisibles: aparecen cuando la ventana se abre, y el
-   componente los enciende. */
-.intro-casete-huecos {
-  stroke: #000;
-}
-/* Más específico que `.intro-casete-arte path`, que le pondría `fill: none`
-   y dejaría la ventana sin abrirse. */
-.intro-casete-arte .intro-casete-cuerpo {
+/* EL CUERPO, dentro de la máscara: negro es hueco, así que esto es la ventana
+   por la que se ve la web. Empieza invisible; la abre el componente. */
+.intro-casete-cuerpo {
   fill: #000;
   opacity: 0;
 }
-.intro-casete-detalles {
-  stroke: #fff;
-  opacity: 0;
+
+/* LO QUE SE COLOCA Y CRECE: el casete que se ve y el cuerpo que abre la
+   ventana. `view-box` y el origen en la esquina hacen que el `transform` se
+   comporte igual que el atributo de SVG; sin esto el navegador escalaría
+   respecto al centro de cada caja y las dos piezas se separarían.
+
+   TAPADO HASTA QUE EL COMPONENTE LO COLOQUE: el dibujo llega en el HTML, y
+   hasta que corre el JavaScript no tiene ni sitio ni tamaño ni los trazos
+   «gastados». Se veía el casete entero, a tamaño natural y pegado a la esquina
+   de arriba a la izquierda, durante los primeros fotogramas. */
+.intro-casete-sitio {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  visibility: hidden;
 }
 
-/* Tinta oscura sobre el naranja: `ink-900` da 4,65:1 ahí; el blanco se queda
-   en 3,2 y no cumple para texto de este tamaño. */
 .intro-casete-saltar {
   position: absolute;
   bottom: 28px;
