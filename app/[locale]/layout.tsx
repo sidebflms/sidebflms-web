@@ -7,7 +7,6 @@ import "@/app/globals.css";
 import { FondoRelieve } from "@/components/glass/fondos/fondo-relieve";
 import { GlassSpotlight } from "@/components/glass/spotlight";
 import { Analitica } from "@/components/layout/analitica";
-import { DiagnosticoVideo } from "@/components/layout/diagnostico-video";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Reglet } from "@/components/layout/reglet";
@@ -68,7 +67,6 @@ export default async function LocaleLayout({
 
         <Analitica />
         {/* TEMPORAL: sólo con ?diagvideo. Ver el componente. */}
-        <DiagnosticoVideo />
       </body>
     </html>
   );
