@@ -871,16 +871,11 @@ html[data-intro="si"] .intro-casete {
 }
 
 /* EL CUERPO, dentro de la máscara: negro es hueco, así que esto es la ventana
-   por la que se ve la web. El componente la abre creciéndola desde el centro;
-   hasta entonces está a escala 0, que no pinta nada.
-
-   `fill-box` pone el origen en el centro del propio dibujo del casete: sin eso
-   crecería desde la esquina del lienzo y la ventana se abriría de lado. */
+   por la que se ve la web. Empieza invisible; la abre el componente, dentro
+   del viraje del trazo para que no se note como un paso aparte. */
 .intro-casete-cuerpo {
   fill: #000;
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(0);
+  opacity: 0;
 }
 
 /* LO QUE SE COLOCA Y CRECE: el casete que se ve y el cuerpo que abre la

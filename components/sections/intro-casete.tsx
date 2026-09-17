@@ -81,11 +81,12 @@ const T = {
   contorno: { espera: 0, dura: 550 },
   detalles: { espera: 300, dura: 420, tramo: 28 },
   // El último detalle acaba de dibujarse sobre los 1.360 ms, así que ahí
-  // empieza el cambio de color. La ventana se abre ENCADENADA, no después: el
-  // casete acaba del color del fondo, y si la apertura esperase a que el color
-  // terminara habría medio segundo de naranja liso.
-  color: { espera: 1360, dura: 500 },
-  ventana: { espera: 1620, dura: 520 },
+  // empieza el viraje: el trazo se encoge y pasa al color de la lámina. La
+  // ventana se abre DENTRO de ese viraje, no después: el casete acaba del color
+  // del fondo, y si la apertura esperase a que terminara habría medio segundo
+  // de naranja liso, que es el corte que Mario veía.
+  color: { espera: 1360, dura: 540 },
+  ventana: { espera: 1650, dura: 300 },
   zoom: { espera: 2300, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
   // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
@@ -102,6 +103,21 @@ const T = {
  * ±24 unidades a cada lado, y en un móvil de 390 px, ±15.
  */
 const CRECE = 28;
+
+/**
+ * LOS GROSORES DEL TRAZO, en unidades del dibujo. Los de partida son los mismos
+ * que pone la hoja de estilos —ahí están explicados—; los «finos» son a los que
+ * se encoge el trazo mientras vira al color de la lámina.
+ *
+ * Mario, 2026-09-18: «que se encojan los bordes negros del exterior y se cambie
+ * al color, así se funde bien».
+ */
+const GRUESO = {
+  detalle: 9,
+  detalleFino: 4,
+  contorno: 18,
+  contornoFino: 7,
+} as const;
 
 /** Qué parte del lado corto de la pantalla ocupa el casete, como el CSS. */
 const PARTE_DE_PANTALLA = 0.72;
@@ -177,26 +193,47 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
 
        El color va en el grupo, así que es una animación y no veinticinco. */
     if (dibujo instanceof SVGElement) {
+      const paso = {
+        duration: T.color.dura,
+        delay: T.color.espera,
+        easing: "ease-in-out",
+        fill: "both" as const,
+      };
+      // El color y el adelgazamiento van juntos: el trazo negro se encoge a la
+      // vez que vira, y por eso parece que se funde con la lámina en vez de
+      // cambiar de color de una pieza.
       animaciones.push(
-        dibujo.animate([{ stroke: tono("--color-ink-900", "#141414") }, { stroke: tono("--color-rust-500", "#e8451d") }], {
-          duration: T.color.dura,
-          delay: T.color.espera,
-          easing: "ease-in-out",
-          fill: "both",
-        })
+        dibujo.animate(
+          [
+            { stroke: tono("--color-ink-900", "#141414"), strokeWidth: GRUESO.detalle },
+            { stroke: tono("--color-rust-500", "#e8451d"), strokeWidth: GRUESO.detalleFino },
+          ],
+          paso
+        )
       );
+      // El contorno lleva su propio grosor en la hoja, así que el heredado no
+      // le llega: se le anima aparte.
+      const contorno = dibujo.querySelector<SVGPathElement>(".intro-casete-contorno");
+      if (contorno) {
+        animaciones.push(
+          contorno.animate(
+            [{ strokeWidth: GRUESO.contorno }, { strokeWidth: GRUESO.contornoFino }],
+            paso
+          )
+        );
+      }
     }
 
     /* 3 · LA VENTANA SE ABRE: el cuerpo del casete se cala en la lámina. */
     const cuerpo = el.querySelector<SVGElement>(".intro-casete-cuerpo");
     if (cuerpo) {
       animaciones.push(
-        // SE ABRE CRECIENDO DESDE EL CENTRO, no apareciendo. Con un fundido, la
-        // ventana pasaba medio segundo a media opacidad y se veía el vídeo
-        // translúcido y sucio por encima del naranja. Creciendo no hay término
-        // medio: cada punto está abierto del todo o cerrado del todo.
-        // A escala 0 no se pinta nada, así que no hace falta esconderla antes.
-        cuerpo.animate([{ transform: "scale(0)" }, { transform: "scale(1)" }], {
+        // SE ABRE APARECIENDO, y no creciendo desde el centro. Creciendo, Mario
+        // lo leía como si el logo se expandiera otra vez: «como si volviera a
+        // aparecer», y lo que tiene que parecer es que se funde. Ahora la
+        // ventana entra dentro del propio viraje —mientras el trazo se encoge
+        // y vira—, corta y sin hacerse notar.
+        cuerpo.animate([{ opacity: 0 }, { opacity: 1 }], {
           duration: T.ventana.dura,
           delay: T.ventana.espera,
           easing: "cubic-bezier(0.16, 1, 0.3, 1)",
