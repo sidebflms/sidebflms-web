@@ -768,29 +768,31 @@ video::-webkit-media-controls-start-playback-button {
    INTRO DE LA PORTADA — el casete recortado en una lámina naranja.
    Componente: components/sections/intro-casete.tsx. Mario, 2026-09-17.
 
-   Una lámina naranja a pantalla completa tapa la portada, con el casete del
-   manual calado en ella: el cuerpo es una ventana a la web y los detalles
-   —bobinas, etiqueta, ranura— quedan dibujados en naranja dentro. Mario,
-   2026-09-17: «coge el casete y lo que son las líneas naranjas sería lo que
-   iría en alfa para que se vea la página web de fondo», y después, con el
-   ejemplo del león de la Premier League, «en negativo así para que funcione y
-   se vea más parte del fondo de la web».
+   Una lámina naranja a pantalla completa tapa la portada, y el casete del
+   manual se va calando en ella. Mario, 2026-09-17: «lo que son las líneas
+   naranjas sería lo que iría en alfa para que se vea la página web de fondo»,
+   después «en negativo así para que funcione y se vea más parte del fondo de
+   la web», y por último «que se vaya construyendo el logo a base de las líneas
+   y luego que entre a la web».
 
-     0,0 – 1,6 s   la lámina naranja con el casete calado, quieta
-     1,6 – 2,6 s   el casete crece hasta comerse la pantalla
-                   (esto lo anima el componente, no esta hoja)
-     2,1 – 2,7 s   la lámina se funde y queda la portada
+     0,0 – 1,6 s   el casete se dibuja trazo a trazo, y cada línea es un hueco
+     1,3 – 1,8 s   la ventana se abre: el cuerpo entero pasa a hueco y las
+                   líneas se dan la vuelta, de huecos a naranja
+     1,9 – 2,8 s   el dibujo crece hasta comerse la pantalla
+     2,4 – 2,9 s   la lámina se funde y queda la portada
 
-   El fundido empieza antes de que el crecimiento acabe, a propósito: si no,
-   quedaría medio segundo de naranja liso —las líneas ya fuera de cuadro— antes
-   de que se vaya la lámina.
+   Los tiempos NO están aquí: los lleva el componente, en la constante `T`, que
+   es quien anima. Aquí sólo vive el aspecto. Y no es manía de ordenar: esta
+   hoja tiene, más arriba, una regla que con «reducir movimiento» del sistema
+   deja todas las animaciones de CSS en 0,01 ms, y la intro se puede forzar con
+   `?intro=1` precisamente en un equipo así.
 
    ── CÓMO SE CALA EL DIBUJO ──────────────────────────────────────────────
-   Dos capas de máscara: el casete (`intro-negativo.svg`, con el cuerpo macizo
-   y los detalles ya calados dentro) y un rectángulo opaco a pantalla completa,
-   combinadas con `exclude` (`xor` en WebKit). Resultado: opaco en todas partes
-   MENOS en el cuerpo del casete. Una máscara normal haría justo lo contrario
-   —naranja sólo en el casete y web alrededor—, que no taparía nada.
+   Una máscara SVG: blanco donde la lámina es naranja, negro donde hay hueco.
+   Encima del blanco a pantalla completa van los trazos en negro (lo que se va
+   dibujando), luego el cuerpo del casete en negro (la ventana que se abre) y
+   luego los mismos trazos otra vez, en blanco, que es lo que deja los detalles
+   dibujados en naranja dentro de la ventana.
 
    Si un navegador no entendiera `mask-composite`, las dos capas se suman y la
    lámina queda naranja entera: se pierde el casete, pero la intro sigue
@@ -822,36 +824,59 @@ html[data-intro="si"] .intro-casete {
   inset: 0;
   z-index: 100;
   cursor: pointer;
-  animation: introSale 0.6s ease-in 2.1s forwards;
 }
 
-/* LA LÁMINA NARANJA CON EL CASETE CALADO.
-   La URL de la máscara llega por `--intro-mascara` desde el componente: con
-   la ruta base de la versión de pruebas, una URL fija aquí apuntaría a la web
-   original. */
-.intro-casete-velo {
+/* LA LÁMINA NARANJA. Es un rectángulo SVG a pantalla completa con la máscara
+   del casete encima; el dibujo y el guion viven en el componente. */
+.intro-casete-lienzo {
   position: absolute;
   inset: 0;
-  background: var(--color-rust-500);
-  -webkit-mask-image: var(--intro-mascara), linear-gradient(#000, #000);
-  mask-image: var(--intro-mascara), linear-gradient(#000, #000);
-  -webkit-mask-position: center, center;
-  mask-position: center, center;
-  -webkit-mask-repeat: no-repeat, no-repeat;
-  mask-repeat: no-repeat, no-repeat;
-  -webkit-mask-size: 72vmin, 100% 100%;
-  mask-size: 72vmin, 100% 100%;
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-/* En una pantalla de móvil, alta y estrecha, 72vmin son 270 px de dibujo en
-   812 de alto: queda perdido en medio de tanto naranja. El componente lee este
-   tamaño de aquí, no lo lleva escrito, así que basta cambiarlo en un sitio. */
-@media (max-width: 767px) {
-  .intro-casete-velo {
-    -webkit-mask-size: 88vmin, 100% 100%;
-    mask-size: 88vmin, 100% 100%;
-  }
+.intro-casete-fondo {
+  fill: var(--color-rust-500);
+}
+
+/* LOS GROSORES DEL DIBUJO, aquí y no en los vectores: el casete del manual
+   está trazado a 3 puntos (y 6 el borde), que a este tamaño son un pelo. Mario,
+   2026-09-17: «los bordes del logo tienen que ser más gordos». Van sobre el
+   dibujo original del `<defs>`, así que valen para las dos copias. */
+.intro-casete-arte path {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.intro-casete-arte .intro-casete-contorno {
+  stroke-width: 18;
+}
+
+/* El dibujo se coloca y crece con `transform`. `view-box` y el origen en la
+   esquina hacen que se comporte igual que el atributo `transform` de SVG: sin
+   esto, el navegador lo escalaría respecto al centro de su caja y el casete se
+   iría de sitio. */
+.intro-casete-arte {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* Negro = hueco por el que se ve la web; blanco = naranja. Los detalles y el
+   cuerpo empiezan invisibles: aparecen cuando la ventana se abre, y el
+   componente los enciende. */
+.intro-casete-huecos {
+  stroke: #000;
+}
+/* Más específico que `.intro-casete-arte path`, que le pondría `fill: none`
+   y dejaría la ventana sin abrirse. */
+.intro-casete-arte .intro-casete-cuerpo {
+  fill: #000;
+  opacity: 0;
+}
+.intro-casete-detalles {
+  stroke: #fff;
+  opacity: 0;
 }
 
 /* Tinta oscura sobre el naranja: `ink-900` da 4,65:1 ahí; el blanco se queda
@@ -885,13 +910,6 @@ html[data-intro="si"] .intro-casete {
   }
   to {
     opacity: 1;
-  }
-}
-@keyframes introSale {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
   }
 }
 
