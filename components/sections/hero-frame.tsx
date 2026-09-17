@@ -64,13 +64,17 @@ export function HeroFrame({
   const [reelOpen, setReelOpen] = useState(false);
   const closeReel = useCallback(() => setReelOpen(false), []);
 
-  // Fuente del reel según ancho, y sin arrancar solo con movimiento reducido
-  // (misma regla que el hero original).
+  // El vídeo trae sus fuentes y `autoplay` desde el HTML (ver el <video>).
+  // Aquí sólo se refuerza el arranque en móvil y, con movimiento reducido, se
+  // para: no hay forma de saber esa preferencia en el servidor.
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.src = window.matchMedia("(max-width: 767px)").matches ? SOURCES.mobile : SOURCES.desktop;
-    if (prefersReducedMotion()) return;
+    if (prefersReducedMotion()) {
+      video.autoplay = false;
+      video.pause();
+      return;
+    }
     return arrancaEnSilencio(video);
   }, []);
 
@@ -158,17 +162,26 @@ export function HeroFrame({
                 "radial-gradient(60% 80% at 70% 20%, rgba(232,69,29,0.22), transparent 60%), radial-gradient(50% 60% at 15% 90%, rgba(255,140,60,0.10), transparent 65%)",
             }}
           />
+          {/* FUENTES Y AUTOPLAY EN EL HTML (2026-09-17). Antes la fuente se
+              ponía desde JavaScript al montar y se llamaba a `play()`: en los
+              móviles no arrancaba en ningún navegador. Con `<source media>` el
+              propio navegador elige el recorte vertical en móvil antes de
+              pedir nada, y con `autoplay` lo arranca él. */}
           <video
             ref={videoRef}
             className="absolute inset-0 -z-10 h-full w-full object-cover"
             poster={SOURCES.poster}
+            autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             tabIndex={-1}
             aria-hidden="true"
-          />
+          >
+            <source src={SOURCES.mobile} type="video/mp4" media="(max-width: 767px)" />
+            <source src={SOURCES.desktop} type="video/mp4" />
+          </video>
           <div
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-900/70 via-ink-900/20 to-ink-900/90 lg:bg-gradient-to-r lg:from-ink-900/80 lg:via-ink-900/30 lg:to-ink-900/40"

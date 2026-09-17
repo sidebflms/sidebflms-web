@@ -1,17 +1,22 @@
 /**
  * ARRANQUE DE VÍDEOS MUDOS DE FONDO, TAMBIÉN EN MÓVIL.
  *
- * Un `play()` suelto no basta en el teléfono:
+ * Un `play()` suelto no basta en el teléfono (probado el 2026-09-17: el hero
+ * no arrancaba en ningún navegador móvil y las cintas no lo hacían en Chrome):
+ *   · Los navegadores móviles tratan mucho mejor el `autoplay` NATIVO que un
+ *     `play()` lanzado desde JavaScript: con el atributo, el propio navegador
+ *     arranca el vídeo cuando tiene datos y cuando está a la vista, y lo
+ *     reanuda solo si lo pausó por salir de pantalla. Un `play()` rechazado,
+ *     en cambio, no se vuelve a intentar nunca.
  *   · iOS sólo deja arrancar solo si el vídeo está silenciado como PROPIEDAD y
- *     como atributo (React no escribe el atributo `muted` en el HTML).
- *   · Con «ahorro de batería» (iOS) o «ahorro de datos» (Android) el primer
- *     `play()` se rechaza; en cambio, uno lanzado dentro de un toque sí vale.
- *   · Un `play()` pedido antes de tener datos a veces se pierde sin error.
+ *     como atributo, y con `playsinline`.
+ *   · Con «ahorro de batería» o «ahorro de datos» el primer intento se
+ *     rechaza; uno lanzado dentro de un toque sí vale.
  *
- * Así que se silencia de las dos formas, se intenta ya, se reintenta cuando
- * llegan datos y, si seguía parado, con el primer toque o al volver a la
- * pestaña. `debeSonar` deja fuera los que el componente quiere parados
- * (fuera de pantalla, «reducir movimiento»).
+ * Así que se silencia de las dos formas, se enciende `autoplay`, se intenta
+ * ya, se reintenta cuando llegan datos y, si seguía parado, con el primer
+ * toque o al volver a la pestaña. `debeSonar` deja fuera los que el componente
+ * quiere parados (fuera de pantalla, «reducir movimiento»).
  */
 export function arrancaEnSilencio(video: HTMLVideoElement, debeSonar: () => boolean = () => true): () => void {
   video.muted = true;
@@ -21,7 +26,9 @@ export function arrancaEnSilencio(video: HTMLVideoElement, debeSonar: () => bool
   video.setAttribute("playsinline", "");
 
   const intenta = () => {
-    if (video.paused && debeSonar()) video.play().catch(() => {});
+    if (!debeSonar()) return;
+    video.autoplay = true;
+    if (video.paused) video.play().catch(() => {});
   };
   const alVolver = () => {
     if (!document.hidden) intenta();
@@ -41,4 +48,25 @@ export function arrancaEnSilencio(video: HTMLVideoElement, debeSonar: () => bool
     document.removeEventListener("click", intenta);
     document.removeEventListener("visibilitychange", alVolver);
   };
+}
+
+/**
+ * Enciende un vídeo que estaba en `preload="none"` al entrar en pantalla: con
+ * `autoplay` y cargando, para que lo arranque el navegador aunque el `play()`
+ * se rechace. Al salir, `apaga`.
+ */
+export function enciende(video: HTMLVideoElement): void {
+  video.autoplay = true;
+  if (video.preload !== "auto") video.preload = "auto";
+  // Sin datos y sin estar cargando (`preload="none"`): hay que pedírselos. Con
+  // `load()` la selección de fuente vuelve a correr ya con `autoplay` puesto.
+  if (video.readyState === HTMLMediaElement.HAVE_NOTHING && video.networkState !== HTMLMediaElement.NETWORK_LOADING) {
+    video.load();
+  }
+  video.play().catch(() => {});
+}
+
+export function apaga(video: HTMLVideoElement): void {
+  video.autoplay = false;
+  video.pause();
 }

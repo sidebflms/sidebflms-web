@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import type { Category, Project } from "@/content/projects";
-import { arrancaEnSilencio } from "@/lib/autoplay";
+import { apaga, arrancaEnSilencio, enciende } from "@/lib/autoplay";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 
@@ -96,12 +96,8 @@ function Pieza({
     const obs = new IntersectionObserver(
       ([e]) => {
         enVista = e.isIntersecting;
-        if (enVista) {
-          if (v.preload !== "auto") v.preload = "auto";
-          v.play().catch(() => {});
-        } else {
-          v.pause();
-        }
+        if (enVista) enciende(v);
+        else apaga(v);
       },
       { rootMargin: "10% 0px", threshold: 0.01 }
     );
