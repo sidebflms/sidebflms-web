@@ -173,7 +173,12 @@ export function FormularioPorPasos({
             horizontal por dentro) ensanchaba la columna hasta su ancho
             natural, más de 1000 px, y el panel recortaba el formulario. */}
         <div className="min-w-0 lg:col-span-4">
-          <div className="lg:sticky lg:top-28">
+          {/* SIN `sticky`. La columna iba pegada al bajar, y como el panel no
+              es mucho más alto que ella, sólo recorría unos 150 px dentro de él
+              y se paraba: el título se veía subir y bajar respecto al
+              formulario. Mario, 2026-09-18: «el texto de request a quote se
+              mueve para arriba y para abajo». */}
+          <div>
             {/* Columna 4/12 dentro del relleno de un panel del 70 % de la
                 ventana: a 1024 px da ~200 px, y «PRESUPUESTO» mide 10.14× el
                 cuerpo. De ahí el 1,4vw. */}
