@@ -454,7 +454,11 @@ export const en: Dictionary = {
     scaleLabel: "When the job needs more crew",
     // Ver la nota de es.ts: reescrito el 2026-09-16.
     scaleBody:
-      "We're a crew of professionals who handle most jobs on our own. When a project demands more, we draw on a long list of trusted external collaborators who join us working to our shooting plan and our deadlines. At Monegros there were eighteen of us.",
+      "We're a crew of professionals who handle most jobs on our own. When a project demands more, we draw on a long list of trusted external collaborators who join us working to our shooting plan and our deadlines.",
+    scaleStats: [
+      { prefix: "Up to", value: "10", label: "Jobs at once" },
+      { prefix: "Up to", value: "18", label: "People on a single shoot" },
+    ],
     scaleAlt: "The scaled-up SIDEBFLMS crew at Monegros",
     ctaTitle: ["Tell us", "what event", "you have"],
   },

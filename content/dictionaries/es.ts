@@ -530,11 +530,20 @@ export const es = {
     scaleLabel: "Cuando hace falta más equipo",
     // Reescrito el 2026-09-16 a petición de Mario: que diga que el equipo
     // resuelve solo la mayoría de trabajos y que, cuando un proyecto lo exige,
-    // hay una lista larga de colaboradores externos de confianza. Se conserva
-    // Monegros porque la foto de al lado son dieciocho personas y sin la
-    // explicación se lee como un descuadre con los once de la rejilla.
+    // hay una lista larga de colaboradores externos de confianza.
+    //
+    // Terminaba con «En Monegros fuimos dieciocho», que explicaba por qué la
+    // foto de al lado tiene dieciocho caras y la rejilla once. Desde el
+    // 2026-09-18 eso lo dice la cifra de `scaleStats` y la frase sobraba.
     scaleBody:
-      "Somos un equipo de profesionales que saca adelante la mayoría de los trabajos por su cuenta. Cuando un proyecto lo exige, contamos con una larga lista de colaboradores externos de confianza que se suman con nuestro plan de rodaje y nuestros plazos. En Monegros fuimos dieciocho.",
+      "Somos un equipo de profesionales que saca adelante la mayoría de los trabajos por su cuenta. Cuando un proyecto lo exige, contamos con una larga lista de colaboradores externos de confianza que se suman con nuestro plan de rodaje y nuestros plazos.",
+    // Mario, 2026-09-18: «podemos hacer hasta 10 trabajos a la vez y hemos sido
+    // hasta 18 personas en un rodaje». Son máximos, no lo de siempre: de ahí el
+    // «Hasta» encima de cada número.
+    scaleStats: [
+      { prefix: "Hasta", value: "10", label: "Trabajos a la vez" },
+      { prefix: "Hasta", value: "18", label: "Personas en un mismo rodaje" },
+    ],
     scaleAlt: "El equipo ampliado de SIDEBFLMS en Monegros",
     ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
   },

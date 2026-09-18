@@ -206,31 +206,54 @@ export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Loca
             ))}
           </BentoRejilla>
 
-          {/* Monegros: la foto del equipo ampliado y su explicación, juntas. */}
+          {/* Monegros: la foto del equipo ampliado y, al lado, su explicación y
+              las dos cifras de escala. */}
           <BentoRejilla className="mt-3 grid gap-3 lg:mt-4 lg:grid-cols-12 lg:gap-4">
             {FOTO_AMPLIACION && (
               <div data-pieza className={cn(pieza, "rounded-[1.75rem] p-2 lg:col-span-7")}>
-                <Parallax amount={5} className="aspect-[16/10] rounded-[1.25rem] bg-ink-900">
+                {/* SIN PARALAJE Y ENCUADRADA ABAJO. La foto es 4:3 y la gente
+                    ocupa su mitad de abajo, con cielo de sobra arriba. El
+                    paralaje la ampliaba un 15 % y la subía y bajaba, y el
+                    encuadre centrado cortaba las piernas a la fila de delante;
+                    Mario, 2026-09-18: «estás cortando las piernas de gente».
+                    Con el foco al 85 % se recorta cielo y quedan los pies. */}
+                <div className="relative aspect-[16/10] overflow-hidden rounded-[1.25rem] bg-ink-900">
                   <Image
                     src={FOTO_AMPLIACION}
                     alt={dict.about.scaleAlt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 55vw"
-                    className="object-cover"
+                    className="object-cover object-[50%_85%]"
                   />
-                </Parallax>
+                </div>
               </div>
             )}
-            <div
-              data-pieza
-              className={cn(
-                pieza,
-                "glass-strong flex flex-col justify-end rounded-[1.75rem] p-7 lg:p-9",
-                FOTO_AMPLIACION ? "lg:col-span-5" : "lg:col-span-12"
-              )}
-            >
-              <h2 className="label text-rust-300">{dict.about.scaleLabel}</h2>
-              <p className="text-lead mt-4 text-bone">{dict.about.scaleBody}</p>
+            {/* La columna de al lado va en DOS piezas y no en una: el texto solo
+                dejaba una caja enorme para un párrafo («exageradamente grande
+                para el texto que es», Mario, 2026-09-18). La otra lleva las dos
+                cifras de escala. */}
+            <div className={cn("grid gap-3 lg:gap-4", FOTO_AMPLIACION ? "lg:col-span-5" : "lg:col-span-12")}>
+              <div data-pieza className={cn(pieza, "glass-strong rounded-[1.75rem] p-7 lg:p-9")}>
+                <h2 className="label text-rust-300">{dict.about.scaleLabel}</h2>
+                <p className="text-lead mt-4 text-bone">{dict.about.scaleBody}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 lg:gap-4">
+                {dict.about.scaleStats.map((cifra, i) => (
+                  <div
+                    key={cifra.label}
+                    data-pieza
+                    className={cn(pieza, "flex flex-col justify-between gap-4 rounded-2xl p-5 lg:p-6")}
+                  >
+                    <p className="label">{cifra.label}</p>
+                    <div>
+                      <p className="label text-rust-300">{cifra.prefix}</p>
+                      <p className="font-display mt-1 text-[clamp(2rem,3.4vw,3.5rem)] leading-none text-bone tabular-nums">
+                        <CountUp value={cifra.value} delay={0.1 * (i + 1)} />
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </BentoRejilla>
         </section>
