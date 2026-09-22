@@ -1,7 +1,7 @@
 # Un panel para editar la web sin tocar código
 
-**Estado: Fase 0 HECHA y superada** (2026-09-22). El resto sigue siendo
-propuesta. El resultado de la prueba está al final, en el punto 11.
+**Estado: Fase 1 EN PRODUCCIÓN** (2026-09-23). Proyectos y equipo se editan
+en `sidebflms.com/admin`. Lo hecho y lo aprendido, al final (puntos 11 y 12).
 
 ---
 
@@ -82,8 +82,8 @@ De ahí la Fase 0.
 
 | Contenido | Hoy | Con el panel |
 |---|---|---|
-| **Proyectos** (27): nombre, textos, fecha, sitio, categorías, destacado | `content/projects.ts` | **Panel** |
-| **Equipo** (13): nombre, cargo, orden, foto | `content/team.ts` | **Panel** |
+| **Proyectos** (23): nombre, textos, fecha, sitio, categorías, destacado | `content/projects.ts` | **Panel** |
+| **Equipo** (11): nombre, cargo, orden, foto | `content/team.ts` | **Panel** |
 | **Cifras** de la portada y de Nosotros | `content/cifras.ts` | **Panel** |
 | **Preguntas frecuentes** | diccionarios | **Panel** |
 | **Textos largos** de cada página (entradillas, descripciones) | diccionarios | **Panel** |
@@ -265,7 +265,7 @@ anterior de Node. Conviene saberlo antes de prometer negritas.
 Ahora sí se puede estimar con fundamento. Trabajo, en orden:
 
 1. Describir proyectos y equipo como colecciones, con todos sus campos.
-2. Script que pase los 27 proyectos y las 13 personas del código a la base de
+2. Script que pase los 23 proyectos y las 11 personas del código a la base de
    datos, repetible.
 3. Cambiar de dónde leen las páginas: hoy de `content/*.ts`, luego de la base
    de datos. Afecta a unos seis componentes.
@@ -287,3 +287,64 @@ npx next dev -p 3005                   # el panel, en /admin
 
 Las credenciales de prueba están en `.env.local` (no va a git). El usuario que
 se creó es `prueba@ejemplo-falso.test`.
+
+---
+
+## 12. Fase 1, hecha y en producción (2026-09-23)
+
+### Qué hay
+
+- **`sidebflms.com/admin`**: el panel. Proyectos y equipo, en los dos idiomas.
+  Al guardar, la web se regenera sola en segundos (comprobado en local editando
+  un cargo y viéndolo cambiar sin desplegar; el otro idioma no se tocó).
+- **La web sale idéntica.** Compilada leyendo de ficheros y leyendo de la base,
+  ocho páginas comparadas carácter a carácter: iguales.
+- **Plan B:** si la base no responde, la web tira de `content/*.ts` y avisa en
+  el registro. Los ficheros se quedan en el repositorio por eso, y porque llevan
+  la memoria del equipo (de dónde salió cada dato).
+- **Salida de emergencia:** `/admin-volcado?clave=…` saca todo en JSON.
+  `/admin-carga?clave=…` hace la ida (ficheros → base), repetible. La clave es
+  `PAYLOAD_SECRET`, del servidor.
+
+### Cómo está montado en el servidor
+
+En `~/sidebflms-web/.env` (que el despliegue NO toca):
+
+    PGHOST=127.0.0.1
+    PGPORT=5432
+    PGUSER=bote_panelweb
+    PGDATABASE=bote_panelweb
+    PGPASSWORD_FILE=/home/bote/sidebflms-web/.clave-panel
+    PAYLOAD_SECRET=…
+
+La contraseña va **en su propio fichero**, `.clave-panel` (permisos 600), y
+puede llevar cualquier carácter. La base se creó desde Hestia (DB → pgsql →
+`panelweb`, que Hestia prefija como `bote_panelweb`).
+
+Las **migraciones** están en `migrations/` y `despliegue/publicar.sh` las aplica
+antes de compilar. En producción Payload no crea tablas por su cuenta.
+
+### Lo que costó, para no repetirlo
+
+1. **La contraseña en una dirección de conexión.** `postgres://u:clave@host/db`
+   se parte por la arroba, el interrogante y la barra que traiga la contraseña.
+   Se cambió a campos sueltos; ver el comentario de `payload.config.ts`.
+2. **La almohadilla en `.env`** empieza un comentario. Por eso el fichero
+   aparte para la contraseña.
+3. **El `rsync --delete` del despliegue borraba** todo lo que no está en el
+   repositorio: `.env.production`, `.clave-panel`. Excluidos los dos.
+4. **Un comentario entre las líneas de un comando** con `\` al final no es un
+   comentario: es un argumento. Un despliegue fallido por eso.
+5. **Las migraciones que genera Payload** importan los tipos como valores y el
+   Node del servidor no los descarta. Cada migración nueva hay que retocarla:
+   `import type` para `MigrateUpArgs`/`MigrateDownArgs`.
+6. **`next/cache` no existe fuera de la web.** El aviso de regeneración lo carga
+   sólo cuando hace falta; si no, la línea de comandos de Payload revienta.
+
+### Lo que queda
+
+- **Copia de seguridad de `bote_panelweb`.** No existe todavía. Hay que hacerla
+  como la del inventario: `pg_dump`, cifrada, semanal, con ensayo de
+  restauración. Sin esto, un borrado en el panel no tiene vuelta.
+- El primer usuario del panel lo crea Mario desde el navegador.
+- Fase 2 (cifras, preguntas, textos de página) y Fase 3 (material).
