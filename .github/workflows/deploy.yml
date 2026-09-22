@@ -90,14 +90,22 @@ jobs:
           # avisar. La web seguía arrancando, pero sin base de datos ni
           # analítica, y el motivo no aparecía por ningún lado. (2026-09-22)
           #
+          # TAMBIÉN SE EXCLUYE `.clave-panel`: es la contraseña de la base de
+          # datos del panel, vive sólo en el servidor y no está en el
+          # repositorio, así que `--delete` la BORRABA en cada publicación.
+          # La web arrancaba sin base de datos y el despliegue fallaba al
+          # compilar, quejándose de un fichero que nadie había tocado.
+          # (2026-09-22)
+          #
           # Y NADA DE COMENTARIOS ENTRE LAS LÍNEAS DEL COMANDO: con la barra
           # al final, la siguiente línea es continuación, así que una
           # almohadilla ahí NO es un comentario, es un argumento más para
-          # rsync. Costó un despliegue fallido el 2026-09-22.
+          # rsync. Costó otro despliegue fallido el mismo día.
           rsync -az --delete \
             --exclude 'node_modules' \
             --exclude '.next' \
             --exclude '.env*' \
+            --exclude '.clave-panel' \
             --exclude '*.log' \
             --exclude '.vigilante.lock' \
             --exclude '.operacion.lock' \
