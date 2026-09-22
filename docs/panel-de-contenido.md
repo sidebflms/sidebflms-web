@@ -1,7 +1,7 @@
 # Un panel para editar la web sin tocar código
 
-**Estado: propuesta.** Nada de esto está hecho. Escrito el 2026-09-22 a
-petición de Mario, para decidir antes de empezar.
+**Estado: Fase 0 HECHA y superada** (2026-09-22). El resto sigue siendo
+propuesta. El resultado de la prueba está al final, en el punto 11.
 
 ---
 
@@ -215,3 +215,75 @@ día y después se puede estimar con fundamento.
 **Que no haya que tocar código nunca más.** Añadir una sección nueva a la web,
 cambiar cómo se ve algo o meter un tipo de contenido que hoy no existe seguirá
 siendo trabajo de programación. El panel es para el contenido del día a día.
+
+---
+
+## 11. Resultado de la Fase 0
+
+Hecha el 2026-09-22 en la rama `prueba-payload`, que **no está mezclada con la
+web**. Payload 3.90.1 montado dentro de esta misma aplicación, contra un
+PostgreSQL 16 de usar y tirar en Docker.
+
+### Las tres preguntas, respondidas
+
+| Pregunta | Respuesta |
+|---|---|
+| ¿Arranca con Next 16.3.6? | **Sí.** En desarrollo y compilado. El panel responde en `/admin` y la web pública sigue igual. |
+| ¿Habla con PostgreSQL? | **Sí.** Se crea sus nueve tablas solo al arrancar, sin tocar nada a mano. |
+| ¿Sabe guardar en dos idiomas? | **Sí.** Creada una pieza en español, añadida su versión inglesa y leídas las dos por separado. Crea una tabla aparte para los idiomas. |
+
+Y una cuarta que era la de verdad importante: **¿puede la web leer lo que hay en
+el panel?** Sí. Una página de prueba lee el contenido desde el propio servidor
+—sin pasar por HTTP— y lo pinta en los dos idiomas.
+
+### Lo que cuesta, medido
+
+| | Sin panel | Con panel |
+|---|---|---|
+| Memoria del proceso | 112 MB | **189 MB** (+77) |
+| Compilar | 2,3 s | 28 s *(la primera vez; luego con caché)* |
+| Páginas pregeneradas | 69 | **69, las mismas** |
+| La web pública | — | **No cambia nada** |
+
+Los 77 MB de más caben de sobra en el VPS (había 3 GB libres).
+
+### Un tropiezo, y no es grave
+
+El editor de texto rico de Payload (`richtext-lexical`) **no se deja cargar por
+su herramienta de línea de comandos con Node 26**, que es el que corre en el
+servidor: falla con «require() cannot be used on an ESM graph with top-level
+await». Se quitó de la prueba y todo lo demás funcionó.
+
+No bloquea la Fase 1, porque **los textos de esta web son texto plano**: los
+resúmenes de proyecto usan saltos de línea, no negritas ni enlaces. Un campo de
+texto normal basta. Si algún día se quiere texto con formato, hay tres salidas:
+otro editor, esperar a que lo arreglen, o generar esa parte con una versión
+anterior de Node. Conviene saberlo antes de prometer negritas.
+
+### Qué haría falta para la Fase 1
+
+Ahora sí se puede estimar con fundamento. Trabajo, en orden:
+
+1. Describir proyectos y equipo como colecciones, con todos sus campos.
+2. Script que pase los 27 proyectos y las 13 personas del código a la base de
+   datos, repetible.
+3. Cambiar de dónde leen las páginas: hoy de `content/*.ts`, luego de la base
+   de datos. Afecta a unos seis componentes.
+4. Que al guardar se regenere sola la página tocada.
+5. El volcado de vuelta a ficheros (la salida de emergencia).
+6. En el servidor: base de datos desde Hestia, dos variables, y añadirla a la
+   copia de seguridad.
+
+**Entre tres y cinco días de trabajo**, con el riesgo puesto en el punto 3, que
+es el que toca código que hoy funciona.
+
+### Cómo volver a levantar la prueba
+
+```bash
+git checkout prueba-payload
+docker start sideb-payload-pg          # PostgreSQL de usar y tirar, puerto 5434
+npx next dev -p 3005                   # el panel, en /admin
+```
+
+Las credenciales de prueba están en `.env.local` (no va a git). El usuario que
+se creó es `prueba@ejemplo-falso.test`.
