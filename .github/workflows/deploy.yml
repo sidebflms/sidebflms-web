@@ -83,14 +83,20 @@ jobs:
           # `--delete` para que un fichero borrado en el repositorio
           # desaparezca también del servidor. Las exclusiones son cosas que se
           # generan allí y que borrar obligaría a recompilar de cero cada vez.
+          #
+          # SE EXCLUYE `.env*` Y NO SÓLO `.env`: la configuración del servidor
+          # puede estar en `.env.production` —así lo pide el README de la
+          # analítica— y con el patrón antiguo el despliegue la BORRABA sin
+          # avisar. La web seguía arrancando, pero sin base de datos ni
+          # analítica, y el motivo no aparecía por ningún lado. (2026-09-22)
+          #
+          # Y NADA DE COMENTARIOS ENTRE LAS LÍNEAS DEL COMANDO: con la barra
+          # al final, la siguiente línea es continuación, así que una
+          # almohadilla ahí NO es un comentario, es un argumento más para
+          # rsync. Costó un despliegue fallido el 2026-09-22.
           rsync -az --delete \
             --exclude 'node_modules' \
             --exclude '.next' \
-            # `.env*` y no sólo `.env`: la configuración del servidor puede
-            # estar en `.env.production` —así lo pide el README de la
-            # analítica— y con el patrón antiguo el despliegue la BORRABA sin
-            # avisar. La web seguía arrancando, pero sin base de datos ni
-            # analítica, y el motivo no aparecía por ningún lado. (2026-09-22)
             --exclude '.env*' \
             --exclude '*.log' \
             --exclude '.vigilante.lock' \
