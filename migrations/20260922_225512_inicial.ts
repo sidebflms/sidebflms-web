@@ -1,4 +1,12 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+// `import type` para los dos tipos, y el `sql` aparte. Payload genera esta
+// línea con los tres juntos, y en el servidor —Node 26 quitando los tipos por
+// su cuenta— los tipos se quedan como importaciones de verdad y el fichero
+// revienta con «does not provide an export named MigrateDownArgs». En local
+// no se notaba porque la herramienta que corre las migraciones ahí sí los
+// descarta. Cada migración nueva que genere Payload hay que retocarla igual.
+// (2026-09-23)
+import type { MigrateUpArgs, MigrateDownArgs } from '@payloadcms/db-postgres'
+import { sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
