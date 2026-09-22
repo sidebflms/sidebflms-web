@@ -8,8 +8,74 @@ import type { NextConfig } from "next";
  */
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || undefined;
 
+/**
+ * EL ORIGEN DE LA ANALÍTICA, si está encendida (ver components/layout/analitica.tsx).
+ * Hace falta aquí para dejarla pasar en la política de contenido.
+ */
+const ANALITICA = (process.env.NEXT_PUBLIC_ANALITICA || "").replace(/\/$/, "");
+
+/**
+ * CABECERAS DE SEGURIDAD. La web no mandaba ninguna (comprobado el 2026-09-22).
+ *
+ * ── QUÉ HACE LA POLÍTICA DE CONTENIDO Y QUÉ NO ──────────────────────────
+ * Lleva `'unsafe-inline'` en los scripts, y eso hay que decirlo claro: NO
+ * protege de un script inyectado en línea. Es a propósito. Next reparte el
+ * contenido de cada página en `<script>` sueltos dentro del HTML, así que la
+ * única manera de prohibir lo de dentro es firmar cada uno con un número de un
+ * solo uso; y para generarlo hay que mirar la petición, lo que convierte las
+ * 69 páginas estáticas en páginas que se montan una a una en cada visita. En
+ * una web que va detrás de un proxy PHP, eso se paga en cada carga.
+ *
+ * Lo que sí impide, que no es poco: cargar scripts de OTRO sitio, meter la web
+ * en un iframe ajeno, mandar los formularios a otro dominio, cambiar la base
+ * de las URL relativas y cargar objetos incrustados.
+ *
+ * Si algún día hay cuentas de usuario o algo que perder, toca dar el paso al
+ * número de un solo uso y asumir el coste.
+ */
+function cabecerasDeSeguridad() {
+  const deFuera = [ANALITICA].filter(Boolean).join(" ");
+  // EN DESARROLLO HACE FALTA `unsafe-eval`. React lo usa en ese modo para
+  // reconstruir las pilas de error, y Next para recargar en caliente: sin
+  // esto, `next dev` se queda en blanco con un error de consola. En lo que se
+  // publica NO se añade: React no usa `eval` en producción.
+  const enDesarrollo = process.env.NODE_ENV === "development";
+  const politica = [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline' ${enDesarrollo ? "'unsafe-eval' " : ""}${deFuera}`.trim(),
+    // Los estilos en línea los pone React en los atributos `style`.
+    "style-src 'self' 'unsafe-inline'",
+    `img-src 'self' data: blob: ${deFuera}`.trim(),
+    "media-src 'self'",
+    "font-src 'self' data:",
+    // `ws:` sólo en desarrollo: es por donde Next recarga en caliente.
+    `connect-src 'self' ${enDesarrollo ? "ws: " : ""}${deFuera}`.trim(),
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+  ].join("; ");
+
+  return [
+    { key: "Content-Security-Policy", value: politica },
+    // Un año. SIN `includeSubDomains` a propósito: hay subdominios de la casa
+    // (app, flightops, analitica) que no gestiona este repo, y prometer por
+    // ellos es prometer lo que uno no controla.
+    { key: "Strict-Transport-Security", value: "max-age=31536000" },
+    { key: "X-Content-Type-Options", value: "nosniff" },
+    { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+    // Nada de esto lo usa la web; se apaga para que tampoco lo use nadie más.
+    { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+    // Por los navegadores que aún no miran `frame-ancestors`.
+    { key: "X-Frame-Options", value: "DENY" },
+  ];
+}
+
 const nextConfig: NextConfig = {
   basePath: BASE_PATH,
+
+  /** Ni versión ni nombre del servidor: no se regala inventario. */
+  poweredByHeader: false,
 
   /**
    * Este proyecto vive dentro de la carpeta de `jota-hq`, que tiene su propio
@@ -66,6 +132,7 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
+      { source: "/:ruta*", headers: cabecerasDeSeguridad() },
       // La versión de pruebas no debe acabar en Google: no está enlazada desde
       // ningún sitio, pero un enlace compartido basta para que la rastreen.
       ...(BASE_PATH

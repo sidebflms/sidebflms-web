@@ -8,12 +8,25 @@
 # la plantilla NodeJS de Hestia necesita un `node.conf` que vive en un
 # directorio de root. Ver despliegue/proxy-php/proxy.php.
 #
-# ── AQUÍ NO SE PONE CONTRASEÑA ───────────────────────────────────────────
-# Y no es un olvido. GoatCounter trae la suya: el panel pide usuario y clave, y
-# lo único abierto son `/count` y `/count.js`, que es justo lo que la web tiene
-# que poder llamar desde el navegador de cada visitante. Si se pusiera aquí una
-# contraseña de Apache, **la web dejaría de poder contar**, porque el navegador
-# del visitante no la tiene.
+# ── QUÉ SE ABRE A INTERNET Y QUÉ NO ──────────────────────────────────────
+# SÓLO `/count` y `/count.js`: lo que el navegador de cada visitante tiene que
+# poder llamar para que la visita se apunte. Contraseña de Apache no se puede
+# poner en esas dos rutas, porque el visitante no la tiene y la web dejaría de
+# contar.
+#
+# TODO LO DEMÁS SE CIERRA, y eso sí es nuevo (2026-09-22). Antes esta regla
+# mandaba al servicio cualquier ruta, así que el panel de GoatCounter —su
+# pantalla de acceso, sus ajustes, la exportación de datos— quedaba publicado
+# en internet. Tiene su propia contraseña, pero una pantalla de acceso abierta
+# es algo que probar a la fuerza bruta, y aquí no hay nada delante que frene
+# los intentos.
+#
+# PARA ENTRAR AL PANEL, un túnel por SSH desde tu equipo:
+#
+#     ssh -N -L 3400:127.0.0.1:3400 bote@nastos.barrasa.dev
+#
+# y luego abrir http://localhost:3400 en el navegador. Lo que se ve es
+# exactamente lo mismo que se veía por el subdominio.
 
 RewriteEngine On
 
@@ -29,7 +42,11 @@ RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
-# Y todo lo demás, al servicio.
-RewriteRule ^(.*)$ /proxy.php [QSA,L]
+# Las DOS rutas de contar, y nada más, al servicio.
+RewriteRule ^count(\.js)?$ /proxy.php [QSA,L]
+
+# El resto no existe para quien venga de fuera. 404 y no 403 a propósito: no
+# hace falta anunciar que ahí detrás hay un panel.
+RewriteRule ^ - [R=404,L]
 
 DirectoryIndex disabled

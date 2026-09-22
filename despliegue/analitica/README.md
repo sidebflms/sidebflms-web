@@ -17,6 +17,20 @@ aparte, con su propia base de datos.
 Escucha en `127.0.0.1:3400` y lo levanta el cron cada minuto si no responde,
 igual que la web y que el inventario.
 
+## Cómo entrar al panel
+
+Desde el 2026-09-22 el subdominio **sólo sirve `/count` y `/count.js`**, que es
+lo que la web necesita para contar. El panel ya no está publicado en internet:
+antes lo estaba, con su pantalla de acceso a la vista de cualquiera y sin nada
+que frenara los intentos a la fuerza bruta.
+
+Para verlo, un túnel por SSH desde tu equipo:
+
+    ssh -N -L 3400:127.0.0.1:3400 bote@nastos.barrasa.dev
+
+y con eso abierto, en el navegador: <http://localhost:3400>. Usuario y clave,
+los de `~/analitica/credenciales.txt`.
+
 ## Por qué GoatCounter y no Umami
 
 Umami era la primera opción, pero necesita un servidor de base de datos y en
