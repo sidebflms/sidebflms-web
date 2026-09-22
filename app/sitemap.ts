@@ -3,7 +3,11 @@ import type { MetadataRoute } from "next";
 import { PROJECTS } from "@/content/projects";
 import { LOCALES, ROUTES, SITE_URL, type RouteKey } from "@/lib/routes";
 
-const STATIC_KEYS: RouteKey[] = ["home", "portfolio", "services", "about", "drone", "contact", "legal", "privacy"];
+// `jobs` es «trabaja con nosotros»: faltaba, y el pie enlaza a ella en los dos
+// idiomas, así que estaba publicada pero no listada. (2026-09-22)
+const STATIC_KEYS: RouteKey[] = [
+  "home", "portfolio", "services", "about", "drone", "jobs", "contact", "legal", "privacy",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];

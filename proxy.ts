@@ -57,7 +57,15 @@ export function proxy(request: NextRequest) {
 
   const locale = pickLocale(request);
   const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
+
+  // SI LA DIRECCIÓN YA TRAE UN IDIOMA QUE NO SERVIMOS, se cambia por el
+  // nuestro en vez de ponerle otro delante: `/fr/about` acababa en
+  // `/es/fr/about`, que no existe y terminaba en un 404 tonto. (2026-09-22)
+  const [, primero = "", ...resto] = pathname.split("/");
+  const pareceIdioma = /^[a-z]{2}(-[A-Za-z]{2,4})?$/.test(primero);
+  url.pathname = pareceIdioma
+    ? `/${locale}${resto.length ? `/${resto.join("/")}` : ""}`
+    : `/${locale}${pathname === "/" ? "" : pathname}`;
 
   return NextResponse.redirect(url);
 }

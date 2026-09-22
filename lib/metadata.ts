@@ -1,6 +1,24 @@
 import type { Metadata } from "next";
 
+import { conBase } from "@/lib/base";
 import { LOCALES, ROUTES, SITE_URL, type Locale, type RouteKey } from "@/lib/routes";
+
+/**
+ * LA IMAGEN QUE SALE AL COMPARTIR UN ENLACE (WhatsApp, redes, Slack).
+ *
+ * No había ninguna, así que cualquier enlace a la web salía con la tarjeta en
+ * blanco pese a pedir la grande (`summary_large_image`). Es un fotograma del
+ * propio reel, recortado a los 1200×630 que esperan casi todos.
+ *
+ * Absoluta y no relativa: los que montan la vista previa no resuelven rutas
+ * relativas, y varios ni siquiera miran `metadataBase`.
+ */
+const IMAGEN_AL_COMPARTIR = {
+  url: `${SITE_URL}${conBase("/media/og-sidebflms.jpg")}`,
+  width: 1200,
+  height: 630,
+  alt: "SIDEBFLMS",
+};
 
 type Copy = { title: string; description: string };
 
@@ -22,8 +40,13 @@ export function buildMetadata({
   copy: Copy;
   extraSegments?: string[];
 }): Metadata {
+  // La barra de delante se pone APARTE y no como un trozo vacío de la lista:
+  // `filter(Boolean)` se comía ese trozo y salía «es/about» en vez de
+  // «/es/about». El canónico se salvaba porque Next lo resuelve contra
+  // `metadataBase`, pero la URL de compartir se montaba a mano y quedaba
+  // «https://sidebflms.comes/about». Comprobado el 2026-09-22.
   const toPath = (l: Locale) =>
-    ["", l, ROUTES[route][l], ...extraSegments].filter(Boolean).join("/") || `/${l}`;
+    "/" + [l, ROUTES[route][l], ...extraSegments].filter(Boolean).join("/");
 
   const languages = Object.fromEntries(
     LOCALES.map((l) => [l, toPath(l)])
@@ -43,11 +66,13 @@ export function buildMetadata({
       description: copy.description,
       url: `${SITE_URL}${toPath(locale)}`,
       locale: locale === "es" ? "es_ES" : "en_GB",
+      images: [IMAGEN_AL_COMPARTIR],
     },
     twitter: {
       card: "summary_large_image",
       title: copy.title,
       description: copy.description,
+      images: [IMAGEN_AL_COMPARTIR.url],
     },
   };
 }

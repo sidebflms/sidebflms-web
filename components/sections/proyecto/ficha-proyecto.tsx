@@ -98,10 +98,17 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
       </FichaVisor>
 
       {/* El nombre en móvil, donde no hay muesca. Por encima de `sm` está
-          oculto y manda el de la muesca. */}
-      <h1 className="font-display mt-4 px-1 pt-[0.15em] text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[1.05] text-bone sm:hidden">
+          oculto y manda el de la muesca.
+
+          `<p>` Y NO `<h1>`: el de la muesca está en el HTML siempre, también
+          en móvil —sólo se esconde con CSS—, así que los dos juntos dejaban
+          DOS encabezados de primer nivel en cada ficha. Se ve igual. */}
+      <p
+        aria-hidden="true"
+        className="font-display mt-4 px-1 pt-[0.15em] text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[1.05] text-bone sm:hidden"
+      >
         {titulo}
-      </h1>
+      </p>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-1">
         <ul className="flex flex-wrap gap-2">
