@@ -19,6 +19,46 @@ import { Equipo, Proyectos, Usuarios } from "./panel/colecciones.ts";
 
 const aqui = path.dirname(fileURLToPath(import.meta.url));
 
+import { readFileSync } from "node:fs";
+
+/**
+ * CÓMO SE CONECTA A LA BASE DE DATOS.
+ *
+ * Por campos sueltos —servidor, usuario, contraseña, base— y NO por una
+ * dirección del tipo `postgres://usuario:clave@servidor/base`.
+ *
+ * El motivo, aprendido a base de perder una tarde (2026-09-23): en esa
+ * dirección, la arroba separa la contraseña del servidor, el interrogante
+ * abre los parámetros y la barra separa la base. Una contraseña generada al
+ * azar trae esos caracteres constantemente, y entonces la línea se parte por
+ * donde no debe y el error que sale —«no se puede resolver el nombre del
+ * servidor N23@127.0.0.1»— no señala a la contraseña por ningún lado.
+ * Así, la contraseña puede tener lo que le dé la gana.
+ *
+ * Y si además se prefiere que no esté ni en el fichero de configuración,
+ * `PGPASSWORD_FILE` apunta a un fichero cuyo contenido ENTERO es la
+ * contraseña. Sin comillas, sin escapes, sin reglas.
+ *
+ * Se sigue admitiendo `DATABASE_URI` para no romper nada que ya la use.
+ */
+function conexion() {
+  if (process.env.DATABASE_URI) {
+    return { connectionString: process.env.DATABASE_URI };
+  }
+
+  const deFichero = process.env.PGPASSWORD_FILE
+    ? readFileSync(process.env.PGPASSWORD_FILE, "utf8").replace(/\r?\n$/, "")
+    : undefined;
+
+  return {
+    host: process.env.PGHOST ?? "127.0.0.1",
+    port: Number(process.env.PGPORT ?? 5432),
+    user: process.env.PGUSER,
+    password: deFichero ?? process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+  };
+}
+
 export default buildConfig({
   // El panel vive en /admin. Ojo con `proxy.ts`: hay que dejarlo fuera del
   // redirector de idioma, o /admin acabaría en /es/admin.
@@ -47,7 +87,5 @@ export default buildConfig({
   // antes. Anotado en docs/panel-de-contenido.md.
   secret: process.env.PAYLOAD_SECRET ?? "prueba-local-sin-valor",
   typescript: { outputFile: path.resolve(aqui, "payload-types.ts") },
-  db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI ?? "" },
-  }),
+  db: postgresAdapter({ pool: conexion() }),
 });

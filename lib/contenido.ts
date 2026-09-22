@@ -35,7 +35,7 @@ import { conBase } from "@/lib/base";
  */
 
 /** Los ficheros son el plan B, y el primero que se prueba si no hay base. */
-const HAY_BASE = Boolean(process.env.DATABASE_URI);
+const HAY_BASE = Boolean(process.env.DATABASE_URI || process.env.PGDATABASE);
 
 type Documento = Record<string, unknown>;
 
