@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
 import { aPiezasDeTrabajo } from "@/components/sections/trabajo/medios";
-import { PROJECTS } from "@/content/projects";
+import { traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -58,7 +58,7 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       <div className="mt-10 lg:mt-12">
         {/* Recortadas: la página monta las dos versiones —escritorio y móvil—,
             así que todo lo que se pase viaja dos veces en el HTML. */}
-        <TrabajoYoutube projects={aPiezasDeTrabajo(PROJECTS, locale)} locale={locale} copy={dict.portfolio} />
+        <TrabajoYoutube projects={aPiezasDeTrabajo(await traeProyectos(), locale)} locale={locale} copy={dict.portfolio} />
       </div>
 
       {/* La credencial, justo después del trabajo que la respalda. */}

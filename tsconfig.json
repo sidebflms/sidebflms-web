@@ -6,6 +6,10 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // La configuración del panel importa sus colecciones con la extensión
+    // `.ts` escrita: es la única forma en que la herramienta de Payload las
+    // encuentra con Node 26. Ver panel/colecciones.ts.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

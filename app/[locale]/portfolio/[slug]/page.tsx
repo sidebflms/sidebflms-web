@@ -2,20 +2,21 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { FichaProyecto } from "@/components/sections/proyecto/ficha-proyecto";
-import { PROJECTS, getProject, type Project } from "@/content/projects";
+import { type Project } from "@/content/projects";
+import { traeProyecto, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { SITE_URL, type Locale } from "@/lib/routes";
 
 export async function generateStaticParams() {
-  return PROJECTS.map((project) => ({ slug: project.slug }));
+  return (await traeProyectos()).map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/portfolio/[slug]">): Promise<Metadata> {
   const { locale, slug } = await params;
-  const project = getProject(slug);
+  const project = await traeProyecto(slug);
   if (!project) return {};
 
   const l = locale as Locale;
@@ -44,13 +45,14 @@ export default async function ProjectDetailPage({
 }: PageProps<"/[locale]/portfolio/[slug]">) {
   const { locale: rawLocale, slug } = await params;
   const locale = rawLocale as Locale;
-  const project = getProject(slug);
+  const proyectos = await traeProyectos();
+  const project = proyectos.find((p) => p.slug === slug);
   if (!project) notFound();
 
   const dict = await getDictionary(locale);
-  const i = PROJECTS.findIndex((p) => p.slug === slug);
-  const anterior = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
-  const siguiente = PROJECTS[(i + 1) % PROJECTS.length];
+  const i = proyectos.findIndex((p) => p.slug === slug);
+  const anterior = proyectos[(i - 1 + proyectos.length) % proyectos.length];
+  const siguiente = proyectos[(i + 1) % proyectos.length];
 
   const jsonLd = !project.placeholder ? datosEstructurados(project, locale) : null;
 

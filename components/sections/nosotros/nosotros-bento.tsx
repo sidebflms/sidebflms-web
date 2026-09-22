@@ -5,7 +5,8 @@ import { Parallax } from "@/components/motion/parallax";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { CIFRAS_CON_DATO } from "@/content/cifras";
-import { EQUIPO, FOTO_AMPLIACION, FOTO_GRUPO, HAY_RETRATOS } from "@/content/team";
+import { FOTO_AMPLIACION, FOTO_GRUPO } from "@/content/team";
+import { traeEquipo } from "@/lib/contenido";
 import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/routes";
 import { cn, pad } from "@/lib/utils";
@@ -34,8 +35,15 @@ import { CargoMiembro, FotoMiembro, LineasTitular } from "./comun";
 const pieza =
   "glass relative overflow-hidden transition-[translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1";
 
-export function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Locale }) {
+export async function NosotrosBento({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [cifraGrande, ...cifrasResto] = CIFRAS_CON_DATO;
+
+  // El equipo sale de la base de datos (panel) o, si no responde, de los
+  // ficheros. Ver lib/contenido.ts.
+  const EQUIPO = await traeEquipo();
+  // Antes venía calculado en `content/team.ts`; ahora se calcula sobre lo que
+  // haya llegado, que es lo mismo.
+  const HAY_RETRATOS = EQUIPO.length > 0 && EQUIPO.every((m) => m.foto !== null);
 
   return (
     <main id="main" className="pagina">

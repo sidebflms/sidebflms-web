@@ -68,7 +68,8 @@ export interface Config {
   blocks: {};
   collections: {
     usuarios: Usuario;
-    'piezas-de-prueba': PiezasDePrueba;
+    proyectos: Proyecto;
+    equipo: Equipo;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -77,7 +78,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     usuarios: UsuariosSelect<false> | UsuariosSelect<true>;
-    'piezas-de-prueba': PiezasDePruebaSelect<false> | PiezasDePruebaSelect<true>;
+    proyectos: ProyectosSelect<false> | ProyectosSelect<true>;
+    equipo: EquipoSelect<false> | EquipoSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -123,6 +125,10 @@ export interface UsuarioAuthOperations {
  */
 export interface Usuario {
   id: number;
+  /**
+   * Para saber quién ha tocado qué.
+   */
+  nombre?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -144,15 +150,102 @@ export interface Usuario {
   collection: 'usuarios';
 }
 /**
+ * Las fichas de Trabajo. El orden de esta lista es el orden en que salen en la web.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "piezas-de-prueba".
+ * via the `definition` "proyectos".
  */
-export interface PiezasDePrueba {
+export interface Proyecto {
   id: number;
-  titulo: string;
-  resumen?: string | null;
-  fecha?: string | null;
-  destacado?: boolean | null;
+  /**
+   * Menor primero. Es el orden en el que salen en la web.
+   */
+  orden: number;
+  /**
+   * La dirección de la ficha: /trabajo/ESTO. Si se cambia, el enlace antiguo deja de funcionar.
+   */
+  slug: string;
+  /**
+   * Marcado: la ficha se pinta como material pendiente.
+   */
+  placeholder?: boolean | null;
+  /**
+   * Sale en los destacados de la portada.
+   */
+  featured?: boolean | null;
+  /**
+   * La pieza central. Sólo una.
+   */
+  showpiece?: boolean | null;
+  /**
+   * 0 a 3: varía el tono del bloque.
+   */
+  tone?: number | null;
+  title: string;
+  /**
+   * La frase de una línea que va bajo el nombre.
+   */
+  hardFact?: string | null;
+  /**
+   * El cuerpo de la ficha. Los párrafos se separan con una línea en blanco.
+   */
+  brief?: string | null;
+  /**
+   * Tal como se lee: «17 de enero de 2026» / «17 January 2026». Vacío si no se sabe.
+   */
+  date?: string | null;
+  /**
+   * «2026», o «—» si no se sabe.
+   */
+  year?: string | null;
+  /**
+   * «Fabrik». Vacío si no aplica.
+   */
+  venue?: string | null;
+  categories: ('aftermovie' | 'multicam' | 'drone' | 'photo' | 'ads')[];
+  /**
+   * /media/loquesea.mp4
+   */
+  video?: string | null;
+  /**
+   * /media/loquesea.jpg
+   */
+  poster?: string | null;
+  verticalVideo?: string | null;
+  verticalPoster?: string | null;
+  gallery?:
+    | {
+        ruta: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * La rejilla de Nosotros. El orden de la lista es el de la web.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipo".
+ */
+export interface Equipo {
+  id: number;
+  orden: number;
+  slug: string;
+  nombre: string;
+  /**
+   * En español va en la forma de los créditos: «Realización / Montaje».
+   */
+  role?: string | null;
+  /**
+   * /media/equipo/quien.jpg
+   */
+  foto?: string | null;
+  /**
+   * Marcado: la web avisa de que esa foto no es suya.
+   */
+  fotoEsEjemplo?: boolean | null;
+  roleEsEjemplo?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -185,8 +278,12 @@ export interface PayloadLockedDocument {
         value: number | Usuario;
       } | null)
     | ({
-        relationTo: 'piezas-de-prueba';
-        value: number | PiezasDePrueba;
+        relationTo: 'proyectos';
+        value: number | Proyecto;
+      } | null)
+    | ({
+        relationTo: 'equipo';
+        value: number | Equipo;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -235,6 +332,7 @@ export interface PayloadMigration {
  * via the `definition` "usuarios_select".
  */
 export interface UsuariosSelect<T extends boolean = true> {
+  nombre?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -255,13 +353,47 @@ export interface UsuariosSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "piezas-de-prueba_select".
+ * via the `definition` "proyectos_select".
  */
-export interface PiezasDePruebaSelect<T extends boolean = true> {
-  titulo?: T;
-  resumen?: T;
-  fecha?: T;
-  destacado?: T;
+export interface ProyectosSelect<T extends boolean = true> {
+  orden?: T;
+  slug?: T;
+  placeholder?: T;
+  featured?: T;
+  showpiece?: T;
+  tone?: T;
+  title?: T;
+  hardFact?: T;
+  brief?: T;
+  date?: T;
+  year?: T;
+  venue?: T;
+  categories?: T;
+  video?: T;
+  poster?: T;
+  verticalVideo?: T;
+  verticalPoster?: T;
+  gallery?:
+    | T
+    | {
+        ruta?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipo_select".
+ */
+export interface EquipoSelect<T extends boolean = true> {
+  orden?: T;
+  slug?: T;
+  nombre?: T;
+  role?: T;
+  foto?: T;
+  fotoEsEjemplo?: T;
+  roleEsEjemplo?: T;
   updatedAt?: T;
   createdAt?: T;
 }

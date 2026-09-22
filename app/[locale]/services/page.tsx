@@ -6,7 +6,7 @@ import { ContactCta } from "@/components/sections/contact-cta";
 import { ProcesoTimeline } from "@/components/sections/proceso-timeline";
 import { ServiciosVisor, type VideoDrone } from "@/components/sections/servicios-visor";
 import { Reveal } from "@/components/motion/reveal";
-import { PROJECTS } from "@/content/projects";
+import { traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -25,12 +25,13 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
+  const proyectos = await traeProyectos();
 
   // El bloque de Drone lleva de fondo la cinta de la pieza de drone destacada
   // (la del showpiece), o la primera pieza de drone con vídeo.
   const pieza =
-    PROJECTS.find((p) => p.showpiece && p.media.video) ??
-    PROJECTS.find((p) => p.categories.includes("drone") && p.media.video);
+    proyectos.find((p) => p.showpiece && p.media.video) ??
+    proyectos.find((p) => p.categories.includes("drone") && p.media.video);
   const videoDrone: VideoDrone = pieza?.media.video
     ? { video: pieza.media.video.replace(/\.mp4$/, "-cinta.mp4"), poster: pieza.media.poster }
     : null;

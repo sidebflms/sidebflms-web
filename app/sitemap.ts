@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { PROJECTS } from "@/content/projects";
+import { traeProyectos } from "@/lib/contenido";
 import { LOCALES, ROUTES, SITE_URL, type RouteKey } from "@/lib/routes";
 
 // `jobs` es «trabaja con nosotros»: faltaba, y el pie enlaza a ella en los dos
@@ -9,7 +9,7 @@ const STATIC_KEYS: RouteKey[] = [
   "home", "portfolio", "services", "about", "drone", "jobs", "contact", "legal", "privacy",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   for (const key of STATIC_KEYS) {
@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  for (const project of PROJECTS) {
+  for (const project of await traeProyectos()) {
     for (const locale of LOCALES) {
       entries.push({
         url: `${SITE_URL}/${locale}/${ROUTES.portfolio[locale]}/${project.slug}`,

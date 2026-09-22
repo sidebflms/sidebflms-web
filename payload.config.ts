@@ -4,20 +4,17 @@ import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 
+import { Equipo, Proyectos, Usuarios } from "./panel/colecciones.ts";
+
 /**
- * PRUEBA DE CONCEPTO DEL PANEL (Fase 0 de docs/panel-de-contenido.md).
+ * EL PANEL DE CONTENIDO (Fase 1 de docs/panel-de-contenido.md).
  *
- * Esto NO es el panel definitivo: es lo mínimo para responder a tres
- * preguntas, que son las que deciden si el plan sigue adelante.
+ * Vive dentro de la propia web: el panel está en `/admin` y los datos en una
+ * base de datos PostgreSQL. Las páginas públicas no saben que existe; siguen
+ * recibiendo los mismos objetos de siempre, ahora por `lib/contenido.ts`.
  *
- *   1. ¿Arranca Payload dentro de ESTA web, con Next 16.3.6? El fabricante
- *      dice que sí desde la 16.3.3, pero una declaración no es una prueba.
- *   2. ¿Habla con PostgreSQL y se crea sus tablas solo?
- *   3. ¿Sabe guardar un mismo campo en español y en inglés? La web es
- *      bilingüe y sin eso no sirve.
- *
- * Si las tres salen bien, esta configuración es el punto de partida de la
- * Fase 1; si no, se borra la rama y no ha pasado nada.
+ * Las colecciones están en `panel/colecciones.ts`, con la misma forma que
+ * tenían `content/projects.ts` y `content/team.ts`.
  */
 
 const aqui = path.dirname(fileURLToPath(import.meta.url));
@@ -39,32 +36,15 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [
-    {
-      slug: "usuarios",
-      auth: true,
-      admin: { useAsTitle: "email" },
-      fields: [],
-    },
-    {
-      // Una pieza de mentira con la misma forma que un proyecto de verdad:
-      // nombre y texto en dos idiomas, una fecha y una casilla.
-      slug: "piezas-de-prueba",
-      admin: { useAsTitle: "titulo" },
-      fields: [
-        { name: "titulo", type: "text", required: true, localized: true },
-        { name: "resumen", type: "textarea", localized: true },
-        { name: "fecha", type: "date" },
-        { name: "destacado", type: "checkbox" },
-      ],
-    },
-  ],
+  collections: [Usuarios, Proyectos, Equipo],
 
-  // SIN EDITOR DE TEXTO RICO EN LA PRUEBA. El paquete `richtext-lexical` no se
-  // deja cargar por la herramienta de línea de comandos de Payload con Node 26
-  // («require() cannot be used on an ESM graph with top-level await»). Para
-  // responder a las tres preguntas de arriba no hace falta; si en la Fase 1 se
-  // quiere texto rico, hay que resolver eso primero.
+  // SIN EDITOR DE TEXTO RICO, y no por gusto: `richtext-lexical` no se deja
+  // cargar por la herramienta de línea de comandos de Payload con Node 26
+  // —«require() cannot be used on an ESM graph with top-level await»— y Node 26
+  // es el que corre en el servidor. No hace falta: los textos de esta web son
+  // texto plano, con los párrafos separados por una línea en blanco. Si algún
+  // día se quieren negritas o enlaces dentro de un texto, hay que resolver eso
+  // antes. Anotado en docs/panel-de-contenido.md.
   secret: process.env.PAYLOAD_SECRET ?? "prueba-local-sin-valor",
   typescript: { outputFile: path.resolve(aqui, "payload-types.ts") },
   db: postgresAdapter({
