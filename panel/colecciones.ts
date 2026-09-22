@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import type { CollectionConfig } from "payload";
 
 /**
@@ -28,9 +27,22 @@ import type { CollectionConfig } from "payload";
  * mismos en las dos versiones.
  */
 
-/** Vuelve a generar las páginas de la web tras un cambio en el panel. */
-const avisaALaWeb = () => {
-  revalidatePath("/", "layout");
+/**
+ * Vuelve a generar las páginas de la web tras un cambio en el panel.
+ *
+ * `next/cache` se pide AQUÍ DENTRO y no arriba del todo a propósito: estas
+ * colecciones también las lee la herramienta de línea de comandos de Payload
+ * —la que crea y aplica las migraciones—, y ahí no hay Next que valga. Con el
+ * import arriba, cualquier migración fallaba con «Cannot find module
+ * next/cache». (2026-09-23)
+ */
+const avisaALaWeb = async () => {
+  try {
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/", "layout");
+  } catch {
+    // Fuera de la web no hay páginas que caducar, y no es un error.
+  }
 };
 
 /** Las mismas cinco de `content/projects.ts`, y en el mismo orden. */

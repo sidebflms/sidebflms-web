@@ -17,6 +17,23 @@ cd "$RAIZ"
 
 echo "==> Compilando"
 "$NPM" ci --no-audit --no-fund
+
+# LAS MIGRACIONES DEL PANEL, ANTES DE COMPILAR Y NO DESPUÉS.
+#
+# Al compilar, la web genera sus páginas leyendo el contenido, así que las
+# tablas tienen que existir ya. Y en producción Payload NO se crea las tablas
+# solo —eso sólo lo hace en desarrollo—: hay que aplicarle las migraciones,
+# que viven en `migrations/` y van en el repositorio.
+#
+# Si no hay base de datos configurada, no se intenta nada: la web tirará de los
+# ficheros de contenido, que es su plan B (ver lib/contenido.ts).
+if grep -q "^PGDATABASE=\|^DATABASE_URI=" "$RAIZ/.env" 2>/dev/null; then
+  echo "==> Migraciones del panel"
+  npx payload migrate
+else
+  echo "    sin base de datos configurada: el panel no se toca"
+fi
+
 "$NPM" run build
 
 echo "==> Preparando $PUBLICO"
