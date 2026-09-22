@@ -130,36 +130,41 @@ export type Miembro = {
  * ahora tienen la suya —la de Galoguin, de espaldas, por decisión de Mario—.
  *
  * `HAY_EJEMPLOS` YA ESTÁ APAGADO: ni fotos ni cargos de ejemplo. Los cargos
- * los mandó Mario el 2026-09-22 y van IGUALES en los dos idiomas a propósito:
- * son los términos del oficio y en España se usan en inglés tal cual
- * («Filmmaker», «VJ», «Drone Pilot»). Si algún día se quiere la versión
- * castellana, se cambia el `es` de cada uno y ya.
+ * los mandó Mario el 2026-09-22 en inglés, y en español van en LA FORMA DE
+ * LOS CRÉDITOS —«Realización», «Montaje», «Fotografía»— porque él pidió que
+ * cambiaran con el idioma.
+ *
+ * Esa forma, además, evita tener que decidir el género de cada persona:
+ * «Realización» vale para cualquiera, «Realizador» o «Realizadora» obligan a
+ * saberlo, y no es algo que se deba suponer por el nombre. Si algún día se
+ * quiere en esa otra forma, hace falta que cada quien diga la suya.
+ * «VJ» se queda igual en los dos: no tiene traducción al uso.
  *
  * El cargo de Rubén, además, cuadra por fin con su foto: sale pilotando.
  */
 const MIEMBROS: Miembro[] = [
-  { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Drone Pilot / Filmmaker", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/mario-bote.jpg" },
-  { nombre: "Fernando", slug: "fernando", role: { es: "Drone Pilot / Filmmaker", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/fernando.jpg" },
+  { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/mario-bote.jpg" },
+  { nombre: "Fernando", slug: "fernando", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/fernando.jpg" },
   // Foto real desde el 2026-09-16, y DE ESPALDAS: en la mesa de control de
   // ITRAMUN, con el casete de SIDEBFLMS en el chaquetón. Se avisó de que en una
   // rejilla de caras no se le reconoce, y Mario decidió ponerla igual: es él, y
   // es mejor que la foto de OTRA persona que llevaba hasta ahora con el rótulo
   // de «Ejemplo». Si llega una de frente, se cambia aquí.
   { nombre: "Galoguin", slug: "galoguin", role: { es: "VJ", en: "VJ" }, foto: "/media/equipo/galoguin.jpg" },
-  { nombre: "Iván", slug: "ivan", role: { es: "Filmmaker / Photo", en: "Filmmaker / Photo" }, foto: "/media/equipo/ivan.jpg" },
-  { nombre: "Jota", slug: "jota", role: { es: "Filmmaker / Edit", en: "Filmmaker / Edit" }, foto: "/media/equipo/jota.jpg" },
-  { nombre: "Kenny", slug: "kenny", role: { es: "Filmmaker / Edit", en: "Filmmaker / Edit" }, foto: "/media/equipo/kenny.jpg" },
-  { nombre: "María", slug: "maria", role: { es: "Photographer", en: "Photographer" }, foto: "/media/equipo/maria.jpg" },
-  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Drone Pilot / Filmmaker", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/nacho-lopez.jpg" },
-  { nombre: "Natalia", slug: "natalia", role: { es: "Filmmaker / Photo", en: "Filmmaker / Photo" }, foto: "/media/equipo/natalia.jpg" },
+  { nombre: "Iván", slug: "ivan", role: { es: "Realización / Fotografía", en: "Filmmaker / Photo" }, foto: "/media/equipo/ivan.jpg" },
+  { nombre: "Jota", slug: "jota", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/jota.jpg" },
+  { nombre: "Kenny", slug: "kenny", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/kenny.jpg" },
+  { nombre: "María", slug: "maria", role: { es: "Fotografía", en: "Photographer" }, foto: "/media/equipo/maria.jpg" },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/nacho-lopez.jpg" },
+  { nombre: "Natalia", slug: "natalia", role: { es: "Realización / Fotografía", en: "Filmmaker / Photo" }, foto: "/media/equipo/natalia.jpg" },
   // Retrato real desde el 2026-09-16: la foto con la emisora del dron, entre
   // el confeti, junto a la valla. Recortada A MANO a 4:5 y no con
   // `scripts/fotos-equipo.sh`, que recorta por el centro: en el original está
   // desplazado a la derecha entre la valla y el público, y el recorte centrado
   // le partía. OJO: en la foto está pilotando, y el cargo provisional dice
   // «Etalonaje». Los cargos siguen todos sin confirmar.
-  { nombre: "Rubén", slug: "ruben", role: { es: "Drone Pilot / Filmmaker", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/ruben.jpg" },
-  { nombre: "Sergio", slug: "sergio", role: { es: "Filmmaker / Edit", en: "Filmmaker / Edit" }, foto: "/media/equipo/sergio.jpg" },
+  { nombre: "Rubén", slug: "ruben", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/ruben.jpg" },
+  { nombre: "Sergio", slug: "sergio", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/sergio.jpg" },
 ];
 
 /** Con la ruta base delante de cada foto (lib/base.ts). */
