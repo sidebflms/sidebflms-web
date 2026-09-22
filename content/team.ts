@@ -143,27 +143,27 @@ export type Miembro = {
  * El cargo de Rubén, además, cuadra por fin con su foto: sale pilotando.
  */
 const MIEMBROS: Miembro[] = [
-  { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/mario-bote.jpg" },
-  { nombre: "Fernando", slug: "fernando", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/fernando.jpg" },
+  { nombre: "Mario Bote", slug: "mario-bote", role: { es: "Drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/mario-bote.jpg" },
+  { nombre: "Fernando", slug: "fernando", role: { es: "Drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/fernando.jpg" },
   // Foto real desde el 2026-09-16, y DE ESPALDAS: en la mesa de control de
   // ITRAMUN, con el casete de SIDEBFLMS en el chaquetón. Se avisó de que en una
   // rejilla de caras no se le reconoce, y Mario decidió ponerla igual: es él, y
   // es mejor que la foto de OTRA persona que llevaba hasta ahora con el rótulo
   // de «Ejemplo». Si llega una de frente, se cambia aquí.
   { nombre: "Galoguin", slug: "galoguin", role: { es: "VJ", en: "VJ" }, foto: "/media/equipo/galoguin.jpg" },
-  { nombre: "Iván", slug: "ivan", role: { es: "Realización / Fotografía", en: "Filmmaker / Photo" }, foto: "/media/equipo/ivan.jpg" },
+  { nombre: "Iván", slug: "ivan", role: { es: "Realización / Foto", en: "Filmmaker / Photo" }, foto: "/media/equipo/ivan.jpg" },
   { nombre: "Jota", slug: "jota", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/jota.jpg" },
   { nombre: "Kenny", slug: "kenny", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/kenny.jpg" },
   { nombre: "María", slug: "maria", role: { es: "Fotografía", en: "Photographer" }, foto: "/media/equipo/maria.jpg" },
-  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/nacho-lopez.jpg" },
-  { nombre: "Natalia", slug: "natalia", role: { es: "Realización / Fotografía", en: "Filmmaker / Photo" }, foto: "/media/equipo/natalia.jpg" },
+  { nombre: "Nacho López", slug: "nacho-lopez", role: { es: "Drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/nacho-lopez.jpg" },
+  { nombre: "Natalia", slug: "natalia", role: { es: "Realización / Foto", en: "Filmmaker / Photo" }, foto: "/media/equipo/natalia.jpg" },
   // Retrato real desde el 2026-09-16: la foto con la emisora del dron, entre
   // el confeti, junto a la valla. Recortada A MANO a 4:5 y no con
   // `scripts/fotos-equipo.sh`, que recorta por el centro: en el original está
   // desplazado a la derecha entre la valla y el público, y el recorte centrado
   // le partía. OJO: en la foto está pilotando, y el cargo provisional dice
   // «Etalonaje». Los cargos siguen todos sin confirmar.
-  { nombre: "Rubén", slug: "ruben", role: { es: "Piloto de drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/ruben.jpg" },
+  { nombre: "Rubén", slug: "ruben", role: { es: "Drone / Realización", en: "Drone Pilot / Filmmaker" }, foto: "/media/equipo/ruben.jpg" },
   { nombre: "Sergio", slug: "sergio", role: { es: "Realización / Montaje", en: "Filmmaker / Edit" }, foto: "/media/equipo/sergio.jpg" },
 ];
 

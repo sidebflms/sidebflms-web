@@ -86,7 +86,12 @@ export function CargoMiembro({
   if (!miembro.role) return null;
   return (
     <p
-      className={cn("label text-rust-300", className)}
+      // DOS LÍNEAS RESERVADAS SIEMPRE. En móvil la rejilla va a dos columnas y
+      // el cargo cabe justo: «Fotografía» ocupa una línea y «Drone /
+      // Realización» dos, así que unas fichas quedaban más altas que otras y
+      // la rejilla se veía desigual (Mario, 2026-09-22, en el móvil). Con el
+      // hueco reservado, todas miden lo mismo se llame como se llame el cargo.
+      className={cn("label min-h-[2.6em] text-rust-300", className)}
       title={miembro.roleEsEjemplo ? dict.about.roleExample : undefined}
     >
       {miembro.role[locale]}

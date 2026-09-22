@@ -249,11 +249,10 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             </div>
 
             <nav className="flex flex-1 flex-col justify-center py-10">
-              {/* «Trabaja con nosotros» va en gris: es el único que no habla a
-                  un cliente. Se distingue POR SER ESE ENLACE y no por ir el
-                  quinto, que era como estaba: añadir o reordenar una entrada
-                  del menú dejaba en gris a la que cayera en esa posición. */}
-              {[...links, { href: path(locale, "jobs"), label: nav.jobs, secundario: true }].map((link, i) => (
+              {/* Los cinco iguales. «Trabaja con nosotros» iba en gris por ser
+                  el único que no habla a un cliente, y en pantalla parecía
+                  desactivado (Mario, 2026-09-22, viéndolo en el móvil). */}
+              {[...links, { href: path(locale, "jobs"), label: nav.jobs }].map((link, i) => (
                 <div key={link.href} className="overflow-hidden border-b border-white/10">
                   <Link
                     data-sheet-item
@@ -262,7 +261,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
                   >
                     <span className="flex items-baseline gap-4">
                       <span className="text-xs text-smoke tabular-nums">0{i + 1}</span>
-                      <span className={cn("font-display text-display-m", "secundario" in link ? "text-smoke" : "text-bone")}>
+                      <span className="font-display text-display-m text-bone">
                         {link.label}
                       </span>
                     </span>
