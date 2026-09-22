@@ -1,4 +1,5 @@
 import path from "node:path";
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 /**
@@ -153,4 +154,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+/* PRUEBA DE CONCEPTO (Fase 0): `withPayload` añade lo que el panel necesita
+   del lado del compilador. No cambia nada de la web pública. */
+export default withPayload(nextConfig);
