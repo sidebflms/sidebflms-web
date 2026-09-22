@@ -1,13 +1,14 @@
 "use server";
 
 import { enviarCandidatura } from "@/lib/correo";
+import { campo, casillas, emailValido, TOPES } from "@/lib/formularios";
+import { ipDelVisitante } from "@/lib/ip-visitante";
+import { permiteEnviar } from "@/lib/limite-envios";
 
 export type JobsState = {
   status: "idle" | "success" | "error";
   fieldErrors?: Partial<Record<"name" | "email" | "speciality" | "consent", string>>;
 };
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * Server Action del formulario de «trabaja con nosotros».
@@ -31,14 +32,14 @@ export async function submitJobs(
     return { status: "success" };
   }
 
-  const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const speciality = formData.getAll("speciality").map(String);
+  const name = campo(formData, "name", TOPES.nombre);
+  const email = campo(formData, "email", TOPES.email);
+  const speciality = casillas(formData, "speciality");
   const consent = formData.get("consent") === "on";
 
   const fieldErrors: JobsState["fieldErrors"] = {};
   if (!name) fieldErrors.name = "required";
-  if (!email || !EMAIL_RE.test(email)) fieldErrors.email = "email";
+  if (!email || !emailValido(email)) fieldErrors.email = "email";
   if (speciality.length === 0) fieldErrors.speciality = "required";
   if (!consent) fieldErrors.consent = "consent";
 
@@ -46,22 +47,26 @@ export async function submitJobs(
     return { status: "error", fieldErrors };
   }
 
-  const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
+  // El mismo freno que en contacto, y por lo mismo: esto también manda un
+  // acuse a la dirección que teclea quien rellena. Ver lib/limite-envios.ts.
+  if (!permiteEnviar(await ipDelVisitante()).ok) {
+    return { status: "error" };
+  }
 
   const enviado = await enviarCandidatura({
     nombre: name,
-    edad: texto("age"),
-    nacionalidad: texto("nationality"),
-    localidad: texto("city"),
+    edad: campo(formData, "age", TOPES.edad),
+    nacionalidad: campo(formData, "nationality", TOPES.nacionalidad),
+    localidad: campo(formData, "city", TOPES.localidad),
     email,
-    telefono: texto("phone"),
+    telefono: campo(formData, "phone", TOPES.telefono),
     especialidad: speciality,
-    experiencia: texto("experience"),
-    eventos: formData.getAll("events").map(String),
-    carnet: texto("licence"),
-    idiomas: texto("languages"),
-    portfolio: texto("portfolio"),
-    instagram: texto("instagram"),
+    experiencia: campo(formData, "experience", TOPES.experiencia),
+    eventos: casillas(formData, "events"),
+    carnet: campo(formData, "licence", 40),
+    idiomas: campo(formData, "languages", TOPES.idiomas),
+    portfolio: campo(formData, "portfolio", TOPES.portfolio),
+    instagram: campo(formData, "instagram", TOPES.instagram),
   });
 
   if (!enviado) return { status: "error" };

@@ -110,6 +110,14 @@ const NO_REENVIAR = [
     'host', 'connection', 'keep-alive', 'transfer-encoding', 'upgrade',
     'proxy-authorization', 'proxy-authenticate', 'te', 'trailer',
     'content-length', 'accept-encoding',
+    // LAS DE «QUIÉN ERES», BORRADAS. Cualquiera puede mandar su propia
+    // `X-Forwarded-For` en la petición, y si se reenvía, la aplicación se cree
+    // que viene de esa IP: el límite de envíos del formulario sería mentira, y
+    // `X-Forwarded-Host` además engaña a la comprobación anti-falsificación de
+    // los formularios de Next. Las únicas válidas son las que pone este
+    // fichero unas líneas más abajo, sacadas de la conexión de verdad.
+    'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port',
+    'x-real-ip', 'forwarded', 'true-client-ip', 'cf-connecting-ip',
 ];
 
 $ruta = $_SERVER['REQUEST_URI'] ?? '/';

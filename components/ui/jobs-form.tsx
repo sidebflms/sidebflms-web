@@ -207,6 +207,8 @@ function Campo({
   required,
   min,
   max,
+  // TOPE DE CARACTERES: el mismo que aplica el servidor (lib/formularios.ts).
+  maxLength = 120,
   placeholder,
   autoComplete,
   error,
@@ -219,6 +221,7 @@ function Campo({
   required?: boolean;
   min?: number;
   max?: number;
+  maxLength?: number;
   placeholder?: string;
   autoComplete?: string;
   error?: string;
@@ -241,6 +244,7 @@ function Campo({
         type={type}
         min={min}
         max={max}
+        maxLength={maxLength}
         placeholder={placeholder}
         autoComplete={autoComplete}
         aria-invalid={error ? true : undefined}

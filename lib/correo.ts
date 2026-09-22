@@ -103,7 +103,21 @@ function transporte() {
  *    revés sería absurdo: perder una consulta porque el cliente tiene el buzón
  *    lleno.
  *
- * 3. **No lleva nada que no haya escrito esa persona.** Es su propia copia.
+ * 3. **NO LLEVA TEXTO ESCRITO POR QUIEN RELLENA EL FORMULARIO.** Ni en el
+ *    asunto ni en el cuerpo. Esto no es manía: hasta el 2026-09-22 el acuse
+ *    repetía el nombre del evento en el asunto y el mensaje entero en el
+ *    cuerpo, y como va a la dirección que teclea el visitante, servía para que
+ *    cualquiera mandase el texto que quisiera a quien quisiera, firmado por el
+ *    dominio. Demostrado contra un buzón de pruebas ese mismo día: salía un
+ *    correo «de SIDEBFLMS» con asunto «Hemos recibido tu consulta: TU FACTURA
+ *    VENCE HOY — paga en …».
+ *
+ *    Así que el acuse dice lo mismo siempre y sólo repite los campos de
+ *    formulario (fecha, aforo, escenarios, cobertura, presupuesto), limpiados
+ *    y recortados. Y lleva una línea para quien no lo haya pedido.
+ *
+ * 4. **Tiene freno.** `lib/limite-envios.ts` limita cuántos puede provocar una
+ *    misma IP y cuántos salen de la web en un día.
  */
 function acuse(asunto: string, destino: string, texto: string): void {
   // Sin `await` a propósito, y con el fallo tragado: ver el punto 2.
@@ -121,6 +135,23 @@ function acuse(asunto: string, destino: string, texto: string): void {
         error: error instanceof Error ? error.message : String(error),
       });
     });
+}
+
+/**
+ * LIMPIA UN DATO ESCRITO POR EL VISITANTE antes de meterlo en un correo.
+ *
+ * Quita saltos de línea y caracteres de control —lo que se usa para colarse en
+ * las cabeceras— y recorta, para que nadie pueda meter una carta entera en un
+ * campo pensado para una palabra. No se usa en el aviso interno, que va a
+ * nuestro propio buzón y ahí interesa el dato entero; se usa en el acuse, que
+ * es el que sale a una dirección de fuera.
+ */
+function limpio(valor: string, tope = 80): string {
+  return valor
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, tope);
 }
 
 export type Consulta = {
@@ -171,7 +202,11 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
     await transporte().sendMail({
       from: `"Web SIDEBFLMS" <${REMITENTE}>`,
       to: DESTINO,
-      replyTo: `"${c.nombre}" <${c.email}>`,
+      // En objeto y NO como texto: escrito a mano, un nombre como
+      // `x" <otro@sitio.test>, "y` metía una segunda dirección en el
+      // Reply-To y el «Responder» acababa yendo al atacante. Comprobado
+      // el 2026-09-22 contra un buzón de pruebas.
+      replyTo: { name: c.nombre, address: c.email },
       // El nombre del evento en el asunto para poder buscarlo luego en el
       // buzón sin abrir cada mensaje.
       subject: `${PREFIJO_ASUNTO}Consulta web: ${c.evento || "sin nombre de evento"}`,
@@ -198,41 +233,34 @@ export async function enviarConsulta(c: Consulta): Promise<boolean> {
 /** El resumen que recibe quien escribe: lo suyo, tal como lo mandó. */
 function acuseConsulta(c: Consulta): void {
   const linea = (etiqueta: string, valor: string) =>
-    valor.trim() ? `${etiqueta}: ${valor.trim()}` : null;
+    limpio(valor) ? `${etiqueta}: ${limpio(valor)}` : null;
 
+  // SÓLO LOS CAMPOS DE FORMULARIO, NO EL TEXTO LIBRE. El nombre del evento y
+  // el mensaje no viajan aquí, y el asunto no lleva nada escrito por nadie:
+  // ver la explicación de arriba.
   const resumen = [
-    linea("Evento", c.evento),
     linea("Fecha", c.fecha),
     linea("Aforo", c.aforo),
     linea("Escenarios", c.escenarios),
-    linea("Cobertura", c.cobertura.join(", ")),
+    linea("Cobertura", c.cobertura.map((v) => limpio(v, 40)).join(", ")),
     linea("Presupuesto", c.presupuesto),
   ].filter((l): l is string => l !== null);
 
-  acuse(
-    `Hemos recibido tu consulta${c.evento ? `: ${c.evento}` : ""}`,
-    c.email,
-    [
-      `Hola${c.nombre ? " " + c.nombre.split(" ")[0] : ""},`,
-      "",
-      "Hemos recibido tu consulta y te respondemos en 24 horas laborables.",
-      "",
-      "Esto es lo que nos has contado:",
-      "",
-      // Sólo lo que rellenó. Una lista con seis «—» no informa de nada y hace
-      // pensar que se ha perdido algo.
-      ...(resumen.length ? resumen : ["(sin datos adicionales)"]),
-      "",
-      "Tu mensaje:",
-      c.mensaje.trim() || "(sin mensaje)",
-      "",
-      "Si algo no cuadra o quieres añadir cualquier cosa, responde a este",
-      "correo directamente.",
-      "",
-      "SIDEBFLMS",
-      DESTINO,
-    ].join("\n")
-  );
+  acuse("Hemos recibido tu consulta", c.email, [
+    "Hola,",
+    "",
+    "Hemos recibido tu consulta y te respondemos en 24 horas laborables.",
+    "",
+    ...(resumen.length ? ["Esto es lo que nos has contado:", "", ...resumen, ""] : []),
+    "Si algo no cuadra o quieres añadir cualquier cosa, responde a este",
+    "correo directamente.",
+    "",
+    "Si no has sido tú quien ha rellenado el formulario, ignora este correo:",
+    "no hemos guardado nada a tu nombre.",
+    "",
+    "SIDEBFLMS",
+    DESTINO,
+  ].join("\n"));
 }
 
 /**
@@ -297,7 +325,11 @@ export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
     await transporte().sendMail({
       from: `"Web SIDEBFLMS" <${REMITENTE}>`,
       to: DESTINO,
-      replyTo: `"${c.nombre}" <${c.email}>`,
+      // En objeto y NO como texto: escrito a mano, un nombre como
+      // `x" <otro@sitio.test>, "y` metía una segunda dirección en el
+      // Reply-To y el «Responder» acababa yendo al atacante. Comprobado
+      // el 2026-09-22 contra un buzón de pruebas.
+      replyTo: { name: c.nombre, address: c.email },
       // Sin nombre en el asunto, a propósito: ver la nota de arriba.
       subject: `${PREFIJO_ASUNTO}Candidatura: ${c.especialidad[0] ?? "sin especialidad"}`,
       text: cuerpoCandidatura(c),
@@ -329,16 +361,21 @@ export async function enviarCandidatura(c: Candidatura): Promise<boolean> {
  * lo mismo que la pantalla que ve al enviar.
  */
 function acuseCandidatura(c: Candidatura): void {
+  // Sin nombre y sin el enlace del portfolio: ver el punto 3 del acuse. La
+  // especialidad son casillas del formulario, así que sí puede ir, limpia.
   acuse("Candidatura recibida — SIDEBFLMS", c.email, [
-    `Hola${c.nombre ? " " + c.nombre.split(" ")[0] : ""},`,
+    "Hola,",
     "",
     "Tu candidatura se ha enviado correctamente y queda guardada.",
     "",
-    c.especialidad.length ? `Especialidad: ${c.especialidad.join(", ")}` : null,
-    c.portfolio ? `Portfolio: ${c.portfolio}` : null,
+    c.especialidad.length
+      ? `Especialidad: ${c.especialidad.map((v) => limpio(v, 40)).join(", ")}`
+      : null,
     "",
     "No respondemos a todas, pero se leen: si entra un trabajo que encaja con",
     "lo que haces, te escribimos.",
+    "",
+    "Si no has sido tú quien ha rellenado el formulario, ignora este correo.",
     "",
     "SIDEBFLMS",
     DESTINO,

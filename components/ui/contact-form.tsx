@@ -56,6 +56,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           id="email"
           name="email"
           type="email"
+          maxLength={254}
           label={dict.contact.form.email}
           required
           error={errorMessage(dict, state.fieldErrors?.email)}
@@ -158,6 +159,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           id="message"
           name="message"
           rows={3}
+          maxLength={4000}
           placeholder={dict.contact.form.messagePlaceholder}
           className={cn(fieldClasses, "mt-2 resize-none")}
         />
@@ -221,6 +223,10 @@ function Field({
   type = "text",
   required,
   min,
+  // TOPE DE CARACTERES. El mismo que aplica el servidor (lib/formularios.ts):
+  // aquí para avisar a quien escribe, allí porque un robot no manda el
+  // formulario, manda la petición.
+  maxLength = 120,
   error,
 }: {
   id: string;
@@ -229,6 +235,7 @@ function Field({
   type?: string;
   required?: boolean;
   min?: number;
+  maxLength?: number;
   error?: string;
 }) {
   return (
@@ -242,6 +249,7 @@ function Field({
         name={name}
         type={type}
         min={min}
+        maxLength={maxLength}
         required={required}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
