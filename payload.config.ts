@@ -46,9 +46,22 @@ function conexion() {
     return { connectionString: process.env.DATABASE_URI };
   }
 
-  const deFichero = process.env.PGPASSWORD_FILE
-    ? readFileSync(process.env.PGPASSWORD_FILE, "utf8").replace(/\r?\n$/, "")
-    : undefined;
+  // Si el fichero no está, SE AVISA Y SE SIGUE con `PGPASSWORD`. Antes se
+  // reventaba: el 2026-09-22 el despliegue borró ese fichero —no estaba en su
+  // lista de excepciones— y la compilación falló con un «no existe el fichero»
+  // que no decía ni de qué iba. Un secreto que falta es un problema; que se
+  // caiga todo sin explicarlo, otro.
+  let deFichero: string | undefined;
+  if (process.env.PGPASSWORD_FILE) {
+    try {
+      deFichero = readFileSync(process.env.PGPASSWORD_FILE, "utf8").replace(/\r?\n$/, "");
+    } catch {
+      console.error(
+        `[panel] no se ha podido leer la contraseña de ${process.env.PGPASSWORD_FILE}. ` +
+          `Se intenta con PGPASSWORD; si tampoco está, la web tirará de los ficheros de contenido.`
+      );
+    }
+  }
 
   return {
     host: process.env.PGHOST ?? "127.0.0.1",
