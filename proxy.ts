@@ -74,6 +74,6 @@ export const config = {
   matcher: [
     // Todo menos las rutas internas, los ficheros de metadatos y los estáticos
     // (cualquier cosa con extensión: .woff2, .mp4, .svg, .webp…).
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\..*).*)",
+    "/((?!api|admin|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\..*).*)",
   ],
 };
