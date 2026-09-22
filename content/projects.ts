@@ -99,6 +99,37 @@ export type Project = {
   brief: Record<Locale, string>;
 };
 
+/**
+ * LA PIEZA VISTA DESDE UNA CINTA. Sólo lo que hace falta para pintar una
+ * miniatura: nombre, categorías y el material ligero.
+ *
+ * Existe para NO MANDAR AL NAVEGADOR LOS PROYECTOS ENTEROS. Cada uno lleva el
+ * texto largo en dos idiomas, la ficha técnica, la galería y las variantes
+ * vertical y de máster; todo eso viajaba en el HTML de la portada aunque las
+ * cintas sólo usaran cinco campos. Con veinticinco piezas, se nota.
+ */
+export type PiezaLigera = {
+  slug: string;
+  categories: Category[];
+  title: Record<Locale, string>;
+  /** La línea corta bajo el nombre en el carrusel del hero. */
+  hardFact: Record<Locale, string>;
+  venue: string | null;
+  media: { video: string | null; poster: string | null };
+};
+
+/** Pasa los proyectos a lo mínimo que necesita una cinta. */
+export function aPiezasLigeras(proyectos: Project[]): PiezaLigera[] {
+  return proyectos.map((p) => ({
+    slug: p.slug,
+    categories: p.categories,
+    title: p.title,
+    hardFact: p.hardFact,
+    venue: p.venue,
+    media: { video: p.media.video, poster: p.media.poster },
+  }));
+}
+
 const PROYECTOS: Project[] = [
   {
     // FUENTE DEL NOMBRE: `DRONE/@sidebflms_HOLIKA.mov`.

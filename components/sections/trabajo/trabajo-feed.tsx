@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { Reveal } from "@/components/motion/reveal";
 import { PillLink } from "@/components/ui/button";
-import { venueYFecha, type Project } from "@/content/projects";
+
 import { prefersReducedMotion } from "@/lib/gsap";
 import { path, type Locale } from "@/lib/routes";
 import { cn, pad } from "@/lib/utils";
@@ -17,8 +17,7 @@ import {
   opcionesFiltro,
   textoResultados,
   type CopyTrabajo,
-  type Filtro,
-} from "./medios";
+  type Filtro, type PiezaDeTrabajo } from "./medios";
 
 /**
  * «TRABAJO» EN MÓVIL Y TABLETA — TARJETAS (cliente, 2026-09-16).
@@ -47,7 +46,7 @@ export function TrabajoFeed({
   copy,
   className,
 }: {
-  projects: Project[];
+  projects: PiezaDeTrabajo[];
   locale: Locale;
   copy: CopyTrabajo;
   className?: string;
@@ -177,7 +176,7 @@ function Tarjeta({
   copy,
   t,
 }: {
-  project: Project;
+  project: PiezaDeTrabajo;
   indice: number;
   total: number;
   activa: boolean;
@@ -232,7 +231,7 @@ function Tarjeta({
         <h2 className="font-display mt-3 pt-[0.15em] text-[clamp(1.25rem,5.2vw,1.75rem)] leading-[1.05] text-bone uppercase">
           {p.title[locale]}
         </h2>
-        {venueYFecha(p, locale) && <p className="label mt-2">{venueYFecha(p, locale)}</p>}
+        {p.piePieza && <p className="label mt-2">{p.piePieza}</p>}
         <p className="mt-3 leading-snug text-bone/85">{p.hardFact[locale]}</p>
 
         <div className="mt-5 flex items-center justify-between gap-3">
@@ -258,7 +257,7 @@ function VideoTarjeta({
   locale,
   t,
 }: {
-  project: Project;
+  project: PiezaDeTrabajo;
   indice: number;
   total: number;
   activa: boolean;
@@ -380,7 +379,7 @@ function CarruselFotos({
   locale,
   t,
 }: {
-  project: Project;
+  project: PiezaDeTrabajo;
   galeria: { grande: string; peque: string }[];
   indice: number;
   total: number;

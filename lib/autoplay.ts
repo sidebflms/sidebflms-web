@@ -27,18 +27,30 @@ export function arrancaEnSilencio(video: HTMLVideoElement, debeSonar: () => bool
 
   const intenta = () => {
     if (!debeSonar()) return;
+    // Si la página se ABRE en una pestaña de fondo no hay cambio de
+    // visibilidad que escuchar, así que se mira también aquí.
+    if (document.hidden) return;
     video.autoplay = true;
     if (video.paused) video.play().catch(() => {});
   };
-  const alVolver = () => {
-    if (!document.hidden) intenta();
+  /**
+   * AL SALIR DE LA PESTAÑA, PARAR; AL VOLVER, REANUDAR.
+   *
+   * Antes sólo reanudaba. Un vídeo mudo sigue descodificando en una pestaña de
+   * fondo, y en la portada puede haber media docena a la vez: con la web
+   * abierta en otra pestaña eso es ventilador en el portátil y batería en el
+   * móvil, sin que nadie esté viendo nada. (2026-09-22)
+   */
+  const alCambiarVisibilidad = () => {
+    if (document.hidden) video.pause();
+    else intenta();
   };
 
   video.addEventListener("loadeddata", intenta);
   video.addEventListener("canplay", intenta);
   document.addEventListener("touchend", intenta, { passive: true });
   document.addEventListener("click", intenta);
-  document.addEventListener("visibilitychange", alVolver);
+  document.addEventListener("visibilitychange", alCambiarVisibilidad);
   intenta();
 
   return () => {
@@ -46,7 +58,7 @@ export function arrancaEnSilencio(video: HTMLVideoElement, debeSonar: () => bool
     video.removeEventListener("canplay", intenta);
     document.removeEventListener("touchend", intenta);
     document.removeEventListener("click", intenta);
-    document.removeEventListener("visibilitychange", alVolver);
+    document.removeEventListener("visibilitychange", alCambiarVisibilidad);
   };
 }
 

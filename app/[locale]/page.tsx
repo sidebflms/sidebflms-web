@@ -9,7 +9,7 @@ import { HeroFrame } from "@/components/sections/hero-frame";
 import { HomeSliders } from "@/components/sections/home-sliders";
 import { PillLink } from "@/components/ui/button";
 import { CIFRAS_CON_DATO } from "@/content/cifras";
-import { PROJECTS } from "@/content/projects";
+import { aPiezasLigeras, PROJECTS } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -38,7 +38,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
-  const featured = PROJECTS.filter((p) => p.featured && p.media.video);
+  // Ligeras también aquí: el carrusel del hero sólo usa el material y el
+  // slug, y así el HTML no arrastra los textos largos de cada pieza.
+  const featured = aPiezasLigeras(PROJECTS.filter((p) => p.featured && p.media.video));
 
   return (
     <main id="main" className="pb-8">
@@ -91,7 +93,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         {/* Las cintas, sin `shell`: tienen que salirse por los dos lados.
             Ver la nota completa en la portada de `main`. */}
         <div className="mt-10 lg:mt-12">
-          <HomeSliders projects={PROJECTS} locale={locale} dict={dict} />
+          {/* LIGERAS y no los proyectos enteros: las cintas sólo necesitan
+              nombre, categorías y el material. Ver `aPiezasLigeras`. */}
+          <HomeSliders projects={aPiezasLigeras(PROJECTS)} locale={locale} dict={dict} />
         </div>
       </section>
 

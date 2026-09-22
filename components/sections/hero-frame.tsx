@@ -9,7 +9,7 @@ import { ReelModal } from "@/components/glass/reel-modal";
 import { CountUp } from "@/components/motion/count-up";
 import { ArrowUpRight, PillLink } from "@/components/ui/button";
 import type { Cifra } from "@/content/cifras";
-import type { Project } from "@/content/projects";
+import type { PiezaLigera } from "@/content/projects";
 import { arrancaEnSilencio } from "@/lib/autoplay";
 import { conBase } from "@/lib/base";
 import type { Dictionary } from "@/lib/dictionaries";
@@ -53,7 +53,7 @@ export function HeroFrame({
 }: {
   dict: Dictionary;
   locale: Locale;
-  featured: Project[];
+  featured: PiezaLigera[];
   cifras: Cifra[];
 }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -409,7 +409,7 @@ function CifrasNotch({ cifras, label, locale }: { cifras: Cifra[]; label: string
    7 s, y en el borde derecho el indicador 01 — 04 con la pieza en curso
    llenándose. Se para con el ratón encima (para poder leer y pulsar) y con
    movimiento reducido no avanza sola: se cambia con el indicador. */
-function DestacadosRotativos({ featured, dict, locale }: { featured: Project[]; dict: Dictionary; locale: Locale }) {
+function DestacadosRotativos({ featured, dict, locale }: { featured: PiezaLigera[]; dict: Dictionary; locale: Locale }) {
   const piezas = featured.slice(0, 4);
   const [activo, setActivo] = useState(0);
   const [pausa, setPausa] = useState(false);

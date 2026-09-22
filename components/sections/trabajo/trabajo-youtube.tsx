@@ -7,7 +7,7 @@ import { FramedStage } from "@/components/glass/framed-stage";
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { Reveal } from "@/components/motion/reveal";
 import { ArrowUpRight, PillLink } from "@/components/ui/button";
-import { venueYFecha, type Project } from "@/content/projects";
+
 import { gsap, hasFinePointer, prefersReducedMotion, registerGsap } from "@/lib/gsap";
 import { path, type Locale } from "@/lib/routes";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -21,8 +21,7 @@ import {
   opcionesFiltro,
   textoResultados,
   type CopyTrabajo,
-  type Filtro,
-} from "./medios";
+  type Filtro, type PiezaDeTrabajo } from "./medios";
 import { TrabajoFeed } from "./trabajo-feed";
 
 /**
@@ -77,7 +76,7 @@ export function TrabajoYoutube({
   locale,
   copy,
 }: {
-  projects: Project[];
+  projects: PiezaDeTrabajo[];
   locale: Locale;
   copy: CopyTrabajo;
 }) {
@@ -864,8 +863,8 @@ export function TrabajoYoutube({
             <div ref={cajaRef}>
               {/* Primera línea en negrita, como las visualizaciones y la fecha
                   en YouTube: aquí venue y fecha. */}
-              {venueYFecha(actual, locale) && (
-                <p className="text-sm font-semibold tracking-[0.02em] text-bone">{venueYFecha(actual, locale)}</p>
+              {actual.piePieza && (
+                <p className="text-sm font-semibold tracking-[0.02em] text-bone">{actual.piePieza}</p>
               )}
 
               {/* Categorías como los hashtags de YouTube: filtran la lista. */}
@@ -890,7 +889,7 @@ export function TrabajoYoutube({
                 id="yt-descripcion"
                 className={cn("mt-2 whitespace-pre-line text-bone/75", !expandido && "line-clamp-2")}
               >
-                {actual.brief[locale]}
+                {actual.brief}
               </p>
               <button
                 type="button"
@@ -1070,8 +1069,8 @@ export function TrabajoYoutube({
                             </span>
                             <span className="truncate">{disciplinas(p, copy)}</span>
                           </span>
-                          {venueYFecha(p, locale) && (
-                            <span className="label mt-1 block truncate text-[10px]">{venueYFecha(p, locale)}</span>
+                          {p.piePieza && (
+                            <span className="label mt-1 block truncate text-[10px]">{p.piePieza}</span>
                           )}
                         </span>
                       </button>

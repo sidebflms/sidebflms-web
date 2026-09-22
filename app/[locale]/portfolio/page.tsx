@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Reveal } from "@/components/motion/reveal";
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
+import { aPiezasDeTrabajo } from "@/components/sections/trabajo/medios";
 import { PROJECTS } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
@@ -55,7 +56,9 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       {/* Sólo la parte del diccionario que usa: es componente de cliente y el
           diccionario entero viajaría como prop. */}
       <div className="mt-10 lg:mt-12">
-        <TrabajoYoutube projects={PROJECTS} locale={locale} copy={dict.portfolio} />
+        {/* Recortadas: la página monta las dos versiones —escritorio y móvil—,
+            así que todo lo que se pase viaja dos veces en el HTML. */}
+        <TrabajoYoutube projects={aPiezasDeTrabajo(PROJECTS, locale)} locale={locale} copy={dict.portfolio} />
       </div>
 
       {/* La credencial, justo después del trabajo que la respalda. */}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-import type { Category, Project } from "@/content/projects";
+import type { Category, PiezaLigera } from "@/content/projects";
 import { apaga, arrancaEnSilencio, enciende } from "@/lib/autoplay";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
@@ -64,7 +64,7 @@ function Pieza({
   locale,
   duplicada,
 }: {
-  project: Project;
+  project: PiezaLigera;
   locale: Locale;
   duplicada: boolean;
 }) {
@@ -212,7 +212,7 @@ function Fila({
   locale,
   dict,
 }: {
-  piezas: Project[];
+  piezas: PiezaLigera[];
   categoria: Category;
   sentido: "izquierda" | "derecha";
   locale: Locale;
@@ -306,7 +306,7 @@ export function HomeSliders({
   locale,
   dict,
 }: {
-  projects: Project[];
+  projects: PiezaLigera[];
   locale: Locale;
   dict: Dictionary;
 }) {

@@ -1,4 +1,5 @@
-import { CATEGORIES, type Category, type Project } from "@/content/projects";
+import { CATEGORIES, venueYFecha, type Category, type Project } from "@/content/projects";
+import type { Locale } from "@/lib/routes";
 import type { Dictionary } from "@/lib/dictionaries";
 
 /**
@@ -7,6 +8,45 @@ import type { Dictionary } from "@/lib/dictionaries";
  */
 
 export type CopyTrabajo = Dictionary["portfolio"];
+
+/**
+ * LA PIEZA VISTA DESDE LA PÁGINA DE TRABAJO.
+ *
+ * Igual que `PiezaLigera` en la portada y por lo mismo: la página monta a la
+ * vez el reproductor de escritorio y el carrete de móvil, así que TODO lo que
+ * se le pase viaja en el HTML dos veces. De cada proyecto sólo se usa lo de
+ * aquí; lo que más pesaba era el texto largo, que además viajaba en los dos
+ * idiomas cuando sólo se pinta el del visitante.
+ */
+export type PiezaDeTrabajo = {
+  slug: string;
+  categories: Category[];
+  showpiece?: boolean;
+  title: Record<Locale, string>;
+  hardFact: Record<Locale, string>;
+  /** Ya en el idioma de la página: aquí no hace falta el otro. */
+  brief: string;
+  /** «Fabrik · 17 de enero de 2026», ya montado y en el idioma de la página. */
+  piePieza: string;
+  year: string;
+  media: Project["media"];
+};
+
+/** Pasa los proyectos a lo que necesita la página de trabajo. */
+export function aPiezasDeTrabajo(proyectos: Project[], locale: Locale): PiezaDeTrabajo[] {
+  return proyectos.map((p) => ({
+    slug: p.slug,
+    categories: p.categories,
+    showpiece: p.showpiece,
+    title: p.title,
+    hardFact: p.hardFact,
+    brief: p.brief[locale],
+    piePieza: venueYFecha(p, locale),
+    year: p.year,
+    media: p.media,
+  }));
+}
+
 export type Filtro = Category | "all";
 
 /**
@@ -18,7 +58,7 @@ export type Filtro = Category | "all";
  * vídeo; su póster es el JPG de 1600 y existe la versión de 800 en WebP al
  * lado, que es la que toca a tamaño de miniatura.
  */
-export function mediosLigeros(project: Project): { video: string | null; poster: string | null } {
+export function mediosLigeros(project: Pick<Project, "media">): { video: string | null; poster: string | null } {
   const { video, poster } = project.media;
   if (video) {
     return {
@@ -34,7 +74,7 @@ export function mediosLigeros(project: Project): { video: string | null; poster:
  * reproductor y `peque` para las copias apiladas de la miniatura. Sin
  * `gallery`, el póster solo. Vacío si la pieza es de vídeo.
  */
-export function galeriaFotos(project: Project): { grande: string; peque: string }[] {
+export function galeriaFotos(project: Pick<Project, "media">): { grande: string; peque: string }[] {
   if (project.media.video) return [];
   const fuentes = project.media.gallery ?? (project.media.poster ? [project.media.poster] : []);
   return fuentes.map((f) => ({
@@ -43,12 +83,12 @@ export function galeriaFotos(project: Project): { grande: string; peque: string 
   }));
 }
 
-export function filtrar(projects: Project[], filtro: Filtro): Project[] {
+export function filtrar<T extends { categories: Category[] }>(projects: T[], filtro: Filtro): T[] {
   return filtro === "all" ? projects : projects.filter((p) => p.categories.includes(filtro));
 }
 
 /** Opciones del filtro con su cuenta, en el orden de `CATEGORIES`. */
-export function opcionesFiltro(projects: Project[], copy: CopyTrabajo) {
+export function opcionesFiltro(projects: { categories: Category[] }[], copy: CopyTrabajo) {
   return [
     { key: "all" as Filtro, label: copy.all, count: projects.length },
     ...CATEGORIES.map((c) => ({
@@ -63,6 +103,6 @@ export function textoResultados(n: number, copy: CopyTrabajo): string {
   return n === 1 ? copy.resultsOne : copy.resultsMany.replace("{n}", String(n));
 }
 
-export function disciplinas(project: Project, copy: CopyTrabajo): string {
+export function disciplinas(project: { categories: Category[] }, copy: CopyTrabajo): string {
   return project.categories.map((c) => copy.categories[c]).join(" · ");
 }
