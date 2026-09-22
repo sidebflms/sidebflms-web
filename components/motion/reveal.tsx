@@ -33,6 +33,24 @@ type RevealProps = {
  * `prefers-reduced-motion`, el contenido está visible desde el primer frame en
  * vez de quedarse en opacidad 0 esperando una animación que no llega.
  */
+/**
+ * UN SOLO REFRESCO POR TANDA, no uno por componente.
+ *
+ * `ScrollTrigger.refresh()` recalcula la posición de TODOS los disparadores de
+ * la página. Al cambiar de página se desmontan a la vez todos los `Reveal`
+ * —y hay decenas—, así que el refresco se ejecutaba decenas de veces seguidas
+ * y cada una repasaba la lista entera. Ahora se apunta uno para el siguiente
+ * fotograma y los demás se suman a ese.
+ */
+let refrescoPendiente = 0;
+function pideRefresco(ScrollTrigger: { refresh: () => void }): void {
+  if (refrescoPendiente) return;
+  refrescoPendiente = window.requestAnimationFrame(() => {
+    refrescoPendiente = 0;
+    ScrollTrigger.refresh();
+  });
+}
+
 export function Reveal({
   children,
   stagger = false,
@@ -108,7 +126,7 @@ export function Reveal({
     // que impide que al navegar entre /es y /en se acumulen triggers huérfanos.
     return () => {
       ctx.revert();
-      ScrollTrigger.refresh();
+      pideRefresco(ScrollTrigger);
     };
   }, [stagger, delay, bidirectional]);
 

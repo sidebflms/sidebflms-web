@@ -331,9 +331,33 @@ function useHoraTimecode(): string | null {
       const d = new Date();
       setAhora(timecode(d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds() + d.getMilliseconds() / 1000));
     };
+
+    // SE PARA CUANDO LA PESTAÑA NO SE VE. Repintar 25 veces por segundo un
+    // texto que nadie está mirando calienta el portátil de quien deja la web
+    // abierta en una pestaña de fondo, y en un móvil se nota en la batería.
+    // Al volver se repinta de inmediato, así que no se ve ningún salto.
+    // Una pintada siempre, aunque la pestaña arranque de fondo: si no, el
+    // reloj se quedaría en blanco hasta que alguien la mirase.
     pinta();
-    const id = window.setInterval(pinta, 40);
-    return () => window.clearInterval(id);
+
+    let id = 0;
+    const arranca = () => {
+      if (id) return;
+      pinta();
+      id = window.setInterval(pinta, 40);
+    };
+    const para = () => {
+      window.clearInterval(id);
+      id = 0;
+    };
+    const segunSeVea = () => (document.hidden ? para() : arranca());
+
+    segunSeVea();
+    document.addEventListener("visibilitychange", segunSeVea);
+    return () => {
+      para();
+      document.removeEventListener("visibilitychange", segunSeVea);
+    };
   }, []);
   return ahora;
 }
