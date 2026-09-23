@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
 import { aPiezasDeTrabajo } from "@/components/sections/trabajo/medios";
-import { traeProyectos } from "@/lib/contenido";
+import { traeClientes, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -34,7 +34,11 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const dict = await getDictionary(locale);
+  const [dict, proyectos, clientes] = await Promise.all([
+    getDictionary(locale),
+    traeProyectos(),
+    traeClientes(),
+  ]);
 
   return (
     <main id="main" className="pagina">
@@ -58,12 +62,12 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       <div className="mt-10 lg:mt-12">
         {/* Recortadas: la página monta las dos versiones —escritorio y móvil—,
             así que todo lo que se pase viaja dos veces en el HTML. */}
-        <TrabajoYoutube projects={aPiezasDeTrabajo(await traeProyectos(), locale)} locale={locale} copy={dict.portfolio} />
+        <TrabajoYoutube projects={aPiezasDeTrabajo(proyectos, locale)} locale={locale} copy={dict.portfolio} />
       </div>
 
       {/* La credencial, justo después del trabajo que la respalda. */}
       <div className="seccion">
-        <BrandStrip dict={dict} />
+        <BrandStrip dict={dict} clientes={clientes} />
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, GlobalConfig } from "payload";
 
 /**
  * LAS COLECCIONES DEL PANEL.
@@ -239,5 +239,103 @@ export const Equipo: CollectionConfig = {
       defaultValue: false,
       admin: { position: "sidebar" },
     },
+  ],
+};
+
+export const Preguntas: CollectionConfig = {
+  slug: "preguntas",
+  hooks: {
+    afterChange: [avisaALaWeb],
+    afterDelete: [avisaALaWeb],
+  },
+  labels: { singular: "Pregunta", plural: "Preguntas frecuentes" },
+  admin: {
+    useAsTitle: "q",
+    defaultColumns: ["q", "orden"],
+    group: "Contenido",
+    description: "El FAQ de la web. El orden de la lista es el de la web.",
+  },
+  defaultSort: "orden",
+  fields: [
+    { name: "orden", type: "number", required: true, defaultValue: 0, admin: { position: "sidebar" } },
+    { name: "q", label: "Pregunta", type: "text", required: true, localized: true },
+    { name: "a", label: "Respuesta", type: "textarea", required: true, localized: true },
+  ],
+};
+
+/**
+ * ── LOS GLOBALS: CONTENIDO DEL QUE SÓLO HAY UNA COPIA ────────────────────
+ *
+ * `Cifras`, `Clientes` y `Textos` no son listas de fichas con su propia
+ * dirección —como Proyectos o Equipo—: son bloques únicos de la web. Payload
+ * los llama «globals» y se editan en su propia pantalla, sin lista de por
+ * medio. Mismo aviso al guardar, mismo plan B en `lib/contenido.ts` si la
+ * base no responde.
+ */
+
+export const Cifras: GlobalConfig = {
+  slug: "cifras",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Cifras",
+  admin: {
+    group: "Contenido",
+    description: "La ficha técnica de la portada y de Nosotros. El orden de la lista es el de la web.",
+  },
+  fields: [
+    {
+      name: "items",
+      label: "Cifras",
+      type: "array",
+      fields: [
+        {
+          name: "valor",
+          label: "Número",
+          type: "text",
+          admin: { description: "«329», «+2.000». Vacío: esa cifra no se pinta." },
+        },
+        { name: "etiqueta", label: "Rótulo", type: "text", required: true, localized: true },
+      ],
+    },
+  ],
+};
+
+export const Clientes: GlobalConfig = {
+  slug: "clientes",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Clientes",
+  admin: {
+    group: "Contenido",
+    description: "La cinta de nombres de Trabajo. Mismo nombre en los dos idiomas.",
+  },
+  fields: [
+    {
+      name: "items",
+      label: "Clientes",
+      type: "array",
+      fields: [{ name: "nombre", type: "text", required: true }],
+    },
+  ],
+};
+
+export const Textos: GlobalConfig = {
+  slug: "textos",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Textos",
+  admin: {
+    group: "Contenido",
+    description:
+      "La entradilla de cada página: el párrafo bajo el titular. Vacío: se ve el texto de siempre. " +
+      "Los titulares y los rótulos del menú no están aquí a propósito: son arrays de líneas para la " +
+      "animación de entrada, ver content/dictionaries/es.ts.",
+  },
+  fields: [
+    { name: "servicesIntro", label: "Servicios — entradilla", type: "textarea", localized: true },
+    { name: "portfolioIntro", label: "Trabajo — entradilla", type: "textarea", localized: true },
+    { name: "jobsIntro", label: "Trabaja con nosotros — entradilla", type: "textarea", localized: true },
+    { name: "contactIntro", label: "Contacto — entradilla", type: "textarea", localized: true },
+    { name: "aboutIntro", label: "Nosotros — entradilla", type: "textarea", localized: true },
+    { name: "aboutWhereBody", label: "Nosotros — dónde operamos", type: "textarea", localized: true },
+    { name: "faqIntro", label: "Preguntas frecuentes — entradilla", type: "textarea", localized: true },
+    { name: "droneIntro", label: "Drone — entradilla", type: "textarea", localized: true },
   ],
 };

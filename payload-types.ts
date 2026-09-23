@@ -70,6 +70,7 @@ export interface Config {
     usuarios: Usuario;
     proyectos: Proyecto;
     equipo: Equipo;
+    preguntas: Pregunta;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     usuarios: UsuariosSelect<false> | UsuariosSelect<true>;
     proyectos: ProyectosSelect<false> | ProyectosSelect<true>;
     equipo: EquipoSelect<false> | EquipoSelect<true>;
+    preguntas: PreguntasSelect<false> | PreguntasSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -89,8 +91,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('es' | 'en') | ('es' | 'en')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    cifras: Cifra;
+    clientes: Cliente;
+    textos: Texto;
+  };
+  globalsSelect: {
+    cifras: CifrasSelect<false> | CifrasSelect<true>;
+    clientes: ClientesSelect<false> | ClientesSelect<true>;
+    textos: TextosSelect<false> | TextosSelect<true>;
+  };
   locale: 'es' | 'en';
   widgets: {
     collections: CollectionsWidget;
@@ -250,6 +260,20 @@ export interface Equipo {
   createdAt: string;
 }
 /**
+ * El FAQ de la web. El orden de la lista es el de la web.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "preguntas".
+ */
+export interface Pregunta {
+  id: number;
+  orden: number;
+  q: string;
+  a: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -284,6 +308,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'equipo';
         value: number | Equipo;
+      } | null)
+    | ({
+        relationTo: 'preguntas';
+        value: number | Pregunta;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -399,6 +427,17 @@ export interface EquipoSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "preguntas_select".
+ */
+export interface PreguntasSelect<T extends boolean = true> {
+  orden?: T;
+  q?: T;
+  a?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -436,6 +475,111 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * La ficha técnica de la portada y de Nosotros. El orden de la lista es el de la web.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cifras".
+ */
+export interface Cifra {
+  id: number;
+  items?:
+    | {
+        /**
+         * «329», «+2.000». Vacío: esa cifra no se pinta.
+         */
+        valor?: string | null;
+        etiqueta: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * La cinta de nombres de Trabajo. Mismo nombre en los dos idiomas.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clientes".
+ */
+export interface Cliente {
+  id: number;
+  items?:
+    | {
+        nombre: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * La entradilla de cada página: el párrafo bajo el titular. Vacío: se ve el texto de siempre. Los titulares y los rótulos del menú no están aquí a propósito: son arrays de líneas para la animación de entrada, ver content/dictionaries/es.ts.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "textos".
+ */
+export interface Texto {
+  id: number;
+  servicesIntro?: string | null;
+  portfolioIntro?: string | null;
+  jobsIntro?: string | null;
+  contactIntro?: string | null;
+  aboutIntro?: string | null;
+  aboutWhereBody?: string | null;
+  faqIntro?: string | null;
+  droneIntro?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cifras_select".
+ */
+export interface CifrasSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        valor?: T;
+        etiqueta?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clientes_select".
+ */
+export interface ClientesSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        nombre?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "textos_select".
+ */
+export interface TextosSelect<T extends boolean = true> {
+  servicesIntro?: T;
+  portfolioIntro?: T;
+  jobsIntro?: T;
+  contactIntro?: T;
+  aboutIntro?: T;
+  aboutWhereBody?: T;
+  faqIntro?: T;
+  droneIntro?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

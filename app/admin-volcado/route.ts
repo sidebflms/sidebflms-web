@@ -32,15 +32,25 @@ export async function GET(peticion: Request): Promise<Response> {
   }
 
   const payload = await getPayload({ config });
-  const pide = (collection: "proyectos" | "equipo", locale: "es" | "en") =>
+  const pide = (collection: "proyectos" | "equipo" | "preguntas", locale: "es" | "en") =>
     payload.find({ collection, locale, limit: 500, sort: "orden", depth: 0 });
+  const pideGlobal = (slug: "cifras" | "clientes" | "textos", locale: "es" | "en") =>
+    payload.findGlobal({ slug, locale, depth: 0 });
 
-  const [proyectosEs, proyectosEn, equipoEs, equipoEn] = await Promise.all([
-    pide("proyectos", "es"),
-    pide("proyectos", "en"),
-    pide("equipo", "es"),
-    pide("equipo", "en"),
-  ]);
+  const [proyectosEs, proyectosEn, equipoEs, equipoEn, preguntasEs, preguntasEn, cifrasEs, cifrasEn, clientes, textosEs, textosEn] =
+    await Promise.all([
+      pide("proyectos", "es"),
+      pide("proyectos", "en"),
+      pide("equipo", "es"),
+      pide("equipo", "en"),
+      pide("preguntas", "es"),
+      pide("preguntas", "en"),
+      pideGlobal("cifras", "es"),
+      pideGlobal("cifras", "en"),
+      pideGlobal("clientes", "es"),
+      pideGlobal("textos", "es"),
+      pideGlobal("textos", "en"),
+    ]);
 
   return Response.json(
     {
@@ -48,6 +58,10 @@ export async function GET(peticion: Request): Promise<Response> {
       deDonde: "base de datos del panel (/admin)",
       proyectos: { es: proyectosEs.docs, en: proyectosEn.docs },
       equipo: { es: equipoEs.docs, en: equipoEn.docs },
+      preguntas: { es: preguntasEs.docs, en: preguntasEn.docs },
+      cifras: { es: cifrasEs, en: cifrasEn },
+      clientes,
+      textos: { es: textosEs, en: textosEn },
     },
     {
       headers: {

@@ -8,9 +8,8 @@ import { ContactCta } from "@/components/sections/contact-cta";
 import { HeroFrame } from "@/components/sections/hero-frame";
 import { HomeSliders } from "@/components/sections/home-sliders";
 import { PillLink } from "@/components/ui/button";
-import { CIFRAS_CON_DATO } from "@/content/cifras";
 import { aPiezasLigeras } from "@/content/projects";
-import { traeProyectos } from "@/lib/contenido";
+import { traeCifras, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -41,7 +40,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const dict = await getDictionary(locale);
   // Ligeras también aquí: el carrusel del hero sólo usa el material y el
   // slug, y así el HTML no arrastra los textos largos de cada pieza.
-  const proyectos = await traeProyectos();
+  const [proyectos, cifras] = await Promise.all([traeProyectos(), traeCifras()]);
   const featured = aPiezasLigeras(proyectos.filter((p) => p.featured && p.media.video));
 
   return (
@@ -49,7 +48,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       {/* LA INTRO DEL CASETE. Ver components/sections/intro-casete.tsx; el
           script que decide si sale está en la cabecera, en layout.tsx. */}
       <IntroCasete textoSaltar={dict.intro.skip} />
-      <HeroFrame dict={dict} locale={locale} featured={featured} cifras={CIFRAS_CON_DATO} />
+      <HeroFrame dict={dict} locale={locale} featured={featured} cifras={cifras} />
 
       <section data-reglet={dict.featured.label} className="seccion overflow-hidden">
         {/* Titular a la izquierda; descripción y botón a la derecha, pegados

@@ -1,16 +1,20 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+import { CIFRAS } from "@/content/cifras";
+import { CLIENTES } from "@/content/clientes";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
+import { PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto } from "@/lib/contenido";
 
 /**
  * CARGA EL CONTENIDO DE LOS FICHEROS EN EL PANEL.
  *
  *   curl -X POST "http://localhost:3005/admin-carga?clave=LA_CLAVE"
  *
- * Lee `content/projects.ts` y `content/team.ts` y los mete en la base de
- * datos. Se puede repetir: si un proyecto ya está, lo actualiza en vez de
+ * Lee todo lo que hasta ahora vivía en código —proyectos, equipo, cifras,
+ * clientes, preguntas frecuentes y las entradillas de página— y lo mete en la
+ * base de datos. Se puede repetir: si algo ya está, lo actualiza en vez de
  * duplicarlo, así que sirve igual para la primera carga que para rehacerla.
  * NO borra nada que no venga de los ficheros.
  *
@@ -130,5 +134,82 @@ export async function POST(peticion: Request): Promise<Response> {
 
   const resumenEquipo = `Equipo: ${creados} creados, ${actualizados} actualizados.`;
 
-  return Response.json({ proyectos: resumenProyectos, equipo: resumenEquipo });
+  // ── Preguntas frecuentes ──────────────────────────────────────────────
+  // Sin `slug` que las identifique: se emparejan por posición (`orden`), que
+  // es estable porque `PREGUNTAS_FICHERO` sale de un array fijo del código.
+  creados = 0;
+  actualizados = 0;
+
+  for (const [i, p] of PREGUNTAS_FICHERO.entries()) {
+    const existente = await payload.find({
+      collection: "preguntas",
+      where: { orden: { equals: i } },
+      limit: 1,
+    });
+
+    if (existente.docs.length > 0) {
+      const id = existente.docs[0].id;
+      await payload.update({ collection: "preguntas", id, locale: "es", data: { orden: i, q: p.q.es, a: p.a.es } });
+      await payload.update({ collection: "preguntas", id, locale: "en", data: { q: p.q.en, a: p.a.en } });
+      actualizados += 1;
+    } else {
+      const creado = await payload.create({
+        collection: "preguntas",
+        locale: "es",
+        data: { orden: i, q: p.q.es, a: p.a.es },
+      });
+      await payload.update({ collection: "preguntas", id: creado.id, locale: "en", data: { q: p.q.en, a: p.a.en } });
+      creados += 1;
+    }
+  }
+
+  const resumenPreguntas = `Preguntas: ${creados} creadas, ${actualizados} actualizadas.`;
+
+  // ── Cifras, clientes y textos: los tres Globals, sólo hay una copia ────
+  //
+  // OJO con el array de «items»: a diferencia de un campo suelto, si la
+  // segunda pasada (inglés) no lleva el `id` que Payload le puso a cada fila
+  // en la primera, no la actualiza: crea filas NUEVAS. Y como esas filas
+  // nuevas nunca reciben una traducción en español, la etiqueta en español
+  // se queda vacía —y `valor`, que no está marcado `localized` pero vive
+  // dentro del array, se pierde de las filas viejas que se quedan huérfanas—.
+  // Por eso se guardan los `id` de la primera pasada y se reutilizan en la
+  // segunda: así las dos escriben sobre las mismas cinco filas.
+  const cifrasEs = await payload.updateGlobal({
+    slug: "cifras",
+    locale: "es",
+    data: { items: CIFRAS.map((c) => ({ valor: c.valor ?? undefined, etiqueta: c.etiqueta.es })) },
+  });
+  const idsCifras = (cifrasEs.items ?? []).map((item) => item.id);
+  await payload.updateGlobal({
+    slug: "cifras",
+    locale: "en",
+    data: {
+      items: CIFRAS.map((c, i) => ({
+        id: idsCifras[i] ?? undefined,
+        valor: c.valor ?? undefined,
+        etiqueta: c.etiqueta.en,
+      })),
+    },
+  });
+
+  await payload.updateGlobal({
+    slug: "clientes",
+    data: { items: CLIENTES.map((nombre) => ({ nombre })) },
+  });
+
+  const claves = Object.keys(TEXTOS_FICHERO) as ClaveTexto[];
+  const datosTextos = (locale: "es" | "en") =>
+    Object.fromEntries(claves.map((clave) => [clave, TEXTOS_FICHERO[clave][locale]]));
+  await payload.updateGlobal({ slug: "textos", locale: "es", data: datosTextos("es") });
+  await payload.updateGlobal({ slug: "textos", locale: "en", data: datosTextos("en") });
+
+  return Response.json({
+    proyectos: resumenProyectos,
+    equipo: resumenEquipo,
+    preguntas: resumenPreguntas,
+    cifras: `${CIFRAS.length} cifras cargadas.`,
+    clientes: `${CLIENTES.length} clientes cargados.`,
+    textos: `${claves.length} entradillas cargadas.`,
+  });
 }

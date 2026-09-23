@@ -1,7 +1,8 @@
 # Un panel para editar la web sin tocar código
 
-**Estado: Fase 1 EN PRODUCCIÓN** (2026-09-23). Proyectos y equipo se editan
-en `sidebflms.com/admin`. Lo hecho y lo aprendido, al final (puntos 11 y 12).
+**Estado: Fase 2 EN PRODUCCIÓN** (2026-09-23). Proyectos, equipo, cifras,
+clientes, preguntas frecuentes y las entradillas de página se editan en
+`sidebflms.com/admin`. Lo hecho y lo aprendido, al final (puntos 11 a 13).
 
 ---
 
@@ -346,5 +347,69 @@ antes de compilar. En producción Payload no crea tablas por su cuenta.
 - **Copia de seguridad de `bote_panelweb`.** No existe todavía. Hay que hacerla
   como la del inventario: `pg_dump`, cifrada, semanal, con ensayo de
   restauración. Sin esto, un borrado en el panel no tiene vuelta.
-- El primer usuario del panel lo crea Mario desde el navegador.
-- Fase 2 (cifras, preguntas, textos de página) y Fase 3 (material).
+- Fase 3 (material: fotos y vídeos desde el panel).
+
+---
+
+## 13. Fase 2, hecha y en producción (2026-09-23)
+
+### Qué hay
+
+Cuatro cosas más editables desde `/admin`, todas con el mismo patrón que
+Proyectos y Equipo: se guardan en la base, avisan a la web al momento, y si la
+base no responde, la web tira de código y lo dice en el registro.
+
+- **Cifras** (Global): la ficha técnica de la portada y de Nosotros. Un
+  número puede dejarse vacío — esa cifra deja de pintarse.
+- **Clientes** (Global): la cinta de nombres de Trabajo.
+- **Preguntas frecuentes** (colección, como Proyectos): el FAQ de Contacto.
+- **Textos** (Global): la entradilla —el párrafo bajo el titular— de
+  Servicios, Trabajo, Trabaja con nosotros, Contacto, Nosotros (más «dónde
+  operamos») y Drone.
+
+**Lo que NO entró, a propósito:** los titulares (`headline`) de cada sección,
+el menú, los botones y los mensajes de formulario. Son arrays de líneas
+pensados para el salto de línea y la animación de entrada; un cambio desde un
+formulario de texto libre los rompería sin que se note por qué. Se quedan en
+`content/dictionaries/{es,en}.ts`, junto con el aviso legal y la privacidad
+—ver el criterio del punto 4—.
+
+### Cómo llega el cambio a la web
+
+Las cifras y los clientes son props que se pasan a los componentes
+(`traeCifras`, `traeClientes` en `lib/contenido.ts`). Las preguntas y las
+entradillas van por otro camino, y es importante saber por cuál: **se
+superponen encima del diccionario de siempre dentro de `getDictionary()`**
+(`lib/dictionaries.ts`). Ni `content/dictionaries/es.ts` ni `en.ts` se han
+tocado —siguen siendo el plan B, uno solo, sin copia en ningún otro
+fichero—; lo que hace `getDictionary` es cargar ese diccionario y, si hay
+algo guardado en el panel para esa entradilla o esas preguntas, sustituirlo
+antes de devolverlo. El resto del código —los 71 componentes que leen
+`dict.loquesea`— no sabe que esto pasa.
+
+### Lo que costó, para no repetirlo
+
+**El array de «items» no se fusiona entre idiomas: se reemplaza entero.**
+Costó una comprobación completa (ocho páginas, texto extraído y comparado
+carácter a carácter entre una compilación desde ficheros y otra desde la
+base) darse cuenta de que las cifras salían sin su rótulo en español. La
+causa: `/admin-carga` escribe primero el español y luego el inglés sobre el
+Global «Cifras»; la pasada del inglés no llevaba el `id` que Payload le puso
+a cada fila en la primera pasada, así que Payload no la actualizó: creó
+**filas nuevas**, que nunca recibieron traducción al español, y dejó las
+viejas huérfanas. La solución está en `app/admin-carga/route.ts`: se guardan
+los `id` que devuelve la primera escritura y se reutilizan en la segunda. La
+lección para cualquier array con campos `localized` dentro: escribir un
+idioma primero, guardar los `id`, y pasarlos en la segunda escritura. Los
+campos normales (fuera de un array) sí se fusionan solos, como ya hacían
+Proyectos y Equipo.
+
+### Cómo se comprobó
+
+Contra el mismo Postgres de usar y tirar de la Fase 0
+(`sideb-payload-pg`, ver el punto 11): migración aplicada, `/admin-carga`
+para pasar el contenido de los ficheros a la base, `next build` de nuevo
+leyendo ya de la base, y el texto visible de las 14 páginas que tocan estos
+cuatro contenidos comparado carácter a carácter contra la compilación de
+ficheros: **igual**. Y una edición de verdad desde el navegador —cambiar un
+rótulo en Cifras y guardar— apareciendo en la portada sin recompilar.

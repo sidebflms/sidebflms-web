@@ -5,6 +5,58 @@ reciente arriba.
 
 ---
 
+## 2026-09-23 (76) — Panel, Fase 2: cifras, clientes, preguntas y entradillas
+
+Mario, tras entrar por primera vez en el panel: «me muestra algunas cosas pero
+esta bastante incompleto». Tenía razón: la Fase 1 sólo cubría proyectos y
+equipo. Esto es la Fase 2 completa del plan
+(`docs/panel-de-contenido.md`, punto 13).
+
+### Qué se puede editar ahora desde `/admin`
+
+- **Cifras**: la ficha técnica de la portada y de Nosotros.
+- **Clientes**: la cinta de nombres de Trabajo.
+- **Preguntas frecuentes**: el FAQ de Contacto.
+- **Textos**: la entradilla de Servicios, Trabajo, Trabaja con nosotros,
+  Contacto, Nosotros y Drone.
+
+Los titulares, el menú y los botones se quedan en código a propósito: son
+arrays de líneas pensados para la animación de entrada, y un formulario de
+texto libre los rompería sin que se note por qué.
+
+### Cómo está hecho
+
+Mismo patrón que Proyectos y Equipo: colección o Global en
+`panel/colecciones.ts`, se lee con `lib/contenido.ts` (con plan B a código si
+la base no responde), y al guardar se avisa a la web sola. Las preguntas y
+las entradillas tienen una diferencia: en vez de ser props sueltas, se
+**superponen dentro de `getDictionary()`** (`lib/dictionaries.ts`) encima del
+diccionario de siempre —que sigue siendo el único sitio donde vive ese texto
+en código, sin copia en ningún otro fichero—, así que los componentes que
+leen `dict.loquesea` no han cambiado ni uno.
+
+### Un tropiezo real, encontrado al comprobar de verdad
+
+Comparando el texto de ocho páginas (compiladas desde ficheros vs. desde la
+base) salió que las cifras aparecían **sin su rótulo en español**. La causa:
+`/admin-carga` escribía primero el español y luego el inglés sobre el mismo
+Global, y la segunda pasada no llevaba el `id` de fila que puso la primera —
+Payload no fusiona un array entre idiomas, lo reemplaza entero si no
+reconoce las filas—, así que creaba filas nuevas sin traducción al español.
+Arreglado guardando los `id` de la primera escritura y reutilizándolos en la
+segunda. Vuelto a comprobar: las 14 páginas, carácter a carácter, iguales.
+
+### Qué hacer al actualizar
+
+Nada en local. En el servidor la migración se aplica sola en el próximo
+despliegue (`publicar.sh` ya corre `payload migrate`). El contenido nuevo
+—cifras, clientes, preguntas y entradillas— hay que **cargarlo una vez** con
+`/admin-carga?clave=…`, igual que se hizo con proyectos y equipo en la
+Fase 1: sin eso, esas cuatro cosas seguirán sirviéndose desde código —que es
+el plan B, no un error— hasta que se carguen.
+
+---
+
 ## 2026-09-23 (75) — El despliegue ya no deja la web a medias mientras compila
 
 Mario entró en `sidebflms.com/admin` y vio «Internal Server Error». Fue a las

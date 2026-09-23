@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 
-import { Equipo, Proyectos, Usuarios } from "./panel/colecciones.ts";
+import { Cifras, Clientes, Equipo, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
 
 /**
  * EL PANEL DE CONTENIDO (Fase 1 de docs/panel-de-contenido.md).
@@ -89,7 +89,8 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [Usuarios, Proyectos, Equipo],
+  collections: [Usuarios, Proyectos, Equipo, Preguntas],
+  globals: [Cifras, Clientes, Textos],
 
   // SIN EDITOR DE TEXTO RICO, y no por gusto: `richtext-lexical` no se deja
   // cargar por la herramienta de línea de comandos de Payload con Node 26
