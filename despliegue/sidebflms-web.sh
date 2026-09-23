@@ -215,10 +215,31 @@ parar() {
   echo "sigue viva tras 20s"; return 1
 }
 
+# Poner en marcha una compilación hecha aparte. `publicar.sh` compila en
+# `.next-nueva` mientras la web sigue sirviendo desde `.next`; aquí se para la
+# web, se cambian las carpetas de nombre y se arranca. El cambio de nombre son
+# milésimas, así que la web no llega a servir nunca una mezcla de ficheros
+# viejos y nuevos, que era lo que daba «Cannot find module» en cada despliegue
+# a quien pidiera una página no precompilada (el panel) mientras compilaba.
+#
+# La compilación anterior se queda en `.next-anterior` por si hay que volver:
+#   ./despliegue/sidebflms-web.sh parar
+#   mv .next .next-rota && mv .next-anterior .next
+#   ./despliegue/sidebflms-web.sh arrancar
+estrenar() {
+  if [ ! -d "$RAIZ/.next-nueva" ]; then echo "no hay .next-nueva que estrenar: compila antes"; return 1; fi
+  parar || return 1
+  rm -rf "$RAIZ/.next-anterior"
+  [ -d "$RAIZ/.next" ] && mv "$RAIZ/.next" "$RAIZ/.next-anterior"
+  mv "$RAIZ/.next-nueva" "$RAIZ/.next"
+  arrancar
+}
+
 case "${1:-}" in
   arrancar|start)     exigir_operacion; arrancar ;;
   parar|stop)         exigir_operacion; parar ;;
   reiniciar|restart)  exigir_operacion; parar; arrancar ;;
+  estrenar)           exigir_operacion; estrenar ;;
   estado|status)
     if esta_viva; then
       echo "en marcha (escuchando en 127.0.0.1:$PUERTO, pid $(pids_del_puerto | tr '\n' ' '))"
@@ -274,5 +295,5 @@ case "${1:-}" in
     done ;;
   registro|logs) tail -f "$REGISTRO" ;;
   puerto|port)   echo "$PUERTO" ;;
-  *) echo "uso: $0 {arrancar|parar|reiniciar|estado|vigilar|registro|puerto}"; exit 1 ;;
+  *) echo "uso: $0 {arrancar|parar|reiniciar|estrenar|estado|vigilar|registro|puerto}"; exit 1 ;;
 esac

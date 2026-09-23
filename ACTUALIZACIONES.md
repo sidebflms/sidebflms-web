@@ -5,6 +5,41 @@ reciente arriba.
 
 ---
 
+## 2026-09-23 (75) — El despliegue ya no deja la web a medias mientras compila
+
+Mario entró en `sidebflms.com/admin` y vio «Internal Server Error». Fue a las
+01:03:37: justo cuando el despliegue de un commit de documentación estaba
+haciendo `npm ci` (que vacía `node_modules` entero y lo vuelve a llenar) y
+`npm run build` (que reescribe `.next`) **debajo del proceso que seguía
+sirviendo**. Cualquier página no precompilada —el panel lo es— reventaba con
+«Cannot find module». A las 01:04:30 arrancó el proceso nuevo y todo volvió.
+
+No era nuevo: había **1.834** errores así en el registro. Pasaba en cada
+despliegue desde el principio, pero las páginas normales son estáticas y
+aguantaban, así que nadie lo vio hasta que hubo un panel dinámico.
+
+### Qué cambia
+
+- `next.config.ts`: `distDir` sale de `SIDEB_CARPETA_COMPILACION`; sin ella,
+  `.next` como siempre. Al arrancar nunca se define.
+- `despliegue/publicar.sh`: compila en `.next-nueva` mientras la web sigue
+  sirviendo desde `.next`. Y `npm ci` sólo corre si cambió `package-lock.json`
+  (huella en `node_modules/.sello-package-lock`; si borras `node_modules`, se
+  va con ella y reinstala).
+- `despliegue/sidebflms-web.sh estrenar`: para, renombra `.next` →
+  `.next-anterior` y `.next-nueva` → `.next`, arranca. Milésimas. Para volver
+  atrás: `parar`, `mv .next .next-rota && mv .next-anterior .next`, `arrancar`.
+- El rsync del deploy y el `.gitignore` ignoran las dos carpetas nuevas.
+
+### Qué hacer al actualizar
+
+Nada en local. En el servidor, el primer despliegue con esto reinstala una vez
+(no hay huella todavía) y a partir de ahí sólo cuando cambien dependencias. Un
+despliegue que sí las cambie sigue teniendo esa ventana de un minuto en las
+páginas dinámicas: sin root no hay forma limpia de evitarla; se cura sola.
+
+---
+
 ## 2026-09-17 (74) — Intro de la portada: el casete como ventana del reel
 
 Mario, con una referencia de unas letras gigantes que dejan ver un vídeo por

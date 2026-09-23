@@ -104,6 +104,8 @@ jobs:
           rsync -az --delete \
             --exclude 'node_modules' \
             --exclude '.next' \
+            --exclude '.next-nueva' \
+            --exclude '.next-anterior' \
             --exclude '.env*' \
             --exclude '.clave-panel' \
             --exclude '*.log' \

@@ -15,8 +15,31 @@ export PATH=/usr/local/bin:/usr/bin:/bin
 
 cd "$RAIZ"
 
-echo "==> Compilando"
-"$NPM" ci --no-audit --no-fund
+# ── LA WEB SIGUE SIRVIENDO MIENTRAS SE PUBLICA ─────────────────────────
+#
+# Hasta el 23-09-2026 esto hacía `npm ci` y `npm run build` sobre las mismas
+# carpetas de las que el proceso viejo estaba sirviendo. `npm ci` BORRA
+# node_modules entero antes de reinstalarlo, y `build` reescribe `.next`
+# trozo a trozo: durante ese minuto largo, cualquier página que no estuviera
+# precompilada —el panel, la API del formulario— reventaba con «Cannot find
+# module». Había 1.834 de esos en el registro y nadie lo había visto porque
+# las páginas normales son estáticas y sí aguantaban.
+#
+# Ahora: las dependencias sólo se reinstalan si cambió package-lock.json, y la
+# compilación va a `.next-nueva`; `estrenar` la cambia de nombre en el
+# instante del reinicio.
+
+echo "==> Dependencias"
+# La huella se guarda DENTRO de node_modules a propósito: si alguien borra la
+# carpeta a mano, la huella se va con ella y se reinstala sin preguntar.
+SELLO="$RAIZ/node_modules/.sello-package-lock"
+HUELLA="$(sha256sum "$RAIZ/package-lock.json" | cut -d' ' -f1)"
+if [ -d "$RAIZ/node_modules" ] && [ "$(cat "$SELLO" 2>/dev/null)" = "$HUELLA" ]; then
+  echo "    package-lock.json sin cambios: no se reinstala nada"
+else
+  "$NPM" ci --no-audit --no-fund
+  echo "$HUELLA" > "$SELLO"
+fi
 
 # LAS MIGRACIONES DEL PANEL, ANTES DE COMPILAR Y NO DESPUÉS.
 #
@@ -34,7 +57,11 @@ else
   echo "    sin base de datos configurada: el panel no se toca"
 fi
 
-"$NPM" run build
+echo "==> Compilando en .next-nueva (la web sigue sirviendo desde .next)"
+rm -rf "$RAIZ/.next-nueva"
+# La variable la lee next.config.ts (`distDir`). Al arrancar no se define, así
+# que `next start` sirve desde `.next`, que es donde `estrenar` la deja.
+SIDEB_CARPETA_COMPILACION=.next-nueva "$NPM" run build
 
 echo "==> Preparando $PUBLICO"
 
@@ -71,7 +98,8 @@ else
   # Node. Es lo que hace que una web de fotos y vídeo no vaya como el barro.
   echo "    no hay .htpasswd -> web PÚBLICA, estáticos servidos por nginx"
   mkdir -p "$PUBLICO/_next"
-  cp -r "$RAIZ/.next/static" "$PUBLICO/_next/static"
+  # De `.next-nueva`: en este punto la web aún sirve la compilación anterior.
+  cp -r "$RAIZ/.next-nueva/static" "$PUBLICO/_next/static"
   # `public/` va al raíz, que es donde Next lo sirve. El `.` del origen copia
   # el contenido y no la carpeta.
   cp -r "$RAIZ/public/." "$PUBLICO/"
@@ -93,8 +121,8 @@ chmod -R a+rX "$PUBLICO"
 # (`location ~ /\.`) y Apache deniega `.ht*` por defecto.
 [ "$CON_CONTRASENA" = "1" ] && chmod 644 "$PUBLICO/.htpasswd"
 
-echo "==> Reiniciando la aplicación"
-"$RAIZ/despliegue/sidebflms-web.sh" reiniciar \
+echo "==> Estrenando la compilación (parar, cambiar .next-nueva por .next, arrancar)"
+"$RAIZ/despliegue/sidebflms-web.sh" estrenar \
   || { echo "No arrancó:"; tail -30 "$RAIZ/sidebflms-web.log"; exit 1; }
 
 echo "==> Comprobando por dentro"

@@ -102,7 +102,18 @@ cd ~/sidebflms-web
 ./despliegue/sidebflms-web.sh reiniciar
 ./despliegue/sidebflms-web.sh registro     # el log, en directo
 ./despliegue/publicar.sh                   # compilar y publicar entero
+./despliegue/sidebflms-web.sh estrenar     # poner en marcha una .next-nueva ya compilada
 ```
+
+### La web no se para mientras se compila
+
+`publicar.sh` compila en `.next-nueva` mientras el proceso viejo sigue sirviendo
+desde `.next`, y `estrenar` cambia las carpetas de nombre en el instante del
+reinicio (la anterior queda en `.next-anterior` por si hay que volver). Las
+dependencias sólo se reinstalan si cambió `package-lock.json`: `npm ci` borra
+`node_modules` entero, y hacerlo bajo un proceso en marcha dejaba «Cannot find
+module» a quien pidiera el panel durante ese minuto. Un despliegue que sí
+cambie dependencias sigue teniendo esa ventana; es el precio de no tener root.
 
 ### Que siga viva sin systemd
 
@@ -218,6 +229,7 @@ nginx o en el DNS, no en la web.
 |---|---|
 | **500 en todo el sitio** | `AuthUserFile` apunta a un `.htpasswd` que no está, o Apache no puede leerlo (`chmod 640` y grupo `www-data`) |
 | **502 «La aplicación no responde»** | Node caído y el vigilante sin poder levantarlo. Mira el registro |
+| **500 sólo en `/admin` o en la API, un minuto, justo tras un empujón** | Un despliegue que cambió dependencias: `npm ci` vacía `node_modules` bajo el proceso viejo. Se cura solo al reiniciar; vuelve a probar |
 | **404 en imágenes o fuentes** | Se quitó el `.htpasswd` sin volver a ejecutar `publicar.sh`, o al revés |
 | **`robots.txt` raro** | Quedó un fichero viejo en `public_html` tapando el que genera Next. `publicar.sh` limpia el directorio justo por esto |
 

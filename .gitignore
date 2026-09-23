@@ -15,6 +15,9 @@
 
 # next.js
 /.next/
+# Compilación aparte y la anterior, que deja el despliegue (despliegue/publicar.sh).
+/.next-nueva/
+/.next-anterior/
 /out/
 
 # production

@@ -73,6 +73,11 @@ function cabecerasDeSeguridad() {
 }
 
 const nextConfig: NextConfig = {
+  // Dónde deja `next build` el resultado. En el servidor se compila en una
+  // carpeta aparte (`.next-nueva`) mientras la web sigue sirviendo desde
+  // `.next`, y se intercambian al reiniciar: ver despliegue/publicar.sh.
+  // Al ARRANCAR nunca se define, así que `next start` lee `.next` como siempre.
+  distDir: process.env.SIDEB_CARPETA_COMPILACION ?? ".next",
   basePath: BASE_PATH,
 
   /** Ni versión ni nombre del servidor: no se regala inventario. */
