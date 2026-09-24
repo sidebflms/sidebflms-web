@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (93) — SEO Fase 6: páginas de ciudad, sólo Madrid y Barcelona
+
+De las cinco ciudades pedidas (Madrid, Barcelona, Valencia, Sevilla,
+Málaga), sólo en dos hay trabajo de drone real: Mario asignó cada
+proyecto a su ciudad de viva voz, venue por venue —los nombres de sitio
+(Fabrik, DURO...) no dicen la ciudad por sí solos, no se ha adivinado
+ninguno—. Sin eso, esto habrían sido páginas plantilla con el nombre
+cambiado: justo las doorway pages que Google penaliza y que se pidió
+explícitamente evitar.
+
+**Madrid** (`content/ciudades-drone.ts`): 13 piezas — Fabrik (siete:
+Fátima Hajji, Adrián Mills en Area 19, Fabrik 150, Sala en rojo, Cabina y
+público, Sala llena, En cabina), FITZ, MITT MOTORS, Metropolitano,
+Prospa, y las dos postales aéreas de la ciudad. **Barcelona:** 3 piezas,
+todas del mismo festival DURO —pirotecnia, el recinto de noche, el
+recinto lleno—. El resto de proyectos reales del portfolio quedan fuera
+a propósito: Holika es La Rioja, Monegros es Huesca, GORDO es Líbano, la
+costa aérea y el pueblo sobre el mar son Mallorca.
+
+Mismo mecanismo que la Fase 2 para no duplicar carpetas: una única ruta
+física (`app/[locale]/ciudad-drone/[ciudad]`) sirve las dos URLs bonitas
+—`/es/grabacion-con-drone-madrid`, `/es/grabacion-con-drone-barcelona`—
+vía rewrites, con `generateStaticParams` limitado a las ciudades reales:
+cualquier otra ciudad da 404, no relleno —comprobado pidiendo
+`/es/grabacion-con-drone-valencia` y la ruta interna
+`/es/ciudad-drone/valencia` directamente: las dos 404—.
+
+Contenido real y distinto por ciudad, con enlaces a las piezas concretas
+del portfolio, y un enlace cruzado entre las dos páginas de ciudad —no un
+enlace nuevo desde el resto del sitio, que sigue sin repartir nombres de
+ciudad fuera del FAQ y de estas páginas, tal y como quedó decidido el
+2026-09-10—.
+
+Comprobado con `curl`: las dos páginas reales a 200 en los dos idiomas,
+Madrid con 13 enlaces al portfolio y Barcelona con 3, el canónico
+correcto en cada una, el sitemap con las cuatro URLs. Barrido completo de
+las 70 páginas del sitio: todas a 200. Medido: 81/100 (+2 sobre la Fase
+3 parte 1) — el bloque de SEO local sube a 13/20. Foto en
+`docs/seo/fase6.json`.
+
 ## 2026-09-24 (92) — SEO Fase 3 (parte 1): permisos, presupuesto, entrega y portfolio de drone
 
 La página de drone tenía ~280 palabras, hacía falta ~1.800. Cuatro
