@@ -3,6 +3,7 @@ import * as migration_20260923_213411_fase2_cifras_clientes_preguntas_textos fro
 import * as migration_20260924_003706_fase3_material from './20260924_003706_fase3_material';
 import * as migration_20260924_153600_fase4_borradores_proyectos from './20260924_153600_fase4_borradores_proyectos';
 import * as migration_20260924_155705_fase4bis_etapas_fotos from './20260924_155705_fase4bis_etapas_fotos';
+import * as migration_20260924_222423_fase15_categorias_cine_marca from './20260924_222423_fase15_categorias_cine_marca';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20260924_155705_fase4bis_etapas_fotos.up,
     down: migration_20260924_155705_fase4bis_etapas_fotos.down,
-    name: '20260924_155705_fase4bis_etapas_fotos'
+    name: '20260924_155705_fase4bis_etapas_fotos',
+  },
+  {
+    up: migration_20260924_222423_fase15_categorias_cine_marca.up,
+    down: migration_20260924_222423_fase15_categorias_cine_marca.down,
+    name: '20260924_222423_fase15_categorias_cine_marca'
   },
 ];
