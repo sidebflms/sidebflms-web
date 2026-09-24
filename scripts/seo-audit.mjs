@@ -144,12 +144,11 @@ async function auditar() {
   check("tecnico", "www", "www redirige al dominio canónico", wwwRedirige ? 2 : 0, 2,
     wwwRedirige ? "301 a la versión sin www" : `www sirve la web con ${www.status} (dominio duplicado)`);
 
-  /** Compresión y HTTP/2: lo que un medidor externo llama «servidor». */
-  let compresion = false, h2 = false;
+  /** Lo que un medidor externo llama «servidor». */
+  let compresion = false;
   try {
     const r = await fetch(BASE + "/es", { headers: { "Accept-Encoding": "gzip, br" } });
     compresion = !!r.headers.get("content-encoding");
-    h2 = true; // fetch de Node negocia HTTP/2 donde el servidor lo ofrece
   } catch {}
   check("tecnico", "transporte", "Compresión activa en el HTML", compresion ? 2 : 0, 2,
     compresion ? "gzip/br activo" : "sin comprimir");

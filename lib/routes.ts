@@ -28,9 +28,26 @@ export function isLocale(value: string): value is Locale {
  * comprobando el locale y devolviendo 404 si no coincide) — duplica cada
  * ruta. Con dos idiomas y cinco secciones no vale la complejidad frente al
  * beneficio de SEO, que aquí es marginal (ningún término del sitio es una
- * palabra de alto volumen de búsqueda). Si el cliente pide slugs localizados
- * más adelante, este mapa es el único lugar que hay que tocar — cambiar los
- * valores por idioma y crear las carpetas duplicadas correspondientes.
+ * palabra de alto volumen de búsqueda).
+ *
+ * LA EXCEPCIÓN, «drone» (SEO, 2026-09-24): «drone» a secas no lo busca
+ * nadie; «grabación con drone» y «drone filming», sí. Aquí SÍ compensa un
+ * slug distinto por idioma, pero sin duplicar la carpeta física como
+ * anticipaba el párrafo de arriba: `app/[locale]/drone/` sigue siendo la
+ * única carpeta que existe. `next.config.ts` hace el resto con dos piezas
+ * —`rewrites()` sirve `/es/grabacion-con-drone` y `/en/drone-filming` desde
+ * esa misma carpeta sin que la URL del navegador cambie, y `redirects()`
+ * manda un 301 permanente desde las direcciones viejas (`/es/drone`,
+ * `/en/drone`) a las nuevas—. Este mapa sigue siendo el único punto de
+ * verdad: el valor que hay aquí es el que ve Google en el canónico, en el
+ * `hreflang` (`lib/metadata.ts`) y en el `sitemap.xml` (`app/sitemap.ts`),
+ * los tres lo leen de aquí sin saber nada de rewrites.
+ *
+ * Si el cliente pide slugs localizados para el resto de secciones más
+ * adelante, la respuesta por defecto sigue siendo duplicar la carpeta
+ * —cambiar los valores aquí y crear la carpeta correspondiente—: el atajo
+ * de esta excepción sólo compensó para «drone» porque el volumen de
+ * búsqueda real lo justificaba.
  */
 export const ROUTES = {
   home: { es: "", en: "" },
@@ -38,7 +55,7 @@ export const ROUTES = {
   // `about` en inglés en los dos idiomas, como el resto: los slugs son
   // idénticos a propósito (ver la decisión escrita arriba en este mismo mapa).
   about: { es: "about", en: "about" },
-  drone: { es: "drone", en: "drone" },
+  drone: { es: "grabacion-con-drone", en: "drone-filming" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
   // Formulario para quien quiere trabajar con nosotros. Slug igual en los dos

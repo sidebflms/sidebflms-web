@@ -142,7 +142,29 @@ const nextConfig: NextConfig = {
    * proxy de idioma, que sólo ve rutas con algo detrás: se manda a mano.
    */
   async redirects() {
-    return BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : [];
+    return [
+      ...(BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : []),
+      // SEO Fase 2 (2026-09-24): las direcciones viejas de la página de
+      // drone, permanentes para que Google transfiera lo que ya tuvieran
+      // indexado a las nuevas en vez de partir de cero. Ver la nota de
+      // `drone` en `lib/routes.ts`.
+      { source: "/es/drone", destination: "/es/grabacion-con-drone", permanent: true },
+      { source: "/en/drone", destination: "/en/drone-filming", permanent: true },
+    ];
+  },
+
+  /**
+   * SEO Fase 2 (2026-09-24): sirve las direcciones nuevas de la página de
+   * drone desde la única carpeta que existe (`app/[locale]/drone/`), sin
+   * que la URL del navegador cambie — un rewrite, no un redirect—. La
+   * decisión completa y por qué no se duplica la carpeta, en la nota de
+   * `drone` en `lib/routes.ts`.
+   */
+  async rewrites() {
+    return [
+      { source: "/es/grabacion-con-drone", destination: "/es/drone" },
+      { source: "/en/drone-filming", destination: "/en/drone" },
+    ];
   },
 
   async headers() {
