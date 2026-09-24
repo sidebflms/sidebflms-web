@@ -237,6 +237,8 @@ export const en: Dictionary = {
     resultsOne: "1 project",
     resultsMany: "{n} projects",
     categories: {
+      cine: "Film",
+      marca: "Brand",
       aftermovie: "Aftermovie",
       multicam: "Multicam",
       drone: "Aerial",

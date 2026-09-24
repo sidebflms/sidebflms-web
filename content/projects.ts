@@ -71,7 +71,19 @@ import type { Locale } from "@/lib/routes";
  * material, así que cumplen la regla y además se pueden comprobar.
  */
 
-export const CATEGORIES = ["aftermovie", "multicam", "drone", "photo", "ads"] as const;
+/**
+ * `cine` y `marca` se añadieron el 2026-09-25 (cambio de rumbo, Mario:
+ * «somos drone profesional de alto nivel —cine, series, anuncios, grandes
+ * eventos— y producción creativa de campañas»). `marca` va en las cinco
+ * fichas cuyo propio texto YA dice para qué son —«material de recurso para
+ * marcas, agencias y productoras», «pensado para turismo, marcas y
+ * contenido de destino»—, no en una interpretación mía. `cine` se queda
+ * SIN USAR de las 23 fichas actuales a propósito: ninguna es cine de
+ * verdad —coberturas de directo y anuncios, no rodaje narrativo—, y
+ * etiquetar una para que la categoría no esté vacía sería mentir. Lista
+ * para el material nuevo que Mario está seleccionando.
+ */
+export const CATEGORIES = ["cine", "marca", "aftermovie", "multicam", "drone", "photo", "ads"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export type Project = {
@@ -143,6 +155,193 @@ export function aPiezasLigeras(proyectos: Project[]): PiezaLigera[] {
 }
 
 const PROYECTOS: Project[] = [
+  {
+    // FUENTE: `DRONE/@sidebflms_METROPOLITANO.mp4`, 3840×2880 (4:3 abierto).
+    // El recinto sale del nombre del fichero y se reconoce en el propio
+    // metraje. FECHA: el fichero no la llevaba. Confirmada por Mario de viva
+    // voz el 2026-09-24: 20 de diciembre de 2025.
+    slug: "metropolitano",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 2,
+    featured: false,
+    year: "2025",
+    venue: "Metropolitano",
+    media: {
+      video: "/media/metropolitano.mp4",
+      poster: "/media/metropolitano.jpg",
+      vertical: { video: "/media/metropolitano-vertical.mp4", poster: "/media/metropolitano-vertical.jpg" },
+    },
+    title: { es: "Metropolitano", en: "Metropolitano" },
+    date: { es: "20 de diciembre de 2025", en: "20 December 2025" },
+    hardFact: {
+      // VERIFICADO: 0 cortes de escena en la pieza publicada.
+      es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
+      en: "From outside the stadium down to the pitch in one flight, no cuts",
+    },
+    // CLIENTE: BRESH, que celebró una fiesta en el propio estadio. Confirmado
+    // por Mario de viva voz el 2026-09-24. BRESH ya tiene permiso de marca
+    // (ver content/clientes.ts). El detalle de qué se entregó queda entre
+    // SIDEBFLMS y el cliente, por decisión de Mario ese mismo día.
+    brief: {
+      es: "Vuelo en el estadio Metropolitano para BRESH, que celebró aquí una de sus fiestas. En un recinto de este tamaño el drone es la única forma de contar el espacio completo: la llegada desde fuera, el anillo del estadio y el campo, en un único recorrido.\n\nUn vuelo en un estadio se planifica con tiempo: coordinación con el recinto y un recorrido ensayado para que el plano salga limpio y sin cortes. El resultado es un plano de apertura que sitúa al espectador antes de entrar en el contenido.",
+      en: "Aerial flight at the Metropolitano stadium for BRESH, who held one of their parties there. In a venue this size the drone is the only way to tell the whole space: the approach from outside, the stadium rim and the pitch, in a single run.\n\nA stadium flight is planned well ahead: coordination with the venue and a rehearsed route so the shot comes out clean and uncut. The result is an opening shot that places the viewer before the content begins.",
+    },
+  },
+  {
+    slug: "mitt-motors",
+    placeholder: false,
+    // "marca" añadida el 2026-09-25: pieza publicitaria para un cliente de
+    // marca (MITT MOTORS), no una cobertura de evento propio.
+    categories: ["ads", "marca", "drone"],
+    tone: 1,
+    featured: true,
+    year: "2026",
+    venue: null,
+    media: {
+      video: "/media/mitt-motors.mp4",
+      poster: "/media/mitt-motors.jpg",
+      vertical: { video: "/media/mitt-motors-vertical.mp4", poster: "/media/mitt-motors-vertical.jpg" },
+    },
+    title: { es: "MITT MOTORS", en: "MITT MOTORS" },
+    date: { es: "16 de julio de 2026", en: "16 July 2026" },
+    hardFact: {
+      es: "Once planos rodados el mismo día, todos en 4:3 abierto para poder entregar apaisado y vertical",
+      en: "Eleven shots filmed the same day, all in open-matte 4:3 so both landscape and vertical could be delivered",
+    },
+    brief: {
+      es: "Pieza publicitaria para MITT MOTORS, rodada en carreteras de montaña combinando drone y cámara en tierra. La protagonista es la moto, y el paisaje está para darle escala y contexto.\n\nTodo se rodó en una sola jornada, planificando los planos según la luz y el recorrido. Grabamos con encuadre abierto para poder entregar la pieza en horizontal y en vertical sin perder los planos buenos al recortar.",
+      en: "An advertising piece for MITT MOTORS, shot on mountain roads combining drone and ground camera. The bike is the star, and the landscape is there to give it scale and context.\n\nEverything was shot in a single day, planning each shot around the light and the route. We recorded open-matte so the piece could be delivered in horizontal and vertical without losing the good shots when reframing.",
+    },
+  },
+  {
+    slug: "madrid-cuatro-torres",
+    placeholder: false,
+    // "marca" añadida el 2026-09-25: el propio texto ya dice "planos de
+    // recurso para marcas, agencias y productoras".
+    categories: ["drone", "marca"],
+    tone: 0,
+    featured: false,
+    year: "2026",
+    venue: "Madrid",
+    media: {
+      video: "/media/madrid-cuatro-torres.mp4",
+      poster: "/media/madrid-cuatro-torres.jpg",
+      vertical: { video: "/media/madrid-cuatro-torres-vertical.mp4", poster: "/media/madrid-cuatro-torres-vertical.jpg" },
+    },
+    title: { es: "Madrid — las Cuatro Torres", en: "Madrid — the four towers" },
+    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
+    hardFact: {
+      es: "Segunda de las ocho postales de Madrid de esa tarde",
+      en: "Second of the eight Madrid postcards from that evening",
+    },
+    brief: {
+      es: "Las Cuatro Torres de Madrid recortadas contra la sierra, con el cielo todavía naranja. Forma parte de la misma serie de postales aéreas de la ciudad rodadas al atardecer.\n\nSon planos de recurso para marcas, agencias y productoras: material de ciudad bien resuelto y disponible antes de que un proyecto lo necesite con prisa.",
+      en: "Madrid's four towers cut out against the mountains, the sky still orange. It belongs to the same series of aerial city postcards shot at sunset.\n\nThey are stock shots for brands, agencies and production companies: well-crafted city footage available before a project needs it in a hurry.",
+    },
+  },
+  {
+    slug: "madrid-aereo",
+    placeholder: false,
+    // "marca" añadida el 2026-09-25: el propio texto ya dice "planos de
+    // recurso... para piezas corporativas, publicidad o contenido para redes".
+    categories: ["drone", "marca"],
+    tone: 3,
+    featured: false,
+    year: "2026",
+    venue: "Madrid",
+    media: {
+      video: "/media/madrid-aereo.mp4",
+      poster: "/media/madrid-aereo.jpg",
+      vertical: { video: "/media/madrid-aereo-vertical.mp4", poster: "/media/madrid-aereo-vertical.jpg" },
+    },
+    title: { es: "Madrid desde el aire", en: "Madrid from the air" },
+    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
+    hardFact: {
+      es: "Una de ocho postales de Madrid rodadas en dos tardes, todas de once segundos",
+      en: "One of eight Madrid postcards shot over two evenings, all eleven seconds long",
+    },
+    brief: {
+      es: "Serie de planos aéreos de Madrid rodados al atardecer, con el skyline y Torrespaña recortados contra el cielo. Es material de recurso: planos de ciudad listos para usar en piezas corporativas, publicidad o contenido para redes.\n\nTenerlos rodados con calma, eligiendo la luz, es lo que marca la diferencia frente a un plano de ciudad hecho con prisa el día que alguien lo necesita.",
+      en: "A series of aerial shots of Madrid at sunset, with the skyline and Torrespaña cut out against the sky. It is stock footage: city shots ready to use in corporate pieces, advertising or social content.\n\nHaving them shot calmly, choosing the light, is what sets them apart from a city shot rushed out on the day someone needs it.",
+    },
+  },
+  {
+    slug: "costa-aerea",
+    placeholder: false,
+    // "marca" añadida el 2026-09-25: el propio texto ya dice "material
+    // pensado para turismo, marcas y contenido de destino".
+    categories: ["drone", "marca"],
+    tone: 0,
+    featured: false,
+    year: "2026",
+    venue: null,
+    media: {
+      video: "/media/costa-aerea.mp4",
+      poster: "/media/costa-aerea.jpg",
+      vertical: { video: "/media/costa-aerea-vertical.mp4", poster: "/media/costa-aerea-vertical.jpg" },
+    },
+    title: { es: "La costa desde el aire", en: "The coast from the air" },
+    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
+    hardFact: {
+      es: "Rodado en la misma salida que las postales de Madrid, cuatro días después",
+      en: "Shot on the same run as the Madrid postcards, four days later",
+    },
+    brief: {
+      es: "Plano aéreo de una bahía con barcos fondeados, rodado en la misma salida que otras postales de costa. El plano se sostiene en el color del agua, que pasa de turquesa a azul según la profundidad, algo que solo se aprecia desde arriba.\n\nComo el resto de postales, es material pensado para turismo, marcas y contenido de destino: planos limpios, estables y listos para montar.",
+      en: "An aerial shot of a bay with anchored boats, filmed on the same trip as other coastal postcards. The shot rests on the colour of the water, shifting from turquoise to blue with depth, something you only see from above.\n\nLike the other postcards, it is footage meant for tourism, brands and destination content: clean, steady shots ready to edit.",
+    },
+  },
+  {
+    slug: "pueblo-sobre-el-mar",
+    placeholder: false,
+    // "marca" añadida el 2026-09-25: el propio texto ya dice "material
+    // pensado para turismo, marcas y contenido de destino".
+    categories: ["drone", "marca"],
+    tone: 3,
+    featured: false,
+    year: "2026",
+    venue: null,
+    media: {
+      video: "/media/pueblo-sobre-el-mar.mp4",
+      poster: "/media/pueblo-sobre-el-mar.jpg",
+      vertical: { video: "/media/pueblo-sobre-el-mar-vertical.mp4", poster: "/media/pueblo-sobre-el-mar-vertical.jpg" },
+    },
+    title: { es: "El pueblo sobre el mar", en: "The town above the sea" },
+    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
+    hardFact: {
+      es: "Misma salida que la otra pieza de costa, cuatro días después de las de Madrid",
+      en: "Same run as the other coastal piece, four days after the Madrid ones",
+    },
+    brief: {
+      es: "Un pueblo que baja hacia el agua, con el cabo al fondo y el cielo encendido. El plano funciona por la profundidad: tres distancias distintas en una misma imagen, algo que solo da la altura del drone.\n\nEs parte de la misma salida de postales de costa, material pensado para turismo, marcas y contenido de destino.",
+      en: "A town running down to the water, with the cape behind and the sky ablaze. The shot works through depth: three different distances in one image, something only the drone's height gives you.\n\nIt is part of the same coastal postcard trip, footage meant for tourism, brands and destination content.",
+    },
+  },
+  {
+    slug: "recinto-desde-el-aire",
+    placeholder: false,
+    categories: ["drone"],
+    tone: 1,
+    featured: true,
+    year: "2025",
+    venue: null,
+    media: {
+      video: "/media/recinto-desde-el-aire.mp4",
+      poster: "/media/recinto-desde-el-aire.jpg",
+      vertical: { video: "/media/recinto-desde-el-aire-vertical.mp4", poster: "/media/recinto-desde-el-aire-vertical.jpg" },
+    },
+    title: { es: "El recinto lleno, desde el aire", en: "The site at capacity, from the air" },
+    date: { es: "9 de noviembre de 2025", en: "9 November 2025" },
+    hardFact: {
+      es: "Máster 4:3 abierto de 3840×2880, que permite entregar apaisado y vertical del mismo vuelo",
+      en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
+    },
+    brief: {
+      es: "El recinto lleno visto desde el aire, con el escenario a un lado y la montaña detrás. Es el tipo de plano que necesita cualquier organizador: una imagen que demuestra la afluencia de un vistazo y que sirve para comunicación, patrocinadores y la siguiente edición.\n\nSe rodó con encuadre abierto para sacar del mismo vuelo la versión horizontal y la vertical.",
+      en: "The site at capacity seen from the air, with the stage on one side and the mountain behind. It is the kind of shot every organiser needs: an image that proves the turnout at a glance and works for communication, sponsors and the next edition.\n\nIt was shot open-matte so the horizontal and vertical versions come out of the same flight.",
+    },
+  },
   {
     // FUENTE DEL NOMBRE: `DRONE/@sidebflms_HOLIKA.mov`.
     // FECHA: el fichero no lleva ninguna. Sin confirmar.
@@ -260,39 +459,6 @@ const PROYECTOS: Project[] = [
     brief: {
       es: "Cobertura aérea del espectáculo de pirotecnia de DURO. En un show así no hay segunda oportunidad: los fuegos suben una sola vez, así que el vuelo se coordina con los tiempos del espectáculo para estar en la posición correcta cuando empiezan.\n\nEl plano junta en la misma imagen la pirotecnia, el escenario, el público iluminado por las pantallas y la ciudad al fondo. Es material que sirve tanto para la pieza resumen del evento como para comunicar la siguiente edición.",
       en: "Aerial coverage of DURO's pyrotechnics show. There are no second chances in a show like this: the fireworks go up once, so the flight is timed to the show to be in the right position when they start.\n\nThe shot brings the pyrotechnics, the stage, the crowd lit by the screens and the city behind into a single frame. It is footage that works both for the event recap and for promoting the next edition.",
-    },
-  },
-  {
-    // FUENTE: `DRONE/@sidebflms_METROPOLITANO.mp4`, 3840×2880 (4:3 abierto).
-    // El recinto sale del nombre del fichero y se reconoce en el propio
-    // metraje. FECHA: el fichero no la llevaba. Confirmada por Mario de viva
-    // voz el 2026-09-24: 20 de diciembre de 2025.
-    slug: "metropolitano",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 2,
-    featured: false,
-    year: "2025",
-    venue: "Metropolitano",
-    media: {
-      video: "/media/metropolitano.mp4",
-      poster: "/media/metropolitano.jpg",
-      vertical: { video: "/media/metropolitano-vertical.mp4", poster: "/media/metropolitano-vertical.jpg" },
-    },
-    title: { es: "Metropolitano", en: "Metropolitano" },
-    date: { es: "20 de diciembre de 2025", en: "20 December 2025" },
-    hardFact: {
-      // VERIFICADO: 0 cortes de escena en la pieza publicada.
-      es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
-      en: "From outside the stadium down to the pitch in one flight, no cuts",
-    },
-    // CLIENTE: BRESH, que celebró una fiesta en el propio estadio. Confirmado
-    // por Mario de viva voz el 2026-09-24. BRESH ya tiene permiso de marca
-    // (ver content/clientes.ts). El detalle de qué se entregó queda entre
-    // SIDEBFLMS y el cliente, por decisión de Mario ese mismo día.
-    brief: {
-      es: "Vuelo en el estadio Metropolitano para BRESH, que celebró aquí una de sus fiestas. En un recinto de este tamaño el drone es la única forma de contar el espacio completo: la llegada desde fuera, el anillo del estadio y el campo, en un único recorrido.\n\nUn vuelo en un estadio se planifica con tiempo: coordinación con el recinto y un recorrido ensayado para que el plano salga limpio y sin cortes. El resultado es un plano de apertura que sitúa al espectador antes de entrar en el contenido.",
-      en: "Aerial flight at the Metropolitano stadium for BRESH, who held one of their parties there. In a venue this size the drone is the only way to tell the whole space: the approach from outside, the stadium rim and the pitch, in a single run.\n\nA stadium flight is planned well ahead: coordination with the venue and a rehearsed route so the shot comes out clean and uncut. The result is an opening shot that places the viewer before the content begins.",
     },
   },
   {
@@ -480,78 +646,6 @@ const PROYECTOS: Project[] = [
     },
   },
   {
-    slug: "mitt-motors",
-    placeholder: false,
-    categories: ["ads", "drone"],
-    tone: 1,
-    featured: true,
-    year: "2026",
-    venue: null,
-    media: {
-      video: "/media/mitt-motors.mp4",
-      poster: "/media/mitt-motors.jpg",
-      vertical: { video: "/media/mitt-motors-vertical.mp4", poster: "/media/mitt-motors-vertical.jpg" },
-    },
-    title: { es: "MITT MOTORS", en: "MITT MOTORS" },
-    date: { es: "16 de julio de 2026", en: "16 July 2026" },
-    hardFact: {
-      es: "Once planos rodados el mismo día, todos en 4:3 abierto para poder entregar apaisado y vertical",
-      en: "Eleven shots filmed the same day, all in open-matte 4:3 so both landscape and vertical could be delivered",
-    },
-    brief: {
-      es: "Pieza publicitaria para MITT MOTORS, rodada en carreteras de montaña combinando drone y cámara en tierra. La protagonista es la moto, y el paisaje está para darle escala y contexto.\n\nTodo se rodó en una sola jornada, planificando los planos según la luz y el recorrido. Grabamos con encuadre abierto para poder entregar la pieza en horizontal y en vertical sin perder los planos buenos al recortar.",
-      en: "An advertising piece for MITT MOTORS, shot on mountain roads combining drone and ground camera. The bike is the star, and the landscape is there to give it scale and context.\n\nEverything was shot in a single day, planning each shot around the light and the route. We recorded open-matte so the piece could be delivered in horizontal and vertical without losing the good shots when reframing.",
-    },
-  },
-  {
-    slug: "madrid-aereo",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 3,
-    featured: false,
-    year: "2026",
-    venue: "Madrid",
-    media: {
-      video: "/media/madrid-aereo.mp4",
-      poster: "/media/madrid-aereo.jpg",
-      vertical: { video: "/media/madrid-aereo-vertical.mp4", poster: "/media/madrid-aereo-vertical.jpg" },
-    },
-    title: { es: "Madrid desde el aire", en: "Madrid from the air" },
-    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
-    hardFact: {
-      es: "Una de ocho postales de Madrid rodadas en dos tardes, todas de once segundos",
-      en: "One of eight Madrid postcards shot over two evenings, all eleven seconds long",
-    },
-    brief: {
-      es: "Serie de planos aéreos de Madrid rodados al atardecer, con el skyline y Torrespaña recortados contra el cielo. Es material de recurso: planos de ciudad listos para usar en piezas corporativas, publicidad o contenido para redes.\n\nTenerlos rodados con calma, eligiendo la luz, es lo que marca la diferencia frente a un plano de ciudad hecho con prisa el día que alguien lo necesita.",
-      en: "A series of aerial shots of Madrid at sunset, with the skyline and Torrespaña cut out against the sky. It is stock footage: city shots ready to use in corporate pieces, advertising or social content.\n\nHaving them shot calmly, choosing the light, is what sets them apart from a city shot rushed out on the day someone needs it.",
-    },
-  },
-  {
-    slug: "costa-aerea",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 0,
-    featured: false,
-    year: "2026",
-    venue: null,
-    media: {
-      video: "/media/costa-aerea.mp4",
-      poster: "/media/costa-aerea.jpg",
-      vertical: { video: "/media/costa-aerea-vertical.mp4", poster: "/media/costa-aerea-vertical.jpg" },
-    },
-    title: { es: "La costa desde el aire", en: "The coast from the air" },
-    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
-    hardFact: {
-      es: "Rodado en la misma salida que las postales de Madrid, cuatro días después",
-      en: "Shot on the same run as the Madrid postcards, four days later",
-    },
-    brief: {
-      es: "Plano aéreo de una bahía con barcos fondeados, rodado en la misma salida que otras postales de costa. El plano se sostiene en el color del agua, que pasa de turquesa a azul según la profundidad, algo que solo se aprecia desde arriba.\n\nComo el resto de postales, es material pensado para turismo, marcas y contenido de destino: planos limpios, estables y listos para montar.",
-      en: "An aerial shot of a bay with anchored boats, filmed on the same trip as other coastal postcards. The shot rests on the colour of the water, shifting from turquoise to blue with depth, something you only see from above.\n\nLike the other postcards, it is footage meant for tourism, brands and destination content: clean, steady shots ready to edit.",
-    },
-  },
-  {
     slug: "escenario-de-noche",
     placeholder: false,
     categories: ["drone"],
@@ -573,30 +667,6 @@ const PROYECTOS: Project[] = [
     brief: {
       es: "Plano aéreo nocturno del escenario de DURO, con sus tres torres encendidas y las luces del pueblo al fondo. Enseña a la vez la instalación y el lugar donde está, una relación que desde el suelo no se puede contar.\n\nSe rodó directamente en vertical, pensando en redes desde el principio, en lugar de recortar después un plano horizontal.",
       en: "A night aerial of DURO's stage, its three towers lit with the town lights behind. It shows the installation and the place it stands in at once, a relationship you cannot tell from the ground.\n\nIt was shot natively in vertical, with social media in mind from the start, instead of cropping a horizontal shot afterwards.",
-    },
-  },
-  {
-    slug: "recinto-desde-el-aire",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 1,
-    featured: true,
-    year: "2025",
-    venue: null,
-    media: {
-      video: "/media/recinto-desde-el-aire.mp4",
-      poster: "/media/recinto-desde-el-aire.jpg",
-      vertical: { video: "/media/recinto-desde-el-aire-vertical.mp4", poster: "/media/recinto-desde-el-aire-vertical.jpg" },
-    },
-    title: { es: "El recinto lleno, desde el aire", en: "The site at capacity, from the air" },
-    date: { es: "9 de noviembre de 2025", en: "9 November 2025" },
-    hardFact: {
-      es: "Máster 4:3 abierto de 3840×2880, que permite entregar apaisado y vertical del mismo vuelo",
-      en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
-    },
-    brief: {
-      es: "El recinto lleno visto desde el aire, con el escenario a un lado y la montaña detrás. Es el tipo de plano que necesita cualquier organizador: una imagen que demuestra la afluencia de un vistazo y que sirve para comunicación, patrocinadores y la siguiente edición.\n\nSe rodó con encuadre abierto para sacar del mismo vuelo la versión horizontal y la vertical.",
-      en: "The site at capacity seen from the air, with the stage on one side and the mountain behind. It is the kind of shot every organiser needs: an image that proves the turnout at a glance and works for communication, sponsors and the next edition.\n\nIt was shot open-matte so the horizontal and vertical versions come out of the same flight.",
     },
   },
   {
@@ -693,54 +763,6 @@ const PROYECTOS: Project[] = [
     brief: {
       es: "Cobertura multicámara desde dentro de la cabina, con el público asomando detrás del artista. Es una posición que solo se consigue con acceso, y es lo que diferencia una grabación de directo profesional de una hecha desde la valla.\n\nLas cámaras de cabina recogen la actuación de cerca y dan el material más buscado para redes: el artista, sus gestos y la pista reaccionando al fondo.",
       en: "Multicam coverage from inside the booth, with the crowd peeking out behind the artist. It is a position you only get with access, and it is what separates professional live coverage from footage shot from the barrier.\n\nBooth cameras capture the performance up close and provide the most sought-after social footage: the artist, their gestures and the floor reacting behind.",
-    },
-  },
-  {
-    slug: "madrid-cuatro-torres",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 0,
-    featured: false,
-    year: "2026",
-    venue: "Madrid",
-    media: {
-      video: "/media/madrid-cuatro-torres.mp4",
-      poster: "/media/madrid-cuatro-torres.jpg",
-      vertical: { video: "/media/madrid-cuatro-torres-vertical.mp4", poster: "/media/madrid-cuatro-torres-vertical.jpg" },
-    },
-    title: { es: "Madrid — las Cuatro Torres", en: "Madrid — the four towers" },
-    date: { es: "17 de mayo de 2026", en: "17 May 2026" },
-    hardFact: {
-      es: "Segunda de las ocho postales de Madrid de esa tarde",
-      en: "Second of the eight Madrid postcards from that evening",
-    },
-    brief: {
-      es: "Las Cuatro Torres de Madrid recortadas contra la sierra, con el cielo todavía naranja. Forma parte de la misma serie de postales aéreas de la ciudad rodadas al atardecer.\n\nSon planos de recurso para marcas, agencias y productoras: material de ciudad bien resuelto y disponible antes de que un proyecto lo necesite con prisa.",
-      en: "Madrid's four towers cut out against the mountains, the sky still orange. It belongs to the same series of aerial city postcards shot at sunset.\n\nThey are stock shots for brands, agencies and production companies: well-crafted city footage available before a project needs it in a hurry.",
-    },
-  },
-  {
-    slug: "pueblo-sobre-el-mar",
-    placeholder: false,
-    categories: ["drone"],
-    tone: 3,
-    featured: false,
-    year: "2026",
-    venue: null,
-    media: {
-      video: "/media/pueblo-sobre-el-mar.mp4",
-      poster: "/media/pueblo-sobre-el-mar.jpg",
-      vertical: { video: "/media/pueblo-sobre-el-mar-vertical.mp4", poster: "/media/pueblo-sobre-el-mar-vertical.jpg" },
-    },
-    title: { es: "El pueblo sobre el mar", en: "The town above the sea" },
-    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
-    hardFact: {
-      es: "Misma salida que la otra pieza de costa, cuatro días después de las de Madrid",
-      en: "Same run as the other coastal piece, four days after the Madrid ones",
-    },
-    brief: {
-      es: "Un pueblo que baja hacia el agua, con el cabo al fondo y el cielo encendido. El plano funciona por la profundidad: tres distancias distintas en una misma imagen, algo que solo da la altura del drone.\n\nEs parte de la misma salida de postales de costa, material pensado para turismo, marcas y contenido de destino.",
-      en: "A town running down to the water, with the cape behind and the sky ablaze. The shot works through depth: three different distances in one image, something only the drone's height gives you.\n\nIt is part of the same coastal postcard trip, footage meant for tourism, brands and destination content.",
     },
   },
   {

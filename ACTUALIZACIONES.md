@@ -5,6 +5,59 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (98) — Portfolio Fase 15: categorías y orden para el rumbo nuevo
+
+Mario corrigió el rumbo de la empresa: drone profesional de alto nivel —
+cine, series, anuncios, grandes eventos — y producción creativa de campañas,
+no productora de música electrónica. (Los textos de la web que todavía dicen
+lo contrario están pendientes de reescritura — esa parte espera el visto
+bueno de Mario sobre la lista de cambios y se documentará aparte cuando se
+haga). Este punto prepara el portfolio para el rumbo nuevo sin tocar el
+trabajo de música, que se queda publicado porque es real y bueno.
+
+**Categorías.** `content/projects.ts` tenía `["aftermovie", "multicam",
+"drone", "photo", "ads"]`. Se añaden `"cine"` y `"marca"`. `"cine"` se deja
+SIN USAR a propósito en las 23 fichas actuales: ninguna es rodaje narrativo
+de verdad, son coberturas de directo y anuncios, y etiquetar una para que la
+categoría no esté vacía habría sido mentir — queda lista para el material
+nuevo que Mario está seleccionando. `"marca"` se aplicó a las cinco fichas
+cuyo propio texto ya dice para qué son: `mitt-motors`, `madrid-aereo`,
+`costa-aerea`, `madrid-cuatro-torres`, `pueblo-sobre-el-mar`.
+
+Corrección sobre el encargo: Mario dijo que `"ads"` estaba definida pero sin
+usar en ninguna ficha. No era así — `mitt-motors` ya la llevaba desde antes
+(`categories: ["ads", "drone"]`). Se deja constancia aquí porque cambia la
+lectura de "cuántas categorías estaban realmente vacías".
+
+**Orden.** Las 7 piezas que sirven al rumbo nuevo —`metropolitano`,
+`mitt-motors`, `madrid-cuatro-torres`, `madrid-aereo`, `costa-aerea`,
+`pueblo-sobre-el-mar`, `recinto-desde-el-aire`— se movieron al principio del
+array `PROYECTOS`. El campo `orden` de cada proyecto en el panel sale de la
+posición en ese array (`app/admin-carga/route.ts`, `orden: i`), así que el
+valor queda como un punto de partida: Mario puede reordenar cualquier ficha
+él mismo desde el panel después, sin tocar código.
+
+**Filtro y vista por defecto.** El filtro por categoría ya existía
+(`opcionesFiltro` en `components/sections/trabajo/medios.ts`, recorre
+`CATEGORIES` en su orden) — con `"cine"` y `"marca"` al principio de
+`CATEGORIES`, el filtro ya los enseña primero sin más cambios. La vista por
+defecto ("Todo") no filtra, así que hereda directamente el nuevo orden: las 7
+piezas del rumbo nuevo abren el portfolio.
+
+Se actualizó también la lista de categorías del desplegable del panel
+(`panel/colecciones.ts`, `CATEGORIAS`) y las etiquetas traducidas
+(`content/dictionaries/es.ts` y `en.ts`, `portfolio.categories`: "Cine" /
+"Film", "Marca" / "Brand"), y se regeneró `payload-types.ts` con `npx payload
+generate:types` para que el tipo de Payload incluya las dos categorías
+nuevas.
+
+**Al traerte el repo:** después de desplegar, hay que volver a ejecutar
+`/admin-carga` contra producción para que el nuevo orden y las categorías
+lleguen a la base de datos real (el archivo sólo describe el estado
+deseado; `/admin-carga` es lo que lo sincroniza).
+
+---
+
 ## 2026-09-24 (97) — SEO Fase 11 (parte 1): servicios, www, drone y alt real
 
 Cuatro huecos que la auditoría corregida (punto (96), abajo) sacó a la luz.

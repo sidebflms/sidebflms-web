@@ -57,8 +57,10 @@ const avisaALaWeb = async ({ doc }: { doc?: { _status?: string } } = {}) => {
   }
 };
 
-/** Las mismas cinco de `content/projects.ts`, y en el mismo orden. */
+/** Las mismas siete de `content/projects.ts`, y en el mismo orden. */
 const CATEGORIAS = [
+  { label: "Cine", value: "cine" },
+  { label: "Marca", value: "marca" },
   { label: "Aftermovie", value: "aftermovie" },
   { label: "Multicámara", value: "multicam" },
   { label: "Drone", value: "drone" },

@@ -274,6 +274,8 @@ export const es = {
     resultsOne: "1 proyecto",
     resultsMany: "{n} proyectos",
     categories: {
+      cine: "Cine",
+      marca: "Marca",
       aftermovie: "Aftermovie",
       multicam: "Multicámara",
       drone: "Drone",

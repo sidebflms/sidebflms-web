@@ -216,7 +216,7 @@ export interface Proyecto {
    * «Fabrik». Vacío si no aplica.
    */
   venue?: string | null;
-  categories: ('aftermovie' | 'multicam' | 'drone' | 'photo' | 'ads')[];
+  categories: ('cine' | 'marca' | 'aftermovie' | 'multicam' | 'drone' | 'photo' | 'ads')[];
   video?: (number | null) | Media;
   poster?: (number | null) | Media;
   verticalVideo?: (number | null) | Media;
