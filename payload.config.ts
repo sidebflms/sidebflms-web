@@ -138,7 +138,15 @@ export default buildConfig({
         const ruta = (() => {
           if (collectionConfig?.slug === "proyectos") {
             const slug = typeof data.slug === "string" && data.slug ? data.slug : undefined;
-            return slug ? rutaDe(idioma, "portfolio", slug) : rutaDe(idioma, "portfolio");
+            const base = slug ? rutaDe(idioma, "portfolio", slug) : rutaDe(idioma, "portfolio");
+            // Una ficha en borrador (ver `versions.drafts` en Proyectos, en
+            // `panel/colecciones.ts`) NO está en la web pública todavía. Con
+            // `?borrador=1` la propia ficha pide la versión sin publicar en
+            // vez de la de siempre —pero SÓLO si quien la pide está en una
+            // sesión de Payload de verdad; sin eso, `?borrador=1` no enseña
+            // nada que un visitante cualquiera no vería ya. Ver
+            // `traeProyectoVistaPrevia` en `lib/contenido.ts`.
+            return data._status === "draft" && slug ? `${base}?borrador=1` : base;
           }
           if (collectionConfig?.slug === "equipo") return rutaDe(idioma, "about");
           if (collectionConfig?.slug === "preguntas") return rutaDe(idioma, "contact");

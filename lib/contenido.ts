@@ -163,7 +163,21 @@ async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas") {
   // `depth: 0` sólo traerían el id suelto de cada fichero, no su dirección.
   // Preguntas no tiene ninguno, así que se queda en 0: una consulta menos.
   const depth = coleccion === "preguntas" ? 0 : 1;
-  const comun = { collection: coleccion, limit: 500, sort: "orden", depth } as const;
+  // OJO, no es lo que parece: `payload.find()` SIN `draft: true` NO filtra
+  // por `_status` sola —trae la tabla principal tal cual, borradores
+  // incluidos—. Sólo pasar `draft: true` cambia la consulta a la última
+  // versión. Comprobado de verdad creando una ficha en borrador y viéndola
+  // aparecer en el portfolio sin publicar (Fase 4, 2026-09-24): hay que
+  // EXCLUIRLOS a mano, o cualquier borrador de Proyectos sale en la web
+  // pública desde el instante en que se guarda.
+  const soloPublicado = coleccion === "proyectos" ? { _status: { equals: "published" as const } } : undefined;
+  const comun = {
+    collection: coleccion,
+    limit: 500,
+    sort: "orden",
+    depth,
+    ...(soloPublicado ? { where: soloPublicado } : {}),
+  } as const;
   const [es, en] = await Promise.all([
     payload.find({ ...comun, locale: "es" }),
     payload.find({ ...comun, locale: "en" }),
@@ -217,6 +231,53 @@ export async function traeProyectos(): Promise<Project[]> {
 export async function traeProyecto(slug: string): Promise<Project | undefined> {
   const todos = await traeProyectos();
   return todos.find((p) => p.slug === slug);
+}
+
+/**
+ * El BORRADOR de un proyecto (Fase 4 del panel, 2026-09-24: «dejar una ficha
+ * a medias sin publicarla»), para la vista previa en vivo. Llamada sólo desde
+ * `app/[locale]/portfolio/[slug]/page.tsx` cuando llega `?borrador=1`, que
+ * pone `payload.config.ts` en la URL de vista previa de una ficha sin
+ * publicar.
+ *
+ * ── POR QUÉ ESTO ES SEGURO Y NO UN AGUJERO ───────────────────────────────
+ * `?borrador=1` en la URL no basta por sí solo: aquí se comprueba la cookie
+ * de sesión de Payload de la propia petición (`payload.auth`), la misma con
+ * la que Mario ya está autenticado en `/admin`. El iframe de la vista previa
+ * la lleva porque carga el mismo origen —de ahí que `frame-ancestors` se
+ * relajara sólo a `'self'`, nunca a fuera—. Sin sesión válida, esto se
+ * comporta exactamente como `traeProyecto`: nadie ve un borrador por
+ * adivinar el parámetro.
+ */
+export async function traeProyectoVistaPrevia(slug: string): Promise<Project | undefined> {
+  if (!HAY_BASE) return traeProyecto(slug);
+  try {
+    const { headers } = await import("next/headers");
+    const payload = await getPayload({ config });
+    const { user } = await payload.auth({ headers: await headers() });
+    if (!user) return traeProyecto(slug);
+
+    const comun = {
+      collection: "proyectos" as const,
+      where: { slug: { equals: slug } },
+      draft: true,
+      depth: 1,
+      limit: 1,
+    };
+    const [es, en] = await Promise.all([
+      payload.find({ ...comun, locale: "es" }),
+      payload.find({ ...comun, locale: "en" }),
+    ]);
+    const comoDoc = (d: unknown) => d as unknown as Documento;
+    const docEs = es.docs[0] ? comoDoc(es.docs[0]) : undefined;
+    if (!docEs) return traeProyecto(slug);
+    const docEn = en.docs[0] ? comoDoc(en.docs[0]) : docEs;
+
+    return conBase([aProyecto(docEs, docEn)])[0];
+  } catch (error) {
+    avisa(`el borrador de «${slug}»`, error);
+    return traeProyecto(slug);
+  }
 }
 
 /** El equipo, en el orden en que sale en la rejilla. */

@@ -227,6 +227,7 @@ export interface Proyecto {
     | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * Fotos y vídeos ya convertidos a su versión ligera. El máster se prepara en el Mac; aquí sólo se sube el resultado.
@@ -430,6 +431,7 @@ export interface ProyectosSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

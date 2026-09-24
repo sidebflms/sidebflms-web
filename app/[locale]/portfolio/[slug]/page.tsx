@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { FichaProyecto } from "@/components/sections/proyecto/ficha-proyecto";
 import { type Project } from "@/content/projects";
-import { traeProyecto, traeProyectos } from "@/lib/contenido";
+import { traeProyecto, traeProyectos, traeProyectoVistaPrevia } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { SITE_URL, type Locale } from "@/lib/routes";
@@ -42,17 +42,32 @@ export async function generateMetadata({
  */
 export default async function ProjectDetailPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/portfolio/[slug]">) {
   const { locale: rawLocale, slug } = await params;
   const locale = rawLocale as Locale;
+  const sp = await searchParams;
+  const esVistaPrevia = sp?.borrador === "1";
+
   const proyectos = await traeProyectos();
-  const project = proyectos.find((p) => p.slug === slug);
+  let project = proyectos.find((p) => p.slug === slug);
+  // Ver `traeProyectoVistaPrevia`: sin sesión de Payload válida, esto se
+  // comporta exactamente igual que sin el parámetro.
+  if (esVistaPrevia) {
+    const borrador = await traeProyectoVistaPrevia(slug);
+    if (borrador) project = borrador;
+  }
   if (!project) notFound();
 
   const dict = await getDictionary(locale);
-  const i = proyectos.findIndex((p) => p.slug === slug);
-  const anterior = proyectos[(i - 1 + proyectos.length) % proyectos.length];
-  const siguiente = proyectos[(i + 1) % proyectos.length];
+  // Una ficha nueva, aún sin publicar, no está en `proyectos` (sólo trae lo
+  // publicado): la navegación anterior/siguiente se arma sobre la lista
+  // pública igualmente, añadiendo el propio borrador al principio sólo para
+  // que `anterior`/`siguiente` tengan de dónde salir sin dividir por cero.
+  const listaNav = proyectos.some((p) => p.slug === slug) ? proyectos : [project, ...proyectos];
+  const i = listaNav.findIndex((p) => p.slug === slug);
+  const anterior = listaNav[(i - 1 + listaNav.length) % listaNav.length];
+  const siguiente = listaNav[(i + 1) % listaNav.length];
 
   const jsonLd = !project.placeholder ? datosEstructurados(project, locale) : null;
 

@@ -43,7 +43,12 @@ const CARPETA_MEDIA = path.resolve(path.dirname(fileURLToPath(import.meta.url)),
  * import arriba, cualquier migración fallaba con «Cannot find module
  * next/cache». (2026-09-23)
  */
-const avisaALaWeb = async () => {
+const avisaALaWeb = async ({ doc }: { doc?: { _status?: string } } = {}) => {
+  // Un borrador (Proyectos, ver más abajo) no se enseña en la web pública:
+  // regenerar 71 páginas por cada guardado intermedio sería trabajo tirado.
+  // `_status` sólo existe en colecciones con `versions.drafts`; en las demás
+  // (Equipo, Preguntas) viene `undefined` y esto no cambia nada para ellas.
+  if (doc?._status === "draft") return;
   try {
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
@@ -84,11 +89,18 @@ export const Proyectos: CollectionConfig = {
   labels: { singular: "Proyecto", plural: "Proyectos" },
   admin: {
     useAsTitle: "slug",
-    defaultColumns: ["slug", "year", "venue", "featured"],
+    defaultColumns: ["slug", "year", "venue", "featured", "_status"],
     group: "Contenido",
     description:
       "Las fichas de Trabajo. El orden de esta lista es el orden en que salen en la web.",
   },
+  // Se puede dejar una ficha a medias sin que salga en la web: «Guardar
+  // borrador» en vez de «Publicar». La web pública SIGUE viendo la última
+  // versión publicada —`lib/contenido.ts` no pide borradores— hasta que se
+  // publique el cambio. Sin `autosave`: que Payload guarde solo mientras se
+  // escribe dispararía `avisaALaWeb` a cada rato para nada, ya que un
+  // borrador no cambia lo que ve el público.
+  versions: { drafts: { autosave: false } },
   // El orden importa: la web pinta los proyectos en el orden del array, así
   // que se le da a Payload un campo para ordenarlos a mano.
   defaultSort: "orden",
