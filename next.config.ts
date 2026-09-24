@@ -28,8 +28,16 @@ const ANALITICA = (process.env.NEXT_PUBLIC_ANALITICA || "").replace(/\/$/, "");
  * una web que va detrás de un proxy PHP, eso se paga en cada carga.
  *
  * Lo que sí impide, que no es poco: cargar scripts de OTRO sitio, meter la web
- * en un iframe ajeno, mandar los formularios a otro dominio, cambiar la base
- * de las URL relativas y cargar objetos incrustados.
+ * en un iframe de OTRO dominio, mandar los formularios a otro dominio, cambiar
+ * la base de las URL relativas y cargar objetos incrustados.
+ *
+ * ── `frame-ancestors 'self'` Y NO `'none'` (2026-09-24) ─────────────────
+ * Hasta la Fase 3 del panel era `'none'`: nadie podía meter la web en un
+ * iframe, ni de fuera ni de dentro. La vista previa en vivo del panel
+ * (`payload.config.ts`, `admin.livePreview`) necesita precisamente eso: un
+ * `<iframe>` en `/admin` que enseña la página real. `'self'` sigue
+ * cerrando la puerta a cualquier sitio AJENO —el riesgo de verdad, el
+ * clickjacking— y sólo abre el propio dominio consigo mismo.
  *
  * Si algún día hay cuentas de usuario o algo que perder, toca dar el paso al
  * número de un solo uso y asumir el coste.
@@ -51,7 +59,7 @@ function cabecerasDeSeguridad() {
     "font-src 'self' data:",
     // `ws:` sólo en desarrollo: es por donde Next recarga en caliente.
     `connect-src 'self' ${enDesarrollo ? "ws: " : ""}${deFuera}`.trim(),
-    "frame-ancestors 'none'",
+    "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self'",
     "object-src 'none'",
@@ -67,8 +75,9 @@ function cabecerasDeSeguridad() {
     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
     // Nada de esto lo usa la web; se apaga para que tampoco lo use nadie más.
     { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
-    // Por los navegadores que aún no miran `frame-ancestors`.
-    { key: "X-Frame-Options", value: "DENY" },
+    // Por los navegadores que aún no miran `frame-ancestors`. `SAMEORIGIN`
+    // es su equivalente de `'self'`: sólo el propio dominio.
+    { key: "X-Frame-Options", value: "SAMEORIGIN" },
   ];
 }
 

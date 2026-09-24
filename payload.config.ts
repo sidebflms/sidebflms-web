@@ -6,6 +6,7 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 
 import { Cifras, Clientes, Equipo, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
+import { isLocale, path as rutaDe } from "./lib/routes.ts";
 
 /**
  * EL PANEL DE CONTENIDO (Fase 1 de docs/panel-de-contenido.md).
@@ -74,10 +75,6 @@ function conexion() {
 }
 
 export default buildConfig({
-  // El panel vive en /admin. Ojo con `proxy.ts`: hay que dejarlo fuera del
-  // redirector de idioma, o /admin acabaría en /es/admin.
-  admin: { user: "usuarios" },
-
   // LOS DOS IDIOMAS DE LA WEB. Con esto, un campo marcado como `localized`
   // guarda una versión por idioma, que es justo lo que hacen hoy a mano los
   // diccionarios y `content/projects.ts`.
@@ -92,6 +89,81 @@ export default buildConfig({
 
   collections: [Usuarios, Proyectos, Equipo, Preguntas, Media],
   globals: [Cifras, Clientes, Textos],
+
+  /**
+   * VISTA PREVIA EN VIVO: la pestaña «Live Preview» de cada ficha enseña la
+   * página real de la web al lado del formulario, dentro de un `<iframe>`.
+   *
+   * ── QUÉ HACE Y QUÉ NO ─────────────────────────────────────────────────
+   * Se actualiza SOLA cada vez que se guarda: `avisaALaWeb` ya hace que el
+   * contenido esté al día en el servidor (`revalidatePath`), y
+   * `components/layout/vista-previa-panel.tsx` —un componente minúsculo que
+   * vive en TODA la web, pero que sólo hace algo dentro de este iframe— le
+   * dice al propio `<iframe>` que vuelva a pedir la página justo cuando eso
+   * pasa. Sin ese componente el iframe se queda con lo que había la primera
+   * vez que se abrió: ver sus comentarios, que explican el apretón de manos
+   * que hace falta y que no está escrito en ningún sitio a la vista.
+   *
+   * Lo que NO hace: reflejar una letra según se escribe, ANTES de guardar.
+   * Eso es otro nivel de Payload («Live Preview» reactivo) que exige que los
+   * componentes que pintan cada sección sepan recibir esos datos sin guardar
+   * en vez de los que trajo el servidor —tocar buena parte de la web para
+   * esto—, y no se ha hecho: se puede añadir más adelante si compensa.
+   *
+   * ── UNA FICHA NO SIEMPRE TIENE UNA ÚNICA PÁGINA ─────────────────────────
+   * Un proyecto tiene su propia ficha (`/portfolio/slug`): fácil. Pero
+   * Cifras sale en la portada Y en Nosotros, y Textos reparte sus ocho
+   * entradillas entre seis páginas distintas: Payload sólo deja apuntar a
+   * UNA url por documento. Se eligió la página más representativa de cada
+   * cosa; no es perfecto, pero enseña la web de verdad en vez de nada.
+   *
+   * ── POR QUÉ HIZO FALTA TOCAR LA CABECERA DE SEGURIDAD ────────────────────
+   * La web manda `frame-ancestors 'none'` (nadie puede meterla en un iframe,
+   * cerrado a propósito en la revisión de seguridad del 2026-09-22 contra
+   * clickjacking). El panel SÍ necesita enseñarla dentro de un iframe, pero
+   * sólo el suyo: se cambió a `frame-ancestors 'self'` —«self» es el propio
+   * dominio, `/admin` incluido, nunca un sitio de fuera—. Ver
+   * `next.config.ts`.
+   */
+  // El panel vive en /admin. Ojo con `proxy.ts`: hay que dejarlo fuera del
+  // redirector de idioma, o /admin acabaría en /es/admin.
+  admin: {
+    user: "usuarios",
+    livePreview: {
+      collections: ["proyectos", "equipo", "preguntas"],
+      globals: ["cifras", "clientes", "textos"],
+      url: ({ collectionConfig, globalConfig, data, locale, req }) => {
+        const idioma = isLocale(locale.code) ? locale.code : "es";
+
+        const ruta = (() => {
+          if (collectionConfig?.slug === "proyectos") {
+            const slug = typeof data.slug === "string" && data.slug ? data.slug : undefined;
+            return slug ? rutaDe(idioma, "portfolio", slug) : rutaDe(idioma, "portfolio");
+          }
+          if (collectionConfig?.slug === "equipo") return rutaDe(idioma, "about");
+          if (collectionConfig?.slug === "preguntas") return rutaDe(idioma, "contact");
+          if (globalConfig?.slug === "cifras") return rutaDe(idioma, "home");
+          if (globalConfig?.slug === "clientes") return rutaDe(idioma, "portfolio");
+          if (globalConfig?.slug === "textos") return rutaDe(idioma, "home");
+          return rutaDe(idioma, "home");
+        })();
+
+        // ABSOLUTA, no relativa: Payload manda el aviso de «se ha guardado»
+        // con `iframe.contentWindow.postMessage(mensaje, ESTA_URL)`, y el
+        // navegador exige que el segundo argumento sea un origen de verdad
+        // —protocolo y dominio—; con una ruta relativa el mensaje se pierde
+        // en silencio, sin error, y `VistaPreviaPanel` nunca se entera de que
+        // hay que refrescar. Comprobado así: primero fallaba en silencio, se
+        // vio con un listener puesto a mano en el propio iframe.
+        //
+        // El origen sale de la propia petición (`req.url`), no de una
+        // constante fija: así funciona igual en local (127.0.0.1:puerto) y en
+        // producción (sidebflms.com) sin tocar nada.
+        const origen = req.url ? new URL(req.url).origin : "";
+        return `${origen}${ruta}`;
+      },
+    },
+  },
 
   // Para que Payload sepa el ancho y el alto de cada foto que se sube (no
   // para redimensionar: eso ya lo hacen los scripts del Mac antes de subir

@@ -12,6 +12,7 @@ import { Analitica } from "@/components/layout/analitica";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Reglet } from "@/components/layout/reglet";
+import { VistaPreviaPanel } from "@/components/layout/vista-previa-panel";
 import { Cursor } from "@/components/motion/cursor";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { getDictionary } from "@/lib/dictionaries";
@@ -77,6 +78,7 @@ export default async function LocaleLayout({
         <Footer locale={locale} dict={dict} />
 
         <Analitica />
+        <VistaPreviaPanel />
         {/* TEMPORAL: sólo con ?diagvideo. Ver el componente. */}
       </body>
     </html>

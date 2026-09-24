@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (78) — Vista previa en vivo en el panel
+
+Mario, tras ver el panel de la Fase 3: «lo suyo sería que en el panel de la
+web pudieras ir página por página… y dentro de cada página poder tocar todo
+de cada cosa». Un panel agrupado por página de verdad no es posible —un
+proyecto sale a la vez en la portada, en Trabajo y en su ficha, no
+pertenece a una sola página—, así que se ofrecieron dos caminos reales
+—reordenar el menú, o ver la página de verdad al lado del formulario— y
+Mario eligió el segundo. Detalle completo en `docs/panel-de-contenido.md`,
+punto 15.
+
+### Qué hay
+
+La pestaña «Live Preview» de cada ficha —Proyectos, Equipo, Preguntas,
+Cifras, Clientes, Textos— enseña la página real dentro de un `<iframe>`, al
+lado del formulario, y se actualiza sola al guardar. No es letra a letra,
+antes de guardar —eso exige convertir buena parte de la web a piezas de
+cliente, un proyecto mucho más grande—: es la página de verdad, lista justo
+después de cada guardado.
+
+### Dos cosas no evidentes que hicieron falta
+
+1. La web cierra el paso a que la metan en un iframe (`frame-ancestors
+   'none'`, cerrado a propósito en la revisión de seguridad del
+   2026-09-22). Se cambió a `frame-ancestors 'self'` —sólo el propio
+   dominio, nunca uno de fuera— para que el panel sí pueda enseñarla.
+2. Payload no manda ningún aviso de «se ha guardado» hasta que la propia
+   página del iframe se lo confirma primero —un apretón de manos que no
+   está escrito en ningún sitio a la vista, encontrado leyendo el código
+   de `@payloadcms/ui`—, y la señal correcta para «se ha guardado» no es
+   la que parecía obvia (comparar `updatedAt`, que resultó no fiable en un
+   Global) sino un mensaje aparte que Payload manda para esto exactamente.
+   Ambas cosas se comprobaron con un listener puesto a mano dentro del
+   iframe, guardando de verdad una y otra vez hasta ver llegar lo correcto.
+
+### Qué hacer al actualizar
+
+Nada. Se aplica solo con el despliegue.
+
+---
+
 ## 2026-09-24 (77) — Panel, Fase 3: el material se sube desde la ficha
 
 Mario: «ve con la fase 3». Vídeo, póster, vertical, galería y foto del

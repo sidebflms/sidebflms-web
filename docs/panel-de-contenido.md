@@ -525,3 +525,73 @@ dimensiones de la foto.
   `media/` a la ruta rápida de `publicar.sh` —la que sirve `public/` y
   `.next/static` directamente por nginx, sin pasar por Node—. Mientras haya
   contraseña, todo pasa por Apache igual que el resto y no hace falta.
+
+---
+
+## 15. Vista previa en vivo (2026-09-24)
+
+Mario, al ver el panel de la Fase 3: «lo suyo sería que en el panel de la
+web pudieras ir página por página… y dentro de cada página poder tocar todo
+de cada cosa». Un panel agrupado por página de verdad no es posible sin
+inventarse un editor propio —un proyecto sale a la vez en la portada, en
+Trabajo y en su ficha; no pertenece a una sola página—, así que se le
+ofrecieron dos caminos reales y eligió éste: ver la página de verdad al
+lado del formulario, actualizada sola al guardar.
+
+### Qué hay
+
+La pestaña «Live Preview» de cada ficha —Proyectos, Equipo, Preguntas,
+Cifras, Clientes, Textos— enseña la página real de la web, dentro de un
+`<iframe>`, al lado del formulario. Se guarda y la vista previa se
+actualiza sola: no hace falta salir del panel ni recargar a mano.
+
+**Lo que no es**: una vista previa *reactiva*, que enseñe una letra según se
+escribe, ANTES de guardar. Eso exige que los componentes que pintan cada
+sección sepan recibir esos datos sin guardar en vez de los que trajo el
+servidor —convertir buena parte de la web a piezas de cliente—, y es un
+proyecto mucho más grande que no se ha hecho. Esto enseña la página de
+verdad, actualizada justo después de cada guardado.
+
+**Una ficha no siempre tiene una única página**: un proyecto sí
+(`/portfolio/slug`), pero Cifras sale en la portada Y en Nosotros, y Textos
+reparte sus ocho entradillas entre seis páginas. Payload sólo deja apuntar
+a una URL por documento; se eligió la más representativa de cada cosa.
+
+### Dos cosas que hubo que resolver, ninguna obvia
+
+1. **La cabecera de seguridad lo impedía a propósito.** Desde la revisión
+   del 2026-09-22, la web manda `frame-ancestors 'none'`: nadie puede
+   meterla en un iframe, para cerrar el clickjacking. Se cambió a
+   `frame-ancestors 'self'` —y `X-Frame-Options: SAMEORIGIN`—: sigue
+   cerrado a cualquier sitio de fuera, sólo se abre el propio dominio
+   consigo mismo. Ver `next.config.ts`.
+
+2. **Payload no avisa de nada hasta que se lo pide.** El aviso de «se ha
+   guardado» viaja por `window.postMessage`, pero Payload no manda NI UNO
+   hasta que la propia página del iframe le confirma que está lista —un
+   apretón de manos que no está escrito en ningún sitio a la vista; se
+   encontró leyendo el código de `@payloadcms/ui` tras comprobar, con un
+   listener puesto a mano dentro del iframe, que no llegaba nada—.
+   `components/layout/vista-previa-panel.tsx` manda ese saludo y escucha la
+   respuesta. Un primer intento usaba el campo `updatedAt` del mensaje para
+   saber si algo se había guardado de verdad; no fue fiable —en un Global se
+   quedó con el mismo valor en varios guardados seguidos, comprobado
+   mensaje a mensaje—, así que se cambió a la señal que el propio Payload
+   manda para esto exactamente: `payload-document-event`.
+
+### Cómo se comprobó
+
+Nada de esto se dio por bueno leyendo el código: se puso un listener a mano
+dentro del iframe (`f.contentWindow.addEventListener('message', …)`) y se
+guardó de verdad, una y otra vez, hasta ver los mensajes correctos llegar
+—primero cero mensajes (sin el saludo), luego mensajes con un `updatedAt`
+que no cambiaba (Global), y por fin el mensaje correcto en las dos
+colecciones probadas—. La vista previa, con el navegador delante: un
+proyecto reproduciendo su vídeo y una cifra de la portada, las dos
+actualizándose solas al guardar sin tocar el iframe.
+
+### Lo que queda
+
+Vista previa reactiva de verdad (letra a letra, antes de guardar) si algún
+día compensa el esfuerzo de convertir los componentes de contenido a piezas
+de cliente. No es poco trabajo, y esto ya resuelve lo que se pedía.
