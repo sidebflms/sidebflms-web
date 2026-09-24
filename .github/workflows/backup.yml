@@ -1,0 +1,92 @@
+name: Copia de seguridad semanal
+
+# Copia de la base del panel Y del material (fotos, vídeos), cifrada y
+# guardada en dos sitios que no se caen a la vez: un artifact de GitHub
+# (90 días) y ~/backups en el VPS (las 12 últimas). El mismo patrón que ya
+# funciona en inventario-sidebfilms, con dos diferencias: la conexión es por
+# campos sueltos (ver `despliegue/copia-seguridad.sh`) y el paquete cifrado
+# lleva también la carpeta `media/`, que desde la Fase 3 del panel vive fuera
+# de la base de datos.
+#
+# PostgreSQL escucha SOLO en localhost del VPS —que es como debe ser— así que
+# el volcado y el cifrado ocurren en el propio servidor y lo que viaja hasta
+# GitHub es el fichero ya cifrado.
+#
+# La lógica vive en `despliegue/copia-seguridad.sh`, no aquí dentro. Así se
+# puede lanzar a mano el día que haga falta y probarla sin esperar a un
+# domingo.
+#
+# Ojo: GitHub desactiva los crons de repos sin actividad durante 60 días, y
+# avisa por correo. Si el desarrollo se para, hay que reactivarlo desde la
+# pestaña Actions.
+on:
+  schedule:
+    - cron: '0 3 * * 0' # domingos 03:00 UTC — antes que la del inventario
+                        # (04:00), para no pelearse por el mismo VPS.
+  workflow_dispatch: {}
+
+jobs:
+  copia:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar que están los secretos
+        id: config
+        env:
+          FRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          # Un workflow que falla todas las noches enseña a ignorar los fallos, y
+          # el día que falle de verdad nadie lo mirará. Mientras el secreto no
+          # esté puesto, la ejecución programada se aparta en silencio; lanzada
+          # a mano sí protesta, porque entonces alguien está esperando algo.
+          # OJO: `exit 0` termina EL PASO, no el trabajo. Por eso se publica una
+          # salida y cada paso posterior la mira con un `if`, en vez de confiar
+          # en que el trabajo entero se pare aquí.
+          if [ -z "$FRASE" ]; then
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              echo "seguir=no" >> "$GITHUB_OUTPUT"
+              echo "::notice::Sin BACKUP_PASSPHRASE todavía: no hay copia que hacer."
+              exit 0
+            fi
+            echo "::error::Falta el secret BACKUP_PASSPHRASE"
+            exit 1
+          fi
+          echo "seguir=si" >> "$GITHUB_OUTPUT"
+
+      - if: steps.config.outputs.seguir == 'si'
+        name: Cargar la llave del VPS
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - if: steps.config.outputs.seguir == 'si'
+        name: Volcar, cifrar y verificar en el servidor
+        env:
+          FRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          echo "SELLO=$(date -u +%F)" >> "$GITHUB_ENV"
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+          # La frase va por la ENTRADA ESTÁNDAR y no como argumento: un
+          # argumento aparecería en `ps` del servidor, donde lo lee cualquier
+          # usuario de esa máquina.
+          printf '%s' "$FRASE" | ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd ~/sidebflms-web && ./despliegue/copia-seguridad.sh'
+
+      - if: steps.config.outputs.seguir == 'si'
+        name: Traerse la copia
+        run: |
+          set -euo pipefail
+          scp "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/backups/sidebflms-web-$SELLO.tar.gz.gpg" .
+          ls -lh "sidebflms-web-$SELLO.tar.gz.gpg"
+
+      - if: steps.config.outputs.seguir == 'si'
+        name: Guardar como artifact (90 días)
+        uses: actions/upload-artifact@v4
+        with:
+          name: sidebflms-web-${{ env.SELLO }}
+          path: sidebflms-web-${{ env.SELLO }}.tar.gz.gpg
+          retention-days: 90
+          # Sin esto, un fallo al copiar pasaría por «todo bien».
+          if-no-files-found: error
