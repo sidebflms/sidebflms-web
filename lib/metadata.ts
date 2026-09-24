@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { REDES } from "@/components/layout/social-icons";
 import { conBase } from "@/lib/base";
 import { LOCALES, ROUTES, SITE_URL, type Locale, type RouteKey } from "@/lib/routes";
 
@@ -74,5 +75,32 @@ export function buildMetadata({
       description: copy.description,
       images: [IMAGEN_AL_COMPARTIR.url],
     },
+  };
+}
+
+/**
+ * LOS DATOS ESTRUCTURADOS DE LA EMPRESA, los que lee Google.
+ *
+ * Hasta ahora sólo llevaban `@type` las fichas de Trabajo
+ * (`VideoObject`/`ImageGallery`, ver `app/[locale]/portfolio/[slug]/page.tsx`):
+ * decían qué es cada proyecto, pero no quién es SIDEBFLMS. Sin un
+ * `Organization`, Google no tiene de dónde sacar el logo o los perfiles de
+ * redes para un panel de conocimiento, y cada ficha de proyecto queda
+ * huérfana en vez de asociada a una marca.
+ *
+ * Va en el layout raíz —una vez, no en cada página— porque describe a la
+ * EMPRESA, que es la misma entre en `/es` o en `/en/portfolio/holika-portal`.
+ * `sameAs` sale de `REDES` (`components/layout/social-icons.tsx`), que ya es
+ * el único sitio donde viven esos enlaces: si cambia un usuario, cambia aquí
+ * solo.
+ */
+export function datosOrganizacion() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SIDEBFLMS",
+    url: SITE_URL,
+    logo: `${SITE_URL}${conBase("/logo/mark.svg")}`,
+    sameAs: REDES.map((red) => red.href),
   };
 }
