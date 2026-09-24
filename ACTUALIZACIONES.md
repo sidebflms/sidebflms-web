@@ -5,6 +5,32 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (89) — SEO Fase 7: alt de verdad en las miniaturas del portfolio
+
+45 de las 61 imágenes de `/es/portfolio` llevaban `alt=""` —medido contra
+el HTML real, no contando de memoria—. De esas, 22 son decoración de
+interfaz de verdad (el logo, los duplicados desenfocados de fondo, las
+copias apiladas detrás de una serie de fotos) y se quedan igual: ahí
+`alt=""` está bien puesto, tal y como se pidió no tocar.
+
+Las otras 23 son la miniatura de cada proyecto en la lista lateral de
+Trabajo (`trabajo-youtube.tsx`), una por ficha, y eso sí es contenido: con
+`alt=""` no salen en Google Imágenes. El texto sale del título y la
+disciplina del proyecto («Holika — el portal — Drone»), reutilizando
+`disciplinas()` de `medios.ts` —el mismo texto que ya se lee al lado en
+pantalla, no uno inventado aparte—.
+
+Comprobado con `curl` contra el HTML servido: de 61 imágenes, 39 ya
+descriptivas (16 de antes + 23 nuevas) y 22 siguen en `alt=""`, exactas
+las que debían quedarse así. De paso, el propio criterio del auditor
+—un ratio bruto sobre las 61, que nunca podía llegar a la nota máxima
+por bien que se hiciera el trabajo, porque ~36 % de las imágenes son
+decorativas a propósito— se corrigió para no contar lo declarado
+`aria-hidden`. Medido: 67/100 (+3 sobre la Fase 5). Foto en
+`docs/seo/fase7.json`.
+
+## 2026-09-24 (88) — SEO Fase 5: página propia para preguntas frecuentes
+
 ## 2026-09-24 (88) — SEO Fase 5: página propia para preguntas frecuentes
 
 El contenido ya existía (`dict.faq`) pero sólo vivía dentro de Contacto

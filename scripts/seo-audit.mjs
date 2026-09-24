@@ -293,12 +293,24 @@ async function auditar() {
    * `alt=""` no salen en Google Imágenes, que para una productora es tráfico
    * real. Esto sí es un hallazgo, y va a su bloque de contenido.
    */
-  const imgsPortfolio = [...(paginas.portfolio.html.matchAll(/<img[^>]*>/gi))].map((m) => m[0]);
+  // `aria-hidden="true"` en el propio <img> es decoración declarada, no un
+  // hueco de contenido: el logo, los fondos desenfocados duplicados. Se
+  // excluye del cálculo porque nunca debería llevar alt descriptivo, y
+  // contarlo hacía que un 100% de aciertos reales pareciera un 64% (Fase 7,
+  // 2026-09-24: medido a mano contra el HTML que esas 22 imágenes que
+  // quedan sin alt son justo las que Mario pidió no tocar). Sigue sin
+  // distinguir las copias apiladas decorativas —ocultas por un `<span
+  // aria-hidden>` que las envuelve, no por el propio `<img>`—, así que un
+  // 100% aquí tampoco es matemáticamente alcanzable del todo; es una mejora
+  // honesta sobre el ratio bruto, no una precisión perfecta.
+  const imgsPortfolioTodas = [...(paginas.portfolio.html.matchAll(/<img[^>]*>/gi))].map((m) => m[0]);
+  const imgsPortfolio = imgsPortfolioTodas.filter((i) => !/aria-hidden=["']true["']/.test(i));
   const descriptivas = imgsPortfolio.filter((i) => /\salt=["'][^"']+["']/.test(i)).length;
   const ratioDesc = imgsPortfolio.length ? descriptivas / imgsPortfolio.length : 0;
   check("contenido", "alt-portfolio", "Las miniaturas del portfolio tienen alt descriptivo",
     ratioDesc >= 0.8 ? 4 : ratioDesc >= 0.5 ? 2 : ratioDesc >= 0.25 ? 1 : 0, 4,
-    `${descriptivas}/${imgsPortfolio.length} descriptivas, el resto alt="" (invisibles en Google Imágenes)`);
+    `${descriptivas}/${imgsPortfolio.length} descriptivas sin contar lo declarado aria-hidden ` +
+      `(${imgsPortfolioTodas.length} imágenes en total)`);
 
   const langOk = /<html[^>]+lang=["']es["']/i.test(home.html);
   check("rendimiento", "lang", "Atributo lang correcto", langOk ? 2 : 0, 2, langOk ? 'lang="es"' : "incorrecto");
