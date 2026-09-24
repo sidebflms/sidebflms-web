@@ -5,6 +5,45 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (88) — SEO Fase 5: página propia para preguntas frecuentes
+
+El contenido ya existía (`dict.faq`) pero sólo vivía dentro de Contacto
+(`contacto-tarjetas.tsx`), sin ruta propia que Google pudiera indexar ni
+enlazar desde fuera. Nueva página `/faq`, `/en/faq`: ruta en `ROUTES`,
+entrada en el sitemap, enlace en el pie, mismo diseño de desplegables que
+ya tenía Contacto —no se inventa uno nuevo—.
+
+La sección de Contacto se deja tal cual está —sigue siendo útil ahí, a
+media conversación con el formulario—, sólo se le quita el schema
+`FAQPage`: dos páginas con el mismo contenido y el mismo schema es justo
+el duplicado que penaliza Google. `FaqJsonLd` (`comun.tsx`) ahora toma la
+ruta de quien llama en vez de tenerla fija a `/contact`, así que el `@id`
+siempre apunta a la página real que lo usa —ahora sólo `/faq`—.
+
+De paso, una pregunta que faltaba de las pedidas («qué pasa si llueve»)
+con una respuesta genérica y cierta —el drone no vuela con lluvia o
+viento fuerte por seguridad del propio aparato—, sin inventar ninguna
+política de la empresa que no se conoce.
+
+**Un tropiezo real que vale la pena anotar:** editar `content/dictionaries/es.ts`
+NO bastó para que la pregunta nueva saliera en la web. Desde la Fase 2 del
+panel, `lib/dictionaries.ts` sustituye `faq.items` por lo que haya en la
+colección «Preguntas» de `/admin` si tiene algo —y ya tenía las 9 de
+siempre—, así que el fichero sólo es el plan B. Hubo que volver a correr
+`/admin-carga` para sincronizar el fichero con la base: creó la pregunta
+10ª y actualizó (sin cambiar nada de contenido) las 23 fichas de
+proyectos y las 11 de equipo, que ya coincidían con sus ficheros. Si
+algún día Mario edita un proyecto o una persona a mano desde el panel sin
+tocar el fichero correspondiente, volver a correr `/admin-carga` le
+pisaría ese cambio — no fue el caso esta vez, comprobado contra la web
+real tras el sync, pero es un efecto secundario real de esa ruta que
+conviene tener presente.
+
+Comprobado con `curl` contra el HTML servido: `/es/faq` y `/en/faq` a 200,
+el schema `FAQPage` presente en `/es/faq` y ausente en `/es/contact`, el
+sitemap con las dos URLs nuevas, y el enlace del pie. Medido con la
+auditoría: 64/100 (+2 sobre la Fase 2). Foto en `docs/seo/fase5.json`.
+
 ## 2026-09-24 (87) — SEO Fase 2: la página de drone, en una URL con palabras clave
 
 «Drone» a secas no lo busca nadie; «grabación con drone» y «drone

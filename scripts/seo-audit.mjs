@@ -33,6 +33,10 @@ const PAGINAS = [
   { clave: "portfolio", url: "/es/portfolio" },
   { clave: "about",     url: "/es/about" },
   { clave: "contact",   url: "/es/contact" },
+  // Desde la Fase 5 (2026-09-24) el schema FAQPage vive SÓLO aquí, no en
+  // /contact: sin esta página en la lista, el criterio de abajo daría 0
+  // aunque el schema exista, sólo por no mirar donde vive ahora.
+  { clave: "faq",       url: "/es/faq" },
 ];
 
 /** Términos que debería contener el H1 de la portada para decir a qué nos dedicamos. */
