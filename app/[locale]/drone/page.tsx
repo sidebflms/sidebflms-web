@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
 import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
+import { traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
-import { isLocale } from "@/lib/routes";
+import { isLocale, path } from "@/lib/routes";
 import { pad } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -31,6 +33,10 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
+  // SEO Fase 3 (2026-09-24): piezas reales del portfolio que son de drone,
+  // no una plantilla ni una lista escrita a mano que se desincroniza en
+  // cuanto se añade un proyecto nuevo.
+  const proyectosDrone = (await traeProyectos()).filter((p) => p.categories.includes("drone") && !p.placeholder);
 
   return (
     <main id="main" className="pagina">
@@ -118,6 +124,83 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </Reveal>
         <Reveal className="lg:col-span-8">
           <p className="text-lead measure text-bone">{dict.drone.safetyBody}</p>
+        </Reveal>
+      </section>
+
+      {/* PERMISOS Y NORMATIVA (SEO Fase 3, 2026-09-24). Mismo patrón que la
+          flota de arriba: una lista numerada de artículo, no una tabla ni
+          un diseño nuevo. */}
+      <section className="shell seccion border-t border-ink-600 pt-14">
+        <Reveal>
+          <h2 className="font-display subtitulo">{dict.drone.permisos.label}</h2>
+          <p className="measure mt-3 text-smoke">{dict.drone.permisos.intro}</p>
+        </Reveal>
+        <div className="mt-10">
+          {dict.drone.permisos.items.map((item, i) => (
+            <Reveal
+              key={item.heading}
+              as="article"
+              className="grid gap-4 border-t border-ink-600 py-8 lg:grid-cols-12 lg:gap-6"
+            >
+              <p aria-hidden="true" className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2">
+                {pad(i + 1)}
+              </p>
+              <h3 className="font-display text-display-m text-bone lg:col-span-5">{item.heading}</h3>
+              <p className="measure text-smoke lg:col-span-5">{item.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* TRABAJO CON DRONE — enlaces reales al portfolio, no una plantilla. */}
+      {proyectosDrone.length > 0 && (
+        <section className="shell seccion border-t border-ink-600 pt-14">
+          <Reveal>
+            <h2 className="font-display subtitulo">{dict.drone.portfolioLabel}</h2>
+          </Reveal>
+          <Reveal stagger>
+            <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2 lg:grid-cols-3">
+              {proyectosDrone.map((p) => (
+                <li key={p.slug} className="bg-ink-800">
+                  <Link
+                    href={path(locale, "portfolio", p.slug)}
+                    className="block p-7 text-bone transition-colors hover:text-rust-300"
+                  >
+                    {p.title[locale]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
+      )}
+
+      {/* QUÉ HACE FALTA PARA EL PRESUPUESTO (SEO Fase 3). */}
+      <section className="shell seccion border-t border-ink-600 pt-14">
+        <Reveal>
+          <h2 className="font-display subtitulo">{dict.drone.presupuesto.label}</h2>
+          <p className="measure mt-3 text-smoke">{dict.drone.presupuesto.intro}</p>
+        </Reveal>
+        <Reveal stagger>
+          <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
+            {dict.drone.presupuesto.items.map((item) => (
+              <li key={item.heading} className="bg-ink-800 p-7">
+                <p className="font-semibold text-bone">{item.heading}</p>
+                <p className="mt-2 text-sm text-smoke">{item.body}</p>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </section>
+
+      {/* PLAZOS Y FORMATOS (SEO Fase 3): mismo patrón de dos columnas que
+          "Cómo volamos", arriba. */}
+      <section className="shell seccion grid gap-6 border-t border-ink-600 pt-14 lg:grid-cols-12">
+        <Reveal className="lg:col-span-4">
+          <h2 className="font-display subtitulo">{dict.drone.entregaLabel}</h2>
+        </Reveal>
+        <Reveal className="lg:col-span-8">
+          <p className="text-lead measure text-bone">{dict.drone.entregaBody}</p>
         </Reveal>
       </section>
 

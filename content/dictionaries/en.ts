@@ -534,6 +534,68 @@ export const en: Dictionary = {
     safetyLabel: "How we fly",
     safetyBody:
       "With a certified pilot and a safety perimeter coordinated with production. Airspace restrictions at the location are dealt with in pre-production, not on the day of the shoot.",
+
+    permisos: {
+      label: "Permits and regulations",
+      intro:
+        "Flying a drone at an event isn't just about having the aircraft: it's having the paperwork in order before anyone asks.",
+      items: [
+        {
+          heading: "AESA categories",
+          body: "Registered as an unmanned aircraft (UAS) operator with Spain's aviation authority, AESA, since 2022, the year the company was founded, holding the four categories that cover almost any situation: A1 and A3 —open category flight, over or away from people depending on the aircraft—, A2 —open category flight close to people, which requires the certified pilot we have— and the two specific categories, STS-01 and STS-02, which allow flying in populated environments and beyond visual line of sight, with the safety measures each scenario calls for.",
+        },
+        {
+          heading: "Liability insurance",
+          body: "The crew flies with liability insurance taken out for drone operations, as required by law for any commercial flight.",
+        },
+        {
+          heading: "Flying over the public",
+          body: "Flying near people isn't the same as flying over people without more: the specific categories allow operating within a controlled ground area in a populated environment —a venue with a safety perimeter, coordinated with production— not flying over the crowd without that control. That's the difference between a festival with a properly planned flight and one without.",
+        },
+        {
+          heading: "Night flights",
+          body: "Outside daylight hours the drone needs approved position lights and, depending on the area, additional permits. That gets decided in pre-production, not on the night of the shoot.",
+        },
+        {
+          heading: "Restricted zones",
+          body: "Near airports, military zones or restricted airspace, extra coordination with the relevant authorities is needed, and sometimes the answer is that flying isn't possible. It gets checked before a flight plan is signed off, not on the day of the event.",
+        },
+      ],
+    },
+
+    presupuesto: {
+      label: "What we need to quote",
+      intro: "The sooner we have this, the tighter the flight plan —and the quote— comes out.",
+      items: [
+        {
+          heading: "Exact location",
+          body: "The venue's address or coordinates: it changes the airspace, the permits needed and whether there are restrictions nearby.",
+        },
+        {
+          heading: "Dates",
+          body: "The event date and, if there's room, a backup in case the weather doesn't cooperate: the drone doesn't fly in rain or strong wind.",
+        },
+        {
+          heading: "Capacity",
+          body: "How many people will be there, to work out the flight's safety perimeter.",
+        },
+        {
+          heading: "Whether there's flight over the public",
+          body: "Whether the plan includes flying over the area where the public is, or the flight stays within the controlled perimeter.",
+        },
+        {
+          heading: "Venue permits",
+          body: "Whether the venue itself or the local council requires a separate permit to fly a drone there: better to know in pre-production than on the day.",
+        },
+      ],
+    },
+
+    entregaLabel: "Delivery times and formats",
+    entregaBody:
+      "Drone pieces follow the same timeline as the rest of the shoot: between 24 and 48 hours. They're shot open-matte, so the landscape version and the vertical cuts for Reels and TikTok come out of the same flight, without reshooting or losing quality on the crop.",
+
+    portfolioLabel: "Drone work",
+
     ctaTitle: ["Tell us", "what you want", "to shoot"],
   },
 

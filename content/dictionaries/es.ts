@@ -640,6 +640,73 @@ export const es = {
     safetyLabel: "Cómo volamos",
     safetyBody:
       "Con piloto certificado y perímetro de seguridad coordinado con producción. Las restricciones de espacio aéreo del lugar se resuelven en preproducción, no el mismo día del rodaje.",
+
+    // SEO Fase 3 (2026-09-24): datos reales que dio Mario directamente
+    // -las cuatro categorías AESA desde 2022, año de fundación de la
+    // productora; alta como operador UAS confirmada; seguro de
+    // responsabilidad civil confirmado, sin nombrar aseguradora-. Nada de
+    // esto se ha inventado ni ampliado más allá de lo que se confirmó.
+    permisos: {
+      label: "Permisos y normativa",
+      intro:
+        "Volar un dron en un evento no es sólo tener el aparato: es tener el papeleo en regla antes de que nadie lo pregunte.",
+      items: [
+        {
+          heading: "Categorías AESA",
+          body: "Dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022, el año en que se fundó la productora, con las cuatro categorías que cubren casi cualquier situación: A1 y A3 —vuelo abierto, sobre o lejos de personas según el aparato—, A2 —vuelo abierto a corta distancia de personas, con el piloto certificado que exige— y las dos categorías específicas, STS-01 y STS-02, que permiten volar en entornos poblados y más allá del alcance visual, con las medidas de seguridad que cada escenario pide.",
+        },
+        {
+          heading: "Seguro de responsabilidad civil",
+          body: "El equipo vuela con seguro de responsabilidad civil contratado para las operaciones con dron, como exige la normativa para cualquier vuelo comercial.",
+        },
+        {
+          heading: "Vuelo sobre público",
+          body: "Volar cerca de gente no es lo mismo que volar sobre gente sin más: las categorías específicas permiten operar dentro de una zona controlada en un entorno poblado —un recinto con perímetro de seguridad, coordinado con producción—, no sobrevolar al público sin ese control. Es la diferencia entre un festival con el vuelo bien planificado y uno que no lo está.",
+        },
+        {
+          heading: "Vuelo nocturno",
+          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje.",
+        },
+        {
+          heading: "Zonas restringidas",
+          body: "Cerca de aeropuertos, zonas militares o espacio aéreo restringido hace falta coordinación adicional con las autoridades correspondientes, y a veces la respuesta es que no se puede volar. Se comprueba antes de dar un plan de vuelo por bueno, no el día del evento.",
+        },
+      ],
+    },
+
+    presupuesto: {
+      label: "Qué necesitamos para el presupuesto",
+      intro: "Cuanto antes tengamos estos datos, más ajustado sale el plan de vuelo —y el presupuesto—.",
+      items: [
+        {
+          heading: "Localización exacta",
+          body: "Dirección o coordenadas del recinto: cambia el espacio aéreo, los permisos que hacen falta y si hay restricciones cerca.",
+        },
+        {
+          heading: "Fechas",
+          body: "La fecha del evento y, si hay margen, una alternativa por si el tiempo no acompaña: el dron no vuela con lluvia o viento fuerte.",
+        },
+        {
+          heading: "Aforo",
+          body: "Cuánta gente va a haber, para calcular el perímetro de seguridad del vuelo.",
+        },
+        {
+          heading: "Si hay vuelo sobre público",
+          body: "Si el plan incluye pasar por encima de la zona donde está el público, o el vuelo se queda dentro del perímetro controlado.",
+        },
+        {
+          heading: "Permisos del recinto",
+          body: "Si el propio recinto o el ayuntamiento exige algún permiso aparte para volar dron, mejor saberlo en preproducción que el mismo día.",
+        },
+      ],
+    },
+
+    entregaLabel: "Plazos y formatos",
+    entregaBody:
+      "Las piezas de drone entran en el mismo plazo que el resto del rodaje: entre 24 y 48 horas. Se ruedan en encuadre abierto, así que la versión horizontal y los cortes verticales para Reels y TikTok salen del mismo vuelo, sin tener que volver a grabar ni recortar perdiendo calidad.",
+
+    portfolioLabel: "Trabajo con drone",
+
     ctaTitle: ["Cuéntanos", "qué quieres", "grabar"],
   },
 
