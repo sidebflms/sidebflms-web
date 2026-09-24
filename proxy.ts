@@ -13,6 +13,8 @@ import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/routes";
  */
 
 const LOCALE_COOKIE = "sideb_locale";
+/** Un año: es una preferencia, no una sesión. */
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 /**
  * Parsea `Accept-Language` a mano en vez de tirar de `negotiator` +
@@ -50,10 +52,25 @@ function pickLocale(request: NextRequest): Locale {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const hasLocale = LOCALES.some(
+  const localeEnRuta = LOCALES.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
-  if (hasLocale) return;
+
+  if (localeEnRuta) {
+    // La ruta ya trae idioma: no hay nada que redirigir, pero SÍ hay que
+    // refrescar la cookie para que la próxima vez que se entre sin ruta
+    // (la portada a secas) se recuerde éste y no el del navegador. Sin
+    // esto, `pickLocale` nunca tenía nada que leer: la cookie se declaraba
+    // en la política de privacidad pero el código no llegaba a escribirla
+    // en ningún sitio. Encontrado el 2026-09-24, revisando si la web
+    // estaba lista para publicarse.
+    const response = NextResponse.next();
+    response.cookies.set(LOCALE_COOKIE, localeEnRuta, {
+      maxAge: LOCALE_COOKIE_MAX_AGE,
+      sameSite: "lax",
+    });
+    return response;
+  }
 
   const locale = pickLocale(request);
   const url = request.nextUrl.clone();
@@ -67,7 +84,12 @@ export function proxy(request: NextRequest) {
     ? `/${locale}${resto.length ? `/${resto.join("/")}` : ""}`
     : `/${locale}${pathname === "/" ? "" : pathname}`;
 
-  return NextResponse.redirect(url);
+  const response = NextResponse.redirect(url);
+  response.cookies.set(LOCALE_COOKIE, locale, {
+    maxAge: LOCALE_COOKIE_MAX_AGE,
+    sameSite: "lax",
+  });
+  return response;
 }
 
 export const config = {
