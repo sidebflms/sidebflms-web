@@ -141,16 +141,13 @@ const nextConfig: NextConfig = {
    * La raíz de la ruta de pruebas (`/prueba-glass-…` a secas) no la recoge el
    * proxy de idioma, que sólo ve rutas con algo detrás: se manda a mano.
    */
+  // Las direcciones viejas de la página de drone (/es/drone, /en/drone) NO se
+  // redirigen aquí: `permanent: true` de Next siempre manda 308, no 301, y
+  // aquí hacía falta el 301 de verdad (SEO Fase 2, 2026-09-24). Se hace en
+  // `proxy.ts`, que sí deja fijar el código exacto. Ver la nota de `drone`
+  // en `lib/routes.ts`.
   async redirects() {
-    return [
-      ...(BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : []),
-      // SEO Fase 2 (2026-09-24): las direcciones viejas de la página de
-      // drone, permanentes para que Google transfiera lo que ya tuvieran
-      // indexado a las nuevas en vez de partir de cero. Ver la nota de
-      // `drone` en `lib/routes.ts`.
-      { source: "/es/drone", destination: "/es/grabacion-con-drone", permanent: true },
-      { source: "/en/drone", destination: "/en/drone-filming", permanent: true },
-    ];
+    return BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : [];
   },
 
   /**

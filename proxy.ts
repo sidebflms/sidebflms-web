@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/routes";
+import { DEFAULT_LOCALE, LOCALES, ROUTES, type Locale } from "@/lib/routes";
 
 /**
  * En Next 16 el convenio `middleware` pasó a llamarse `proxy` y la función
@@ -51,6 +51,21 @@ function pickLocale(request: NextRequest): Locale {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // SEO Fase 2 (2026-09-24): 301 DE VERDAD para las direcciones viejas de la
+  // página de drone, no el 308 que manda Next con `redirects()` de
+  // `next.config.ts` (`permanent: true` ahí siempre es 308: no hay forma de
+  // pedirle un 301 exacto). `NextResponse.redirect(url, 301)` sí deja fijar
+  // el código. Google trata 301 y 308 como permanentes por igual, pero aquí
+  // se pidió el 301 exacto, así que se hace a mano. Ver la nota de `drone`
+  // en `lib/routes.ts`.
+  for (const locale of LOCALES) {
+    if (pathname === `/${locale}/drone`) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}/${ROUTES.drone[locale]}`;
+      return NextResponse.redirect(url, 301);
+    }
+  }
 
   const localeEnRuta = LOCALES.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
