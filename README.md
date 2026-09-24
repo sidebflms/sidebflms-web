@@ -99,24 +99,39 @@ por consola. En el servidor sí sale.
 
 ## Lo que falta antes de abrirla al público
 
-Nada de esto es código: es material y decisiones.
+Revisado de verdad el 2026-09-24 (no de memoria: consultando la base de datos
+de producción, `content/projects.ts` y los propios ficheros). Nada de esto es
+código: es material y decisiones, y de las que sólo puede tomar Mario.
 
-- **Las piezas reales que faltan.** Hay nueve proyectos con material de verdad,
-  pero el archivo da para más.
-- **Los logos de clientes.** La franja lleva los nombres reales, pero **falta el
-  permiso de uso de marca por escrito** de cada uno. Publicar el nombre de una
-  marca en una web comercial es usar su marca, aunque sea en texto.
-- **«Qué entregamos»** está sin confirmar en las nueve fichas. Es una afirmación
-  sobre encargos reales y sólo la puede escribir quien hizo el trabajo.
-- **Tres fechas sin confirmar**: dos ficheros no la llevan y el de Prospa se
-  llama `31132026` — el 31 del mes 13, que no existe.
-- **El aviso legal no lleva CIF ni domicilio**, por decisión expresa. Eso lo
-  deja incumpliendo el art. 10 de la LSSI-CE. Los cuatro sitios donde habría que
-  ponerlos están señalados en el código.
-- **La fuente de los titulares.** Akira Expanded es la demo de Typologic,
-  licencia «free for personal use only»: **no cubre uso comercial**. Está
-  marcado en `app/globals.css`. Hace falta comprar la licencia web antes de que
-  el sitio sea público.
+**Ya resuelto, aunque lo hayas visto anotado aquí antes:** los permisos de
+marca de los clientes (concedidos el 2026-09-13, ver `content/clientes.ts`), la
+licencia comercial de Akira Expanded (confirmada el 2026-09-12, ver
+`app/globals.css`) y los once cargos y fotos del equipo (ya no hay ninguno de
+relleno). Si vuelves a ver alguno de estos tres en una lista de bloqueantes en
+otro sitio, esa lista está desactualizada, no esto.
+
+**Lo que sigue de verdad pendiente:**
+
+- **Los textos de «qué entregamos» de cada proyecto son provisionales**
+  (`content/projects.ts`, desde el 2026-09-17): se escribieron sólo con lo que
+  se puede medir del propio fichero —título, sitio, fecha, disciplina—, sin
+  inventar el encargo real. Sólo quien hizo el trabajo puede escribir el texto
+  de verdad.
+- **Cinco fichas sin fecha**: `holika-portal`, `monegros-hora-dorada`,
+  `duro-pyroshow`, `metropolitano`, `prospa-multicam` (éste último tiene un
+  nombre de fichero, `31132026`, que sería el 31 del mes 13 — no existe).
+- **El aviso legal no lleva CIF ni domicilio**, por decisión expresa de Mario
+  (`content/dictionaries/es.ts`, sección `legal`). Eso deja el aviso
+  incumpliendo el art. 10 de la LSSI-CE mientras la web sea pública.
+- **La política de privacidad afirma algo que el código no hace**: dice que
+  el sitio usa «cookies técnicas para recordar tu idioma», pero esa cookie no
+  se llega a escribir en ningún sitio (`proxy.ts` sólo la LEE, nunca la
+  guarda) — comprobado el 2026-09-24. O se implementa de verdad, o se quita
+  la frase: tal como está, es una afirmación legal falsa.
+- **Las tres redes del pie** (`components/layout/social-icons.tsx`) no se han
+  verificado contra las cuentas reales desde que se escribieron.
+- **El archivo da para más piezas** de las 23 que hay hoy, si se quiere seguir
+  ampliando antes de abrir.
 
 El día que esté todo, quitar la contraseña son dos órdenes, y están en
 `despliegue/README.md`.
