@@ -593,7 +593,14 @@ export const es = {
         q: "¿Podéis cubrir varios escenarios a la vez?",
         a: "Sí. Se resuelve en preproducción, no sobre la marcha: un plan por franjas horarias con prioridades por escenario, para que drone y cámara no estén los dos en el mismo sitio mientras en el otro pasa algo.",
       },
+      {
+        q: "¿Qué pasa si llueve?",
+        a: "El drone no vuela con lluvia o viento fuerte: es una limitación de seguridad del propio aparato, no nuestra, así que si el plan cuenta con cobertura aérea se avisa con antelación para tener un plan B. El resto del equipo —cámara en mano, multicámara— sí trabaja con lluvia moderada.",
+      },
     ],
+    // El titular de la llamada final (ContactCta), no el H1 de esta página
+    // —ese es `headline`, arriba—.
+    ctaTitle: ["¿Te queda", "alguna duda?", "Escríbenos"],
   },
 
   drone: {

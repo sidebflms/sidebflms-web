@@ -58,6 +58,10 @@ export const ROUTES = {
   drone: { es: "grabacion-con-drone", en: "drone-filming" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
+  // Su propia página desde la Fase 5 de SEO (2026-09-24): antes el contenido
+  // sólo vivía dentro de Contacto, sin ruta propia que Google pudiera
+  // indexar por su cuenta.
+  faq: { es: "faq", en: "faq" },
   // Formulario para quien quiere trabajar con nosotros. Slug igual en los dos
   // idiomas, como todos los demás.
   jobs: { es: "work-with-us", en: "work-with-us" },

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import { ContactForm } from "@/components/ui/contact-form";
-import { CabeceraFormulario, FaqJsonLd } from "@/components/sections/contacto/comun";
+import { CabeceraFormulario } from "@/components/sections/contacto/comun";
 import { FormularioPorPasos, type PasoFormulario } from "@/components/sections/contacto/formulario-por-pasos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
@@ -100,6 +100,11 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
       </FormularioPorPasos>
 
       {/* ── 3. LAS PREGUNTAS FRECUENTES ──────────────────────────────────── */}
+      {/* SEO Fase 5 (2026-09-24): esta sección ya NO lleva el schema
+          `FAQPage` —antes lo llevaba, con `FaqJsonLd`—. Las preguntas
+          también tienen su propia página (`/faq`), y esa es la única que
+          lo lleva: dos páginas con el mismo `FAQPage` es justo el
+          duplicado que Google penaliza. Ver `app/[locale]/faq/page.tsx`. */}
       <section id={ID_FAQ} data-reglet={dict.faq.label} className="shell seccion scroll-mt-28">
         <div ref={faqRef}>
           <div
@@ -147,8 +152,6 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
           ))}
         </div>
       </section>
-
-      <FaqJsonLd locale={locale} dict={dict} />
     </main>
   );
 }

@@ -84,6 +84,17 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     {dict.nav.contact}
                   </Link>
                 </li>
+                {/* SEO Fase 5 (2026-09-24): la propia página de preguntas
+                    frecuentes, ahora que existe (antes sólo era una sección
+                    dentro de Contacto). */}
+                <li>
+                  <Link
+                    href={path(locale, "faq")}
+                    className="text-bone transition-colors hover:text-rust-300"
+                  >
+                    {dict.faq.label}
+                  </Link>
+                </li>
                 {/* «Trabaja con nosotros» va en el pie y NO en el menú de
                     arriba: el menú es para quien viene a contratar, que es a
                     quien la web tiene que atender primero. Quien busca trabajo

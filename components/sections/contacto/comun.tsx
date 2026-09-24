@@ -4,7 +4,7 @@ import { IconoRed, REDES, type RedKey } from "@/components/layout/social-icons";
 import { Reveal } from "@/components/motion/reveal";
 import { ArrowUpRight, PillLink, circleButton } from "@/components/ui/button";
 import type { Dictionary } from "@/lib/dictionaries";
-import { SITE_URL, type Locale } from "@/lib/routes";
+import { SITE_URL } from "@/lib/routes";
 
 /**
  * PIEZAS DE APOYO DE «CONTACTO» (y de «Trabaja con nosotros», que copia su
@@ -23,15 +23,18 @@ export function redesContacto(dict: Dictionary): { key: RedKey; nombre: string; 
 }
 
 /**
- * El mismo JSON-LD que genera `components/sections/faq.tsx`. Las versiones que
- * pintan las preguntas con otra maqueta no usan ese componente, y sin esto
- * perderían el marcado `FAQPage` respecto a la página actual.
+ * El schema `FAQPage`. Vive SÓLO en `app/[locale]/faq/page.tsx` (SEO Fase 5,
+ * 2026-09-24): antes estaba aquí, en Contacto, que también pinta las mismas
+ * preguntas en desplegables —pero sin la etiqueta de datos estructurados
+ * repetida, para no tener el mismo `FAQPage` en dos páginas—. `ruta` es la
+ * de quien llama, no una fija: así el `@id` apunta siempre a la página real
+ * que lo usa.
  */
-export function FaqJsonLd({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function FaqJsonLd({ dict, ruta }: { dict: Dictionary; ruta: string }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `${SITE_URL}/${locale}/contact`,
+    "@id": `${SITE_URL}${ruta}`,
     mainEntity: dict.faq.items.map((item) => ({
       "@type": "Question",
       name: item.q,

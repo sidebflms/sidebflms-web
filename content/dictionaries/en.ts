@@ -508,7 +508,12 @@ export const en: Dictionary = {
         q: "Can you cover several stages at once?",
         a: "Yes. It gets solved in pre-production, not on the fly: a plan broken down by time slots with priorities per stage, so drone and camera aren't both in the same place while something happens in the other.",
       },
+      {
+        q: "What happens if it rains?",
+        a: "The drone doesn't fly in rain or strong wind — it's a safety limit of the aircraft itself, not ours — so if the plan includes aerial coverage we flag it in advance to have a backup plan. The rest of the crew — handheld, multicam — does work through moderate rain.",
+      },
     ],
+    ctaTitle: ["Still have", "a question?", "Get in touch"],
   },
 
   drone: {
