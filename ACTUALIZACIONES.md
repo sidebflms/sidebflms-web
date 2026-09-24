@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (87) — SEO Fase 2: la página de drone, en una URL con palabras clave
+
+«Drone» a secas no lo busca nadie; «grabación con drone» y «drone
+filming», sí. La URL que sirve la página (y la canónica) pasa a ser
+`/es/grabacion-con-drone` y `/en/drone-filming`, sin duplicar la carpeta
+física `app/[locale]/drone/` que ya existía: `next.config.ts` sirve las
+nuevas desde ahí con `rewrites()`. Las viejas (`/es/drone`, `/en/drone`)
+mandan un 301 permanente para que Google transfiera lo que ya tuvieran
+indexado en vez de partir de cero.
+
+`lib/routes.ts` sigue siendo el único punto de verdad —la decisión
+escrita ahí de slugs idénticos entre idiomas se actualizó explicando
+esta excepción y por qué—: el canónico y el `hreflang`
+(`lib/metadata.ts`) y el `sitemap.xml` (`app/sitemap.ts`) leen de ahí sin
+saber nada de rewrites, así que cambiar el mapa bastó para que los tres
+salieran ya con las URLs nuevas.
+
+Un tropiezo real con el 301: `redirects()` de `next.config.ts` con
+`permanent: true` manda SIEMPRE 308, nunca 301 —decisión explícita de
+Next para preservar el método de la petición, no un descuido—. Se pidió
+el 301 exacto, así que se hizo a mano en `proxy.ts` con
+`NextResponse.redirect(url, 301)`, antes de la comprobación normal de
+idioma.
+
+Comprobado con `curl` contra la web real, los cuatro puntos pedidos:
+`/es/drone` → 301, `/es/grabacion-con-drone` → 200, el `<link
+rel="canonical">` de la página nueva apunta a sí misma, y el `sitemap.xml`
+sólo lista las URLs nuevas. Medido con la auditoría: 60/100 (+4 sobre la
+Fase 1). Foto en `docs/seo/fase2.json`. De paso, dos fallos reales en el
+propio script de auditoría —comprobaba `/es/servicios`, que nunca ha
+sido una URL real (`services` no cambió de slug), y seguía apuntando a
+la dirección vieja de drone— corregidos antes de fiarse del número.
+
 ## 2026-09-24 (86) — SEO Fase 1: el `<h1>` de la portada dice a qué nos dedicamos
 
 Objetivo de negocio: posicionar para «grabación con drone [ciudad]» y

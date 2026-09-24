@@ -28,7 +28,7 @@ const MANUAL = {
 
 const PAGINAS = [
   { clave: "home",      url: "/es" },
-  { clave: "drone",     url: "/es/drone" },
+  { clave: "drone",     url: "/es/grabacion-con-drone" },
   { clave: "services",  url: "/es/services" },
   { clave: "portfolio", url: "/es/portfolio" },
   { clave: "about",     url: "/es/about" },
@@ -188,7 +188,11 @@ async function auditar() {
   check("contenido", "h1-negocio", "El H1 de la portada dice a qué nos dedicamos", h1Dice ? 4 : 0, 4,
     h1Dice ? "contiene término de negocio" : `"${(etiqueta(home.html, "h1")[0] ?? "").slice(0, 45)}" — sin término de negocio`);
 
-  const urlsDinero = ["/es/grabacion-con-drone", "/es/servicios"];
+  // "servicios" NO es una URL real —ROUTES.services es "services" en los dos
+  // idiomas, y así se queda: sólo "drone" tenía volumen de búsqueda real
+  // como para justificar el atajo de la Fase 2 (ver lib/routes.ts). Este
+  // criterio comprueba la única URL de dinero que sí cambió.
+  const urlsDinero = ["/es/grabacion-con-drone"];
   const urlsBien = [];
   for (const u of urlsDinero) {
     const r = await traer(BASE + u);
@@ -196,7 +200,7 @@ async function auditar() {
   }
   check("contenido", "urls-clave", "Las URLs de dinero llevan la palabra clave",
     Math.round((urlsBien.length / urlsDinero.length) * 4), 4,
-    urlsBien.length ? urlsBien.join(", ") : "ninguna: /es/drone y /es/services no contienen términos de búsqueda");
+    urlsBien.length ? urlsBien.join(", ") : "/es/grabacion-con-drone no responde 200");
 
   const palabrasDrone = drone.ok ? palabras(drone.html) : 0;
   const ptsDrone = palabrasDrone >= 1200 ? 5 : palabrasDrone >= 800 ? 3 : palabrasDrone >= 400 ? 1 : 0;
