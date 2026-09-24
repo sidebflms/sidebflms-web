@@ -5,6 +5,57 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (97) — SEO Fase 11 (parte 1): servicios, www, drone y alt real
+
+Cuatro huecos que la auditoría corregida (punto (96), abajo) sacó a la luz.
+
+**1. `/es/servicios`.** Daba 404: la Fase 2 sólo renombró la página de
+drone, no la de servicios, que se quedó en `/es/services`. Mismo
+mecanismo: rewrite en `next.config.ts`, 301 de verdad desde la URL vieja
+en `proxy.ts` —`permanent: true` de Next siempre da 308, no 301, mismo
+tropiezo que ya costó resolver en la Fase 2—.
+
+**2. `www.sidebflms.com`.** Servía la web entera con 200 en vez de
+redirigir. Se pidió en nginx; no se pudo: el VPS no da acceso a su
+configuración (Hestia, sin root, ver `despliegue/README.md`). Se comprobó
+que `www` llega hasta la misma aplicación —de ahí el 200— y se resolvió
+en `proxy.ts`, el mismo sitio donde ya viven el resto de redirects de
+este proyecto por la misma razón.
+
+**3. La página de drone.** De 900 a 1.107 palabras, con sustancia real:
+por qué tener las cuatro categorías AESA importa en la práctica (no
+rechazar un plano por no tener el dron que hace falta), qué cubre el
+seguro para quien contrata, por qué el vuelo nocturno es la norma y no la
+excepción en este negocio, por qué las zonas restringidas son el caso
+habitual y no raro. Sigue sin llegar a las 1.200 —quedan ~93—: no se ha
+encontrado más sustancia real sin caer en relleno. Pendiente de que Mario
+diga si se baja el objetivo o si ve otro ángulo real que añadir.
+
+**4. Las fotos de FITZ con `aria-hidden` y `alt=""`.** Investigado a fondo
+antes de tocar nada —código de `trabajo-feed.tsx`/`trabajo-youtube.tsx`,
+árbol de accesibilidad real con el navegador, captura de pantalla—: la
+foto nítida de cada una SÍ lleva alt descriptivo, justo al lado, en el
+mismo `<figure>`. Con esa evidencia, mi lectura inicial fue que ya estaban
+bien. Se corrigieron igualmente, tal y como se pidió dos veces —en el
+mensaje y en el punto (96)—: mismo alt que la foto nítida, sin
+`aria-hidden`, en `trabajo-feed.tsx`, `trabajo-youtube.tsx` y
+`ficha-visor.tsx` (mismo patrón en la ficha individual del proyecto,
+fuera de la lista pero con el mismo código). La reserva técnica queda
+dicha en el mensaje a Mario, no escondida.
+
+Quedan 4 imágenes en la misma familia (`fitz-arcangel(-sala)`,
+`mdf-carpa-noche`, `mdf-escenario-noche`) sin tocar a propósito: son la
+«copia apilada» detrás de la miniatura de la lista —efecto decorativo
+explícito, «dos fotos de la serie asoman detrás, como un taco de
+copias»—, no la misma pieza en dos resoluciones. Ni Mario las nombró ni
+encajan en el mismo caso.
+
+Comprobado con `curl`: `/es/services` → 301, `/es/servicios` → 200,
+`/en/services` sin cambios, `www` → 301 conservando la ruta. Medido:
+87/100 (+2 sobre la Fase 3 final). Foto en `docs/seo/fase11parte1.json`.
+El punto 5 (tercera ciudad) sigue pendiente de que Mario confirme qué
+ciudades tienen material real: no se inventa ninguna.
+
 ## 2026-09-24 (96) — El medidor, corregido: quien hace el examen no lo corrige
 
 La misma sesión que aplicaba las fases de SEO editó `scripts/seo-audit.mjs`
