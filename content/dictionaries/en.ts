@@ -326,6 +326,8 @@ export const en: Dictionary = {
       "The more you tell us about capacity and stages, the tighter the quote.",
     directLabel: "Or straight to us",
     email: "contact@sidebflms.com",
+    phone: "+34 614 96 36 93",
+    address: "Calle de Cuba 43, Fuenlabrada, Madrid",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     youtube: "YouTube",

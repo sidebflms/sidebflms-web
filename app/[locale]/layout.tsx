@@ -17,7 +17,7 @@ import { Cursor } from "@/components/motion/cursor";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { getDictionary } from "@/lib/dictionaries";
 import { fontVariables } from "@/lib/fonts";
-import { datosOrganizacion } from "@/lib/metadata";
+import { datosNegocio } from "@/lib/metadata";
 import { LOCALES, SITE_URL, isLocale } from "@/lib/routes";
 
 /**
@@ -80,11 +80,12 @@ export default async function LocaleLayout({
 
         <Analitica />
         <VistaPreviaPanel />
-        {/* Quién es SIDEBFLMS, no de qué va esta página: ver datosOrganizacion
-            en lib/metadata.ts. Una vez por documento, en el layout raíz. */}
+        {/* Quién es SIDEBFLMS y dónde está, no de qué va esta página: ver
+            datosNegocio en lib/metadata.ts. Una vez por documento, en el
+            layout raíz. */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(datosOrganizacion()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(datosNegocio(dict)) }}
         />
         {/* TEMPORAL: sólo con ?diagvideo. Ver el componente. */}
       </body>

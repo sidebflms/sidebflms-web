@@ -228,7 +228,17 @@ async function auditar() {
     tieneLocal ? "presente" : `sólo ${tiposHome.join(", ") || "ninguno"}`);
 
   const textoTodo = vivas.map((p) => sinEtiquetas(p.html)).join(" ");
-  const hayTelefono = /(\+34[\s.-]?\d{9}|\b\d{3}[\s.-]?\d{3}[\s.-]?\d{3}\b)/.test(textoTodo);
+  // El primer intento sólo reconocía grupos de 3-3-3 o +34 pegado a 9
+  // cifras seguidas. El teléfono real que dio Mario (Fase 9, 2026-09-24) se
+  // escribe 3-2-2-2 con espacios —"+34 614 96 36 93"—, que ninguno de los
+  // dos patrones cazaba: habría dado "no" con el teléfono puesto delante.
+  // Ahora se buscan tramos de cifras y separadores, se les quitan los
+  // separadores, y se comprueba la LONGITUD final (9 cifras, u 11 con el 34
+  // del prefijo) en vez de una forma concreta de agruparlas.
+  const hayTelefono = (textoTodo.match(/(\+?\d[\d\s.-]{6,14}\d)/g) ?? []).some((m) => {
+    const cifras = m.replace(/\D/g, "");
+    return cifras.length === 9 || (cifras.length === 11 && cifras.startsWith("34"));
+  });
   const hayDireccion = /\b(calle|c\/|avenida|avda|plaza|polígono|carrer)\b/i.test(textoTodo);
   const ptsNap = (hayTelefono ? 3 : 0) + (hayDireccion ? 2 : 0);
   check("local", "nap", "Teléfono y dirección visibles en la web", ptsNap, 5,
@@ -250,7 +260,11 @@ async function auditar() {
 
   // ---- ESTRUCTURADOS (10)
   const todosTipos = new Set(vivas.flatMap((p) => tiposJsonLd(p.html)));
-  const tieneOrg = [...todosTipos].some((t) => /Organization/i.test(t));
+  // Fase 4 (SEO, 2026-09-24): el schema pasó de Organization a
+  // ProfessionalService -lo EXTIENDE, en el vocabulario de schema.org sigue
+  // siendo una Organization, ver la nota de datosNegocio() en
+  // lib/metadata.ts-, así que el criterio tiene que reconocer los dos.
+  const tieneOrg = [...todosTipos].some((t) => /Organization|ProfessionalService|LocalBusiness/i.test(t));
   check("estructurados", "organization", "Organization", tieneOrg ? 3 : 0, 3, tieneOrg ? "presente" : "ausente");
 
   const tieneMiga = [...todosTipos].some((t) => /BreadcrumbList/i.test(t));

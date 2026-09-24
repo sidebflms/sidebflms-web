@@ -81,12 +81,22 @@ export function buildMetadata({
 /**
  * LOS DATOS ESTRUCTURADOS DE LA EMPRESA, los que lee Google.
  *
- * Hasta ahora sólo llevaban `@type` las fichas de Trabajo
- * (`VideoObject`/`ImageGallery`, ver `app/[locale]/portfolio/[slug]/page.tsx`):
- * decían qué es cada proyecto, pero no quién es SIDEBFLMS. Sin un
- * `Organization`, Google no tiene de dónde sacar el logo o los perfiles de
- * redes para un panel de conocimiento, y cada ficha de proyecto queda
- * huérfana en vez de asociada a una marca.
+ * Hasta la Fase 4 de SEO (2026-09-24) esto era un `Organization` a secas:
+ * decía quién es SIDEBFLMS (el logo, los perfiles de redes) pero no DÓNDE
+ * está ni cómo se la contacta, así que Google no tenía con qué cruzarlo
+ * contra la ficha de Google Business para un panel de conocimiento local.
+ *
+ * `ProfessionalService` no sustituye a `Organization`: lo EXTIENDE —en el
+ * vocabulario de schema.org, `ProfessionalService < LocalBusiness <
+ * Organization|Place›, así que sigue siendo válido como Organization y
+ * además lleva los datos de negocio local—. Por eso es un único bloque y no
+ * dos scripts separados: son el mismo SIDEBFLMS, no dos entidades.
+ *
+ * TELÉFONO, DIRECCIÓN Y ASEGURADO DE VERDAD (nada de relleno): los dio
+ * Mario directamente el 2026-09-24, letra a letra iguales a la ficha de
+ * Google Business —si no coinciden exactamente, Google lo nota y resta—.
+ * Sin código postal, porque no se dio uno y es mejor omitirlo que
+ * inventarlo. Sin `priceRange`: Mario prefirió no darlo.
  *
  * Va en el layout raíz —una vez, no en cada página— porque describe a la
  * EMPRESA, que es la misma entre en `/es` o en `/en/portfolio/holika-portal`.
@@ -94,14 +104,34 @@ export function buildMetadata({
  * el único sitio donde viven esos enlaces: si cambia un usuario, cambia aquí
  * solo.
  */
-export function datosOrganizacion() {
+export function datosNegocio(dict: { contact: { phone: string; email: string; address: string } }) {
+  // "Calle de Cuba 43, Fuenlabrada, Madrid" -> calle, localidad, provincia.
+  // Se parte por comas porque así es como Mario lo dio y así es como se lee
+  // en pantalla (footer.tsx); si el formato de `contact.address` cambiara
+  // algún día a algo que no sean tres tramos separados por coma, esto
+  // dejaría de tener sentido y habría que escribirlo a mano aquí.
+  const [calle, localidad, provincia] = dict.contact.address.split(",").map((t) => t.trim());
+
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "ProfessionalService",
     name: "SIDEBFLMS",
     url: SITE_URL,
     logo: `${SITE_URL}${conBase("/logo/mark.svg")}`,
     sameAs: REDES.map((red) => red.href),
+    telephone: dict.contact.phone,
+    email: dict.contact.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: calle,
+      addressLocality: localidad,
+      addressRegion: provincia,
+      addressCountry: "ES",
+    },
+    // España entera, no sólo Madrid/Barcelona: es lo que ya dice el FAQ
+    // ("con base en España... fuera de ahí también, lo que cambia es la
+    // logística"), no una limitación nueva.
+    areaServed: { "@type": "Country", name: "Spain" },
   };
 }
 

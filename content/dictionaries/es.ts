@@ -368,6 +368,12 @@ export const es = {
       "Cuantos más datos nos des de aforo y escenarios, más ajustado sale el presupuesto.",
     directLabel: "O directamente",
     email: "contact@sidebflms.com",
+    // SEO Fase 9 (2026-09-24), datos que Mario dio directamente: mismo
+    // teléfono y dirección que la ficha de Google Business, letra a letra
+    // -si no coinciden exactamente, Google lo nota y resta-. El teléfono es
+    // también el WhatsApp Business de la empresa.
+    phone: "+34 614 96 36 93",
+    address: "Calle de Cuba 43, Fuenlabrada, Madrid",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     youtube: "YouTube",
@@ -437,6 +443,18 @@ export const es = {
     // FAQ se lee como una respuesta a una pregunta que ya te hacías.
     //
     // Si alguien las vuelve a repartir por el sitio, que sea a propósito.
+    //
+    // ENMENDADA A PROPÓSITO DOS VECES, las dos por Mario (SEO, 2026-09-24):
+    //   1. La dirección del pie (`contact.address`, más abajo) lleva
+    //      «Fuenlabrada, Madrid». No es la lista de «dónde trabajamos» que
+    //      esta decisión reserva al FAQ —es dónde está la empresa, un dato
+    //      distinto, y hace falta que sea texto visible para que coincida
+    //      con la ficha de Google Business—.
+    //   2. Las páginas `/grabacion-con-drone-madrid` y
+    //      `/grabacion-con-drone-barcelona` (Fase 6) sí anuncian la ciudad
+    //      por todas partes, a propósito: son justo para eso. No es un
+    //      descuido ni una vuelta atrás de esta decisión, es que el mismo
+    //      Mario pidió esas páginas concretas.
     builtNote: "@sidebflms",
   },
 

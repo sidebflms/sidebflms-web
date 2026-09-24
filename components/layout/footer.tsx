@@ -126,6 +126,21 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     </a>
                   </li>
                 ))}
+                {/* SEO Fase 9 (2026-09-24): teléfono y dirección, en texto —no
+                    en una imagen, que Google no lee—, idénticos a la ficha de
+                    Google Business. La dirección lleva la ciudad (Fuenlabrada,
+                    Madrid): no es la lista de "dónde trabajamos" que la
+                    decisión de más abajo reserva al FAQ —es dónde está la
+                    empresa, un dato distinto—, así que no la contradice. */}
+                <li>
+                  <a
+                    href={`tel:${dict.contact.phone.replace(/\s+/g, "")}`}
+                    className="text-bone transition-colors hover:text-rust-300"
+                  >
+                    {dict.contact.phone}
+                  </a>
+                </li>
+                <li className="text-bone">{dict.contact.address}</li>
                 <li>
                   <a
                     href={`mailto:${dict.contact.email}`}
