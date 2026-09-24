@@ -5,8 +5,9 @@ multicámara en directo, drone y fotografía.
 
 Next.js 16 (App Router), bilingüe español/inglés, autoalojada en un VPS propio.
 
-> **Ahora mismo está publicada con contraseña.** Es intencionado: falta material
-> y faltan permisos. Ver «Lo que falta antes de abrirla» al final.
+> **Pública desde el 2026-09-24, sin contraseña.** Ver «Lo que queda
+> pendiente» al final: nada de ello bloquea que esté abierta, son decisiones
+> ya tomadas o mejoras futuras, no huecos.
 
 ---
 
@@ -97,11 +98,13 @@ por consola. En el servidor sí sale.
 
 ---
 
-## Lo que falta antes de abrirla al público
+## Lo que queda pendiente
 
 Revisado de verdad el 2026-09-24 (no de memoria: consultando la base de datos
-de producción, `content/projects.ts` y los propios ficheros). Nada de esto es
-código: es material y decisiones, y de las que sólo puede tomar Mario.
+de producción, `content/projects.ts` y los propios ficheros), el mismo día
+que se quitó la contraseña. Nada de esto es código, y nada de ello es un
+motivo para haber seguido cerrada: son decisiones ya tomadas por Mario, datos
+que a propósito no van en la web, o mejoras para más adelante.
 
 **Ya resuelto, aunque lo hayas visto anotado aquí antes:** los permisos de
 marca de los clientes (concedidos el 2026-09-13, ver `content/clientes.ts`), la
@@ -109,26 +112,26 @@ licencia comercial de Akira Expanded (confirmada el 2026-09-12, ver
 `app/globals.css`), los once cargos y fotos del equipo (ya no hay ninguno de
 relleno), las cinco fechas que faltaban (confirmadas por Mario el 2026-09-24),
 la cookie de idioma que prometía la privacidad y no existía (`proxy.ts` ya la
-escribe de verdad) y el cliente de cada proyecto —confirmado uno por uno por
-Mario el 2026-09-24, ver la nota de `content/projects.ts`—: Instagram y
-LinkedIn del pie verificados contra las cuentas reales. Si vuelves a ver
-alguno de éstos en una lista de bloqueantes en otro sitio, esa lista está
+escribe de verdad), el cliente de cada proyecto —confirmado uno por uno por
+Mario el 2026-09-24, ver la nota de `content/projects.ts`—, Instagram y
+LinkedIn del pie verificados contra las cuentas reales, y el enlace de
+YouTube del pie (el canal `@sidebflms` ya responde). Si vuelves a ver alguno
+de éstos en una lista de bloqueantes en otro sitio, esa lista está
 desactualizada, no esto.
 
-**Lo que sigue de verdad pendiente:**
+**Lo que sigue, por decisión ya tomada, no por descuido:**
 
-- **El enlace de YouTube del pie** apunta a `@sidebflms`, el canal que Mario
-  acaba de crear (2026-09-24): da 404 hasta que Google lo propague. Revisar
-  cuando haya pasado un tiempo.
 - **El detalle de qué se entregó a cada cliente es a propósito privado**: por
   decisión expresa de Mario, esa parte queda entre SIDEBFLMS y cada cliente y
   no se escribe en la web. Los textos describen el trabajo tal como se ve, no
   la relación comercial —no es un dato que falte, es un dato que no va aquí—.
-- **El aviso legal no lleva CIF ni domicilio**, por decisión expresa de Mario
+- **El aviso legal no lleva CIF ni domicilio**, por decisión expresa de Mario,
+  reafirmada el 2026-09-24 tras explicarle el riesgo dos veces
   (`content/dictionaries/es.ts`, sección `legal`). Eso deja el aviso
-  incumpliendo el art. 10 de la LSSI-CE mientras la web sea pública.
+  incumpliendo el art. 10 de la LSSI-CE. Si algún día quiere retomarlo, que lo
+  pida él; no es una tarea abierta.
 - **El archivo da para más piezas** de las 23 que hay hoy, si se quiere seguir
-  ampliando antes de abrir.
+  ampliando.
 
-El día que esté todo, quitar la contraseña son dos órdenes, y están en
-`despliegue/README.md`.
+Cómo se vuelve a poner una contraseña si hiciera falta (una demo cerrada a un
+cliente, por ejemplo) está en `despliegue/README.md`.

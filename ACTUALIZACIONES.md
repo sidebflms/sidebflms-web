@@ -5,6 +5,51 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (81) — La web ya es pública: sin contraseña
+
+Mario: «quita el user y contraseña ya». Bastaba con borrar el `.htpasswd`
+del servidor —así lo dejó escrito `despliegue/proxy-php/htaccess` desde
+que se montó, sin tocar ningún fichero ni reiniciar nada— y volver a
+desplegar para que `publicar.sh` detectara su ausencia y copiara
+`.next/static` y `public/` dentro de `public_html`, para que nginx sirva
+esos ficheros directamente en vez de pasarlos por PHP y Node. Antes de
+esto, cualquier visitante veía primero un cuadro de usuario/contraseña de
+Apache; ahora `sidebflms.com` se abre directo.
+
+Comprobado de verdad tras el despliegue, no dado por hecho: las 64
+páginas del `sitemap.xml` y los 182 ficheros de material a 200, `/admin`
+sigue accesible para Mario pero fuera del `robots.txt`, y un estático real
+del build (`/_next/static/...`) sirviéndose ya con cabeceras de caché
+larga puestas por nginx, no por Node.
+
+El `.htpasswd` no se ha borrado del repositorio porque nunca vivió ahí —lo
+puso Mario a mano en el servidor el 2026-09-10—; sólo se ha borrado del
+servidor. Si algún día hiciera falta cerrarla otra vez (una demo a un
+cliente concreto, por ejemplo), basta con volver a crear ese fichero y
+desplegar: el `<IfFile>` del `.htaccess` vuelve a pedir contraseña solo.
+
+## 2026-09-24 (80) — Intro: colores invertidos, lámina negra y casete naranja
+
+Mario: «cambiarlo de color e invertirlo, en vez de naranja negro y las
+líneas naranjas en vez de negro». Misma animación de siempre —se dibuja en
+el color que mejor se lee sobre la lámina y termina en el color exacto de
+la lámina, para fundirse con ella al abrirse la ventana—, sólo que ahora
+la lámina es negra y el casete se dibuja en naranja de marca, terminando
+en negro. Cambia también el botón «Saltar intro», que tenía que seguir
+siendo legible sobre el fondo nuevo (naranja sobre negro, antes negro
+sobre naranja).
+
+Comprobado en el navegador, fotograma a fotograma, no sólo mirando el
+código: el trazo en naranja mientras se dibuja, el logo completo legible,
+el instante exacto en que la ventana se abre y el contorno se funde con el
+negro del fondo, y el tramo final con las líneas ya en negro sobre el
+vídeo real. El primer intento de desplegarlo falló a media compilación
+—el servidor se quedó sin memoria (137, sin swap configurado)—; el
+segundo intento, sin cambiar nada, terminó bien pero llegó a quedarse con
+sólo 144 MB libres. No es un fallo de este cambio, es un límite real del
+servidor que conviene tener en cuenta si los despliegues empiezan a fallar
+así más a menudo.
+
 ## 2026-09-24 (79) — Grave: 72 de 182 ficheros de material daban 500
 
 Mario, antes de publicar: «revisa todo todo y que todo funcione». No fue una
