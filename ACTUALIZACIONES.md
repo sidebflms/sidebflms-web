@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (91) — SEO Fases 9 y 4: teléfono, dirección y negocio local
+
+Datos reales, dados por Mario directamente, letra a letra iguales a la
+ficha de Google Business —si no coinciden exactamente, Google lo nota y
+resta—: teléfono `+34 614 96 36 93` (también el WhatsApp Business de la
+empresa), dirección Calle de Cuba 43, Fuenlabrada, Madrid. Seguro de
+responsabilidad civil confirmado, sin nombrar aseguradora. Sin rango de
+precios: Mario prefirió no darlo, no se inventa.
+
+**Fase 9:** teléfono y dirección en TEXTO en el pie —no en una imagen, que
+Google no lee—. La dirección lleva una ciudad, lo que toca la decisión de
+2026-09-10 de no repartir ciudades por el sitio; queda anotada la
+enmienda en el propio diccionario (`content/dictionaries/es.ts`), a
+propósito y explicada, no un descuido: una dirección no es la lista de
+«dónde trabajamos» que aquella decisión reservaba al FAQ.
+
+**Fase 4:** el `Organization` de la Fase 2-SEO anterior pasa a
+`ProfessionalService` —lo EXTIENDE, sigue siendo una Organization en el
+vocabulario de schema.org, por eso es un único bloque (`datosNegocio()`
+en `lib/metadata.ts`) y no dos scripts separados describiendo la misma
+empresa—. Lleva teléfono, email, dirección postal completa (sin código
+postal: no se dio uno, mejor omitirlo que inventarlo) y `areaServed`
+España entera, que es lo que ya dice el FAQ («con base en España...
+fuera de ahí también»), no una limitación nueva.
+
+**De paso, dos fallos reales en el propio auditor**, corregidos antes de
+fiarse de sus números: el patrón de teléfono sólo reconocía grupos de
+3-3-3 cifras o `+34` pegado a 9 cifras seguidas, y el teléfono real se
+escribe 3-2-2-2 con espacios —habría dado «no» con el teléfono puesto
+delante en la página—; y el criterio «Organization» no reconocía
+`ProfessionalService` como su propia extensión.
+
+Comprobado con `curl` contra el HTML servido: el `tel:` del pie, el texto
+de la dirección, y el bloque `ProfessionalService` completo con los
+cuatro campos. Medido: 78/100 (+9 sobre la Fase 8) — el bloque de SEO
+local pasa de 0/20 a 10/20. Foto en `docs/seo/fase9y4.json`.
+
 ## 2026-09-24 (90) — SEO Fase 8: migas de pan en portfolio, fichas y servicios
 
 Sin `BreadcrumbList`, Google enseña la URL pelada en el resultado de
