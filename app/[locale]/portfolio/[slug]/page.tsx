@@ -5,8 +5,8 @@ import { FichaProyecto } from "@/components/sections/proyecto/ficha-proyecto";
 import { type Project } from "@/content/projects";
 import { traeProyecto, traeProyectos, traeProyectoVistaPrevia } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
-import { buildMetadata } from "@/lib/metadata";
-import { SITE_URL, type Locale } from "@/lib/routes";
+import { buildMetadata, datosMigas } from "@/lib/metadata";
+import { path, SITE_URL, type Locale } from "@/lib/routes";
 
 export async function generateStaticParams() {
   return (await traeProyectos()).map((project) => ({ slug: project.slug }));
@@ -70,6 +70,14 @@ export default async function ProjectDetailPage({
   const siguiente = listaNav[(i + 1) % listaNav.length];
 
   const jsonLd = !project.placeholder ? datosEstructurados(project, locale) : null;
+  // Migas de pan (SEO Fase 8): Inicio › Trabajo › el propio proyecto. Sólo
+  // el schema, sin rastro visible —ver la nota de `datosMigas` en
+  // lib/metadata.ts—. Se enseña también en fichas «placeholder»: describe
+  // dónde vive la página, no si el contenido ya está terminado.
+  const migas = datosMigas(locale, dict.nav.home, [
+    { nombre: dict.nav.portfolio, ruta: path(locale, "portfolio") },
+    { nombre: project.title[locale], ruta: path(locale, "portfolio", project.slug) },
+  ]);
 
   return (
     <>
@@ -77,6 +85,7 @@ export default async function ProjectDetailPage({
       {jsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(migas) }} />
     </>
   );
 }

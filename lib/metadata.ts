@@ -104,3 +104,35 @@ export function datosOrganizacion() {
     sameAs: REDES.map((red) => red.href),
   };
 }
+
+/**
+ * LAS MIGAS DE PAN (SEO Fase 8, 2026-09-24): en vez de la URL pelada,
+ * Google puede enseñar la ruta —Inicio › Trabajo › Holika — el portal— en
+ * el resultado de búsqueda. Sólo el schema `BreadcrumbList`: no hay un
+ * rastro de migas VISIBLE en ninguna página —no se pidió, y no toca el
+ * diseño actual—, igual que `Organization` o `FAQPage` tampoco tienen
+ * contrapartida visible en esta web.
+ *
+ * `inicio` va siempre primero. `tramos` es el resto de la ruta, de la raíz
+ * hacia la página actual —por ejemplo, en una ficha de proyecto: Trabajo,
+ * luego el propio proyecto—.
+ */
+export function datosMigas(
+  locale: Locale,
+  inicio: string,
+  tramos: { nombre: string; ruta: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: inicio, item: `${SITE_URL}/${locale}` },
+      ...tramos.map((tramo, i) => ({
+        "@type": "ListItem",
+        position: i + 2,
+        name: tramo.nombre,
+        item: `${SITE_URL}${tramo.ruta}`,
+      })),
+    ],
+  };
+}

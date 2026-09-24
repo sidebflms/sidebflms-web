@@ -7,8 +7,8 @@ import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
 import { aPiezasDeTrabajo } from "@/components/sections/trabajo/medios";
 import { traeClientes, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
-import { buildMetadata } from "@/lib/metadata";
-import { isLocale } from "@/lib/routes";
+import { buildMetadata, datosMigas } from "@/lib/metadata";
+import { isLocale, path } from "@/lib/routes";
 
 export async function generateMetadata({
   params,
@@ -69,6 +69,17 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       <div className="seccion">
         <BrandStrip dict={dict} clientes={clientes} />
       </div>
+
+      {/* Migas de pan (SEO Fase 8): sólo el schema, sin rastro visible —ver
+          la nota de `datosMigas` en lib/metadata.ts—. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            datosMigas(locale, dict.nav.home, [{ nombre: dict.nav.portfolio, ruta: path(locale, "portfolio") }])
+          ),
+        }}
+      />
     </main>
   );
 }

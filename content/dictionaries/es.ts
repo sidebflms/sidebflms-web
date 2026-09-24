@@ -64,6 +64,10 @@ export const es = {
   },
 
   nav: {
+    // Sólo para las migas de pan (BreadcrumbList, SEO Fase 8): no se pinta
+    // en ningún sitio del menú, que no lleva enlace a "Inicio" a propósito
+    // -el logo ya hace ese papel-.
+    home: "Inicio",
     portfolio: "Trabajo",
     services: "Servicios",
     about: "Nosotros",

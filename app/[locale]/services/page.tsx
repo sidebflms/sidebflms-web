@@ -8,8 +8,8 @@ import { ServiciosVisor, type VideoDrone } from "@/components/sections/servicios
 import { Reveal } from "@/components/motion/reveal";
 import { traeEtapasFotos, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
-import { buildMetadata } from "@/lib/metadata";
-import { isLocale } from "@/lib/routes";
+import { buildMetadata, datosMigas } from "@/lib/metadata";
+import { isLocale, path } from "@/lib/routes";
 
 export async function generateMetadata({
   params,
@@ -80,6 +80,17 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
         dict={dict}
         headline={dict.services.ctaTitle}
         intro={dict.contact.intro}
+      />
+
+      {/* Migas de pan (SEO Fase 8): sólo el schema, sin rastro visible —ver
+          la nota de `datosMigas` en lib/metadata.ts—. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            datosMigas(locale, dict.nav.home, [{ nombre: dict.nav.services, ruta: path(locale, "services") }])
+          ),
+        }}
       />
     </main>
   );
