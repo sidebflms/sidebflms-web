@@ -19,21 +19,30 @@ import { CASETE } from "./casete-trazos";
  * construyendo el logo a base de las líneas y luego que entre a la web». Y, al
  * verlo: «y ahora fondo negro y logo en naranja», «fondo naranja, casete
  * naranja», «todas las líneas del casete en negro» y, por fin, «puede ser que
- * cuando termina ya de formar el logo se vuelva naranja», que es como está.
+ * cuando termina ya de formar el logo se vuelva naranja», que es como estuvo
+ * hasta el 2026-09-24, día en que Mario pidió invertir los dos colores:
+ * «cambiarlo de color e invertirlo, en vez de naranja negro y las líneas
+ * naranjas en vez de negro». Es la paleta que había pedido una vez, al
+ * principio del todo («fondo negro y logo en naranja»), pero sobre la
+ * animación completa que se construyó después: aquella primera vez no
+ * convenció sin más —«fondo naranja, casete naranja» fue lo que se quedó—;
+ * esta vez sí es la que se quedó.
  *
  * ── CÓMO SE VE ──────────────────────────────────────────────────────────
- * Una lámina naranja de marca tapa la portada entera. Encima:
+ * Una lámina negra tapa la portada entera. Encima:
  *
- *   1. EL CASETE SE DIBUJA en negro, trazo a trazo, empezando por el borde.
- *   2. AL TERMINAR DE FORMARSE SE VUELVE NARANJA, y a la vez se abre la
+ *   1. EL CASETE SE DIBUJA en naranja de marca, trazo a trazo, empezando por
+ *      el borde.
+ *   2. AL TERMINAR DE FORMARSE SE VUELVE NEGRO, y a la vez se abre la
  *      ventana: el cuerpo del casete se cala en la lámina y por dentro aparece
- *      la portada, con el dibujo naranja encima.
+ *      la portada, con el dibujo —ya en negro— encima.
  *   3. SE ENTRA: el dibujo crece hasta comerse la pantalla y la lámina se
  *      funde. Quedan unos 3,7 s en total.
  *
- * El negro y el naranja no son a capricho: el negro es lo que mejor se lee
- * sobre la lámina naranja mientras el casete se dibuja, y el naranja lo que se
- * lee sobre el vídeo de la portada cuando la ventana ya está abierta.
+ * El naranja y el negro no son a capricho: el naranja es lo que mejor se lee
+ * sobre la lámina negra mientras el casete se dibuja, y el negro es el color
+ * exacto de la propia lámina, así que el contorno se funde con ella y
+ * desaparece justo cuando la ventana se abre.
  *
  * No hay vídeo propio: lo que se ve por la ventana ES la portada, con su reel.
  *
@@ -60,7 +69,7 @@ import { CASETE } from "./casete-trazos";
  * Lo decide un script en la CABECERA del documento (`SCRIPT_INTRO`, puesto en
  * `app/[locale]/layout.tsx`), antes de pintar nada: si toca, marca
  * `<html data-intro="si">`. El CSS esconde la intro salvo con esa marca, así
- * que no hay fogonazo naranja al recargar.
+ * que no hay fogonazo de la lámina al recargar.
  *
  * La primera versión ponía el script junto a la intro, en la página, y no se
  * ejecutaba nunca: Next manda el contenido de la página por partes y lo encaja
@@ -91,7 +100,7 @@ const T = {
   // empieza el viraje: el trazo se encoge y pasa al color de la lámina. La
   // ventana se abre DENTRO de ese viraje, no después: el casete acaba del color
   // del fondo, y si la apertura esperase a que terminara habría medio segundo
-  // de naranja liso, que es el corte que Mario veía.
+  // de lámina lisa, que es el corte que Mario veía.
   //
   // EL VIRAJE VA LARGO A PROPÓSITO (Mario, 2026-09-18: «la transición tiene que
   // ser más suave, más alargada, que vaya poco a poco»): 1,2 s, más del doble
@@ -101,15 +110,15 @@ const T = {
   ventana: { espera: 2050, dura: 500 },
   zoom: { espera: 2650, dura: 900 },
   // La lámina se va ANTES de que el crecimiento acabe, a propósito: si no,
-  // quedaría medio segundo de naranja liso —el dibujo ya fuera de cuadro—
+  // quedaría medio segundo de lámina lisa —el dibujo ya fuera de cuadro—
   // antes de que se fundiera.
   salida: { espera: 3100, dura: 550 },
 } as const;
 
 /**
  * CUÁNTO CRECE AL FINAL. No es a ojo: al crecer, los detalles crecen con el
- * dibujo, y si alguno cae dentro de la pantalla al final se ve una banda
- * naranja justo cuando debería verse sólo la web. El centro del dibujo cae
+ * dibujo, y si alguno cae dentro de la pantalla al final se ve una banda de
+ * la lámina justo cuando debería verse sólo la web. El centro del dibujo cae
  * entre las dos bobinas, y la de la derecha empieza 34 unidades a la derecha
  * de ese centro. Creciendo 28 veces, en una pantalla de 1440×900 se ven sólo
  * ±24 unidades a cada lado, y en un móvil de 390 px, ±15.
@@ -174,19 +183,21 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       );
     });
 
-    /* 2 · YA FORMADO, EL CASETE SE VUELVE NARANJA.
+    /* 2 · YA FORMADO, EL CASETE SE VUELVE NEGRO.
        Mario, 2026-09-17: «puede ser que cuando termina ya de formar el logo se
-       vuelva naranja». Se dibuja en negro, que es lo que mejor se lee sobre la
-       lámina naranja, y al terminar pasa al naranja de marca, justo cuando la
-       ventana se abre y el dibujo queda sobre el vídeo de la portada —donde el
-       negro se apagaría—.
+       vuelva naranja» —la idea de fondo, un giro de color justo al terminar de
+       dibujarse, sigue igual desde entonces; lo único que cambió el 2026-09-24
+       fue A QUÉ COLOR llega cada extremo—. Se dibuja en naranja, que es lo que
+       mejor se lee sobre la lámina negra, y al terminar pasa al mismo negro,
+       justo cuando la ventana se abre y el dibujo queda sobre el vídeo de la
+       portada.
 
-       EL NARANJA ES EL DE LA LÁMINA, el de marca (Mario: «tiene que ser del
-       color del fondo»). Eso quiere decir que al final del cambio el casete se
-       funde con el fondo y desaparece; lo que lo devuelve es la ventana, que
-       se abre encima y deja las líneas naranjas sobre el vídeo. Por eso la
+       EL NEGRO ES EL DE LA LÁMINA (Mario: «tiene que ser del color del
+       fondo»). Eso quiere decir que al final del cambio el contorno se funde
+       con el fondo y desaparece; lo que lo devuelve es la ventana, que se abre
+       encima y deja el dibujo —ya en negro— sobre el vídeo. Por eso la
        apertura empieza ANTES de que el color termine: si se esperase, habría
-       medio segundo de naranja liso, que es el corte que Mario veía.
+       medio segundo de lámina lisa, que es el corte que Mario veía.
 
        El color va en el grupo, así que es una animación y no veinticinco. */
     if (dibujo instanceof SVGElement) {
@@ -202,12 +213,15 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
       // SÓLO EL COLOR: el grosor no se toca. Hubo una versión en la que el
       // trazo adelgazaba a la vez que viraba, para que pareciera que se fundía
       // con la lámina, y Mario la descartó al verla: «me gustaría que fueran
-      // igual de gordas que cuando está el contorno en negro».
+      // igual de gordas que cuando está el contorno en negro» —dicho con la
+      // paleta de entonces, donde el contorno EMPEZABA en negro; el punto que
+      // pedía —grosor constante, sin adelgazar— sigue valiendo igual con los
+      // colores invertidos—.
       animaciones.push(
         dibujo.animate(
           [
-            { stroke: tono("--color-ink-900", "#141414") },
             { stroke: tono("--color-rust-500", "#e8451d") },
+            { stroke: tono("--color-ink-900", "#141414") },
           ],
           paso
         )
@@ -238,7 +252,7 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
        miles de píxeles en cada fotograma. `transform-box`/`transform-origin`
        están puestos en el CSS para que se comporte igual que el atributo
        `transform` de SVG y no respecto al centro de la caja. */
-    // Van dos: el casete que se ve, en naranja, y el cuerpo que abre la ventana
+    // Van dos: el casete que se ve, ya en negro a estas alturas, y el cuerpo que abre la ventana
     // dentro de la máscara. Los dos tienen que estar en el mismo sitio y crecer
     // a la vez, así que llevan la misma marca y se mueven juntos.
     const sitios = el.querySelectorAll<SVGGElement>(".intro-casete-sitio");
@@ -330,8 +344,9 @@ export function IntroCasete({ textoSaltar }: { textoSaltar: string }) {
           mask={`url(#${ID_MASCARA})`}
         />
 
-        {/* EL CASETE, en naranja y por encima de todo: se dibuja solo encima de
-            la lámina y sigue ahí cuando la ventana se abre, ya sobre la web. */}
+        {/* EL CASETE, empieza en naranja y por encima de todo: se dibuja solo
+            encima de la lámina, vira a negro al formarse y sigue ahí cuando la
+            ventana se abre, ya sobre la web. */}
         <g id={ID_DIBUJO} className="intro-casete-sitio intro-casete-dibujo">
           <path className="intro-casete-contorno" d={CASETE.contorno} />
           {CASETE.trazos.map((d, i) => (

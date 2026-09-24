@@ -765,19 +765,31 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 /* ============================================================================
-   INTRO DE LA PORTADA — el casete recortado en una lámina naranja.
+   INTRO DE LA PORTADA — el casete recortado en una lámina negra.
    Componente: components/sections/intro-casete.tsx. Mario, 2026-09-17.
 
-   Una lámina naranja a pantalla completa tapa la portada, y el casete del
-   manual se va calando en ella. Mario, 2026-09-17: «lo que son las líneas
-   naranjas sería lo que iría en alfa para que se vea la página web de fondo»,
-   después «en negativo así para que funcione y se vea más parte del fondo de
-   la web», y por último «que se vaya construyendo el logo a base de las líneas
+   Una lámina a pantalla completa tapa la portada, y el casete del manual se
+   va calando en ella. Mario, 2026-09-17: «lo que son las líneas naranjas
+   sería lo que iría en alfa para que se vea la página web de fondo», después
+   «en negativo así para que funcione y se vea más parte del fondo de la
+   web», y por último «que se vaya construyendo el logo a base de las líneas
    y luego que entre a la web».
+
+   ── LOS COLORES SE INVIRTIERON EL 2026-09-24 ────────────────────────────
+   Hasta entonces la lámina era naranja y el casete se dibujaba en negro.
+   Mario: «cambiarlo de color e invertirlo, en vez de naranja negro y las
+   líneas naranjas en vez de negro». La lógica de abajo —dibujar en el color
+   que mejor se lee sobre la lámina, y terminar en el color EXACTO de la
+   lámina para que se funda con ella— es la misma; lo único que cambió es
+   cuál de los dos colores hace de lámina y cuál de trazo. Ya se había
+   probado una vez, al revés de como estaba hasta ahora —lámina negra, casete
+   naranja, sin la animación de color que hay hoy— y a Mario no le convenció
+   entonces (2026-09-17: «fondo naranja, casete naranja»); esta vez es la
+   misma paleta pero con toda la animación que se construyó después.
 
      0,0 – 1,6 s   el casete se dibuja trazo a trazo, y cada línea es un hueco
      1,3 – 1,8 s   la ventana se abre: el cuerpo entero pasa a hueco y las
-                   líneas se dan la vuelta, de huecos a naranja
+                   líneas se dan la vuelta, de huecos a negro
      1,9 – 2,8 s   el dibujo crece hasta comerse la pantalla
      2,4 – 2,9 s   la lámina se funde y queda la portada
 
@@ -788,14 +800,16 @@ video::-webkit-media-controls-start-playback-button {
    `?intro=1` precisamente en un equipo así.
 
    ── CÓMO SE CALA EL DIBUJO ──────────────────────────────────────────────
-   Una máscara SVG: blanco donde la lámina es naranja, negro donde hay hueco.
-   Encima del blanco a pantalla completa van los trazos en negro (lo que se va
+   Una máscara SVG: blanco donde la lámina es negra, negro donde hay hueco —
+   «blanco»/«negro» aquí son los dos valores de la máscara, no el color que se
+   ve; el color que se ve lo pone `.intro-casete-fondo` más abajo. Encima del
+   blanco a pantalla completa van los trazos en negro (lo que se va
    dibujando), luego el cuerpo del casete en negro (la ventana que se abre) y
    luego los mismos trazos otra vez, en blanco, que es lo que deja los detalles
-   dibujados en naranja dentro de la ventana.
+   dibujados en negro dentro de la ventana.
 
    Si un navegador no entendiera `mask-composite`, las dos capas se suman y la
-   lámina queda naranja entera: se pierde el casete, pero la intro sigue
+   lámina queda entera de su color: se pierde el casete, pero la intro sigue
    fundiéndose y no deja nada roto por medio.
 
    ── iPHONE: NADA DE TRANSFORMACIONES ────────────────────────────────────
@@ -818,7 +832,7 @@ video::-webkit-media-controls-start-playback-button {
 /* OCULTA POR DEFECTO. Sólo aparece con `<html data-intro="si">`, que lo pone
    el script de la cabecera antes de pintar. Así, sin esa marca —recarga en la
    misma sesión, navegación interna, «reducir movimiento», JavaScript
-   desactivado— no hay ni un fotograma naranja. */
+   desactivado— no hay ni un fotograma de la lámina. */
 .intro-casete {
   display: none;
 }
@@ -830,7 +844,7 @@ html[data-intro="si"] .intro-casete {
   cursor: pointer;
 }
 
-/* LA LÁMINA NARANJA. Es un rectángulo SVG a pantalla completa con la máscara
+/* LA LÁMINA. Es un rectángulo SVG a pantalla completa con la máscara
    del casete encima; el dibujo y el guion viven en el componente. */
 .intro-casete-lienzo {
   position: absolute;
@@ -840,29 +854,33 @@ html[data-intro="si"] .intro-casete {
   height: 100%;
 }
 
-/* LA LÁMINA, en el naranja de marca. Mario, 2026-09-17: primero la quiso
-   negra con el casete naranja, y al verla, «fondo naranja, casete naranja». */
+/* LA LÁMINA, en negro (invertido el 2026-09-24; antes era el naranja de
+   marca). Mario, 2026-09-17, sobre la combinación al revés de la de
+   entonces —lámina negra, casete naranja, sin esta animación—: «fondo
+   naranja, casete naranja» — no le convenció esa vez. Ver la nota de arriba
+   del todo, al principio de este bloque. */
 .intro-casete-fondo {
-  fill: var(--color-rust-500);
+  fill: var(--color-ink-900);
 }
 
 /* EL CASETE Y LOS GROSORES.
 
    El color va en el GRUPO y no en cada trazo, a propósito: los veinticinco lo
-   heredan, y así el cambio de negro a naranja del final es una sola animación
+   heredan, y así el cambio de naranja a negro del final es una sola animación
    en vez de veinticinco.
 
-   Empieza en negro: mientras se dibuja, está sobre la lámina naranja y es
-   donde mejor se lee. Al terminar de formarse pasa al naranja de marca (lo
-   hace el componente), que es justo cuando la ventana se abre y el dibujo pasa
-   a estar sobre el vídeo de la portada, donde el negro se apagaría.
+   Empieza en naranja de marca: mientras se dibuja, está sobre la lámina negra
+   y es donde mejor se lee. Al terminar de formarse pasa al mismo negro de la
+   lámina (lo hace el componente): es lo que hace que el contorno se funda con
+   el fondo y desaparezca justo cuando la ventana se abre sobre el vídeo de la
+   portada, en vez de quedar un marco suelto encima.
 
    Los grosores van aquí y no en los vectores: el casete del manual está
    trazado a 3 puntos (y 6 el borde), que a este tamaño son un pelo. Mario:
    «los bordes del logo tienen que ser más gordos». */
 .intro-casete-dibujo {
   fill: none;
-  stroke: var(--color-ink-900);
+  stroke: var(--color-rust-500);
   stroke-width: 9;
   stroke-linecap: butt;
   stroke-linejoin: miter;
@@ -897,6 +915,9 @@ html[data-intro="si"] .intro-casete {
   visibility: hidden;
 }
 
+/* El color sigue el de la lámina: legible encima, del mismo modo que el
+   casete. Invertido el 2026-09-24 junto con `.intro-casete-fondo` — antes era
+   negro sobre lámina naranja, ahora naranja sobre lámina negra. */
 .intro-casete-saltar {
   position: absolute;
   bottom: 28px;
@@ -910,14 +931,14 @@ html[data-intro="si"] .intro-casete {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-ink-900);
+  color: var(--color-rust-500);
   text-decoration: underline;
   text-underline-offset: 4px;
   cursor: pointer;
   animation: introAparece 0.7s var(--ease-out-strong) 0.4s both;
 }
 .intro-casete-saltar:focus-visible {
-  outline-color: var(--color-ink-900);
+  outline-color: var(--color-rust-500);
 }
 
 @keyframes introAparece {
