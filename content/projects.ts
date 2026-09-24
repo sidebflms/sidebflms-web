@@ -31,11 +31,13 @@ import type { Locale } from "@/lib/routes";
  *
  * ── LO QUE NO SE SABE VA A `null` Y NO SE ENSEÑA ────────────────────────
  * `venue` y `date` desconocidos son `null` (antes decían «Por confirmar»).
- * Donde se pintan, se omiten. Casos sin fecha:
- *   - `holika-portal`, `monegros-hora-dorada`, `duro-pyroshow`,
- *     `metropolitano`: el nombre del fichero no lleva fecha.
- *   - `prospa-multicam`: el fichero se llama `31132026`, que sería el 31 del
- *     mes 13. **Ese mes no existe**, así que no sirve como fuente.
+ * Donde se pintan, se omiten.
+ *
+ * Cinco fichas se quedaron así hasta el 2026-09-24: el nombre del fichero no
+ * llevaba fecha en `holika-portal`, `monegros-hora-dorada`, `duro-pyroshow`
+ * y `metropolitano`, y el de `prospa-multicam` («31132026») era el 31 del
+ * mes 13, que no existe. Las cinco tienen ya la fecha real, confirmada por
+ * Mario de viva voz ese mismo día — ver la nota en cada ficha.
  *
  * ── AMPLIACIÓN DEL 2026-09-13: TRES PIEZAS MÁS ──────────────────────────
  * Salen del material que Mario fue pasando por el chat y que está en
@@ -140,7 +142,9 @@ const PROYECTOS: Project[] = [
     tone: 0,
     featured: true,
     showpiece: true,
-    year: "—",
+    // FECHA: el fichero no llevaba ninguna. Confirmada por Mario de viva voz
+    // el 2026-09-24: 3 de julio de 2026.
+    year: "2026",
     venue: "Holika",
     media: {
       video: "/media/holika-portal.mp4",
@@ -148,7 +152,7 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/holika-portal-vertical.mp4", poster: "/media/holika-portal-vertical.jpg" },
     },
     title: { es: "Holika — el portal", en: "Holika — the portal" },
-    date: null,
+    date: { es: "3 de julio de 2026", en: "3 July 2026" },
     hardFact: {
       // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
       es: "Doce segundos, un solo vuelo, ni un corte",
@@ -188,7 +192,8 @@ const PROYECTOS: Project[] = [
   },
   {
     // FUENTE: `DRONE/@SIDEBFLMS_MONEGROS POSTCARD4.mp4`.
-    // FECHA: el fichero no lleva ninguna. Sin confirmar.
+    // FECHA: el fichero no la llevaba. Confirmada por Mario de viva voz el
+    // 2026-09-24: 26 de julio de 2026.
     // OJO: no se puede saber por la imagen si es amanecer o atardecer, así que
     // el título dice «hora dorada» y no una de las dos cosas.
     slug: "monegros-hora-dorada",
@@ -196,7 +201,7 @@ const PROYECTOS: Project[] = [
     categories: ["drone"],
     tone: 2,
     featured: true,
-    year: "—",
+    year: "2026",
     venue: "Monegros",
     media: {
       video: "/media/monegros-hora-dorada.mp4",
@@ -204,7 +209,7 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/monegros-hora-dorada-vertical.mp4", poster: "/media/monegros-hora-dorada-vertical.jpg" },
     },
     title: { es: "Monegros — hora dorada", en: "Monegros — golden hour" },
-    date: null,
+    date: { es: "26 de julio de 2026", en: "26 July 2026" },
     hardFact: {
       es: "Una de doce postales aéreas rodadas en el mismo recinto",
       en: "One of twelve aerial postcards shot at the same site",
@@ -220,13 +225,15 @@ const PROYECTOS: Project[] = [
     // insertos VERTICALES pillarboxed, y `cropdetect` confirmó que 168-171
     // llevaba bandas (3226 px de ancho) mientras que 171-183 está limpio
     // (3840 en todo el tramo). Cortar sin mirar eso mete bandas negras.
-    // FECHA: el fichero no lleva ninguna.
+    // FECHA: el fichero no la llevaba. Confirmada por Mario de viva voz el
+    // 2026-09-24: 3-4 de abril de 2026 (el rodaje se repartió entre los dos
+    // días).
     slug: "duro-pyroshow",
     placeholder: false,
     categories: ["drone"],
     tone: 0,
     featured: false,
-    year: "—",
+    year: "2026",
     venue: "DURO",
     media: {
       video: "/media/duro-pyroshow.mp4",
@@ -234,7 +241,7 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/duro-pyroshow-vertical.mp4", poster: "/media/duro-pyroshow-vertical.jpg" },
     },
     title: { es: "DURO — el show de fuego", en: "DURO — the pyro show" },
-    date: null,
+    date: { es: "3-4 de abril de 2026", en: "3-4 April 2026" },
     hardFact: {
       // VERIFICADO: detección de escena sobre la pieza publicada → 0 cortes.
       es: "Doce segundos de un máster de 4:22, y ni un corte dentro",
@@ -248,13 +255,14 @@ const PROYECTOS: Project[] = [
   {
     // FUENTE: `DRONE/@sidebflms_METROPOLITANO.mp4`, 3840×2880 (4:3 abierto).
     // El recinto sale del nombre del fichero y se reconoce en el propio
-    // metraje. FECHA: el fichero no lleva ninguna.
+    // metraje. FECHA: el fichero no la llevaba. Confirmada por Mario de viva
+    // voz el 2026-09-24: 20 de diciembre de 2025.
     slug: "metropolitano",
     placeholder: false,
     categories: ["drone"],
     tone: 2,
     featured: false,
-    year: "—",
+    year: "2025",
     venue: "Metropolitano",
     media: {
       video: "/media/metropolitano.mp4",
@@ -262,7 +270,7 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/metropolitano-vertical.mp4", poster: "/media/metropolitano-vertical.jpg" },
     },
     title: { es: "Metropolitano", en: "Metropolitano" },
-    date: null,
+    date: { es: "20 de diciembre de 2025", en: "20 December 2025" },
     hardFact: {
       // VERIFICADO: 0 cortes de escena en la pieza publicada.
       es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
@@ -354,7 +362,8 @@ const PROYECTOS: Project[] = [
   {
     // FUENTE: `MULTICAM/@SIDEBFLMS_31132026_PROSPA_MULTICAM_1.mp4`.
     // ⚠️ LA FECHA DEL NOMBRE ESTÁ MAL: «31132026» sería el 31 del mes 13. No
-    // se usa. Hay que preguntar a producción cuándo fue.
+    // se usa. Confirmada por Mario de viva voz el 2026-09-24: 30 de mayo de
+    // 2026.
     slug: "prospa-multicam",
     placeholder: false,
     categories: ["multicam"],
@@ -368,7 +377,7 @@ const PROYECTOS: Project[] = [
       vertical: { video: "/media/prospa-multicam-vertical.mp4", poster: "/media/prospa-multicam-vertical.jpg" },
     },
     title: { es: "Prospa — multicámara", en: "Prospa — multicam" },
-    date: null,
+    date: { es: "30 de mayo de 2026", en: "30 May 2026" },
     hardFact: {
       es: "De día y a plena luz: el caso contrario al de cabina de noche",
       en: "Daylight, wide open: the opposite case to a night booth",
