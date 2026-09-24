@@ -413,12 +413,17 @@ function CarruselFotos({
       >
         {galeria.map((f, i) => (
           <figure key={f.grande} className="relative h-full w-full shrink-0 snap-center overflow-hidden">
-            {/* Entera, en su proporción, sobre sí misma desenfocada. */}
+            {/* Entera, en su proporción, sobre sí misma desenfocada. SEO
+                Fase 11 (2026-09-24): esta capa de fondo llevaba alt="" y
+                aria-hidden dando por hecho que la foto de delante ya
+                bastaba para describir el contenido -válido para el logo o
+                una copia apilada, pero aquí las dos imágenes son la MISMA
+                pieza de trabajo, no una decorativa y otra real-. Mismo alt
+                que la de delante, y sin aria-hidden. */}
             {/* eslint-disable-next-line @next/next/no-img-element -- WebP de 800, fondo. */}
             <img
               src={f.peque}
-              alt=""
-              aria-hidden="true"
+              alt={`${p.title[locale]} · ${pad(i + 1)} / ${pad(n)}`}
               loading="lazy"
               className="absolute inset-0 h-full w-full scale-125 object-cover opacity-90 blur-2xl brightness-[0.6] saturate-150"
             />

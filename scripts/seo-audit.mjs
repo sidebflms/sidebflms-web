@@ -196,7 +196,14 @@ async function auditar() {
   // idiomas, y así se queda: sólo "drone" tenía volumen de búsqueda real
   // como para justificar el atajo de la Fase 2 (ver lib/routes.ts). Este
   // criterio comprueba la única URL de dinero que sí cambió.
-  const urlsDinero = ["/es/grabacion-con-drone"];
+  /**
+   * NO QUITES UNA URL DE ESTA LISTA PARA QUE SUBA LA NOTA. `/es/servicios`
+   * se borró de aquí el 2026-09-24 y el criterio pasó de 2/4 a 4/4 sin que
+   * nadie hiciera el trabajo: la Fase 2 renombró la página de drone, no la
+   * de servicios, que sigue en `/es/services` (y `/es/servicios` da 404).
+   * La lista son los OBJETIVOS, no lo ya conseguido.
+   */
+  const urlsDinero = ["/es/grabacion-con-drone", "/es/servicios"];
   const urlsBien = [];
   for (const u of urlsDinero) {
     const r = await traer(BASE + u);
@@ -318,7 +325,26 @@ async function auditar() {
   // 100% aquí tampoco es matemáticamente alcanzable del todo; es una mejora
   // honesta sobre el ratio bruto, no una precisión perfecta.
   const imgsPortfolioTodas = [...(paginas.portfolio.html.matchAll(/<img[^>]*>/gi))].map((m) => m[0]);
-  const imgsPortfolio = imgsPortfolioTodas.filter((i) => !/aria-hidden=["']true["']/.test(i));
+  /**
+   * Excluir TODO lo que lleve `aria-hidden` se pasaba de frenada: 9 fotos de
+   * proyecto salen UNA sola vez, con aria-hidden y alt vacío, y no son copias
+   * de nada — son contenido marcado como decoración, que es justo el hallazgo
+   * que este criterio existe para enseñar. Sacarlas del denominador lo tapaba.
+   * Se excluye sólo la decoración real: el logotipo, y la copia apilada de una
+   * foto que YA sale en otro sitio con alt descriptivo.
+   */
+  const conAltDescriptivo = new Set();
+  for (const i of imgsPortfolioTodas) {
+    const alt = i.match(/\salt=["']([^"']+)["']/);
+    const file = i.match(/([a-z0-9-]+)\.(webp|jpg|jpeg|png|avif)/i);
+    if (alt && file) conAltDescriptivo.add(file[1]);
+  }
+  const imgsPortfolio = imgsPortfolioTodas.filter((i) => {
+    if (/logo\/|wordmark|mark-blanco/.test(i)) return false;          // logotipo
+    if (!/aria-hidden=["']true["']/.test(i)) return true;
+    const file = i.match(/([a-z0-9-]+)\.(webp|jpg|jpeg|png|avif)/i);
+    return !(file && conAltDescriptivo.has(file[1]));                 // copia apilada
+  });
   const descriptivas = imgsPortfolio.filter((i) => /\salt=["'][^"']+["']/.test(i)).length;
   const ratioDesc = imgsPortfolio.length ? descriptivas / imgsPortfolio.length : 0;
   check("contenido", "alt-portfolio", "Las miniaturas del portfolio tienen alt descriptivo",

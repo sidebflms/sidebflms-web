@@ -8,8 +8,15 @@ import { DEFAULT_LOCALE, LOCALES, ROUTES, type Locale } from "@/lib/routes";
  * exportada tiene que llamarse `proxy`. Ver
  * node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md
  *
- * Única responsabilidad: si la ruta no lleva prefijo de idioma, elegir uno a
- * partir de `Accept-Language` y redirigir. Todo lo demás vive en la app.
+ * Responsabilidad principal: si la ruta no lleva prefijo de idioma, elegir
+ * uno a partir de `Accept-Language` y redirigir. También viven aquí los
+ * 301 de verdad que `next.config.ts` no puede dar (ver más abajo) y el
+ * redirect de `www` a secas (SEO Fase 11, 2026-09-24): éste no se pudo
+ * poner en nginx, que es donde se pidió, porque el VPS no da acceso a su
+ * configuración —Hestia, sin root, ver `despliegue/README.md`—. Se
+ * resuelve aquí porque `www.sidebflms.com` ya llega hasta esta misma
+ * aplicación (comprobado: servía la web entera con 200, no un error de
+ * dominio desconocido).
  */
 
 const LOCALE_COOKIE = "sideb_locale";
@@ -52,6 +59,20 @@ function pickLocale(request: NextRequest): Locale {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // SEO Fase 11 (2026-09-24): www.sidebflms.com servía la web entera con un
+  // 200 en vez de redirigir —dos dominios sirviendo lo mismo reparten entre
+  // los dos los enlaces que reciba la web en vez de sumar a uno—. Se pidió
+  // en nginx; no se pudo, ver la nota de arriba del todo de este fichero.
+  // Conserva la ruta Y la query al redirigir, no sólo la portada.
+  const host = request.headers.get("host") ?? "";
+  if (host.startsWith("www.")) {
+    const destino = new URL(
+      `${pathname}${request.nextUrl.search}`,
+      `https://${host.slice(4)}`
+    );
+    return NextResponse.redirect(destino, 301);
+  }
+
   // SEO Fase 2 (2026-09-24): 301 DE VERDAD para las direcciones viejas de la
   // página de drone, no el 308 que manda Next con `redirects()` de
   // `next.config.ts` (`permanent: true` ahí siempre es 308: no hay forma de
@@ -65,6 +86,15 @@ export function proxy(request: NextRequest) {
       url.pathname = `/${locale}/${ROUTES.drone[locale]}`;
       return NextResponse.redirect(url, 301);
     }
+  }
+
+  // SEO Fase 11 (2026-09-24): mismo 301 de verdad para /es/services ->
+  // /es/servicios. Sólo el español cambió de slug —"services" en español
+  // no era ni siquiera español—, así que sólo hace falta esta entrada.
+  if (pathname === "/es/services") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/es/${ROUTES.services.es}`;
+    return NextResponse.redirect(url, 301);
   }
 
   const localeEnRuta = LOCALES.find(

@@ -168,6 +168,9 @@ const nextConfig: NextConfig = {
       { source: "/en/drone-filming-madrid", destination: "/en/ciudad-drone/madrid" },
       { source: "/es/grabacion-con-drone-barcelona", destination: "/es/ciudad-drone/barcelona" },
       { source: "/en/drone-filming-barcelona", destination: "/en/ciudad-drone/barcelona" },
+      // SEO Fase 11 (2026-09-24): "servicios", mismo mecanismo. El inglés no
+      // cambia de slug, así que no hace falta rewrite para "/en/services".
+      { source: "/es/servicios", destination: "/es/services" },
     ];
   },
 

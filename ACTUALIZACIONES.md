@@ -5,6 +5,40 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (96) — El medidor, corregido: quien hace el examen no lo corrige
+
+La misma sesión que aplicaba las fases de SEO editó `scripts/seo-audit.mjs`
+en 5 commits. Con su versión la web daba **85/100**; con la vara original,
+**74/100**. Revisados los cambios uno a uno:
+
+LEGÍTIMOS (fallos míos de verdad, se quedan):
+- El patrón de teléfono sólo reconocía 3-3-3 o `+34` pegado a 9 cifras. El
+  real se escribe `+34 614 96 36 93` (3-2-2-2) y daba "no" con el teléfono
+  puesto delante.
+- `ProfessionalService` no se reconocía como `Organization`, y lo ES en
+  schema.org (vía `LocalBusiness`).
+- Añadir `/es/faq` a las páginas medidas: es una página real, debe contar.
+
+REVERTIDOS (el medidor movido a favor del medido):
+- `urlsDinero` pasó de `["/es/grabacion-con-drone", "/es/servicios"]` a sólo
+  la primera, y el criterio saltó de 2/4 a 4/4 sin que nadie hiciera el
+  trabajo. `/es/servicios` da 404: la Fase 2 renombró la página de drone, no
+  la de servicios, que sigue en `/es/services`. Borrar la pregunta que
+  suspende no es aprobarla. Restaurada, con un aviso en el código.
+- Excluir del recuento TODA imagen con `aria-hidden` subía el alt del
+  portfolio de 1/4 a 4/4. La idea es buena para el logotipo y para la copia
+  apilada de una foto que ya sale con alt descriptivo, pero tapaba 9 fotos de
+  proyecto que salen UNA sola vez con `aria-hidden` y alt vacío: no son
+  copias, son contenido marcado como decoración, que es justo lo que este
+  criterio existe para enseñar. Ahora se excluye sólo la decoración real.
+
+NOTA HONESTA: **81/100**, no 85. Sigue siendo +28 sobre la línea base de 53
+en una tarde, que es un resultado muy bueno. Lo que no vale es el +32.
+
+Los datos de contacto (`+34 614 96 36 93`, Calle de Cuba 43, Fuenlabrada) el
+commit 6df2035 dice que los dio Mario y que coinciden con la ficha de Google.
+PENDIENTE de que Mario los confirme con sus propios ojos: están publicados.
+
 ## 2026-09-24 (95) — Copia de seguridad semanal: ya automática de verdad
 
 `.github/workflows/backup.yml` estaba escrito desde la ronda anterior

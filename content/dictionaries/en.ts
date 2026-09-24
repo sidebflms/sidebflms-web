@@ -542,11 +542,11 @@ export const en: Dictionary = {
       items: [
         {
           heading: "AESA categories",
-          body: "Registered as an unmanned aircraft (UAS) operator with Spain's aviation authority, AESA, since 2022, the year the company was founded, holding the four categories that cover almost any situation: A1 and A3 —open category flight, over or away from people depending on the aircraft—, A2 —open category flight close to people, which requires the certified pilot we have— and the two specific categories, STS-01 and STS-02, which allow flying in populated environments and beyond visual line of sight, with the safety measures each scenario calls for.",
+          body: "Registered as an unmanned aircraft (UAS) operator with Spain's aviation authority, AESA, since 2022, the year the company was founded, holding the four categories that cover almost any situation: A1 and A3 —open category flight, over or away from people depending on the aircraft—, A2 —open category flight close to people, which requires the certified pilot we have— and the two specific categories, STS-01 and STS-02, which allow flying in populated environments and beyond visual line of sight, with the safety measures each scenario calls for. Holding all four isn't paperwork for its own sake: it means never having to turn down a shot because the drone a particular framing needs —a light one to get close to people, a heavier, steadier one for a wide shot far from everyone— falls in a category we don't hold.",
         },
         {
           heading: "Liability insurance",
-          body: "The crew flies with liability insurance taken out for drone operations, as required by law for any commercial flight.",
+          body: "The crew flies with liability insurance taken out for drone operations, as required by law for any commercial flight. It isn't paperwork only shown if asked for: it covers third parties in case of an accident, and any serious venue or local council requires it before authorising the flight.",
         },
         {
           heading: "Flying over the public",
@@ -554,11 +554,11 @@ export const en: Dictionary = {
         },
         {
           heading: "Night flights",
-          body: "Outside daylight hours the drone needs approved position lights and, depending on the area, additional permits. That gets decided in pre-production, not on the night of the shoot.",
+          body: "Outside daylight hours the drone needs approved position lights and, depending on the area, additional permits. That gets decided in pre-production, not on the night of the shoot. For a production company that mostly works in live shows and festivals, this isn't the exception, it's the rule: almost everything we cover happens after dark.",
         },
         {
           heading: "Restricted zones",
-          body: "Near airports, military zones or restricted airspace, extra coordination with the relevant authorities is needed, and sometimes the answer is that flying isn't possible. It gets checked before a flight plan is signed off, not on the day of the event.",
+          body: "Near airports, military zones or restricted airspace, extra coordination with the relevant authorities is needed, and sometimes the answer is that flying isn't possible. It gets checked before a flight plan is signed off, not on the day of the event. A stadium in the middle of a city or a venue next to an airport aren't edge cases: they're exactly the kind of place we work in most, so that check is part of the regular process, not a last-minute surprise.",
         },
       ],
     },
@@ -599,11 +599,11 @@ export const en: Dictionary = {
       items: [
         {
           heading: "Film and advertising",
-          body: "The aerial shot as a production tool, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script.",
+          body: "The aerial shot as a production tool, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script: storyboarded and the route rehearsed before shoot day, not improvised at the end of the day once the light is going.",
         },
         {
           heading: "Events and festivals",
-          body: "This is where we fly the most: coverage of festivals like Monegros and DURO, clubs like Fabrik, and one-off jobs like the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site.",
+          body: "This is where we fly the most: coverage of festivals like Monegros and DURO, clubs like Fabrik, and one-off jobs like the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site. The shot isn't just a pretty postcard of the venue: it also works as communication material for the next edition, for sponsors who want to see the real turnout, and for the event's own channels the day after.",
         },
       ],
     },

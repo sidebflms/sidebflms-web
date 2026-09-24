@@ -595,11 +595,15 @@ export function TrabajoYoutube({
                       className={cn("absolute inset-0", !(reproducir && enPantalla) && "[&_img]:[animation-play-state:paused]")}
                       style={{ "--dur-foto": `${SEGUNDOS_POR_FOTO + 1}s` } as CSSProperties}
                     >
+                      {/* SEO Fase 11 (2026-09-24): mismo motivo que el
+                          equivalente móvil en trabajo-feed.tsx — las dos
+                          imágenes son la MISMA pieza de trabajo, no una
+                          decorativa y otra real. Mismo alt que la de
+                          delante, sin aria-hidden. */}
                       {/* eslint-disable-next-line @next/next/no-img-element -- WebP de 800, sólo de fondo desenfocado. */}
                       <img
                         src={galeria[fotoActual].peque}
-                        alt=""
-                        aria-hidden="true"
+                        alt={`${actual.title[locale]} · ${pad(fotoActual + 1)} / ${pad(galeria.length)}`}
                         decoding="async"
                         className={cn(
                           "foto-acerca absolute inset-0 h-full w-full scale-125 object-cover opacity-90 blur-2xl brightness-[0.6] saturate-150",

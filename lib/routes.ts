@@ -63,7 +63,11 @@ export const ROUTES = {
   // `content/ciudades-drone.ts`.
   droneMadrid: { es: "grabacion-con-drone-madrid", en: "drone-filming-madrid" },
   droneBarcelona: { es: "grabacion-con-drone-barcelona", en: "drone-filming-barcelona" },
-  services: { es: "services", en: "services" },
+  // SEO Fase 11 (2026-09-24): "servicios" sí es una palabra que se busca de
+  // verdad —a diferencia de "drone" a secas, "services" en español no era
+  // ni siquiera español—. Mismo mecanismo que `drone`: rewrite desde
+  // `next.config.ts`, sin duplicar la carpeta física `app/[locale]/services/`.
+  services: { es: "servicios", en: "services" },
   contact: { es: "contact", en: "contact" },
   // Su propia página desde la Fase 5 de SEO (2026-09-24): antes el contenido
   // sólo vivía dentro de Contacto, sin ruta propia que Google pudiera

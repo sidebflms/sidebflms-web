@@ -653,11 +653,11 @@ export const es = {
       items: [
         {
           heading: "Categorías AESA",
-          body: "Dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022, el año en que se fundó la productora, con las cuatro categorías que cubren casi cualquier situación: A1 y A3 —vuelo abierto, sobre o lejos de personas según el aparato—, A2 —vuelo abierto a corta distancia de personas, con el piloto certificado que exige— y las dos categorías específicas, STS-01 y STS-02, que permiten volar en entornos poblados y más allá del alcance visual, con las medidas de seguridad que cada escenario pide.",
+          body: "Dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022, el año en que se fundó la productora, con las cuatro categorías que cubren casi cualquier situación: A1 y A3 —vuelo abierto, sobre o lejos de personas según el aparato—, A2 —vuelo abierto a corta distancia de personas, con el piloto certificado que exige— y las dos categorías específicas, STS-01 y STS-02, que permiten volar en entornos poblados y más allá del alcance visual, con las medidas de seguridad que cada escenario pide. Tenerlas todas no es acumular papeleo por acumular: es no tener que rechazar un plano porque el dron que hace falta para ese encuadre concreto —uno ligero para acercarse a la gente, uno más pesado y estable para un plano abierto lejos de todos— cae en una categoría que no se tiene.",
         },
         {
           heading: "Seguro de responsabilidad civil",
-          body: "El equipo vuela con seguro de responsabilidad civil contratado para las operaciones con dron, como exige la normativa para cualquier vuelo comercial.",
+          body: "El equipo vuela con seguro de responsabilidad civil contratado para las operaciones con dron, como exige la normativa para cualquier vuelo comercial. No es un trámite que se enseña sólo si lo piden: cubre a terceros en caso de accidente, y cualquier recinto o ayuntamiento serio lo exige antes de autorizar el vuelo.",
         },
         {
           heading: "Vuelo sobre público",
@@ -665,11 +665,11 @@ export const es = {
         },
         {
           heading: "Vuelo nocturno",
-          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje.",
+          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje. Para una productora que trabaja sobre todo en directos y festivales esto no es una excepción, es la norma: casi todo lo que se cubre pasa de noche.",
         },
         {
           heading: "Zonas restringidas",
-          body: "Cerca de aeropuertos, zonas militares o espacio aéreo restringido hace falta coordinación adicional con las autoridades correspondientes, y a veces la respuesta es que no se puede volar. Se comprueba antes de dar un plan de vuelo por bueno, no el día del evento.",
+          body: "Cerca de aeropuertos, zonas militares o espacio aéreo restringido hace falta coordinación adicional con las autoridades correspondientes, y a veces la respuesta es que no se puede volar. Se comprueba antes de dar un plan de vuelo por bueno, no el día del evento. Un estadio en el centro de una ciudad o un recinto junto a un aeropuerto no son casos raros: son justo el tipo de sitio donde más se trabaja, así que esa comprobación es parte del proceso habitual, no un imprevisto de última hora.",
         },
       ],
     },
@@ -715,11 +715,11 @@ export const es = {
       items: [
         {
           heading: "Cine y publicidad",
-          body: "El plano aéreo como recurso de producción, no como un extra de última hora: para MITT MOTORS combinamos drone y cámara en tierra en una sola jornada de rodaje, con la moto de protagonista y el paisaje dando escala. Se planifica como cualquier otro plano del guion.",
+          body: "El plano aéreo como recurso de producción, no como un extra de última hora: para MITT MOTORS combinamos drone y cámara en tierra en una sola jornada de rodaje, con la moto de protagonista y el paisaje dando escala. Se planifica como cualquier otro plano del guion: storyboard y ensayo del recorrido antes del día de rodaje, no una toma improvisada al final de la jornada cuando ya queda poca luz.",
         },
         {
           heading: "Eventos y festivales",
-          body: "Es donde más volamos: coberturas de festivales como Monegros y DURO, discotecas como Fabrik, y encargos puntuales como el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto.",
+          body: "Es donde más volamos: coberturas de festivales como Monegros y DURO, discotecas como Fabrik, y encargos puntuales como el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto. El plano no es sólo la postal bonita del recinto: sirve también como material de comunicación para la siguiente edición, para patrocinadores que quieren ver el aforo real, y para las redes del propio evento al día siguiente.",
         },
       ],
     },

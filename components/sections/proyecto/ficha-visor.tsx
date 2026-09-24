@@ -401,8 +401,11 @@ export function FichaVisor({
           </>
         ) : imagen ? (
           <>
+            {/* SEO Fase 11 (2026-09-24): mismo motivo que trabajo-feed.tsx
+                y trabajo-youtube.tsx — las dos imágenes son la MISMA
+                pieza de trabajo, no una decorativa y otra real. */}
             {/* eslint-disable-next-line @next/next/no-img-element -- fondo desenfocado de la misma foto. */}
-            <img src={imagen} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl brightness-50" />
+            <img src={imagen} alt={titulo} className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl brightness-50" />
             {/* eslint-disable-next-line @next/next/no-img-element -- la foto entera, a su proporción. */}
             <img src={imagen} alt={titulo} fetchPriority="high" className="absolute inset-0 h-full w-full object-contain" />
           </>
