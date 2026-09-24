@@ -84,6 +84,9 @@ export const es = {
     // Tagline de marca fijo en inglés — idéntico en ES y EN, no se traduce.
     // 2 líneas · una frase corta por línea · ver REGLAS DE REDACCIÓN arriba
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
+    // El <h1> real de la portada (SEO, 2026-09-24): dice a qué nos dedicamos,
+    // el tagline de arriba no. Ver components/sections/hero-frame.tsx.
+    subtitulo: "Productora audiovisual y grabación con drone en España",
   },
 
   brands: {

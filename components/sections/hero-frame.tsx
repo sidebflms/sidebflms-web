@@ -59,7 +59,7 @@ export function HeroFrame({
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const headlineRef = useRef<HTMLParagraphElement>(null);
   const [reelOpen, setReelOpen] = useState(false);
   const closeReel = useCallback(() => setReelOpen(false), []);
 
@@ -226,14 +226,19 @@ export function HeroFrame({
             <div className="mb-5 px-2 text-center lg:absolute lg:top-1/2 lg:left-10 lg:mb-0 lg:-translate-y-[62%] lg:px-0 lg:text-left">
               {/* Cada frase en UNA línea también en móvil. «CAPTURE THE ENERGY.»
                   mide ~16× el cuerpo en Akira: a 4.9vw ocupa el 79 % del ancho,
-                  y el hueco del titular a 375 px es el 85 %. */}
-              <h1 ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
+                  y el hueco del titular a 375 px es el 85 %.
+
+                  SEO (2026-09-24): este bloque es el eslogan de marca, no dice a
+                  qué se dedica la empresa — por eso es un <p>, no un <h1>. El
+                  <h1> real, visible, va justo debajo con dict.hero.subtitulo. */}
+              <p ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
                 {dict.hero.headline.map((line) => (
                   <span key={line} className="block">
                     {line}
                   </span>
                 ))}
-              </h1>
+              </p>
+              <h1 className="label mt-2 text-smoke lg:mt-3">{dict.hero.subtitulo}</h1>
 
               <div data-intro="up" className="mt-8 hidden items-center gap-6 lg:flex">
                 <button

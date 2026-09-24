@@ -82,6 +82,9 @@ export const en: Dictionary = {
     // Fixed English tagline — identical in ES and EN by design, not translated.
     // 2 lines · one short sentence per line · see note at the top of this file
     headline: ["CAPTURE THE ENERGY.", "DELIVER THE STORY."],
+    // The homepage's real <h1> (SEO, 2026-09-24): says what we do, the
+    // tagline above doesn't. See components/sections/hero-frame.tsx.
+    subtitulo: "Audiovisual production and drone filming in Spain",
   },
 
   brands: {
