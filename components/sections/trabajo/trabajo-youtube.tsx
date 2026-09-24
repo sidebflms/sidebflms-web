@@ -1006,10 +1006,17 @@ export function TrabajoYoutube({
                             )}
                           >
                             {ligero.poster && (
+                              // SEO Fase 7 (2026-09-24): esta miniatura es la
+                              // ficha del proyecto en la lista, no decoración
+                              // de interfaz -antes llevaba alt="" y así no
+                              // salía en Google Imágenes-. El texto sale del
+                              // título y la disciplina, igual que ya se lee
+                              // al lado en pantalla (línea 1070 de este
+                              // mismo fichero).
                               // eslint-disable-next-line @next/next/no-img-element -- miniatura WebP ya a su tamaño.
                               <img
                                 src={ligero.poster}
-                                alt=""
+                                alt={`${p.title[locale]} — ${disciplinas(p, copy)}`}
                                 loading="lazy"
                                 className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                               />
