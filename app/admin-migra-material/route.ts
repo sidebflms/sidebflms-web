@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getPayload, type Payload } from "payload";
@@ -31,6 +31,29 @@ import { EQUIPO } from "@/content/team";
  *
  * Pide la misma clave que `/admin-carga`, y por lo mismo: machaca contenido
  * y sube ficheros, así que sin la clave responde 404.
+ *
+ * ── LO QUE SE ENCONTRÓ EL 2026-09-24, REVISANDO LA WEB ENTERA ────────────
+ * La primera versión de esta migración sólo seguía los campos explícitos de
+ * `content/projects.ts` —`video`, `poster`, `vertical`, `gallery`— y subió
+ * 110 de los 199 ficheros de `public/media`. Los otros 89 no están en NINGÚN
+ * campo: son las versiones LIGERAS que la propia web construye por nombre de
+ * fichero, no por dato guardado —`hero-frame.tsx`, `home-sliders.tsx`,
+ * `ficha-vecinos.tsx` y `services/page.tsx` hacen
+ * `video.replace(/\.mp4$/, "-cinta.mp4")` sobre la ruta del vídeo principal
+ * para las cintas de la portada, y `medios.ts` hace lo mismo con
+ * `-800.webp`/`.webp` para la galería de fotos—. Con rutas de texto sobre
+ * `public/media` esos ficheros SIEMPRE estaban ahí, con ese nombre exacto,
+ * porque `scripts/cinta-web.sh` y `scripts/pieza-web.sh` los generan como
+ * hermanos del original. Con Media, si nadie los sube, esa convención de
+ * nombre apunta a un documento que no existe: 500 en cada cinta y cada foto
+ * de galería de la web pública, sin que ninguna página fallara al compilar
+ * —el material se pide desde el navegador, no en el servidor—. Se encontró
+ * pidiendo cada URL de material de las 66 páginas reales, una por una, no
+ * leyendo el código.
+ *
+ * La solución no es perseguir cada patrón de nombre uno a uno: es subir
+ * TODO lo que haya en `public/media`, lo mencione un campo o no. Es lo que
+ * hace `subeCarpetaEntera` al final de esta ruta.
  */
 
 const RAIZ_PUBLICO = path.resolve(process.cwd(), "public");
@@ -81,6 +104,41 @@ async function subeSiHaceFalta(
   });
   cache.set(rutaWeb, creado.id);
   return creado.id;
+}
+
+/**
+ * Sube TODO fichero de `public/media` que todavía no esté en Media, lo
+ * referencie o no un campo de `content/projects.ts`/`content/team.ts`. Ver
+ * la nota de arriba: sin esto, las versiones «-cinta»/«-800»/«.webp» que la
+ * web construye por convención de nombre apuntan a nada.
+ *
+ * `recursive: true` de `readdir` (Node 20+) evita andar la carpeta a mano;
+ * el servidor corre Node 26.
+ */
+async function subeCarpetaEntera(
+  payload: Payload,
+  cache: Map<string, number>
+): Promise<{ subidosAhora: number; totalEnCarpeta: number }> {
+  const raizMedia = path.join(RAIZ_PUBLICO, "media");
+  const entradas = await readdir(raizMedia, { recursive: true, withFileTypes: true });
+
+  let subidosAhora = 0;
+  let totalEnCarpeta = 0;
+  for (const entrada of entradas) {
+    if (!entrada.isFile()) continue;
+    totalEnCarpeta += 1;
+
+    // `entrada.parentPath`/`entrada.path` es absoluta; se necesita relativa a
+    // `public/` para llamar a `subeSiHaceFalta` igual que con los demás campos.
+    const absoluta = path.join(entrada.parentPath ?? raizMedia, entrada.name);
+    const rutaWeb = "/" + path.relative(RAIZ_PUBLICO, absoluta).split(path.sep).join("/");
+
+    const antesDeSubir = cache.size;
+    await subeSiHaceFalta(payload, rutaWeb, cache);
+    if (cache.size > antesDeSubir) subidosAhora += 1;
+  }
+
+  return { subidosAhora, totalEnCarpeta };
 }
 
 export async function POST(peticion: Request): Promise<Response> {
@@ -152,10 +210,15 @@ export async function POST(peticion: Request): Promise<Response> {
     equipoEnlazado += 1;
   }
 
+  // La pasada final: todo lo que quede en `public/media` sin subir, aunque
+  // ningún campo lo mencione. Ver la nota de arriba de esta ruta.
+  const { subidosAhora, totalEnCarpeta } = await subeCarpetaEntera(payload, cache);
+
   return Response.json({
     ficherosDistintosSubidosOEncontrados: cache.size,
     proyectos: `${proyectosEnlazados} de ${PROJECTS.length} enlazados.`,
     equipo: `${equipoEnlazado} de ${EQUIPO.length} enlazados.`,
+    carpetaCompleta: `${subidosAhora} nuevos de ${totalEnCarpeta} ficheros en public/media (el resto ya estaban).`,
     avisos,
   });
 }
