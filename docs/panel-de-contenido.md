@@ -514,6 +514,40 @@ de Trabajo con su vídeo reproduciéndose, la rejilla de Nosotros con las once
 fotos, y el campo de subida del panel enseñando la miniatura, el peso y las
 dimensiones de la foto.
 
+### El fallo que la comprobación de arriba no pilló (2026-09-24, un día después)
+
+Las «934 referencias de material comparadas» de más arriba comprobaban que
+el NOMBRE de cada fichero coincidiera entre la versión de ficheros y la de
+la base — no que esa URL respondiera 200. Y coincidía siempre, porque las
+dos versiones construyen el mismo nombre con la misma fórmula. Lo que esa
+comprobación no podía ver: varios componentes —`home-sliders.tsx`,
+`hero-frame.tsx`, `ficha-vecinos.tsx`, `services/page.tsx`, `medios.ts`—
+no leen la versión ligera de un campo guardado, la CONSTRUYEN por el nombre
+del fichero (`video.replace(/\.mp4$/, "-cinta.mp4")`). Con rutas de texto
+sobre `public/media` eso bastaba: los scripts del Mac generan esa versión
+como hermana del original, siempre en el mismo sitio. Con Media, si nadie
+sube ese hermano como su propio documento, el nombre apunta a nada.
+
+El resultado: 72 de 182 ficheros de material daban 500 al navegador del
+visitante —las tres cintas de la portada, la tira de proyectos de cada
+ficha, el fondo de Drone, las galerías de fotos— desde el mismo día que se
+publicó la Fase 3, sin que ninguna página fallara al compilar ni al
+desplegar. Se encontró cuando Mario pidió revisar la web entera antes de
+publicarla y se comprobó, por primera vez, que cada URL de material
+RESPONDIERA, no sólo que se llamara igual.
+
+Arreglado en `app/admin-migra-material/route.ts`: una pasada final,
+`subeCarpetaEntera`, que sube TODO lo que haya en `public/media` aunque
+ningún campo lo mencione, en vez de perseguir cada patrón de nombre uno a
+uno. Repetida la migración en producción: 89 ficheros nuevos —exactamente
+los que faltaban—, y las 182 URLs de las 66 páginas reales comprobadas otra
+vez, ahora sí una a una contra el proceso real (con un túnel SSH, no la web
+pública) y con el navegador de verdad, no sólo `curl`: 0 fallos.
+
+**La lección, para la próxima vez que algo se mida por nombre de fichero:**
+comparar que dos versiones construyen el mismo NOMBRE no es lo mismo que
+comprobar que ese nombre responde. Hace falta lo segundo.
+
 ### Lo que queda
 
 - **Copia de seguridad de `media/`**, además de la de la base (ver el punto

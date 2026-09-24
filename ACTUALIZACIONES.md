@@ -5,6 +5,78 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (79) — Grave: 72 de 182 ficheros de material daban 500
+
+Mario, antes de publicar: «revisa todo todo y que todo funcione». No fue una
+revisión de pantalla: se pidió, una por una, la URL de cada página real (66)
+y de cada fichero de material que esas páginas referencian (182), contra el
+proceso de producción. Encontró un fallo real que ninguna comprobación
+anterior de la Fase 3 había pillado.
+
+### Qué pasaba
+
+Las tres cintas de la portada, la tira de «otros proyectos» de cada ficha, el
+fondo de la sección Drone y las galerías de fotos (FITZ, Monegros fotografía)
+daban **500 al navegador del visitante** en todas y cada una. Ninguna página
+fallaba al compilar ni al desplegar —por eso no se había visto—: el material
+lo pide el navegador después de cargar la página, no el servidor al
+generarla.
+
+### La causa
+
+`home-sliders.tsx`, `hero-frame.tsx`, `ficha-vecinos.tsx`, `services/page.tsx`
+y `medios.ts` construyen las versiones ligeras —cintas de 854×480 mudas,
+fotos en `.webp` a 800/1600— **por el nombre del fichero**, no por un dato
+guardado: `video.replace(/\.mp4$/, "-cinta.mp4")`. Con rutas de texto sobre
+`public/media` eso funcionaba siempre, porque `scripts/cinta-web.sh` y
+`scripts/pieza-web.sh` generan esas versiones como hermanas del original en
+el mismo sitio. Con la colección Media de la Fase 3, esa convención de
+nombre deja de bastar: si nadie sube el hermano como su propio documento, el
+nombre apunta a nada.
+
+`/admin-migra-material` sólo seguía los campos explícitos de
+`content/projects.ts` —`video`, `poster`, `vertical`, `gallery`—, así que
+subió 110 de los 199 ficheros y dejó fuera justo los 89 que ningún campo
+menciona: las cintas y las galerías en `.webp`.
+
+### El arreglo
+
+`app/admin-migra-material/route.ts` suma una pasada final,
+`subeCarpetaEntera`: sube TODO lo que haya en `public/media`, lo mencione un
+campo o no. No persigue cada patrón de nombre —«-cinta», «-800», «.webp»—
+uno a uno; sube la carpeta entera y deja que la convención de nombre
+encuentre su fichero.
+
+### Cómo se comprobó
+
+Local primero, contra el Postgres desechable: los 182 ficheros de material
+de las 66 páginas reales, uno a uno, 0 fallos. Visual en el navegador: las
+tres cintas de la portada y la galería de FITZ con imágenes de verdad, no
+sólo el código 200. Sólo entonces, en producción: migración repetida (89
+ficheros nuevos, exactamente los que faltaban), y la misma comprobación de
+las 66 páginas y los 182 ficheros repetida contra el proceso real —un túnel
+SSH al puerto de Node, no la web pública, para no depender de la contraseña
+de Apache—, con el navegador real y su consola, no sólo `curl`: 0 fallos.
+
+**Un aviso, no un fallo persistente:** durante la migración en producción
+salieron 8 líneas `ERROR: File … is missing on the disk` en el registro,
+todas de ficheros «-cinta» justo en el momento de subirse. Comprobado después
+de la migración: los 199 ficheros están en disco, las 199 filas están en la
+base, y las 182 URLs de las páginas reales responden 200. Es una carrera
+—Payload comprobando un fichero en el instante entre crear la fila y
+terminar de escribirlo— que se resuelve sola, no una corrupción. Anotado por
+si vuelve a aparecer en una migración futura y hace falta reconocerlo rápido.
+
+### Qué hacer al actualizar
+
+En el servidor, si alguna vez se repite `/admin-migra-material` desde cero
+—una base nueva, un disco nuevo—, esta versión ya sube la carpeta entera:
+no hace falta ningún paso extra.
+
+---
+
+---
+
 ## 2026-09-24 (78) — Vista previa en vivo en el panel
 
 Mario, tras ver el panel de la Fase 3: «lo suyo sería que en el panel de la
