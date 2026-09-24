@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { ProcesoEscaleta } from "@/components/sections/proceso-movil";
-import { FOTO_ETAPA } from "@/content/etapas-fotos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { ICONO_ETAPA } from "@/lib/etapas";
 import { gsap, prefersReducedMotion, registerGsap, type ScrollTrigger } from "@/lib/gsap";
@@ -47,7 +46,14 @@ const ONDA = Array.from({ length: 180 }, (_, i) =>
 );
 const SEGUNDOS_TOTALES = 4 * 60; // lo que marca el timecode al final de la línea
 
-export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
+export function ProcesoTimeline({
+  dict,
+  fotoEtapa,
+}: {
+  dict: Dictionary;
+  /** Del panel (Global «Cómo lo hacemos»), plan B en content/etapas-fotos.ts. */
+  fotoEtapa: Record<string, string | null>;
+}) {
   const etapas = dict.services.stages;
   const largos = etapas.length === LARGO.length ? LARGO : etapas.map(() => 1 / etapas.length);
   const inicios = largos.map((_, i) => largos.slice(0, i).reduce((a, b) => a + b, 0));
@@ -163,7 +169,7 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
 
       {/* Móvil y tableta: la escaleta vertical. */}
       <div className="lg:hidden">
-        <ProcesoEscaleta dict={dict} />
+        <ProcesoEscaleta dict={dict} fotoEtapa={fotoEtapa} />
       </div>
 
       {/* Escritorio: visor y línea de tiempo. */}
@@ -180,7 +186,7 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
                 en la siguiente sin pasar por negro. Un respiro de escala mínimo
                 (1.02 → 1) para que no quede plano. */}
             {etapas.map((e, i) => {
-              const f = FOTO_ETAPA[e.number];
+              const f = fotoEtapa[e.number];
               const visible = i === activo;
               return (
                 <div
@@ -271,7 +277,7 @@ export function ProcesoTimeline({ dict }: { dict: Dictionary }) {
                 cada etapa se lea dentro del clip. */}
             <div className="relative h-[5.5rem]">
               {etapas.map((et, i) => {
-                const f = FOTO_ETAPA[et.number];
+                const f = fotoEtapa[et.number];
                 const sel = i === activo;
                 return (
                   <button

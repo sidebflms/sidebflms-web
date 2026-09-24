@@ -7,6 +7,7 @@ import { CIFRAS_CON_DATO, type Cifra } from "@/content/cifras";
 import { CLIENTES } from "@/content/clientes";
 import { en as diccionarioEn } from "@/content/dictionaries/en";
 import { es as diccionarioEs } from "@/content/dictionaries/es";
+import { FOTO_ETAPA as FOTO_ETAPA_FICHERO } from "@/content/etapas-fotos";
 import { PROJECTS, type Category, type Project } from "@/content/projects";
 import { EQUIPO, type Miembro } from "@/content/team";
 import { conBase } from "@/lib/base";
@@ -325,6 +326,36 @@ export async function traeClientes(): Promise<string[]> {
   } catch (error) {
     avisa("los clientes", error);
     return CLIENTES;
+  }
+}
+
+/**
+ * Las cuatro fotos de «Cómo lo hacemos» (Servicios), una por etapa. Mismo
+ * `Record<string, string | null>` que devolvía `FOTO_ETAPA` de
+ * `content/etapas-fotos.ts` —ese fichero sigue siendo el plan B—, así que
+ * los componentes que las pintan (`proceso-timeline.tsx`, `proceso-movil.tsx`)
+ * sólo cambian de dónde la reciben, no cómo la usan.
+ */
+export async function traeEtapasFotos(): Promise<Record<string, string | null>> {
+  if (!HAY_BASE) return FOTO_ETAPA_FICHERO;
+  try {
+    const payload = await getPayload({ config });
+    const doc = (await payload.findGlobal({ slug: "etapas", depth: 1 })) as unknown as Documento;
+    const fotos = {
+      "01": urlDeMedia(doc.etapa01),
+      "02": urlDeMedia(doc.etapa02),
+      "03": urlDeMedia(doc.etapa03),
+      "04": urlDeMedia(doc.etapa04),
+    };
+    // Las cuatro a null es el Global sin inicializar (antes de la primera
+    // `admin-carga`), no una decisión de dejar las cuatro etapas sin foto:
+    // eso sí es un caso real —se pinta el número— pero se distingue por
+    // venir de la base con AL MENOS una puesta.
+    const algunaConFoto = Object.values(fotos).some((v) => v !== null);
+    return algunaConFoto ? fotos : FOTO_ETAPA_FICHERO;
+  } catch (error) {
+    avisa("las fotos de las etapas", error);
+    return FOTO_ETAPA_FICHERO;
   }
 }
 

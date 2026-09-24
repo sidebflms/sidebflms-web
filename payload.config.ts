@@ -5,7 +5,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
-import { Cifras, Clientes, Equipo, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
+import { Cifras, Clientes, Equipo, EtapasFotos, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
 import { isLocale, path as rutaDe } from "./lib/routes.ts";
 
 /**
@@ -88,7 +88,7 @@ export default buildConfig({
   },
 
   collections: [Usuarios, Proyectos, Equipo, Preguntas, Media],
-  globals: [Cifras, Clientes, Textos],
+  globals: [Cifras, Clientes, Textos, EtapasFotos],
 
   /**
    * VISTA PREVIA EN VIVO: la pestaña «Live Preview» de cada ficha enseña la
@@ -131,7 +131,7 @@ export default buildConfig({
     user: "usuarios",
     livePreview: {
       collections: ["proyectos", "equipo", "preguntas"],
-      globals: ["cifras", "clientes", "textos"],
+      globals: ["cifras", "clientes", "textos", "etapas"],
       url: ({ collectionConfig, globalConfig, data, locale, req }) => {
         const idioma = isLocale(locale.code) ? locale.code : "es";
 
@@ -153,6 +153,7 @@ export default buildConfig({
           if (globalConfig?.slug === "cifras") return rutaDe(idioma, "home");
           if (globalConfig?.slug === "clientes") return rutaDe(idioma, "portfolio");
           if (globalConfig?.slug === "textos") return rutaDe(idioma, "home");
+          if (globalConfig?.slug === "etapas") return rutaDe(idioma, "services");
           return rutaDe(idioma, "home");
         })();
 

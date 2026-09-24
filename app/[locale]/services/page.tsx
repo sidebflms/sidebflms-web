@@ -6,7 +6,7 @@ import { ContactCta } from "@/components/sections/contact-cta";
 import { ProcesoTimeline } from "@/components/sections/proceso-timeline";
 import { ServiciosVisor, type VideoDrone } from "@/components/sections/servicios-visor";
 import { Reveal } from "@/components/motion/reveal";
-import { traeProyectos } from "@/lib/contenido";
+import { traeEtapasFotos, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale } from "@/lib/routes";
@@ -26,6 +26,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
 
   const dict = await getDictionary(locale);
   const proyectos = await traeProyectos();
+  const fotoEtapa = await traeEtapasFotos();
 
   // El bloque de Drone lleva de fondo la cinta de la pieza de drone destacada
   // (la del showpiece), o la primera pieza de drone con vídeo.
@@ -72,7 +73,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
       <ServiciosVisor dict={dict} locale={locale} videoDrone={videoDrone} />
 
       {/* CÓMO LO HACEMOS — la línea de tiempo de montaje, ver el componente. */}
-      <ProcesoTimeline dict={dict} />
+      <ProcesoTimeline dict={dict} fotoEtapa={fotoEtapa} />
 
       <ContactCta
         locale={locale}

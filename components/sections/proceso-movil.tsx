@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { IconoServicio } from "@/components/glass/iconos-servicio";
-import { FOTO_ETAPA } from "@/content/etapas-fotos";
 import type { Dictionary } from "@/lib/dictionaries";
 import { ICONO_ETAPA } from "@/lib/etapas";
 import { gsap, prefersReducedMotion, registerGsap } from "@/lib/gsap";
@@ -30,7 +29,13 @@ type Etapa = Dictionary["services"]["stages"][number];
    cada etapa se enciende cuando la línea llega a ella.
    ========================================================================== */
 
-export function ProcesoEscaleta({ dict }: { dict: Dictionary }) {
+export function ProcesoEscaleta({
+  dict,
+  fotoEtapa,
+}: {
+  dict: Dictionary;
+  fotoEtapa: Record<string, string | null>;
+}) {
   const etapas = dict.services.stages;
   const listaRef = useRef<HTMLOListElement>(null);
   const rellenoRef = useRef<HTMLSpanElement>(null);
@@ -90,7 +95,7 @@ export function ProcesoEscaleta({ dict }: { dict: Dictionary }) {
               {etapa.number}
             </span>
             <article className="glass overflow-hidden rounded-[1.25rem] p-2">
-              <FotoEtapa etapa={etapa} className="aspect-[21/9] rounded-[0.9rem]" />
+              <FotoEtapa etapa={etapa} fotoEtapa={fotoEtapa} className="aspect-[21/9] rounded-[0.9rem]" />
               <TextoEtapa etapa={etapa} dict={dict} className="p-3" />
             </article>
           </li>
@@ -102,8 +107,16 @@ export function ProcesoEscaleta({ dict }: { dict: Dictionary }) {
 
 /* ── Piezas de cada etapa ─────────────────────────────────────────────── */
 
-function FotoEtapa({ etapa, className }: { etapa: Etapa; className?: string }) {
-  const foto = FOTO_ETAPA[etapa.number];
+function FotoEtapa({
+  etapa,
+  fotoEtapa,
+  className,
+}: {
+  etapa: Etapa;
+  fotoEtapa: Record<string, string | null>;
+  className?: string;
+}) {
+  const foto = fotoEtapa[etapa.number];
   return (
     <div className={cn("relative overflow-hidden bg-ink-900", className)}>
       {foto ? (

@@ -97,11 +97,13 @@ export interface Config {
     cifras: Cifra;
     clientes: Cliente;
     textos: Texto;
+    etapas: Etapa;
   };
   globalsSelect: {
     cifras: CifrasSelect<false> | CifrasSelect<true>;
     clientes: ClientesSelect<false> | ClientesSelect<true>;
     textos: TextosSelect<false> | TextosSelect<true>;
+    etapas: EtapasSelect<false> | EtapasSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -575,6 +577,21 @@ export interface Texto {
   createdAt?: string | null;
 }
 /**
+ * Una foto por etapa del proceso, en Servicios. Vacía: se pinta el número en su lugar.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "etapas".
+ */
+export interface Etapa {
+  id: number;
+  etapa01?: (number | null) | Media;
+  etapa02?: (number | null) | Media;
+  etapa03?: (number | null) | Media;
+  etapa04?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cifras_select".
  */
@@ -618,6 +635,19 @@ export interface TextosSelect<T extends boolean = true> {
   aboutWhereBody?: T;
   faqIntro?: T;
   droneIntro?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "etapas_select".
+ */
+export interface EtapasSelect<T extends boolean = true> {
+  etapa01?: T;
+  etapa02?: T;
+  etapa03?: T;
+  etapa04?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

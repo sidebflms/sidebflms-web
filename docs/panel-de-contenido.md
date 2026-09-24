@@ -1,9 +1,9 @@
 # Un panel para editar la web sin tocar código
 
-**Estado: Fase 3 EN PRODUCCIÓN** (2026-09-24). Proyectos, equipo, cifras,
-clientes, preguntas frecuentes, las entradillas de página y ahora también el
-material (fotos y vídeos) se editan en `sidebflms.com/admin`. Lo hecho y lo
-aprendido, al final (puntos 11 a 14).
+**Estado: Fase 4 EN PRODUCCIÓN** (2026-09-24). Proyectos, equipo, cifras,
+clientes, preguntas frecuentes, las entradillas de página, el material
+(fotos y vídeos) y ahora también los borradores se editan en
+`sidebflms.com/admin`. Lo hecho y lo aprendido, al final (puntos 11 a 17).
 
 ---
 
@@ -628,3 +628,99 @@ actualizándose solas al guardar sin tocar el iframe.
 Vista previa reactiva de verdad (letra a letra, antes de guardar) si algún
 día compensa el esfuerzo de convertir los componentes de contenido a piezas
 de cliente. No es poco trabajo, y esto ya resuelve lo que se pedía.
+
+---
+
+## 16. Fase 4: borradores en Proyectos (2026-09-24)
+
+La Fase 4 del plan original (punto 8) quedó marcada «opcional»: poder dejar
+una ficha a medias sin que salga en la web, y verla antes de publicar.
+Hecha el mismo día que se abrió la web al público, junto con las otras
+mejoras de este apartado.
+
+### Qué hay
+
+Cada ficha de Proyecto tiene ahora «Save Draft» además de «Publish
+changes». Guardada como borrador, la web pública sigue enseñando la última
+versión publicada —o nada, si es una ficha nueva que nunca se publicó—
+hasta que se le da a publicar. La vista previa en vivo (punto 15) enseña el
+borrador igualmente: la URL del iframe lleva `?borrador=1` cuando la ficha
+no está publicada.
+
+### La sorpresa que costó encontrar probando de verdad
+
+La asunción razonable —y equivocada— era que `payload.find()` sin pasar
+`draft: true` ya filtraba sola por `_status: published`. No es así: sin
+ese parámetro, Payload consulta la tabla principal tal cual, con
+borradores incluidos, y sólo `draft: true` cambia el comportamiento (a
+traer la ÚLTIMA versión, sea borrador o no). Se encontró creando de
+verdad una ficha en borrador y viéndola aparecer en el portfolio público,
+en la portada y en el sitemap sin haberla publicado. Arreglado filtrando
+`_status: { equals: 'published' }` a mano en la consulta de Proyectos
+(`enDosIdiomas` en `lib/contenido.ts`); Equipo y Preguntas no llevan
+`_status` porque no tienen `versions.drafts`, así que no les afecta.
+
+### Cómo se enseña un borrador sin abrir un agujero
+
+`traeProyectoVistaPrevia` (`lib/contenido.ts`) es la única función que lee
+con `draft: true`, y sólo se llama desde la ficha pública cuando la URL
+lleva `?borrador=1`. Antes de devolver nada comprueba `payload.auth` sobre
+las cabeceras de la propia petición: la misma cookie de sesión con la que
+se entra a `/admin`, que el iframe de la vista previa ya lleva por ser el
+mismo origen. Sin sesión válida, se comporta exactamente igual que sin el
+parámetro —comprobado con `curl` sin cookies contra una ficha real con
+`?borrador=1`: respuesta idéntica a sin el parámetro—.
+
+### Otra migración con el mismo tropiezo que la Fase 3
+
+`ADD COLUMN "_status" ... DEFAULT 'draft'` se aplica también a las filas
+YA EXISTENTES —Postgres rellena así toda columna nueva con su valor por
+defecto—. Sin arreglarlo, los 23 proyectos ya publicados se habrían
+quedado en `_status = 'draft'` en el instante de aplicar la migración, y
+habrían desaparecido de la web pública hasta publicarlos uno a uno.
+Reproducido de verdad —`ADD COLUMN` de prueba, `SELECT ... GROUP BY`,
+`DROP COLUMN`— contra una copia de la base con los 23 proyectos reales
+antes de tocar producción, y arreglado con un `UPDATE ... SET _status =
+'published'` explícito para las filas existentes.
+
+### Cómo se comprobó
+
+Contra el mismo Postgres de usar y tirar, con los 23 proyectos reales
+cargados: crear una ficha en borrador, comprobar con el Local API que una
+consulta normal no la trae (0) y una con `draft: true` sí (1), publicarla,
+comprobar que ya aparece, borrarla. El ciclo `migrate` / `migrate:down` /
+`migrate` de la migración, probado entero. Y en producción, tras
+desplegar: los 23 proyectos siguen en `_status = published` y la web
+pública sigue sirviendo exactamente los mismos 23 enlaces en Trabajo.
+
+---
+
+## 17. Las cuatro fotos de «Cómo lo hacemos» (2026-09-24)
+
+Un detalle menor que quedó fuera de las fases numeradas: las cuatro fotos
+del proceso en Servicios (`content/etapas-fotos.ts`) seguían fijas en
+código. Nuevo Global, «Cómo lo hacemos (fotos)» (slug `etapas`), con un
+campo de subida por etapa.
+
+### Por qué tocó dos componentes de cliente
+
+`proceso-timeline.tsx` y `proceso-movil.tsx` importaban `FOTO_ETAPA`
+directamente del módulo —no lo recibían por prop—, a diferencia del resto
+del contenido del panel, que siempre llega desde una página servidor. Como
+son piezas de cliente (`"use client"`, por las animaciones de GSAP), no
+pueden hacer la consulta ellas mismas. Se cambió a que la reciban como
+prop `fotoEtapa` desde `app/[locale]/services/page.tsx`, que sí es
+servidor y ya llamaba a `traeProyectos()` del mismo modo.
+
+### Cómo se distingue «vacío porque nadie lo ha tocado» de «las cuatro sin
+foto a propósito»
+
+Con las cuatro etapas a `null` no se sabe si el Global nunca se inicializó
+o si de verdad se quiere ver el número en vez de una foto en las cuatro
+—eso es un caso real y válido, ver `content/etapas-fotos.ts`—. El criterio:
+si viene de la base con AL MENOS una etapa puesta, se confía en la base
+tal cual (nulls incluidos); si las cuatro son `null`, se usa el fichero.
+`/admin-migra-material` enlaza las cuatro fotos que ya existían en Media
+—migradas ya en la Fase 3, no hace falta volver a subirlas— sólo si el
+Global está completamente vacío, para no pisar un cambio que Mario ya
+hubiera hecho desde el panel.

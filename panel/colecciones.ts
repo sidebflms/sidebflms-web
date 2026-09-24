@@ -409,6 +409,29 @@ export const Clientes: GlobalConfig = {
   ],
 };
 
+/**
+ * Las cuatro fotos de «Cómo lo hacemos» (Servicios), una por etapa del
+ * proceso. Hasta el 2026-09-24 vivían fijas en `content/etapas-fotos.ts`
+ * —el mismo fichero sigue siendo el plan B, ver `lib/contenido.ts`—. Sin
+ * `required`: una etapa sin foto se pinta con su número sobre la luz
+ * naranja en vez de foto, que es lo que ya hacía el fichero con `null`.
+ */
+export const EtapasFotos: GlobalConfig = {
+  slug: "etapas",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Cómo lo hacemos (fotos)",
+  admin: {
+    group: "Contenido",
+    description: "Una foto por etapa del proceso, en Servicios. Vacía: se pinta el número en su lugar.",
+  },
+  fields: [
+    { name: "etapa01", label: "01 · Preproducción", type: "upload", relationTo: "media" },
+    { name: "etapa02", label: "02 · Rodaje en directo", type: "upload", relationTo: "media" },
+    { name: "etapa03", label: "03 · Cobertura aérea", type: "upload", relationTo: "media" },
+    { name: "etapa04", label: "04 · Postproducción", type: "upload", relationTo: "media" },
+  ],
+};
+
 export const Textos: GlobalConfig = {
   slug: "textos",
   hooks: { afterChange: [avisaALaWeb] },

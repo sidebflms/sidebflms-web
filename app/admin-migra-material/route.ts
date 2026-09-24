@@ -6,6 +6,7 @@ import config from "@payload-config";
 
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
+import { FOTO_ETAPA } from "@/content/etapas-fotos";
 
 /**
  * LA MIGRACIÓN DEL MATERIAL QUE YA EXISTÍA (Fase 3, 2026-09-24).
@@ -210,6 +211,37 @@ export async function POST(peticion: Request): Promise<Response> {
     equipoEnlazado += 1;
   }
 
+  // El Global de las cuatro fotos de «Cómo lo hacemos» (Fase 4-bis,
+  // 2026-09-24): sólo se enlaza aquí una vez, no se pisa si ya hay algo —a
+  // diferencia de proyectos/equipo, este Global no tiene «huecos de
+  // relleno» que distinguir, y sobrescribir una foto que Mario ya cambió
+  // desde el panel por la del fichero sería justo lo contrario de lo que se
+  // quiere.
+  const etapasActuales = (await payload.findGlobal({ slug: "etapas", depth: 0 })) as unknown as Record<
+    string,
+    unknown
+  >;
+  const etapasYaTienenAlgo = ["etapa01", "etapa02", "etapa03", "etapa04"].some(
+    (campo) => etapasActuales[campo] != null
+  );
+  let etapasEnlazadas = false;
+  if (!etapasYaTienenAlgo) {
+    const etapa01 = await subeSiHaceFalta(payload, FOTO_ETAPA["01"], cache);
+    const etapa02 = await subeSiHaceFalta(payload, FOTO_ETAPA["02"], cache);
+    const etapa03 = await subeSiHaceFalta(payload, FOTO_ETAPA["03"], cache);
+    const etapa04 = await subeSiHaceFalta(payload, FOTO_ETAPA["04"], cache);
+    await payload.updateGlobal({
+      slug: "etapas",
+      data: {
+        ...(etapa01 ? { etapa01 } : {}),
+        ...(etapa02 ? { etapa02 } : {}),
+        ...(etapa03 ? { etapa03 } : {}),
+        ...(etapa04 ? { etapa04 } : {}),
+      },
+    });
+    etapasEnlazadas = true;
+  }
+
   // La pasada final: todo lo que quede en `public/media` sin subir, aunque
   // ningún campo lo mencione. Ver la nota de arriba de esta ruta.
   const { subidosAhora, totalEnCarpeta } = await subeCarpetaEntera(payload, cache);
@@ -218,6 +250,7 @@ export async function POST(peticion: Request): Promise<Response> {
     ficherosDistintosSubidosOEncontrados: cache.size,
     proyectos: `${proyectosEnlazados} de ${PROJECTS.length} enlazados.`,
     equipo: `${equipoEnlazado} de ${EQUIPO.length} enlazados.`,
+    etapas: etapasEnlazadas ? "enlazadas desde el fichero." : "ya tenían algo puesto: no se han tocado.",
     carpetaCompleta: `${subidosAhora} nuevos de ${totalEnCarpeta} ficheros en public/media (el resto ya estaban).`,
     avisos,
   });
