@@ -5,6 +5,76 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (84) — Las cuatro fotos de «Cómo lo hacemos», editables
+
+Detalle menor que quedó fuera de las fases numeradas del panel: las fotos
+del proceso en Servicios seguían fijas en `content/etapas-fotos.ts`. Nuevo
+Global «Cómo lo hacemos (fotos)»; ese fichero sigue siendo el plan B y
+también lo que enlaza `/admin-migra-material` la primera vez, con las
+cuatro fotos que ya estaban migradas a Media desde la Fase 3 (no hizo
+falta volver a subirlas). `proceso-timeline.tsx` y `proceso-movil.tsx`
+importaban la constante directamente en vez de recibirla por prop —son
+piezas de cliente, por las animaciones de GSAP, y no pueden pedir el dato
+ellas mismas—; ahora la reciben desde `services/page.tsx`.
+
+Comprobado en producción tras desplegar: las cuatro fotos seguían
+saliendo mientras el Global estaba vacío (plan B), y tras ejecutar
+`/admin-migra-material` pasaron a servirse desde `/api/media/file/...`
+del panel, sin duplicar ningún documento de Media (sigue en 199).
+
+## 2026-09-24 (83) — Panel, Fase 4: borradores en Proyectos
+
+Pendiente desde el plan original (docs/panel-de-contenido.md, punto 8,
+marcada «opcional»): poder dejar una ficha a medias sin que salga en la
+web, y verla antes de publicar.
+
+Sorpresa real, encontrada probando de verdad y no dando nada por bueno:
+una consulta normal, SIN pasar `draft: true`, NO filtra por `_status`
+sola —trae la tabla tal cual, borradores incluidos—. Se creó una ficha en
+borrador de prueba y apareció en el portfolio público, en la portada y en
+el sitemap sin haberla publicado. Arreglado filtrando `_status: published`
+a mano en la consulta de Proyectos (`lib/contenido.ts`).
+
+La vista previa en vivo ya existente se extiende para enseñar un
+borrador: la URL del iframe lleva `?borrador=1` sólo cuando la ficha no
+está publicada, y el lado servidor sólo atiende ese parámetro si hay una
+sesión de Payload de verdad en la petición —comprobado con `curl` sin
+cookies contra una ficha real con `?borrador=1`: respuesta idéntica a sin
+el parámetro—.
+
+La migración generada tenía el mismo tropiezo que la de la Fase 3: el
+`DEFAULT 'draft'` de la columna nueva se habría aplicado también a los 23
+proyectos YA PUBLICADOS, sacándolos de la web pública en el instante de
+aplicarse. Reproducido de verdad contra una copia de la base con los 23
+proyectos reales antes de tocar producción, y arreglado con un `UPDATE`
+explícito a `published` para las filas existentes. Verificado en
+producción tras el despliegue: los 23 proyectos siguen publicados y la
+web pública sirve los mismos 23 enlaces de siempre.
+
+## 2026-09-24 (82) — Copia de seguridad semanal: la base y el material
+
+Pendiente desde que se montó el panel (Fase 1): sin esto, un borrado
+accidental en `/admin` no tenía vuelta atrás. Mismo patrón que ya
+funciona en inventario-sidebfilms —`pg_dump`, cifrado con GPG, verificado
+descifrándolo y comparándolo con el original—, con dos adaptaciones: la
+conexión es por campos sueltos y no una URL (la contraseña de Hestia
+parte una URL), y el paquete cifrado lleva también `~/sidebflms-web/media`,
+que desde la Fase 3 vive fuera de la base de datos.
+
+De paso, ahora que la web es pública: `media/` se suma a la ruta rápida
+de `publicar.sh` con un ENLACE simbólico (no una copia) hacia
+`~/sidebflms-web/media`, para que nginx sirva las fotos y vídeos del
+panel directamente, sin pasar por Node —comprobado con las cabeceras de
+caché larga que ya llevaban `_next/static`—, y para que subir o borrar
+algo en `/admin` se note al momento en vez de esperar a un despliegue.
+
+Probado el script de copia de verdad en el servidor, con una frase
+efímera: 23 proyectos, 11 personas del equipo, 199 ficheros de material,
+cifrado verificado, y limpiado después. El workflow que lo automatiza
+cada domingo (`.github/workflows/backup.yml`) está escrito pero sin
+comitear: crear el secreto `BACKUP_PASSPHRASE` del repositorio es una
+acción que hay que aprobar aparte, no algo que se pueda hacer solo.
+
 ## 2026-09-24 (81) — La web ya es pública: sin contraseña
 
 Mario: «quita el user y contraseña ya». Bastaba con borrar el `.htpasswd`
