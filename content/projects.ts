@@ -21,13 +21,23 @@ import type { Locale } from "@/lib/routes";
  * original o de rótulos legibles dentro del propio metraje — cada uno está
  * anotado en su ficha con de dónde sale.
  *
- * ── `brief`: PROVISIONAL (2026-09-17) ────────────────────────────────────
+ * ── `brief`: ESCRITO EL 2026-09-17, CLIENTE CONFIRMADO EL 2026-09-24 ──────
  * El cliente pidió textos que cuenten el TRABAJO y no el plano en pantalla.
- * Los de ahora son provisionales: se escribieron sólo con lo que ya consta
- * (título, venue, fecha, disciplina, lo que se ve) y sin inventar encargos,
- * equipos ni cifras. Se sustituyen por los reales cuando producción pase la
- * información de cada trabajo. Dos párrafos, separados por una línea en
- * blanco (`\n\n`); la ficha los pinta como párrafos.
+ * Se escribieron sólo con lo que se podía comprobar del propio material
+ * (título, venue, fecha, disciplina, lo que se ve), sin inventar encargos,
+ * equipos ni cifras. El 2026-09-24 Mario confirmó de viva voz, proyecto por
+ * proyecto, que cada cliente que ya nombra el texto es real —Holika,
+ * Fabrik, Monegros, DURO, FITZ, GORDO, Prospa, MITT MOTORS y BRESH (este
+ * último en `metropolitano`, corregido ese mismo día: el cliente no era el
+ * propio estadio)— y que los nueve sin nombre de cliente en el título
+ * (`madrid-aereo`, `costa-aerea`, `recinto-desde-el-aire`, `cabina-y-publico`,
+ * `sala-llena`, `sala-en-rojo`, `en-cabina`, `madrid-cuatro-torres`,
+ * `pueblo-sobre-el-mar`) son de verdad material propio, sin cliente detrás.
+ * **Lo que NO se pregunta ni se escribe aquí es el detalle de qué se
+ * entregó a cada cliente**: por decisión expresa de Mario, eso queda entre
+ * SIDEBFLMS y cada cliente, y el texto se queda describiendo el trabajo tal
+ * como se ve, no la relación comercial. Dos párrafos, separados por una
+ * línea en blanco (`\n\n`); la ficha los pinta como párrafos.
  *
  * ── LO QUE NO SE SABE VA A `null` Y NO SE ENSEÑA ────────────────────────
  * `venue` y `date` desconocidos son `null` (antes decían «Por confirmar»).

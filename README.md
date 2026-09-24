@@ -106,30 +106,27 @@ código: es material y decisiones, y de las que sólo puede tomar Mario.
 **Ya resuelto, aunque lo hayas visto anotado aquí antes:** los permisos de
 marca de los clientes (concedidos el 2026-09-13, ver `content/clientes.ts`), la
 licencia comercial de Akira Expanded (confirmada el 2026-09-12, ver
-`app/globals.css`) y los once cargos y fotos del equipo (ya no hay ninguno de
-relleno). Si vuelves a ver alguno de estos tres en una lista de bloqueantes en
-otro sitio, esa lista está desactualizada, no esto.
+`app/globals.css`), los once cargos y fotos del equipo (ya no hay ninguno de
+relleno), las cinco fechas que faltaban (confirmadas por Mario el 2026-09-24),
+la cookie de idioma que prometía la privacidad y no existía (`proxy.ts` ya la
+escribe de verdad) y el cliente de cada proyecto —confirmado uno por uno por
+Mario el 2026-09-24, ver la nota de `content/projects.ts`—: Instagram y
+LinkedIn del pie verificados contra las cuentas reales. Si vuelves a ver
+alguno de éstos en una lista de bloqueantes en otro sitio, esa lista está
+desactualizada, no esto.
 
 **Lo que sigue de verdad pendiente:**
 
-- **Los textos de «qué entregamos» de cada proyecto son provisionales**
-  (`content/projects.ts`, desde el 2026-09-17): se escribieron sólo con lo que
-  se puede medir del propio fichero —título, sitio, fecha, disciplina—, sin
-  inventar el encargo real. Sólo quien hizo el trabajo puede escribir el texto
-  de verdad.
-- **Cinco fichas sin fecha**: `holika-portal`, `monegros-hora-dorada`,
-  `duro-pyroshow`, `metropolitano`, `prospa-multicam` (éste último tiene un
-  nombre de fichero, `31132026`, que sería el 31 del mes 13 — no existe).
+- **El enlace de YouTube del pie** apunta a `@sidebflms`, el canal que Mario
+  acaba de crear (2026-09-24): da 404 hasta que Google lo propague. Revisar
+  cuando haya pasado un tiempo.
+- **El detalle de qué se entregó a cada cliente es a propósito privado**: por
+  decisión expresa de Mario, esa parte queda entre SIDEBFLMS y cada cliente y
+  no se escribe en la web. Los textos describen el trabajo tal como se ve, no
+  la relación comercial —no es un dato que falte, es un dato que no va aquí—.
 - **El aviso legal no lleva CIF ni domicilio**, por decisión expresa de Mario
   (`content/dictionaries/es.ts`, sección `legal`). Eso deja el aviso
   incumpliendo el art. 10 de la LSSI-CE mientras la web sea pública.
-- **La política de privacidad afirma algo que el código no hace**: dice que
-  el sitio usa «cookies técnicas para recordar tu idioma», pero esa cookie no
-  se llega a escribir en ningún sitio (`proxy.ts` sólo la LEE, nunca la
-  guarda) — comprobado el 2026-09-24. O se implementa de verdad, o se quita
-  la frase: tal como está, es una afirmación legal falsa.
-- **Las tres redes del pie** (`components/layout/social-icons.tsx`) no se han
-  verificado contra las cuentas reales desde que se escribieron.
 - **El archivo da para más piezas** de las 23 que hay hoy, si se quiere seguir
   ampliando antes de abrir.
 
