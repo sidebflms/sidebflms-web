@@ -5,6 +5,51 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (95) — Copia de seguridad semanal: ya automática de verdad
+
+`.github/workflows/backup.yml` estaba escrito desde la ronda anterior
+pero sin comitear —un workflow nuevo con acceso SSH al servidor es
+sensible, quedó pendiente del visto bueno explícito de Mario—. Lo dio el
+2026-09-24 («si quieres hagamos lo de GitHub»): secreto
+`BACKUP_PASSPHRASE` creado en el repositorio y workflow comiteado.
+
+Probado disparándolo a mano (`workflow_dispatch`), no dado por bueno sin
+más: volcó los 23 proyectos, las 11 personas del equipo y los 199
+ficheros de material, cifró, verificó que se descifra, y quedó guardado
+en dos sitios —`~/backups` del servidor (152 MB) y como artifact de
+GitHub (90 días, 159 MB)—. Corre solo cada domingo a las 03:00 UTC desde
+ahora.
+
+## 2026-09-24 (94) — SEO Fase 3 (parte 2): tipos de encargo, fase cerrada
+
+Preguntado a Mario si de verdad se hacen encargos de inmobiliaria/
+industria y de deporte —los otros dos tipos que se plantearon al
+empezar la Fase 3—: «tipos de encargo nada». Coincide con lo que ya se
+veía en el portfolio (ninguna evidencia de ninguno de los dos), así que
+se escribió sólo con lo que sí tiene trabajo real: cine y publicidad
+(MITT MOTORS), eventos y festivales (Monegros, DURO, Fabrik,
+Metropolitano).
+
+Con esto se cierran las cuatro secciones que pedía la Fase 3 —permisos y
+normativa, tipos de encargo, qué hace falta para el presupuesto, plazos y
+formatos— más los enlaces reales al portfolio de drone. La página pasó de
+~280 a 900 palabras reales, sin relleno: no se ha forzado para llegar a
+las 1.200 que pedía el objetivo original, porque eso habría significado
+escribir contenido que no aporta sólo por contar palabras, justo lo que
+se pidió explícitamente no hacer.
+
+Comprobado con `curl`: las dos categorías nuevas visibles en la página, en
+los dos idiomas. Medido con la auditoría: 85/100 (+4 sobre la Fase 6) —
+sube también «Media del sitio ≥600 palabras» a 4/4, con las páginas de
+ciudad de la Fase 6 ya contando. Foto en `docs/seo/fase3final.json`.
+
+**Con esto se cierra la tanda completa de SEO de esta sesión (Fases 1, 2,
+3, 4, 5, 6, 7, 8 y 9): 53/100 → 85/100.** Lo único que queda fuera del
+alcance de un cambio de código son dos comprobaciones manuales que
+dependen de herramientas externas: la ficha de Google Business (creada,
+pendiente del vídeo de verificación) y los dominios que enlazan a la web
+(hace falta Search Console o una herramienta como Ahrefs).
+
 ## 2026-09-24 (93) — SEO Fase 6: páginas de ciudad, sólo Madrid y Barcelona
 
 De las cinco ciudades pedidas (Madrid, Barcelona, Valencia, Sevilla,
