@@ -1,0 +1,258 @@
+{
+  "fecha": "2026-09-24T18:31:00Z",
+  "base": "https://sidebflms.com",
+  "total": 57,
+  "max": 108,
+  "pct": 53,
+  "checks": [
+    {
+      "bloque": "tecnico",
+      "id": "robots",
+      "titulo": "robots.txt existe y permite el rastreo",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "presente y permisivo"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "sitemap",
+      "titulo": "sitemap.xml válido y con URLs",
+      "puntos": 4,
+      "max": 4,
+      "detalle": "64 URLs"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "https",
+      "titulo": "HTTPS y portada accesible",
+      "puntos": 2,
+      "max": 2,
+      "detalle": "200 por HTTPS"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "noindex",
+      "titulo": "Ninguna página clave con noindex",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "ninguna bloqueada"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "404",
+      "titulo": "Las páginas inexistentes devuelven 404",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "devuelve 404"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "www",
+      "titulo": "www redirige al dominio canónico",
+      "puntos": 0,
+      "max": 2,
+      "detalle": "www sirve la web con 200 (dominio duplicado)"
+    },
+    {
+      "bloque": "tecnico",
+      "id": "transporte",
+      "titulo": "Compresión activa en el HTML",
+      "puntos": 2,
+      "max": 2,
+      "detalle": "gzip/br activo"
+    },
+    {
+      "bloque": "metadatos",
+      "id": "titulos",
+      "titulo": "Títulos únicos y de 30-65 caracteres",
+      "puntos": 4,
+      "max": 4,
+      "detalle": "6/6 en rango, todos únicos"
+    },
+    {
+      "bloque": "metadatos",
+      "id": "descripciones",
+      "titulo": "Descripciones únicas de 70-165 caracteres",
+      "puntos": 4,
+      "max": 4,
+      "detalle": "6/6 en rango"
+    },
+    {
+      "bloque": "metadatos",
+      "id": "canonico",
+      "titulo": "Canónico en todas las páginas",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "6/6"
+    },
+    {
+      "bloque": "metadatos",
+      "id": "hreflang",
+      "titulo": "hreflang recíproco con x-default",
+      "puntos": 4,
+      "max": 4,
+      "detalle": "6/6"
+    },
+    {
+      "bloque": "contenido",
+      "id": "h1-unico",
+      "titulo": "Un solo H1 por página",
+      "puntos": 4,
+      "max": 4,
+      "detalle": "6/6"
+    },
+    {
+      "bloque": "contenido",
+      "id": "h1-negocio",
+      "titulo": "El H1 de la portada dice a qué nos dedicamos",
+      "puntos": 0,
+      "max": 4,
+      "detalle": "\"CAPTURE THE ENERGY.DELIVER THE STORY.\" — sin termino de negocio"
+    },
+    {
+      "bloque": "contenido",
+      "id": "urls-clave",
+      "titulo": "Las URLs de dinero llevan la palabra clave",
+      "puntos": 0,
+      "max": 4,
+      "detalle": "ninguna: /es/drone y /es/services no contienen términos de búsqueda"
+    },
+    {
+      "bloque": "contenido",
+      "id": "profundidad-drone",
+      "titulo": "La página de drone tiene ≥1200 palabras",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "272 palabras"
+    },
+    {
+      "bloque": "contenido",
+      "id": "profundidad-media",
+      "titulo": "Media del sitio ≥600 palabras por página",
+      "puntos": 2,
+      "max": 4,
+      "detalle": "510 palabras de media"
+    },
+    {
+      "bloque": "contenido",
+      "id": "faq",
+      "titulo": "Existe una página de preguntas frecuentes",
+      "puntos": 0,
+      "max": 4,
+      "detalle": "no existe (los textos están escritos sin usar)"
+    },
+    {
+      "bloque": "local",
+      "id": "schema-local",
+      "titulo": "Datos estructurados de negocio local",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "sólo Organization"
+    },
+    {
+      "bloque": "local",
+      "id": "nap",
+      "titulo": "Teléfono y dirección visibles en la web",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "teléfono: no, dirección: no"
+    },
+    {
+      "bloque": "local",
+      "id": "ciudades",
+      "titulo": "Páginas por ciudad (≥3)",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "ninguna"
+    },
+    {
+      "bloque": "local",
+      "id": "ficha-google",
+      "titulo": "Ficha de Google Business verificada [MANUAL]",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "creada pero sin verificar (vídeo pendiente)"
+    },
+    {
+      "bloque": "estructurados",
+      "id": "organization",
+      "titulo": "Organization",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "presente"
+    },
+    {
+      "bloque": "estructurados",
+      "id": "migas",
+      "titulo": "Migas de pan (BreadcrumbList)",
+      "puntos": 0,
+      "max": 2,
+      "detalle": "ausente"
+    },
+    {
+      "bloque": "estructurados",
+      "id": "faqpage",
+      "titulo": "FAQPage",
+      "puntos": 2,
+      "max": 2,
+      "detalle": "presente"
+    },
+    {
+      "bloque": "estructurados",
+      "id": "videoobject",
+      "titulo": "VideoObject en las fichas de trabajo",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "presente"
+    },
+    {
+      "bloque": "rendimiento",
+      "id": "velocidad",
+      "titulo": "Respuesta media <800 ms",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "315 ms"
+    },
+    {
+      "bloque": "rendimiento",
+      "id": "peso",
+      "titulo": "HTML medio <150 KB",
+      "puntos": 2,
+      "max": 2,
+      "detalle": "120 KB"
+    },
+    {
+      "bloque": "rendimiento",
+      "id": "alt",
+      "titulo": "Todas las imágenes llevan atributo alt",
+      "puntos": 3,
+      "max": 3,
+      "detalle": "103/103 con atributo"
+    },
+    {
+      "bloque": "contenido",
+      "id": "alt-portfolio",
+      "titulo": "Las miniaturas del portfolio tienen alt descriptivo",
+      "puntos": 1,
+      "max": 4,
+      "detalle": "16/61 descriptivas, el resto alt=\"\" (invisibles en Google Imágenes)"
+    },
+    {
+      "bloque": "rendimiento",
+      "id": "lang",
+      "titulo": "Atributo lang correcto",
+      "puntos": 2,
+      "max": 2,
+      "detalle": "lang=\"es\""
+    },
+    {
+      "bloque": "autoridad",
+      "id": "enlaces",
+      "titulo": "Dominios que enlazan a la web [MANUAL]",
+      "puntos": 0,
+      "max": 5,
+      "detalle": "sin medir (hace falta Search Console o Ahrefs)"
+    }
+  ],
+  "nota": "Linea base ANTES de cualquier cambio. Reconstruida: la medicion de las 18:34 ya llevaba la Fase 1 desplegada. La UNICA comprobacion que cambio fue h1-negocio (0 -> 4); el resto se midio identico en las dos pasadas, verificado comparando ambas salidas. El estado real de esa pasada esta en fase1.json."
+}

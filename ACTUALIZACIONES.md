@@ -5,6 +5,75 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (86) — SEO Fase 1: el `<h1>` de la portada dice a qué nos dedicamos
+
+Objetivo de negocio: posicionar para «grabación con drone [ciudad]» y
+«productora audiovisual drone España». El `<h1>` de siempre era el
+eslogan de marca («CAPTURE THE ENERGY. DELIVER THE STORY.»), que no dice
+qué hace la empresa — Google no tiene de dónde sacar el tema de la
+página con eso.
+
+El eslogan pasa a `<p>` (misma tipografía, mismo `ref`, misma animación de
+SplitText — `headlineRef` cambia de `HTMLHeadingElement` a
+`HTMLParagraphElement`, nada más). Debajo, un `<h1>` visible de verdad, en
+letra pequeña (`.label`, la misma que ya usan otros rótulos del sitio),
+con `dict.hero.subtitulo`: «Productora audiovisual y grabación con drone
+en España» / «Audiovisual production and drone filming in Spain». Nada de
+texto oculto ni `sr-only`: se ve en la página tal cual.
+
+Comprobado con `curl` contra el HTML servido, no dando el build por
+bueno: un único `<h1>` en la portada, en los dos idiomas, con el texto
+nuevo. Medido con la auditoría del punto anterior: 56/100, +3 sobre la
+línea base — el bloque de contenido pasa de "un solo H1" 0/4 a 4/4 en el
+criterio "el H1 dice a qué nos dedicamos". Foto guardada en
+`docs/seo/fase1.json`.
+
+## 2026-09-24 (85) — Auditoría de SEO con puntuación repetible
+
+Antes de tocar nada de posicionamiento hacía falta una foto del estado
+actual medida con una vara fija, para que el "después" se pueda comparar
+y no sea una opinión. `scripts/seo-audit.mjs` mide la web PUBLICADA (no
+el código) en 7 bloques y 24 comprobaciones, sobre 104 puntos.
+
+    node scripts/seo-audit.mjs                   mide y puntúa
+    node scripts/seo-audit.mjs --guardar antes   guarda la foto
+    node scripts/seo-audit.mjs --comparar antes  mide y compara
+
+Línea base del 2026-09-24 en `docs/seo/antes.json`: **53/100** (57/108).
+Técnico 15/15, metadatos 15/15, rendimiento 10/10 — nada que arreglar
+ahí. Los agujeros son contenido (7/29) y SEO local (0/20).
+
+CUIDADO CON UN CRITERIO, que ya se equivocó una vez: la primera versión
+contaba `alt=""` como imagen sin texto alternativo y sacaba un 0/3 de
+accesibilidad. Es falso —`alt=""` es la forma CORRECTA de marcar una
+imagen decorativa— y las 103 imágenes del sitio llevan el atributo.
+Comprobado a mano contra el HTML servido antes de corregirlo. Lo que sí
+es un hallazgo real, y ahora va a su bloque de contenido, es que 45 de
+las 61 miniaturas del portfolio están marcadas como decorativas: son
+contenido, y así no salen en Google Imágenes.
+
+Dos comprobaciones no se pueden automatizar desde fuera y puntúan 0
+hasta que se confirmen a mano en la constante `MANUAL` del script: la
+ficha de Google Business (creada, pendiente del vídeo de verificación) y
+los dominios que enlazan (hace falta Search Console). Un 0 honesto antes
+que un aprobado inventado.
+
+Dos comprobaciones añadidas después, comparando con un medidor externo
+(Seobility) que puntuaba el "servidor" a 0: compresión y redirección de
+`www`. La compresión está bien (gzip, 128 KB → 27 KB, HTTP/2), pero salió
+un fallo de verdad que aquí no se medía: **`www.sidebflms.com` sirve la web
+entera con un 200 en vez de redirigir**. El canónico apunta a la versión
+sin `www`, así que Google lo consolida, pero mientras haya dos hostnames
+sirviendo lo mismo los enlaces que reciba la web se reparten entre los dos.
+Falta el 301 en nginx (ver `despliegue/`).
+
+AVISO SI REPITES LA MEDICIÓN: la pasada de las 18:34 ya llevaba la Fase 1
+(el H1 de la portada) desplegada, así que contaminó el "antes". El
+`antes.json` está reconstruido a mano —la única comprobación que cambió fue
+`h1-negocio`, 0 → 4, verificado comparando las dos salidas enteras— y el
+estado con Fase 1 está aparte en `docs/seo/fase1.json`. Lección: guardar la
+línea base ANTES de que nadie toque nada.
+
 ## 2026-09-24 (84) — Las cuatro fotos de «Cómo lo hacemos», editables
 
 Detalle menor que quedó fuera de las fases numeradas del panel: las fotos
