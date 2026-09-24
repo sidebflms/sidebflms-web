@@ -1,4 +1,11 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { CollectionConfig, GlobalConfig } from "payload";
+
+/** La carpeta del material subido: `media/`, junto a `public/`, pero NUNCA
+ * dentro de ella. Ver el comentario de `Media` más abajo. */
+const CARPETA_MEDIA = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "media");
 
 /**
  * LAS COLECCIONES DEL PANEL.
@@ -178,21 +185,27 @@ export const Proyectos: CollectionConfig = {
     },
 
     // ── El material ────────────────────────────────────────────────────
-    // Rutas de fichero, NO subidas: en esta fase el vídeo se sigue preparando
-    // con los scripts y se copia a `public/media`. La Fase 3 cambia esto.
+    // Subidas a la colección Media, no rutas de texto: ver el comentario de
+    // `Media` más abajo. El fichero que se sube tiene que venir YA
+    // convertido a su versión ligera —el máster se prepara en el Mac—.
     {
       type: "collapsible",
       label: "Material",
       fields: [
-        { name: "video", type: "text", admin: { description: "/media/loquesea.mp4" } },
-        { name: "poster", type: "text", admin: { description: "/media/loquesea.jpg" } },
-        { name: "verticalVideo", label: "Vídeo vertical", type: "text" },
-        { name: "verticalPoster", label: "Póster vertical", type: "text" },
+        { name: "video", type: "upload", relationTo: "media" },
+        { name: "poster", type: "upload", relationTo: "media" },
+        { name: "verticalVideo", label: "Vídeo vertical", type: "upload", relationTo: "media" },
+        { name: "verticalPoster", label: "Póster vertical", type: "upload", relationTo: "media" },
         {
           name: "gallery",
           label: "Galería (sólo fotografía)",
           type: "array",
-          fields: [{ name: "ruta", type: "text", required: true }],
+          // Sigue llamándose «ruta» aunque ya no lo sea: si se renombra, la
+          // herramienta de migraciones lo confunde con un renombrado de
+          // columna y pregunta de forma interactiva —no se puede automatizar
+          // desde un despliegue—. El nombre del campo no lo ve Mario, sólo
+          // la `label`.
+          fields: [{ name: "ruta", label: "Archivo", type: "upload", relationTo: "media", required: true }],
         },
       ],
     },
@@ -224,7 +237,7 @@ export const Equipo: CollectionConfig = {
       localized: true,
       admin: { description: "En español va en la forma de los créditos: «Realización / Montaje»." },
     },
-    { name: "foto", type: "text", admin: { description: "/media/equipo/quien.jpg" } },
+    { name: "foto", type: "upload", relationTo: "media" },
     {
       name: "fotoEsEjemplo",
       label: "La foto es de relleno",
@@ -260,6 +273,73 @@ export const Preguntas: CollectionConfig = {
     { name: "orden", type: "number", required: true, defaultValue: 0, admin: { position: "sidebar" } },
     { name: "q", label: "Pregunta", type: "text", required: true, localized: true },
     { name: "a", label: "Respuesta", type: "textarea", required: true, localized: true },
+  ],
+};
+
+/**
+ * EL MATERIAL: fotos y vídeos YA PREPARADOS.
+ *
+ * «Ya preparados» es la palabra que importa: esto NO convierte el máster de
+ * dos gigas en la versión ligera de la web —eso lo siguen haciendo
+ * `scripts/pieza-web.sh` y `scripts/cinta-web.sh` en el Mac, ver el punto 5 de
+ * `docs/panel-de-contenido.md`—. Lo que hace el panel es la parte que antes
+ * era código: guardar el fichero ya convertido y enlazarlo con la ficha, sin
+ * tocar `content/projects.ts` ni volver a desplegar.
+ *
+ * ── DÓNDE SE GUARDA, Y POR QUÉ NO EN `public/` ───────────────────────────
+ * En `media/`, junto al repositorio pero fuera de él: no está en Git
+ * (`.gitignore`) ni lo toca el despliegue (excluido del `rsync --delete`,
+ * igual que `.env`). Así el repositorio deja de engordar con cada proyecto
+ * —154 MB a fecha de la Fase 3, y subiendo— y lo que se sube desde el panel
+ * sobrevive a cada `git pull` en vez de perderse en el primer despliegue.
+ *
+ * Los 199 ficheros que YA estaban en `public/media` antes de la Fase 3 se
+ * migraron aquí con `/admin-migra-material` (ver ese fichero): a partir de
+ * esa migración, `public/media` es historia en el repositorio, no la fuente
+ * de la que lee la web.
+ *
+ * ── CÓMO SE SIRVE ─────────────────────────────────────────────────────────
+ * Por la propia ruta de la API de Payload (`/api/media/file/…`), que ya
+ * existe desde la Fase 0 —`app/(payload)/api/[...slug]/route.ts`—. Mientras
+ * la web siga con contraseña, pasa por Apache igual que todo lo demás; el día
+ * que se abra al público, sumarla a la ruta rápida de `publicar.sh` (la que
+ * hoy sirve `public/` y `.next/static` directamente por nginx) es trabajo
+ * pendiente, anotado allí.
+ */
+export const Media: CollectionConfig = {
+  slug: "media",
+  // SIN ESTO, 403 PARA TODO EL MUNDO. Por defecto Payload exige estar
+  // identificado hasta para LEER —da igual la colección—, y hasta ahora daba
+  // igual: la web sólo pedía el contenido por la API local (`lib/contenido.ts`),
+  // que no pasa por aquí. El material es distinto: el `<img>`/`<video>` que
+  // pinta la página lo pide el NAVEGADOR DEL VISITANTE, sin sesión ninguna,
+  // así que su lectura tiene que ser pública. Crear, editar y borrar se
+  // quedan como estaban —sólo quien tenga usuario del panel—.
+  access: { read: () => true },
+  hooks: {
+    afterChange: [avisaALaWeb],
+    afterDelete: [avisaALaWeb],
+  },
+  labels: { singular: "Archivo", plural: "Material" },
+  admin: {
+    group: "Contenido",
+    description:
+      "Fotos y vídeos ya convertidos a su versión ligera. El máster se prepara en el Mac; aquí sólo se sube el resultado.",
+  },
+  upload: {
+    staticDir: CARPETA_MEDIA,
+    mimeTypes: ["image/*", "video/*"],
+    // El tamaño máximo del fichero se limita en payload.config.ts
+    // (`upload.requestSizeLimit`): es un límite de la petición entera, no de
+    // esta colección en concreto, así que va ahí y no aquí.
+  },
+  fields: [
+    {
+      name: "alt",
+      label: "Descripción",
+      type: "text",
+      admin: { description: "Para quien no puede ver la imagen. No sale en pantalla." },
+    },
   ],
 };
 

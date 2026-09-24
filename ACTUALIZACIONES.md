@@ -5,6 +5,64 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (77) — Panel, Fase 3: el material se sube desde la ficha
+
+Mario: «ve con la fase 3». Vídeo, póster, vertical, galería y foto del
+equipo dejan de ser una ruta de texto (`/media/loquesea.mp4`, escrita a mano
+en el panel o en código) y pasan a ser una subida de verdad, con su propia
+colección **Media** (`docs/panel-de-contenido.md`, punto 14).
+
+### Qué se puede hacer ahora
+
+Arrastrar el fichero —ya convertido a su versión ligera en el Mac, con los
+scripts de siempre— al campo de la ficha (Vídeo, Póster, Foto…) y guardar.
+Payload le pone miniatura, peso y, en fotos, las dimensiones. El material
+nuevo se guarda en `~/sidebflms-web/media`, **fuera del repositorio**: el
+repositorio deja de engordar con cada proyecto.
+
+Los 199 ficheros que ya estaban en `public/media` se migraron una sola vez
+con `/admin-migra-material`, que lee las rutas de siempre de
+`content/projects.ts`/`content/team.ts`, sube cada fichero real y enlaza la
+ficha. `public/media` se queda en el repositorio —no se ha borrado nada—,
+pero la web ya no lee de ahí.
+
+### Dos fallos reales, encontrados antes de tocar producción
+
+1. **403 en todas las fotos y vídeos.** Por defecto Payload exige estar
+   identificado hasta para leer, y hasta ahora daba igual porque la web sólo
+   pedía contenido por la API interna. El material lo pide el navegador del
+   visitante, sin sesión, así que necesitaba lectura pública explícita
+   (`access.read` en la colección Media). Se encontró pidiendo el fichero
+   por HTTP de verdad, no dándolo por sentado.
+2. **La migración habría fallado a mitad en producción.** Añadía una
+   columna obligatoria (`NOT NULL`) a la tabla de la galería, que en el Mac
+   de pruebas estaba vacía pero en producción ya tenía 15 filas (las fotos
+   de Fitz y Monegros). Postgres no deja eso en una tabla con datos. Se
+   reprodujo con 15 filas de prueba insertadas a mano antes de aplicar la
+   migración, y se corrigió el fichero de migración a mano.
+
+### Cómo se comprobó
+
+Migración aplicada dos veces contra el Postgres de pruebas —con datos
+previos simulando producción la segunda vez—, `up` y `down` los dos
+probados de verdad (el `down` que generó la herramienta también estaba
+roto: se corrigió). Después, 60 páginas con el texto visible comparado
+carácter a carácter (igual) y 934 referencias de material en 52 páginas
+comparadas por nombre de fichero (ninguna discrepancia real). Y en el
+navegador: una ficha reproduciendo su vídeo, la rejilla de Nosotros con las
+once fotos, y el propio campo de subida del panel con la miniatura.
+
+### Qué hacer al actualizar
+
+Nada en local para trabajar en el resto de la web. En el servidor, la
+migración se aplica sola en el despliegue. Igual que en la Fase 2, el
+material que ya existía hay que **enlazarlo una vez** con
+`/admin-migra-material?clave=…` —después de `/admin-carga`, que tiene que
+haber corrido antes—: sin eso, los campos de material se quedan vacíos
+hasta que alguien los rellene a mano desde el panel.
+
+---
+
 ## 2026-09-23 (76) — Panel, Fase 2: cifras, clientes, preguntas y entradillas
 
 Mario, tras entrar por primera vez en el panel: «me muestra algunas cosas pero

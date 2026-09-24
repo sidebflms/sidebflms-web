@@ -1,8 +1,9 @@
 # Un panel para editar la web sin tocar código
 
-**Estado: Fase 2 EN PRODUCCIÓN** (2026-09-23). Proyectos, equipo, cifras,
-clientes, preguntas frecuentes y las entradillas de página se editan en
-`sidebflms.com/admin`. Lo hecho y lo aprendido, al final (puntos 11 a 13).
+**Estado: Fase 3 EN PRODUCCIÓN** (2026-09-24). Proyectos, equipo, cifras,
+clientes, preguntas frecuentes, las entradillas de página y ahora también el
+material (fotos y vídeos) se editan en `sidebflms.com/admin`. Lo hecho y lo
+aprendido, al final (puntos 11 a 14).
 
 ---
 
@@ -346,8 +347,9 @@ antes de compilar. En producción Payload no crea tablas por su cuenta.
 
 - **Copia de seguridad de `bote_panelweb`.** No existe todavía. Hay que hacerla
   como la del inventario: `pg_dump`, cifrada, semanal, con ensayo de
-  restauración. Sin esto, un borrado en el panel no tiene vuelta.
-- Fase 3 (material: fotos y vídeos desde el panel).
+  restauración. Sin esto, un borrado en el panel no tiene vuelta. Con la
+  Fase 3, además, hay que copiar `~/sidebflms-web/media` —el pg_dump ya no basta,
+  los ficheros en sí viven fuera de la base—.
 
 ---
 
@@ -413,3 +415,113 @@ leyendo ya de la base, y el texto visible de las 14 páginas que tocan estos
 cuatro contenidos comparado carácter a carácter contra la compilación de
 ficheros: **igual**. Y una edición de verdad desde el navegador —cambiar un
 rótulo en Cifras y guardar— apareciendo en la portada sin recompilar.
+
+---
+
+## 14. Fase 3, hecha y en producción (2026-09-24)
+
+### Qué hay
+
+El vídeo, el póster, el vertical, la galería de fotografía y la foto de cada
+persona ya no son una ruta de texto (`/media/loquesea.mp4`) que había que
+escribir a mano: son una subida de verdad, con su propia colección **Media**
+en el panel (grupo «Contenido», ficha «Archivo»). Se sube desde la propia
+ficha del proyecto o de la persona —arrastrando el fichero al campo
+correspondiente—, y Payload le pone miniatura, tamaño y —en fotos—
+dimensiones. Un archivo con el mismo nombre no se duplica: se reutiliza.
+
+**Lo que NO cambia, a propósito** (ver el punto 5): el máster se sigue
+convirtiendo en el Mac con `scripts/pieza-web.sh` y `scripts/cinta-web.sh`.
+El panel no comprime ni redimensiona nada — sube tal cual lo que se le da, y
+`next/image`, que ya usa la web, hace el resto al servirlo.
+
+### Dónde vive el material, y por qué ahí
+
+En `~/sidebflms-web/media`, junto al repositorio pero **fuera de Git**
+(`.gitignore`) y fuera del `rsync --delete` del despliegue —igual que
+`.env`—. Antes de la Fase 3, 154 MB de fotos y vídeos vivían dentro del
+repositorio (`public/media`), y crecían con cada proyecto nuevo. Ahora el
+repositorio deja de engordar: lo nuevo se sube directamente al servidor, no
+pasa por GitHub. Se sirve por la propia API de Payload
+(`/api/media/file/…`), que ya existía desde la Fase 0.
+
+Los 199 ficheros que ya estaban en `public/media` se migraron una sola vez
+con `/admin-migra-material` (ver ese fichero: lee las rutas de
+`content/projects.ts`/`content/team.ts`, sube el fichero real y enlaza cada
+ficha). `public/media` se queda en el repositorio como estaba —no se ha
+borrado nada—, pero desde la migración **la web ya no lee de ahí**: es
+historia, no la fuente.
+
+### Un permiso que faltaba, y que no se ve hasta que alguien mira de verdad
+
+Por defecto, Payload exige estar identificado hasta para **leer** cualquier
+colección. No había hecho falta tocarlo hasta ahora porque la web sólo pide
+proyectos y equipo por la API *local* (`lib/contenido.ts`), que no pasa por
+ahí. El material es distinto: el `<img>`/`<video>` que pinta la página lo
+pide el **navegador del visitante**, sin sesión ninguna. Sin `access.read`
+abierto en la colección Media, cada foto y cada vídeo de la web habría dado
+403 — comprobado de verdad pidiendo el fichero por HTTP antes de dar esto por
+cerrado, que es como se encontró. Arreglado en `panel/colecciones.ts`: sólo
+la lectura de Media es pública; crear, editar y borrar siguen pidiendo
+usuario del panel, igual que todo lo demás.
+
+### Otro tropiezo real: una columna `NOT NULL` sobre una tabla con filas
+
+La migración generada añadía la columna nueva de la galería
+(`proyectos_gallery.ruta_id`) como `NOT NULL`. En el Mac de pruebas no se
+notó —la tabla estaba vacía—, pero en producción esa tabla **ya tenía 15
+filas** (las fotos de Fitz y Monegros, cargadas en la Fase 1), y Postgres no
+deja añadir una columna obligatoria sin valor por defecto a una tabla que no
+está vacía: el despliegue habría fallado a mitad de migración, con la base a
+medio cambiar. Se reprodujo aposta —15 filas de prueba insertadas a mano
+antes de aplicar la migración— antes de tocar producción, y se corrigió
+quitando el `NOT NULL` en `migrations/20260924_003706_fase3_material.ts`
+(arriba y en la reversión). El campo sigue siendo obligatorio para quien
+edite desde el panel —eso lo exige Payload al guardar—, sólo no a nivel de
+base de datos mientras una fila vieja no se haya enlazado todavía.
+
+### La herramienta de migraciones y el diálogo que no se puede automatizar
+
+`payload migrate:create` pregunta, de forma interactiva, si una columna que
+cambia de tipo es «un renombrado» cuando sólo hay un candidato claro en la
+tabla — y esa pregunta **no se puede responder desde un script sin terminal
+de verdad** (`expect` sí lo consigue, dándole un terminal real; un simple
+`echo`/pipe no). Pasó con la galería (`ruta` texto → `ruta_id` subida): la
+respuesta correcta siempre es «crear columna», nunca «renombrar», porque el
+contenido se vuelve a derivar entero desde `content/projects.ts` con
+`/admin-migra-material`, no se conserva el valor viejo. Y **el nombre del
+campo en el propio Payload importa para esto**: si se le hubiera puesto
+`archivo` en vez de dejarlo como `ruta`, la pregunta habría sido inevitable
+—Mario no lo ve, sólo ve la `label`, «Archivo»—.
+
+### Cómo se comprobó
+
+Contra el mismo Postgres de usar y tirar de siempre: las tres migraciones
+aplicadas en orden (con las 15 filas de prueba insertadas antes de la
+tercera, para reproducir producción tal cual), `up` y `down` probados los
+dos —el `down` que generó la herramienta también venía mal: intentaba borrar
+restricciones que un `DROP TABLE … CASCADE` anterior ya se había llevado por
+delante; corregido quitando esas líneas repetidas—. Después, `/admin-carga`
++ `/admin-migra-material`, otra compilación completa, y dos comprobaciones:
+**60 páginas** con el texto visible comparado carácter a carácter (igual) y
+**934 referencias de material** en 52 páginas comparadas por nombre de
+fichero entre la versión de ficheros y la de la base (ni una discrepancia
+real; las pocas que salieron a la primera pasada eran el reel de la portada,
+la foto de grupo de Monegros y la imagen de compartir en redes — assets fijos
+del diseño que nunca estuvieron en `content/projects.ts` y se quedan en
+código, fuera de esto a propósito). Y, de verdad, en el navegador: una ficha
+de Trabajo con su vídeo reproduciéndose, la rejilla de Nosotros con las once
+fotos, y el campo de subida del panel enseñando la miniatura, el peso y las
+dimensiones de la foto.
+
+### Lo que queda
+
+- **Copia de seguridad de `media/`**, además de la de la base (ver el punto
+  «lo que queda» de la Fase 1/2, arriba). Son dos copias distintas ahora: el
+  `pg_dump` no incluye los ficheros.
+- **Fase 4 (opcional):** borradores y vista previa, para dejar un proyecto a
+  medias sin publicarlo.
+- Cuando la web se abra al público (hoy sigue con contraseña), sumar
+  `media/` a la ruta rápida de `publicar.sh` —la que sirve `public/` y
+  `.next/static` directamente por nginx, sin pasar por Node—. Mientras haya
+  contraseña, todo pasa por Apache igual que el resto y no hace falta.

@@ -18,6 +18,14 @@ import { PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto } from "@/lib/conten
  * duplicarlo, así que sirve igual para la primera carga que para rehacerla.
  * NO borra nada que no venga de los ficheros.
  *
+ * ── EL MATERIAL NO ENTRA AQUÍ (Fase 3) ───────────────────────────────────
+ * Vídeo, póster y foto son campos `upload` desde la Fase 3: hacen falta los
+ * bytes del fichero, no una ruta de texto, así que esta ruta no los toca —ni
+ * para crear ni para actualizar, así que reejecutarla nunca los borra—. Los
+ * 199 que ya existían se migraron una vez con `/admin-migra-material`; los
+ * nuevos se suben desde el propio panel, en la ficha del proyecto o la
+ * persona.
+ *
  * ── POR QUÉ ES UNA RUTA DE LA WEB Y NO UN SCRIPT SUELTO ─────────────────
  * Porque `content/projects.ts` importa `@/lib/base`, y ese alias sólo lo
  * entiende la propia aplicación. Un script por fuera —probado— se queda en
@@ -57,11 +65,7 @@ export async function POST(peticion: Request): Promise<Response> {
       year: p.year,
       venue: p.venue ?? undefined,
       categories: p.categories,
-      video: p.media.video ?? undefined,
-      poster: p.media.poster ?? undefined,
-      verticalVideo: p.media.vertical?.video ?? undefined,
-      verticalPoster: p.media.vertical?.poster ?? undefined,
-      gallery: (p.media.gallery ?? []).map((ruta) => ({ ruta })),
+      // El material NO va aquí, ver la nota de arriba.
     };
 
     const existente = await payload.find({
@@ -105,7 +109,7 @@ export async function POST(peticion: Request): Promise<Response> {
       orden: i,
       slug: m.slug,
       nombre: m.nombre,
-      foto: m.foto ?? undefined,
+      // La foto NO va aquí, ver la nota de arriba.
       fotoEsEjemplo: m.fotoEsEjemplo ?? false,
       roleEsEjemplo: m.roleEsEjemplo ?? false,
     };

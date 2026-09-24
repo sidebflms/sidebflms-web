@@ -55,16 +55,27 @@ const porIdioma = (es: unknown, en: unknown): Record<"es" | "en", string> => ({
   en: typeof en === "string" ? en : typeof es === "string" ? es : "",
 });
 
+/**
+ * La URL de un campo `upload`, YA POBLADO (hace falta pedir la colección con
+ * `depth: 1`, si no esto sólo tendría el id suelto). Payload guarda el
+ * `alt` y demás en el propio documento de Media; aquí sólo hace falta la
+ * dirección del fichero. Sin poblar, sin archivo o vacío: `null`, que es lo
+ * mismo que «no hay» para el resto de este fichero.
+ */
+const urlDeMedia = (v: unknown): string | null =>
+  v && typeof v === "object" && "url" in v ? oNulo((v as { url?: unknown }).url) : null;
+
 function aProyecto(es: Documento, en: Documento): Project {
-  const vertical = oNulo(es.verticalPoster)
+  const posterVertical = urlDeMedia(es.verticalPoster);
+  const vertical = posterVertical
     ? {
-        video: oNulo(es.verticalVideo),
-        poster: oNulo(es.verticalPoster) as string,
+        video: urlDeMedia(es.verticalVideo),
+        poster: posterVertical,
       }
     : undefined;
 
   const galeria = Array.isArray(es.gallery)
-    ? (es.gallery as { ruta?: string }[]).map((g) => g.ruta).filter((r): r is string => Boolean(r))
+    ? (es.gallery as { ruta?: unknown }[]).map((g) => urlDeMedia(g.ruta)).filter((r): r is string => r !== null)
     : [];
 
   return {
@@ -77,8 +88,8 @@ function aProyecto(es: Documento, en: Documento): Project {
     year: typeof es.year === "string" ? es.year : "—",
     venue: oNulo(es.venue),
     media: {
-      video: oNulo(es.video),
-      poster: oNulo(es.poster),
+      video: urlDeMedia(es.video),
+      poster: urlDeMedia(es.poster),
       ...(vertical ? { vertical } : {}),
       ...(galeria.length ? { gallery: galeria } : {}),
     },
@@ -94,7 +105,7 @@ function aMiembro(es: Documento, en: Documento): Miembro {
     nombre: String(es.nombre),
     slug: String(es.slug),
     role: oNulo(es.role) ? porIdioma(es.role, en.role) : null,
-    foto: oNulo(es.foto),
+    foto: urlDeMedia(es.foto),
     ...(es.fotoEsEjemplo ? { fotoEsEjemplo: true } : {}),
     ...(es.roleEsEjemplo ? { roleEsEjemplo: true } : {}),
   };
@@ -148,7 +159,11 @@ export const TEXTOS_FICHERO: Textos = {
  */
 async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas") {
   const payload = await getPayload({ config });
-  const comun = { collection: coleccion, limit: 500, sort: "orden", depth: 0 } as const;
+  // Proyectos y equipo llevan campos `upload` (el material, Fase 3): con
+  // `depth: 0` sólo traerían el id suelto de cada fichero, no su dirección.
+  // Preguntas no tiene ninguno, así que se queda en 0: una consulta menos.
+  const depth = coleccion === "preguntas" ? 0 : 1;
+  const comun = { collection: coleccion, limit: 500, sort: "orden", depth } as const;
   const [es, en] = await Promise.all([
     payload.find({ ...comun, locale: "es" }),
     payload.find({ ...comun, locale: "en" }),

@@ -71,6 +71,7 @@ export interface Config {
     proyectos: Proyecto;
     equipo: Equipo;
     preguntas: Pregunta;
+    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     proyectos: ProyectosSelect<false> | ProyectosSelect<true>;
     equipo: EquipoSelect<false> | EquipoSelect<true>;
     preguntas: PreguntasSelect<false> | PreguntasSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -213,24 +215,42 @@ export interface Proyecto {
    */
   venue?: string | null;
   categories: ('aftermovie' | 'multicam' | 'drone' | 'photo' | 'ads')[];
-  /**
-   * /media/loquesea.mp4
-   */
-  video?: string | null;
-  /**
-   * /media/loquesea.jpg
-   */
-  poster?: string | null;
-  verticalVideo?: string | null;
-  verticalPoster?: string | null;
+  video?: (number | null) | Media;
+  poster?: (number | null) | Media;
+  verticalVideo?: (number | null) | Media;
+  verticalPoster?: (number | null) | Media;
   gallery?:
     | {
-        ruta: string;
+        ruta: number | Media;
         id?: string | null;
       }[]
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * Fotos y vídeos ya convertidos a su versión ligera. El máster se prepara en el Mac; aquí sólo se sube el resultado.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Para quien no puede ver la imagen. No sale en pantalla.
+   */
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * La rejilla de Nosotros. El orden de la lista es el de la web.
@@ -247,10 +267,7 @@ export interface Equipo {
    * En español va en la forma de los créditos: «Realización / Montaje».
    */
   role?: string | null;
-  /**
-   * /media/equipo/quien.jpg
-   */
-  foto?: string | null;
+  foto?: (number | null) | Media;
   /**
    * Marcado: la web avisa de que esa foto no es suya.
    */
@@ -312,6 +329,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'preguntas';
         value: number | Pregunta;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -435,6 +456,24 @@ export interface PreguntasSelect<T extends boolean = true> {
   a?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

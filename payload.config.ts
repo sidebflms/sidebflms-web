@@ -3,8 +3,9 @@ import { fileURLToPath } from "node:url";
 
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
+import sharp from "sharp";
 
-import { Cifras, Clientes, Equipo, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
+import { Cifras, Clientes, Equipo, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
 
 /**
  * EL PANEL DE CONTENIDO (Fase 1 de docs/panel-de-contenido.md).
@@ -89,8 +90,18 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [Usuarios, Proyectos, Equipo, Preguntas],
+  collections: [Usuarios, Proyectos, Equipo, Preguntas, Media],
   globals: [Cifras, Clientes, Textos],
+
+  // Para que Payload sepa el ancho y el alto de cada foto que se sube (no
+  // para redimensionar: eso ya lo hacen los scripts del Mac antes de subir
+  // el fichero, y `next/image` al servirlo — ver el comentario de `Media`).
+  sharp,
+
+  // 25 MB por fichero: el vídeo más pesado de hoy pesa 5,3 MB. Deja margen de
+  // sobra sin dejar que alguien suba por error un máster entero de varios
+  // gigas —el VPS tiene memoria compartida entre cuatro aplicaciones—.
+  upload: { requestSizeLimit: 25 * 1024 * 1024 },
 
   // SIN EDITOR DE TEXTO RICO, y no por gusto: `richtext-lexical` no se deja
   // cargar por la herramienta de línea de comandos de Payload con Node 26
