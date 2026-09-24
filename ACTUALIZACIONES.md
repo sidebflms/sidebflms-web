@@ -5,6 +5,26 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (90) — SEO Fase 8: migas de pan en portfolio, fichas y servicios
+
+Sin `BreadcrumbList`, Google enseña la URL pelada en el resultado de
+búsqueda en vez de la ruta (Inicio › Trabajo › Holika — el portal). Nueva
+función `datosMigas()` en `lib/metadata.ts`, reutilizada en las tres
+páginas pedidas: `/portfolio`, cada ficha de proyecto y `/services`.
+
+Sólo el schema, sin rastro visible en la página: no se pidió una miga de
+pan en pantalla, y así no toca el diseño actual —igual que `Organization`
+o `FAQPage` tampoco tienen contrapartida visible en esta web—. La ficha
+de proyecto la lleva también en las fichas «placeholder» (material
+pendiente): describe dónde vive la página en la estructura del sitio, no
+si el contenido ya está terminado.
+
+Comprobado con `curl` contra el HTML servido en las tres páginas, en los
+dos idiomas, con la ruta completa y las URLs correctas. Barrido completo
+de las 66 páginas del sitemap: todas a 200. Medido con la auditoría:
+69/100 (+2 sobre la Fase 7) — el bloque de datos estructurados llega a
+10/10.
+
 ## 2026-09-24 (89) — SEO Fase 7: alt de verdad en las miniaturas del portfolio
 
 45 de las 61 imágenes de `/es/portfolio` llevaban `alt=""` —medido contra
@@ -28,8 +48,6 @@ por bien que se hiciera el trabajo, porque ~36 % de las imágenes son
 decorativas a propósito— se corrigió para no contar lo declarado
 `aria-hidden`. Medido: 67/100 (+3 sobre la Fase 5). Foto en
 `docs/seo/fase7.json`.
-
-## 2026-09-24 (88) — SEO Fase 5: página propia para preguntas frecuentes
 
 ## 2026-09-24 (88) — SEO Fase 5: página propia para preguntas frecuentes
 
