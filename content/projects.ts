@@ -276,9 +276,13 @@ const PROYECTOS: Project[] = [
       es: "De fuera del estadio al césped en un solo vuelo, sin cortar",
       en: "From outside the stadium down to the pitch in one flight, no cuts",
     },
+    // CLIENTE: BRESH, que celebró una fiesta en el propio estadio. Confirmado
+    // por Mario de viva voz el 2026-09-24. BRESH ya tiene permiso de marca
+    // (ver content/clientes.ts). El detalle de qué se entregó queda entre
+    // SIDEBFLMS y el cliente, por decisión de Mario ese mismo día.
     brief: {
-      es: "Vuelo en el estadio Metropolitano. En un recinto de este tamaño el drone es la única forma de contar el espacio completo: la llegada desde fuera, el anillo del estadio y el campo, en un único recorrido.\n\nUn vuelo en un estadio se planifica con tiempo: coordinación con el recinto y un recorrido ensayado para que el plano salga limpio y sin cortes. El resultado es un plano de apertura que sitúa al espectador antes de entrar en el contenido.",
-      en: "A flight at the Metropolitano stadium. In a venue this size the drone is the only way to tell the whole space: the approach from outside, the stadium rim and the pitch, in a single run.\n\nA stadium flight is planned well ahead: coordination with the venue and a rehearsed route so the shot comes out clean and uncut. The result is an opening shot that places the viewer before the content begins.",
+      es: "Vuelo en el estadio Metropolitano para BRESH, que celebró aquí una de sus fiestas. En un recinto de este tamaño el drone es la única forma de contar el espacio completo: la llegada desde fuera, el anillo del estadio y el campo, en un único recorrido.\n\nUn vuelo en un estadio se planifica con tiempo: coordinación con el recinto y un recorrido ensayado para que el plano salga limpio y sin cortes. El resultado es un plano de apertura que sitúa al espectador antes de entrar en el contenido.",
+      en: "Aerial flight at the Metropolitano stadium for BRESH, who held one of their parties there. In a venue this size the drone is the only way to tell the whole space: the approach from outside, the stadium rim and the pitch, in a single run.\n\nA stadium flight is planned well ahead: coordination with the venue and a rehearsed route so the shot comes out clean and uncut. The result is an opening shot that places the viewer before the content begins.",
     },
   },
   {
