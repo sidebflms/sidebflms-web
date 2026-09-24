@@ -550,15 +550,14 @@ comprobar que ese nombre responde. Hace falta lo segundo.
 
 ### Lo que queda
 
-- **Copia de seguridad de `media/`**, además de la de la base (ver el punto
-  «lo que queda» de la Fase 1/2, arriba). Son dos copias distintas ahora: el
-  `pg_dump` no incluye los ficheros.
 - **Fase 4 (opcional):** borradores y vista previa, para dejar un proyecto a
   medias sin publicarlo.
-- Cuando la web se abra al público (hoy sigue con contraseña), sumar
-  `media/` a la ruta rápida de `publicar.sh` —la que sirve `public/` y
-  `.next/static` directamente por nginx, sin pasar por Node—. Mientras haya
-  contraseña, todo pasa por Apache igual que el resto y no hace falta.
+
+**Resuelto el 2026-09-24, el mismo día que se abrió la web al público:**
+copia de seguridad semanal de la base Y de `media/` (`despliegue/copia-seguridad.sh`,
+detalle en `docs/RESTAURAR.md`), y `media/` sumado a la ruta rápida de
+`publicar.sh` —con un ENLACE, no una copia, para que subir o borrar algo en
+`/admin` se note al momento y no haga falta desplegar—.
 
 ---
 

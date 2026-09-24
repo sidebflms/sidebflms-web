@@ -85,9 +85,13 @@ lo que se sirve**, no sólo si se pide contraseña.
   puerta. Cuesta un proceso PHP por fichero, y da igual: es lo que hace que
   la web sea de verdad privada.
 - **Sin contraseña**, el despliegue deja ahí una copia de `.next/static` y de
-  `public/`. nginx los sirve desde disco con `expires max` sin despertar ni a
+  `public/`, y un ENLACE (no una copia) de `api/media/file` hacia
+  `~/sidebflms-web/media`, la carpeta donde vive el material subido desde el
+  panel. nginx sirve todo eso desde disco con `expires max` sin despertar ni a
   PHP ni a Node — que es lo que hace que una web de fotos y vídeo no vaya
-  como el barro.
+  como el barro. Que sea un enlace y no una copia importa: si fuera copia,
+  una foto subida o borrada en `/admin` no se vería hasta el siguiente
+  despliegue.
 
 Si se quita el `.htpasswd` y no se vuelve a desplegar, la web queda pública
 **y** lenta, sirviéndolo todo por PHP.

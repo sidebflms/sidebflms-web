@@ -103,6 +103,20 @@ else
   # `public/` va al raíz, que es donde Next lo sirve. El `.` del origen copia
   # el contenido y no la carpeta.
   cp -r "$RAIZ/public/." "$PUBLICO/"
+
+  # El material del panel (Fase 3), igual de rápido: un ENLACE, no una copia.
+  #
+  # `_next/static` y `public/` se pueden copiar porque sólo cambian con un
+  # despliegue. `media/` no: Mario sube y borra fotos y vídeos desde
+  # `/admin` sin pasar por git ni por aquí. Si se copiara, lo nuevo no se
+  # vería hasta el siguiente `git push`, y lo borrado seguiría serviéndose
+  # —justo lo contrario de lo que promete el panel («guardas y se ve»)—.
+  # Con un enlace, nginx sigue leyendo del mismo sitio donde Payload escribe:
+  # se entera en el momento, sin desplegar nada.
+  if [ -d "$RAIZ/media" ]; then
+    mkdir -p "$PUBLICO/api/media"
+    ln -s "$RAIZ/media" "$PUBLICO/api/media/file"
+  fi
 fi
 
 # Apache y nginx leen esto como www-data; sin permiso de lectura, 403.
