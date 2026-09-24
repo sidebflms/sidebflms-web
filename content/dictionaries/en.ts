@@ -594,6 +594,20 @@ export const en: Dictionary = {
     entregaBody:
       "Drone pieces follow the same timeline as the rest of the shoot: between 24 and 48 hours. They're shot open-matte, so the landscape version and the vertical cuts for Reels and TikTok come out of the same flight, without reshooting or losing quality on the crop.",
 
+    encargos: {
+      label: "Types of work",
+      items: [
+        {
+          heading: "Film and advertising",
+          body: "The aerial shot as a production tool, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script.",
+        },
+        {
+          heading: "Events and festivals",
+          body: "This is where we fly the most: coverage of festivals like Monegros and DURO, clubs like Fabrik, and one-off jobs like the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site.",
+        },
+      ],
+    },
+
     portfolioLabel: "Drone work",
 
     ctaTitle: ["Tell us", "what you want", "to shoot"],

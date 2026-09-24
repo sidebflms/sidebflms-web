@@ -152,6 +152,23 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </div>
       </section>
 
+      {/* TIPOS DE ENCARGO (SEO Fase 3). Sólo los dos con evidencia real en el
+          portfolio y confirmados por Mario — ver el comentario en
+          content/dictionaries/es.ts. */}
+      <section className="shell seccion border-t border-ink-600 pt-14">
+        <Reveal>
+          <h2 className="font-display subtitulo">{dict.drone.encargos.label}</h2>
+        </Reveal>
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          {dict.drone.encargos.items.map((item) => (
+            <Reveal key={item.heading} as="article" className="border-t border-ink-600 pt-6">
+              <h3 className="font-display text-display-m text-bone">{item.heading}</h3>
+              <p className="measure mt-3 text-smoke">{item.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/* TRABAJO CON DRONE — enlaces reales al portfolio, no una plantilla. */}
       {proyectosDrone.length > 0 && (
         <section className="shell seccion border-t border-ink-600 pt-14">

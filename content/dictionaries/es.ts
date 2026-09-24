@@ -705,6 +705,25 @@ export const es = {
     entregaBody:
       "Las piezas de drone entran en el mismo plazo que el resto del rodaje: entre 24 y 48 horas. Se ruedan en encuadre abierto, así que la versión horizontal y los cortes verticales para Reels y TikTok salen del mismo vuelo, sin tener que volver a grabar ni recortar perdiendo calidad.",
 
+    // Sólo dos tipos, no los cuatro que se plantearon al principio:
+    // preguntado a Mario directamente el 2026-09-24 si de verdad se hacen
+    // encargos de inmobiliaria/industria y de deporte, y la respuesta fue
+    // que no. En el portfolio tampoco hay ninguno de esos dos, así que
+    // coincide: se queda con lo que sí hay evidencia real.
+    encargos: {
+      label: "Tipos de encargo",
+      items: [
+        {
+          heading: "Cine y publicidad",
+          body: "El plano aéreo como recurso de producción, no como un extra de última hora: para MITT MOTORS combinamos drone y cámara en tierra en una sola jornada de rodaje, con la moto de protagonista y el paisaje dando escala. Se planifica como cualquier otro plano del guion.",
+        },
+        {
+          heading: "Eventos y festivales",
+          body: "Es donde más volamos: coberturas de festivales como Monegros y DURO, discotecas como Fabrik, y encargos puntuales como el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto.",
+        },
+      ],
+    },
+
     portfolioLabel: "Trabajo con drone",
 
     ctaTitle: ["Cuéntanos", "qué quieres", "grabar"],
