@@ -6,7 +6,8 @@ import { LOCALES, ROUTES, SITE_URL, type RouteKey } from "@/lib/routes";
 // `jobs` es «trabaja con nosotros»: faltaba, y el pie enlaza a ella en los dos
 // idiomas, así que estaba publicada pero no listada. (2026-09-22)
 const STATIC_KEYS: RouteKey[] = [
-  "home", "portfolio", "services", "about", "drone", "faq", "jobs", "contact", "legal", "privacy",
+  "home", "portfolio", "services", "about", "drone", "droneMadrid", "droneBarcelona",
+  "faq", "jobs", "contact", "legal", "privacy",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

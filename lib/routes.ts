@@ -56,6 +56,13 @@ export const ROUTES = {
   // idénticos a propósito (ver la decisión escrita arriba en este mismo mapa).
   about: { es: "about", en: "about" },
   drone: { es: "grabacion-con-drone", en: "drone-filming" },
+  // Páginas de ciudad (SEO Fase 6, 2026-09-24): mismo mecanismo que
+  // `drone` de arriba —un slug distinto por idioma, servido por rewrite
+  // desde una única carpeta física (`app/[locale]/ciudad-drone/[ciudad]`,
+  // ver `next.config.ts`)—. Qué ciudades hay y por qué sólo esas dos, en
+  // `content/ciudades-drone.ts`.
+  droneMadrid: { es: "grabacion-con-drone-madrid", en: "drone-filming-madrid" },
+  droneBarcelona: { es: "grabacion-con-drone-barcelona", en: "drone-filming-barcelona" },
   services: { es: "services", en: "services" },
   contact: { es: "contact", en: "contact" },
   // Su propia página desde la Fase 5 de SEO (2026-09-24): antes el contenido
