@@ -5,6 +5,48 @@ reciente arriba.
 
 ---
 
+## 2026-09-24 (92) — SEO Fase 3 (parte 1): permisos, presupuesto, entrega y portfolio de drone
+
+La página de drone tenía ~280 palabras, hacía falta ~1.800. Cuatro
+secciones nuevas, con datos reales que dio Mario directamente —nada
+inventado—:
+
+**Permisos y normativa:** las cuatro categorías AESA (A1/A3, A2, STS-01,
+STS-02) desde 2022, año de fundación de la productora; alta como operador
+UAS; seguro de responsabilidad civil (sin nombrar aseguradora, no se
+dio). El vuelo sobre público está explicado con precisión, no como
+promesa suelta: las categorías específicas permiten volar dentro de una
+zona CONTROLADA en un entorno poblado, no sobrevolar al público sin ese
+control —es una distinción real de la normativa AESA/EASA, no una
+licencia para escribir cualquier cosa—. Vuelo nocturno y zonas
+restringidas van como consideraciones operativas reales, no
+certificaciones aparte que no están confirmadas.
+
+**Qué hace falta para el presupuesto:** localización, fechas, aforo, si
+hay vuelo sobre público, permisos del recinto.
+
+**Plazos y formatos:** el mismo dato ya establecido en el resto del sitio
+(24-48h, encuadre abierto para los cortes verticales sin recortar).
+
+**Trabajo con drone:** enlaces reales a las 12 piezas de drone del
+portfolio, sacados de `traeProyectos()` filtrando por categoría —no una
+lista escrita a mano que se desincroniza en cuanto se añade un proyecto—.
+
+Mismo patrón visual que ya usaba la flota (lista numerada de artículo) y
+«Cómo volamos» (dos columnas): nada de diseño nuevo.
+
+**Queda pendiente «tipos de encargo»** (cine/publicidad, eventos/
+festivales, inmobiliaria/industria, deporte): en el portfolio sólo hay
+evidencia real de los dos primeros —ningún proyecto de inmobiliaria ni de
+deporte—. Preguntado a Mario antes de escribirlo; en cuanto conteste se
+añade en un commit aparte.
+
+Comprobado con `curl` contra el HTML servido: las categorías visibles,
+los 12 enlaces al portfolio correctos, la página sigue a 200. Medido:
+787 palabras (de 280), 79/100 (+1 sobre la Fase 9+4) — el criterio de
+≥1.200 palabras sube de 0/5 a 1/5, y con la parte que falta debería
+cerrar del todo. Foto en `docs/seo/fase3parte1.json`.
+
 ## 2026-09-24 (91) — SEO Fases 9 y 4: teléfono, dirección y negocio local
 
 Datos reales, dados por Mario directamente, letra a letra iguales a la
