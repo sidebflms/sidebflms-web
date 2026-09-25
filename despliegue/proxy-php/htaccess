@@ -34,6 +34,16 @@
     </RequireAny>
 </IfFile>
 
+# Apache añade la barra final sola a cualquier ruta que coincida con un
+# directorio real en disco (mod_dir). `_next/static` y `api/media` SON
+# directorios reales aquí dentro —los deja el despliegue—, así que Apache le
+# ponía la barra (301, fuera de estas reglas) y Next se la quitaba otra vez
+# (308, `trailingSlash: false` por defecto): un bucle infinito entre los dos.
+# Encontrado en una auditoría de seguridad externa el 2026-09-25. Sólo se
+# gestionan ficheros reales por su cuenta (`-f`, más abajo); un directorio
+# sin ese trato especial debe seguir yendo a `proxy.php` tal cual llegó.
+DirectorySlash Off
+
 RewriteEngine On
 
 # Let's Encrypt valida el dominio dejando un fichero aquí dentro. Si esto se

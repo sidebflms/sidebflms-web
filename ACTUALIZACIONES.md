@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (103) — Segunda auditoría: bucle de redirección arreglado, una falsa alarma
+
+Mario trajo una ronda más de la auditoría externa (API/GraphQL, subdominios,
+email, directorios). La mayoría de lo que salió no toca este repositorio
+—otros subdominios, DNS del correo—, pero dos cosas sí eran de aquí.
+
+**Arreglado — bucle de redirección infinito en `/api/media` y
+`/_next/static`.** Dos fuerzas contrarias sobre la barra final: Apache
+(`mod_dir`) se la añade sola a cualquier ruta que coincida con un
+DIRECTORIO real en disco —y `_next/static` y `api/media` lo son, los deja
+el propio despliegue—, mientras que Next se la quita por defecto
+(`trailingSlash: false`). Cada uno deshacía lo que hacía el otro sin
+parar. El `.htaccess` (`despliegue/proxy-php/htaccess`) sólo tenía trato
+especial para FICHEROS reales (`-f`), nunca para directorios. Arreglado con
+`DirectorySlash Off`: ahora un directorio sin ese trato especial sigue a
+`proxy.php` tal cual llegó, sin que Apache meta baza primero.
+
+**Falsa alarma — `analytic.sidebflms.com/user/new`.** El informe decía que
+podía dejar registrarse como administrador sin login previo. Comprobado con
+una petición GET de solo lectura (nada de crear cuenta): la página que
+sirve ahí es un formulario normal de INICIO DE SESIÓN (email + contraseña,
+`action="/user/requestlogin"`), sin ningún enlace de registro. GoatCounter
+ya tiene su cuenta de propietario configurada; el nombre de la URL confunde
+pero no hay nada que cerrar.
+
+**Fuera de este repositorio, no tocado:** cabeceras de seguridad y HTTPS
+forzado en `accounting`/`app`/`drone`/`autoedit`/`dit` (`app.sidebflms.com`
+además es de sólo lectura por decisión ya tomada — ver memoria de
+sesiones), y SPF/DKIM/DMARC del correo (son registros DNS, no código de
+esta web). Quedan para quien gestione esos sitios o el panel de DNS.
+
+---
+
 ## 2026-09-25 (102) — NIF y domicilio fiscal en el Aviso Legal y la Privacidad
 
 Cierra la mitad del punto (100). Mario dio el NIF (`BSIDEBFLMS`) y el
