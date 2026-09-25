@@ -5,6 +5,21 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (116) — WhatsApp también en el pie
+
+Mario, sobre una captura del pie: el enlace de WhatsApp, junto a las
+redes y el correo, en las 72 páginas. Añadido debajo de
+`contact@sidebflms.com` en la columna «Síguenos», mismo estilo que el
+resto de la lista —texto plano, sin icono—, con el mismo número que ya
+se usa en Contacto (`dict.contact.phone`, sin espacios). No es un dato
+nuevo que mantener: sale del mismo teléfono de siempre.
+
+El teléfono en texto y la dirección siguen sin volver al pie —esas
+decisiones no cambian—; esto es sólo el enlace, como el que ya hay en
+Contacto.
+
+---
+
 ## 2026-09-25 (115) — El teléfono, en texto legible, sólo en Contacto
 
 El número existía sólo dentro del enlace `wa.me/` y del `telephone` del

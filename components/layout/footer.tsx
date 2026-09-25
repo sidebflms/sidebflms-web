@@ -144,6 +144,19 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     {dict.contact.email}
                   </a>
                 </li>
+                {/* Mario (2026-09-25): el enlace de WhatsApp, también aquí.
+                    Mismo número que en Contacto (`dict.contact.phone`, sin
+                    espacios), no un dato nuevo que pueda desincronizarse. */}
+                <li>
+                  <a
+                    href={`https://wa.me/${dict.contact.phone.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-bone transition-colors hover:text-rust-300"
+                  >
+                    {dict.contact.whatsapp}
+                  </a>
+                </li>
               </ul>
             </div>
 
