@@ -5,6 +5,93 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (99) — Fase 13: reescritura de identidad, drone y "el circuito" incluidos
+
+Mario corrigió el rumbo de la empresa: drone profesional de alto nivel —
+cine, series, anuncios, grandes eventos— y producción creativa de campañas,
+no productora de música electrónica. Antes de escribir nada se le enseñó la
+lista completa de frases con el antes y el después, y se esperó su visto
+bueno — así lo pidió explícitamente, por tratarse de la identidad de la
+empresa.
+
+**El primer intento de lista se quedó corto.** La Fase 3 (ampliación de
+`/es/grabacion-con-drone`, dentro de la Fase 11 de SEO) se hizo ANTES de que
+llegara este cambio de rumbo, así que metió marco viejo ("Eventos y
+festivales", "una productora que trabaja sobre todo en directos y
+festivales") que no estaba en el barrido inicial de la Fase 13. Mario lo
+detectó y lo señaló; el hueco era real y el fallo de no haber vuelto a
+barrer esa página después de ampliarla, mío.
+
+**Los siete sitios que cambian, con las tres correcciones de Mario sobre mi
+propuesta inicial:**
+
+1. `meta.about.description` (ES) — ya no dice "música electrónica": ahora
+   dice "especializada en cine, series, publicidad y grandes eventos". 165
+   caracteres exactos, el límite del auditor.
+2. `meta.about.description` (EN) — mi primera versión se pasaba de 165
+   caracteres. Mario dio la versión corta directamente: "Audiovisual and
+   drone production company in Spain, specialising in film, series,
+   advertising and large-scale events. Who we are and how we work."
+3. `about.whereBody` (ES y EN) — "el circuito no entiende de provincias" era
+   lenguaje de circuito de clubs/festivales, y salía justo en la frase que
+   lee un cliente nuevo sobre dónde operamos. Corrección de Mario: no
+   "agenda" (no dice nada) sino "el trabajo... si el rodaje está en otro
+   sitio" — empuja hacia el rumbo nuevo y sigue siendo verdad para un
+   directo.
+4. `drone.permisos` → "Vuelo nocturno" (ES y EN) — ya no se define como "una
+   productora que trabaja sobre todo en directos y festivales".
+5. `drone.encargos` → segunda entrada, título (ES y EN) — "Eventos y
+   festivales" pasa a ser "Grandes eventos".
+6. `drone.encargos` → segunda entrada, cuerpo (ES y EN) — reencuadrada:
+   Monegros, DURO y Fabrik son trabajo real y se siguen citando —Mario fue
+   explícito en que debían quedarse—, pero como prueba de que se sabe volar
+   sobre grandes multitudes, no como la definición de la empresa. De "es
+   donde más volamos" a "es la misma exigencia que pide un rodaje de cine...
+   y es donde tenemos más horas de vuelo".
+7. `jobs.form.eventsOptions` (ES y EN) — el desplegable "¿En qué eventos te
+   gustaría trabajar?" del formulario de "Trabaja con nosotros" pasa de
+   `Clubs / Festivales / Publicidad / Todo` a `Cine y series / Publicidad /
+   Grandes eventos / Clubs y festivales / Otro`, en ese orden.
+
+**Aviso sobre el punto 7, para que quede constancia:** el ejemplo que dio
+Mario para justificarlo —un jefe de producción de una serie que abre el
+desplegable y no encuentra su terreno— describe la experiencia de un
+CLIENTE, pero este desplegable concreto sólo lo ve quien rellena el
+formulario de incorporarse al equipo (`jobs`), no quien pide presupuesto.
+El formulario de presupuesto (`components/ui/contact-form.tsx`) tiene su
+propio selector de disciplinas y ya sale actualizado solo, sin tocar nada
+aquí: recorre `CATEGORIES` de `content/projects.ts`, que desde la Fase 15
+ya incluye "Cine" y "Marca". El cambio en `eventsOptions` se hizo de todos
+modos porque sigue siendo una mejora real —un filmmaker que quiere unirse al
+equipo tampoco se sentía representado por "Clubs/Festivales"—, sólo que por
+una razón distinta a la que se dio.
+
+**Grupo C — se queda como está, decisión de Mario:** el ejemplo genérico
+"un festival con el vuelo bien planificado" en la explicación regulatoria de
+vuelo sobre público (usa "festival" como ejemplo de evento, no como
+identidad), y la ficha de Barcelona en `content/ciudades-drone.ts` ("todo el
+trabajo de drone en Barcelona sale del mismo festival: DURO") — es un hecho
+contrastable sobre de dónde sale el material, no una definición de la
+empresa. Se actualizará el día que haya trabajo de otro tipo grabado allí.
+
+**Nota para más adelante, no para ahora (palabras de Mario):** la lista de
+"Tipos de encargo" de la página de drone se queda con sólo dos entradas
+(Cine y publicidad / Grandes eventos) y para el rumbo nuevo se queda corta —
+deberían ser cuatro (cine y series, publicidad, grandes eventos, marca).
+Eso es la Fase 16, no se ha tocado en ésta.
+
+**Sobre el recuento de menciones:** el encargo original decía "23 veces".
+Al volver a contar tras el aviso de Mario salieron 27 en un recuento en
+bruto (todo lo que coincide con "electrónica"/"festival" en el repo,
+incluidos comentarios de código y "correo electrónico"). Filtrando a sólo
+texto que ve el visitante, y descontando usos genéricos o fácticos que no
+son identidad (grupo C, arriba), quedaron 6 sitios reales que cambiar o
+decidir — los 7 de la lista de arriba, contando el ES/EN de cada uno como un
+mismo sitio. El número en bruto no es el criterio útil; el filtro por "¿esto
+define a la empresa o no?" sí lo es.
+
+---
+
 ## 2026-09-25 (98) — Portfolio Fase 15: categorías y orden para el rumbo nuevo
 
 Mario corrigió el rumbo de la empresa: drone profesional de alto nivel —

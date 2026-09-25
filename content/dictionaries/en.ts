@@ -41,8 +41,10 @@ export const en: Dictionary = {
     },
     about: {
       title: "About us · Audiovisual production in Spain — SIDEBFLMS",
+      // Rewritten 2026-09-25 (direction change, see ACTUALIZACIONES.md).
+      // Mario's own shortened version: 138 characters, under the 165 limit.
       description:
-        "Audiovisual production for electronic music, based in Spain. Who we are, how we work and where we operate.",
+        "Audiovisual and drone production company in Spain, specialising in film, series, advertising and large-scale events. Who we are and how we work.",
     },
     faq: {
       title: "Frequently asked questions about event coverage — SIDEBFLMS",
@@ -297,7 +299,7 @@ export const en: Dictionary = {
       experiencePlaceholder: "For example: three years, or since 2019.",
       events: "What kind of events would you like to work on?",
       eventsHint: "Tick as many as apply",
-      eventsOptions: ["Clubs", "Festivals", "Commercials", "Everything"],
+      eventsOptions: ["Film and series", "Advertising", "Large events", "Clubs and festivals", "Other"],
       licence: "Do you have a driving licence?",
       licenceOptions: ["Yes", "No"],
       languages: "What languages do you speak?",
@@ -453,7 +455,7 @@ export const en: Dictionary = {
     figuresLabel: "So far in 2026",
     whereLabel: "Where we operate",
     whereBody:
-      "Based in Spain. The circuit doesn't care about provinces: if the show is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
+      "Based in Spain. The work doesn't care about provinces: if the shoot is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
     howLabel: "How we work",
     teamLabel: "The crew",
     groupAlt: "The SIDEBFLMS crew",
@@ -556,7 +558,7 @@ export const en: Dictionary = {
         },
         {
           heading: "Night flights",
-          body: "Outside daylight hours the drone needs approved position lights and, depending on the area, additional permits. That gets decided in pre-production, not on the night of the shoot. For a production company that mostly works in live shows and festivals, this isn't the exception, it's the rule: almost everything we cover happens after dark.",
+          body: "Outside daylight hours the drone needs approved position lights and, depending on the area, additional permits. That gets decided in pre-production, not on the night of the shoot. For us this isn't the exception, it's the rule: most of what we shoot —concerts, film work and large events— happens after dark.",
         },
         {
           heading: "Restricted zones",
@@ -604,8 +606,8 @@ export const en: Dictionary = {
           body: "The aerial shot as a production tool, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script: storyboarded and the route rehearsed before shoot day, not improvised at the end of the day once the light is going.",
         },
         {
-          heading: "Events and festivals",
-          body: "This is where we fly the most: coverage of festivals like Monegros and DURO, clubs like Fabrik, and one-off jobs like the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site. The shot isn't just a pretty postcard of the venue: it also works as communication material for the next edition, for sponsors who want to see the real turnout, and for the event's own channels the day after.",
+          heading: "Large events",
+          body: "Flying over thousands of people with zero margin for error takes the same discipline as a film shoot or a live-audience campaign, and it's where we have the most flight hours: Monegros, DURO, Fabrik, or the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site. The shot isn't just a pretty postcard of the venue: it also works as communication material for the next edition, for sponsors who want to see the real turnout, and for the event's own channels the day after.",
         },
       ],
     },

@@ -43,8 +43,10 @@ export const es = {
     },
     about: {
       title: "Quiénes somos · Productora audiovisual en España — SIDEBFLMS",
+      // Reescrito el 2026-09-25 (cambio de rumbo, ver ACTUALIZACIONES.md):
+      // ya no dice "música electrónica". 165 caracteres exactos.
       description:
-        "Productora audiovisual de música electrónica con base en España. Quiénes somos, cómo trabajamos y dónde operamos.",
+        "Productora audiovisual y grabación con drone en España, especializada en cine, series, publicidad y grandes eventos. Quiénes somos, cómo trabajamos y dónde operamos.",
     },
     faq: {
       title: "Preguntas frecuentes sobre cobertura de eventos — SIDEBFLMS",
@@ -339,7 +341,8 @@ export const es = {
       experiencePlaceholder: "Por ejemplo: tres años, o desde 2019.",
       events: "¿En qué eventos te gustaría trabajar?",
       eventsHint: "Puedes marcar varias",
-      eventsOptions: ["Clubs", "Festivales", "Publicidad", "Todo"],
+      // Actualizado el 2026-09-25 al rumbo nuevo (Mario), en este orden.
+      eventsOptions: ["Cine y series", "Publicidad", "Grandes eventos", "Clubs y festivales", "Otro"],
       licence: "¿Tienes carnet de conducir?",
       licenceOptions: ["Sí", "No"],
       languages: "¿Qué idiomas hablas?",
@@ -546,8 +549,11 @@ export const es = {
       "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en la anterior es el que va a la siguiente, y eso se nota a las cuatro de la mañana.",
     figuresLabel: "En lo que va de 2026",
     whereLabel: "Dónde operamos",
+    // Reescrito el 2026-09-25: "el circuito" era lenguaje de circuito de
+    // clubs/festivales (Mario). "Rodaje" en vez de "evento" empuja hacia el
+    // rumbo nuevo y sigue siendo verdad para un directo.
     whereBody:
-      "Con base en España. El circuito no entiende de provincias: si el evento está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",
+      "Con base en España. El trabajo no entiende de provincias: si el rodaje está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",
     howLabel: "Cómo trabajamos",
     teamLabel: "El equipo",
     groupAlt: "El equipo de SIDEBFLMS",
@@ -667,7 +673,9 @@ export const es = {
         },
         {
           heading: "Vuelo nocturno",
-          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje. Para una productora que trabaja sobre todo en directos y festivales esto no es una excepción, es la norma: casi todo lo que se cubre pasa de noche.",
+          // Reescrito el 2026-09-25: la frase se definía por "directos y
+          // festivales" (cambio de rumbo, ver ACTUALIZACIONES.md).
+          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje. Para nosotros esto no es la excepción, es la norma: la mayoría de lo que cubrimos —conciertos, rodajes y grandes eventos— pasa de noche.",
         },
         {
           heading: "Zonas restringidas",
@@ -720,8 +728,12 @@ export const es = {
           body: "El plano aéreo como recurso de producción, no como un extra de última hora: para MITT MOTORS combinamos drone y cámara en tierra en una sola jornada de rodaje, con la moto de protagonista y el paisaje dando escala. Se planifica como cualquier otro plano del guion: storyboard y ensayo del recorrido antes del día de rodaje, no una toma improvisada al final de la jornada cuando ya queda poca luz.",
         },
         {
-          heading: "Eventos y festivales",
-          body: "Es donde más volamos: coberturas de festivales como Monegros y DURO, discotecas como Fabrik, y encargos puntuales como el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto. El plano no es sólo la postal bonita del recinto: sirve también como material de comunicación para la siguiente edición, para patrocinadores que quieren ver el aforo real, y para las redes del propio evento al día siguiente.",
+          // Reencuadrado el 2026-09-25 (Mario): Monegros, DURO y Fabrik son
+          // trabajos reales y se siguen citando, pero como prueba de que
+          // sabemos volar sobre grandes multitudes — no como lo que define
+          // a la empresa. Ver ACTUALIZACIONES.md.
+          heading: "Grandes eventos",
+          body: "Volar sobre miles de personas sin margen de error es la misma exigencia que pide un rodaje de cine o una campaña con público real, y es donde tenemos más horas de vuelo: Monegros, DURO, Fabrik, o el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto. El plano no es sólo la postal bonita del recinto: sirve también como material de comunicación para la siguiente edición, para patrocinadores que quieren ver el aforo real, y para las redes del propio evento al día siguiente.",
         },
       ],
     },
