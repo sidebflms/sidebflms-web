@@ -5,6 +5,83 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (106) — Fase 17, punto 6: las 23 fichas de proyecto, ampliadas
+
+Cierra la Fase 17. El punto más delicado del encargo: engordar las 23
+fichas de proyecto (no 24 — corrección sobre el encargo, ya señalada en el
+punto (105)) sin inventar nada de trabajos de clientes reales.
+
+**Cómo se hizo.** Se enseñaron primero las 7 fichas del rumbo nuevo
+—metropolitano, mitt-motors, madrid-cuatro-torres, madrid-aereo,
+costa-aerea, pueblo-sobre-el-mar, recinto-desde-el-aire— y se esperó el
+visto bueno de Mario antes de tocar las otras 16, tal como pedía el
+encargo.
+
+**La corrección de DURO.** Al revisar `recinto-desde-el-aire`, Mario
+confirmó sin duda que también es de DURO (Barcelona), como
+`duro-pyroshow` y `escenario-de-noche` — antes llevaba `venue: null`.
+Corregidos: el `venue`, el título (ahora "DURO — el recinto lleno", igual
+que las otras dos) y la nota de cabecera de `content/projects.ts` que la
+listaba entre las fichas "sin cliente detrás". La página
+`/es/grabacion-con-drone-barcelona` ya daba esta pieza por DURO desde la
+Fase 6 y no se tocó, tal como confirmó Mario.
+
+**Qué se desarrolló, en las 23.** Sólo lo que permitía la regla de
+`hardFact` de la cabecera del fichero — un dato que nadie podría
+inventar—: el reto técnico de cada rodaje y cómo se resolvió, qué
+condiciones reales había (luz, hora, meteorología, espacio aéreo,
+público), cómo se coordinó con producción, qué formato se entregó y por
+qué ese plano no se consigue desde el suelo. Nada de cifras de
+asistentes, presupuestos ni fechas inventadas; ninguna atribución a
+cliente que no estuviera ya confirmada; ninguna localización nueva sin
+confirmar (el caso de `costa-aerea`, mal atribuida hasta la Fase 16, es
+justo el error que esta regla evita repetir).
+
+**Resultado — ninguna llega a las 400-500 palabras pedidas, avisado en
+vez de inflado:**
+
+| Ficha | Antes | Ahora |
+|---|---|---|
+| metropolitano | 95 | 349 |
+| mitt-motors | 65 | 286 |
+| recinto-desde-el-aire | 55 | 292 |
+| pueblo-sobre-el-mar | 50 | 267 |
+| costa-aerea | 60 | 259 |
+| holika-portal | 95 | 261 |
+| madrid-aereo | 65 | 246 |
+| fatima-hajji-fabrik | 85 | 235 |
+| gordo-lebanon | 95 | 234 |
+| madrid-cuatro-torres | 50 | 231 |
+| escenario-de-noche | 55 | 214 |
+| monegros-recinto | 70 | 208 |
+| monegros-hora-dorada | 85 | 207 |
+| duro-pyroshow | 85 | 206 |
+| fabrik-150 | 75 | 205 |
+| prospa-multicam | 85 | 196 |
+| cabina-y-publico | 65 | 191 |
+| monegros-fotografia | 70 | 190 |
+| adrian-mills-area19 | 80 | 187 |
+| en-cabina | 65 | 187 |
+| fitz-directos | 85 | 186 |
+| sala-llena | 55 | 178 |
+| sala-en-rojo | 65 | 165 |
+
+Todas entre 2 y 4 veces su tamaño original; ninguna llega a 400. Es lo que
+da el material real sin adornar con adjetivos — la propia regla del
+fichero, aplicada hasta el final.
+
+**Auditoría de cierre de toda la Fase 17:**
+
+```
+TOTAL: 98/108  (91/100)  — Excelente
+Antes: 57/108   Diferencia: +41 puntos
+Media del sitio: 835 palabras por página (era 344 sólo en portada)
+```
+
+Snapshot en `docs/seo/fase17final.json`.
+
+---
+
 ## 2026-09-25 (105) — Fase 17 (parcial): títulos, meta descripciones, portada, ciudades y servicios
 
 Mario pidió un barrido de las 72 URLs del sitemap (la auditoría automática
