@@ -326,43 +326,41 @@ const PROYECTOS: Project[] = [
     },
   },
   {
-    slug: "costa-aerea",
+    // VENUE confirmado por Mario el 2026-09-25, sin duda: es de DURO, como
+    // `duro-pyroshow` y `escenario-de-noche`. Hasta entonces llevaba
+    // `venue: null` — ver la nota de cabecera de este fichero.
+    slug: "recinto-desde-el-aire",
     // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
     // reescrita a mano a partir del hardFact — no es un recorte automático
     // del brief, que se pasaba de los 165 que trunca Google.
     metaDescription: {
-      es: "Bahía de Mallorca con barcos fondeados, con el agua pasando de turquesa a azul según la profundidad: rodada cuatro días después de las postales de Madrid.",
-      en: "An aerial shot of a Mallorca bay with anchored boats, the water shifting from turquoise to blue with depth: shot four days after the Madrid postcards.",
+      es: "El recinto de DURO lleno, visto desde el aire, con el escenario a un lado y la montaña detrás: máster 4:3 abierto que entrega apaisado y vertical del mismo vuelo.",
+      en: "DURO's site at capacity, from the air, with the stage on one side and the mountain behind: open-matte 4:3 master, landscape and vertical from the same flight.",
     },
     placeholder: false,
-    // "marca" añadida el 2026-09-25: el propio texto ya dice "material
-    // pensado para turismo, marcas y contenido de destino".
-    categories: ["drone", "marca"],
-    tone: 0,
-    // Fase 18 (2026-09-25): pasa a destacada para reequilibrar la portada
-    // hacia el rumbo nuevo — ver la nota de metropolitano.
+    categories: ["drone"],
+    tone: 1,
     featured: true,
-    year: "2026",
-    // CONFIRMADO por Mario el 2026-09-25 (Fase 16): es la costa de Mallorca.
-    // "Mallorca" y no "Palma": es como se busca, y el plano es de costa, no
-    // de ciudad. Antes null — ver la nota de cabecera de este fichero.
-    venue: "Mallorca",
+    year: "2025",
+    venue: "DURO",
     media: {
-      video: "/media/costa-aerea.mp4",
-      poster: "/media/costa-aerea.jpg",
-      vertical: { video: "/media/costa-aerea-vertical.mp4", poster: "/media/costa-aerea-vertical.jpg" },
+      video: "/media/recinto-desde-el-aire.mp4",
+      poster: "/media/recinto-desde-el-aire.jpg",
+      vertical: { video: "/media/recinto-desde-el-aire-vertical.mp4", poster: "/media/recinto-desde-el-aire-vertical.jpg" },
     },
-    title: { es: "La costa desde el aire", en: "The coast from the air" },
-    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
+    title: { es: "DURO — el recinto lleno", en: "DURO — the site at capacity" },
+    date: { es: "9 de noviembre de 2025", en: "9 November 2025" },
     hardFact: {
-      es: "Rodado en la misma salida que las postales de Madrid, cuatro días después",
-      en: "Shot on the same run as the Madrid postcards, four days later",
+      es: "Máster 4:3 abierto de 3840×2880, que permite entregar apaisado y vertical del mismo vuelo",
+      en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
     },
-    // Fase 17 (2026-09-25): ampliado de 60 a ~260 palabras. Aprobado por
-    // Mario tras revisar el borrador.
+    // Fase 17 (2026-09-25): ampliado de 55 a ~300 palabras tras confirmarse
+    // el venue. Añade el desarrollo técnico del encuadre (altura y ángulo)
+    // y la conexión con las otras dos piezas de la misma cobertura de DURO
+    // — nada inventado, sólo desarrollado a partir de lo ya confirmado.
     brief: {
-      es: "Plano aéreo de una bahía de Mallorca con barcos fondeados, rodado el 21 de mayo de 2026, cuatro días después de la serie de postales de Madrid y con el mismo criterio de trabajo: salir a rodar cuando la luz acompaña, no cuando lo pide un cliente con prisa.\n\nEl plano se sostiene por completo en el color del agua, que pasa de turquesa a azul según la profundidad — un gradiente que desde el nivel del mar apenas se percibe, porque el ojo humano a ras de agua no tiene la perspectiva necesaria para comparar zonas distintas de la bahía al mismo tiempo. Desde el aire, en cambio, toda la bahía entra en el mismo encuadre y el cambio de tono se lee de un vistazo: es exactamente el tipo de plano que no se puede conseguir desde el suelo ni desde un barco, por mucho que se intente con un gran angular.\n\nVolar sobre el mar exige además tener en cuenta el viento, que sin edificios ni relieve que lo corten se comporta de forma distinta a como lo hace tierra adentro, y la luz reflejada en el agua, que cambia el plano según la hora del día. Se roda buscando la ventana en la que el reflejo ayuda al plano en vez de quemarlo.\n\nComo el resto de las postales de esta salida, es material pensado para turismo, marcas y contenido de destino: planos limpios, estables y listos para montar, disponibles para quien necesite representar la costa de Mallorca sin organizar un rodaje propio desde cero.",
-      en: "Aerial shot of a Mallorca bay with anchored boats, filmed on 21 May 2026, four days after the Madrid postcard series and with the same approach: going out to shoot when the light cooperates, not when a client is in a hurry.\n\nThe shot rests entirely on the colour of the water, which shifts from turquoise to blue with depth —a gradient barely visible at sea level, because the human eye at water height doesn't have the perspective needed to compare different parts of the bay at once. From the air, by contrast, the whole bay fits in one frame and the shift in tone reads at a glance: it's exactly the kind of shot that can't be got from the ground or from a boat, however wide the lens.\n\nFlying over the sea also means accounting for the wind, which behaves differently with no buildings or terrain to break it, and the light reflecting off the water, which changes the shot depending on the time of day. It's shot looking for the window where the reflection helps the image rather than blowing it out.\n\nLike the rest of the postcards from this trip, it's footage meant for tourism, brands and destination content: clean, steady shots ready to edit, available for anyone who needs to represent the Mallorca coast without setting up a shoot of their own from scratch.",
+      es: "El recinto de DURO lleno, visto desde el aire, con el escenario a un lado y la montaña detrás, rodado el 9 de noviembre de 2025. Es el tipo de plano que necesita cualquier organizador de un evento con aforo: una imagen que demuestra la afluencia de un vistazo, sin depender de una cifra que alguien tenga que defender después.\n\nEl reto de un plano así no es sólo encuadrar el recinto entero: es encontrar la altura y el ángulo en los que el escenario, la montaña y el público quepan en la misma imagen sin que ninguno de los tres reste protagonismo a los otros dos. Demasiado alto, el público se convierte en una mancha sin forma; demasiado bajo, se pierde la montaña que da contexto geográfico al recinto. El punto intermedio es el que hace que la imagen se lea como una sola escena y no como tres elementos superpuestos.\n\nSe roda con encuadre abierto —máster en 4:3 a 3840×2880— para poder entregar la versión horizontal y la vertical del mismo vuelo, sin tener que repetir el sobrevuelo ni recortar perdiendo calidad. Es una decisión de formato que se toma antes de despegar, no en la mesa de montaje.\n\nEs la tercera pieza de la misma cobertura de DURO, junto al show de fuego y el recinto de noche: tres planos que, juntos, cuentan la escala del evento en tres momentos distintos. Ningún plano desde el suelo puede sustituir a éste: ninguna cámara en tierra llega a ver el recinto entero de una vez, y es precisamente esa vista completa lo que convierte este tipo de plano en material de comunicación, tanto para quien no pudo ir como para quien tiene que convencer a un patrocinador de la siguiente edición.",
+      en: "DURO's site at capacity, seen from the air, with the stage on one side and the mountain behind, shot on 9 November 2025. It is the kind of shot every organiser of a venue with capacity needs: an image that proves the turnout at a glance, without relying on a number someone has to defend afterwards.\n\nThe challenge of a shot like this isn't just framing the whole site: it's finding the height and angle where the stage, the mountain and the crowd all fit in the same image without any of the three taking over from the other two. Too high, and the crowd turns into a shapeless smudge; too low, and the mountain that gives the site its geographic context is lost. The middle point is what makes the image read as one scene rather than three stacked elements.\n\nIt's shot open-matte —a 4:3 master at 3840×2880— so the horizontal and vertical versions can be delivered from the same flight, without having to fly it again or lose quality cropping. That's a format decision made before take-off, not at the editing desk.\n\nIt's the third piece from the same DURO coverage, alongside the pyro show and the site at night: three shots that, together, tell the event's scale at three different moments. No ground shot can replace this one: no camera on the ground ever sees the whole site at once, and it's exactly that full view that turns this kind of shot into communication material, both for anyone who missed it and for anyone who has to convince a sponsor to come back for the next edition.",
     },
   },
   {
@@ -404,41 +402,43 @@ const PROYECTOS: Project[] = [
     },
   },
   {
-    // VENUE confirmado por Mario el 2026-09-25, sin duda: es de DURO, como
-    // `duro-pyroshow` y `escenario-de-noche`. Hasta entonces llevaba
-    // `venue: null` — ver la nota de cabecera de este fichero.
-    slug: "recinto-desde-el-aire",
+    slug: "costa-aerea",
     // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
     // reescrita a mano a partir del hardFact — no es un recorte automático
     // del brief, que se pasaba de los 165 que trunca Google.
     metaDescription: {
-      es: "El recinto de DURO lleno, visto desde el aire, con el escenario a un lado y la montaña detrás: máster 4:3 abierto que entrega apaisado y vertical del mismo vuelo.",
-      en: "DURO's site at capacity, from the air, with the stage on one side and the mountain behind: open-matte 4:3 master, landscape and vertical from the same flight.",
+      es: "Bahía de Mallorca con barcos fondeados, con el agua pasando de turquesa a azul según la profundidad: rodada cuatro días después de las postales de Madrid.",
+      en: "An aerial shot of a Mallorca bay with anchored boats, the water shifting from turquoise to blue with depth: shot four days after the Madrid postcards.",
     },
     placeholder: false,
-    categories: ["drone"],
-    tone: 1,
+    // "marca" añadida el 2026-09-25: el propio texto ya dice "material
+    // pensado para turismo, marcas y contenido de destino".
+    categories: ["drone", "marca"],
+    tone: 0,
+    // Fase 18 (2026-09-25): pasa a destacada para reequilibrar la portada
+    // hacia el rumbo nuevo — ver la nota de metropolitano.
     featured: true,
-    year: "2025",
-    venue: "DURO",
+    year: "2026",
+    // CONFIRMADO por Mario el 2026-09-25 (Fase 16): es la costa de Mallorca.
+    // "Mallorca" y no "Palma": es como se busca, y el plano es de costa, no
+    // de ciudad. Antes null — ver la nota de cabecera de este fichero.
+    venue: "Mallorca",
     media: {
-      video: "/media/recinto-desde-el-aire.mp4",
-      poster: "/media/recinto-desde-el-aire.jpg",
-      vertical: { video: "/media/recinto-desde-el-aire-vertical.mp4", poster: "/media/recinto-desde-el-aire-vertical.jpg" },
+      video: "/media/costa-aerea.mp4",
+      poster: "/media/costa-aerea.jpg",
+      vertical: { video: "/media/costa-aerea-vertical.mp4", poster: "/media/costa-aerea-vertical.jpg" },
     },
-    title: { es: "DURO — el recinto lleno", en: "DURO — the site at capacity" },
-    date: { es: "9 de noviembre de 2025", en: "9 November 2025" },
+    title: { es: "La costa desde el aire", en: "The coast from the air" },
+    date: { es: "21 de mayo de 2026", en: "21 May 2026" },
     hardFact: {
-      es: "Máster 4:3 abierto de 3840×2880, que permite entregar apaisado y vertical del mismo vuelo",
-      en: "Open-matte 4:3 master at 3840×2880, which allows landscape and vertical from the same flight",
+      es: "Rodado en la misma salida que las postales de Madrid, cuatro días después",
+      en: "Shot on the same run as the Madrid postcards, four days later",
     },
-    // Fase 17 (2026-09-25): ampliado de 55 a ~300 palabras tras confirmarse
-    // el venue. Añade el desarrollo técnico del encuadre (altura y ángulo)
-    // y la conexión con las otras dos piezas de la misma cobertura de DURO
-    // — nada inventado, sólo desarrollado a partir de lo ya confirmado.
+    // Fase 17 (2026-09-25): ampliado de 60 a ~260 palabras. Aprobado por
+    // Mario tras revisar el borrador.
     brief: {
-      es: "El recinto de DURO lleno, visto desde el aire, con el escenario a un lado y la montaña detrás, rodado el 9 de noviembre de 2025. Es el tipo de plano que necesita cualquier organizador de un evento con aforo: una imagen que demuestra la afluencia de un vistazo, sin depender de una cifra que alguien tenga que defender después.\n\nEl reto de un plano así no es sólo encuadrar el recinto entero: es encontrar la altura y el ángulo en los que el escenario, la montaña y el público quepan en la misma imagen sin que ninguno de los tres reste protagonismo a los otros dos. Demasiado alto, el público se convierte en una mancha sin forma; demasiado bajo, se pierde la montaña que da contexto geográfico al recinto. El punto intermedio es el que hace que la imagen se lea como una sola escena y no como tres elementos superpuestos.\n\nSe roda con encuadre abierto —máster en 4:3 a 3840×2880— para poder entregar la versión horizontal y la vertical del mismo vuelo, sin tener que repetir el sobrevuelo ni recortar perdiendo calidad. Es una decisión de formato que se toma antes de despegar, no en la mesa de montaje.\n\nEs la tercera pieza de la misma cobertura de DURO, junto al show de fuego y el recinto de noche: tres planos que, juntos, cuentan la escala del evento en tres momentos distintos. Ningún plano desde el suelo puede sustituir a éste: ninguna cámara en tierra llega a ver el recinto entero de una vez, y es precisamente esa vista completa lo que convierte este tipo de plano en material de comunicación, tanto para quien no pudo ir como para quien tiene que convencer a un patrocinador de la siguiente edición.",
-      en: "DURO's site at capacity, seen from the air, with the stage on one side and the mountain behind, shot on 9 November 2025. It is the kind of shot every organiser of a venue with capacity needs: an image that proves the turnout at a glance, without relying on a number someone has to defend afterwards.\n\nThe challenge of a shot like this isn't just framing the whole site: it's finding the height and angle where the stage, the mountain and the crowd all fit in the same image without any of the three taking over from the other two. Too high, and the crowd turns into a shapeless smudge; too low, and the mountain that gives the site its geographic context is lost. The middle point is what makes the image read as one scene rather than three stacked elements.\n\nIt's shot open-matte —a 4:3 master at 3840×2880— so the horizontal and vertical versions can be delivered from the same flight, without having to fly it again or lose quality cropping. That's a format decision made before take-off, not at the editing desk.\n\nIt's the third piece from the same DURO coverage, alongside the pyro show and the site at night: three shots that, together, tell the event's scale at three different moments. No ground shot can replace this one: no camera on the ground ever sees the whole site at once, and it's exactly that full view that turns this kind of shot into communication material, both for anyone who missed it and for anyone who has to convince a sponsor to come back for the next edition.",
+      es: "Plano aéreo de una bahía de Mallorca con barcos fondeados, rodado el 21 de mayo de 2026, cuatro días después de la serie de postales de Madrid y con el mismo criterio de trabajo: salir a rodar cuando la luz acompaña, no cuando lo pide un cliente con prisa.\n\nEl plano se sostiene por completo en el color del agua, que pasa de turquesa a azul según la profundidad — un gradiente que desde el nivel del mar apenas se percibe, porque el ojo humano a ras de agua no tiene la perspectiva necesaria para comparar zonas distintas de la bahía al mismo tiempo. Desde el aire, en cambio, toda la bahía entra en el mismo encuadre y el cambio de tono se lee de un vistazo: es exactamente el tipo de plano que no se puede conseguir desde el suelo ni desde un barco, por mucho que se intente con un gran angular.\n\nVolar sobre el mar exige además tener en cuenta el viento, que sin edificios ni relieve que lo corten se comporta de forma distinta a como lo hace tierra adentro, y la luz reflejada en el agua, que cambia el plano según la hora del día. Se roda buscando la ventana en la que el reflejo ayuda al plano en vez de quemarlo.\n\nComo el resto de las postales de esta salida, es material pensado para turismo, marcas y contenido de destino: planos limpios, estables y listos para montar, disponibles para quien necesite representar la costa de Mallorca sin organizar un rodaje propio desde cero.",
+      en: "Aerial shot of a Mallorca bay with anchored boats, filmed on 21 May 2026, four days after the Madrid postcard series and with the same approach: going out to shoot when the light cooperates, not when a client is in a hurry.\n\nThe shot rests entirely on the colour of the water, which shifts from turquoise to blue with depth —a gradient barely visible at sea level, because the human eye at water height doesn't have the perspective needed to compare different parts of the bay at once. From the air, by contrast, the whole bay fits in one frame and the shift in tone reads at a glance: it's exactly the kind of shot that can't be got from the ground or from a boat, however wide the lens.\n\nFlying over the sea also means accounting for the wind, which behaves differently with no buildings or terrain to break it, and the light reflecting off the water, which changes the shot depending on the time of day. It's shot looking for the window where the reflection helps the image rather than blowing it out.\n\nLike the rest of the postcards from this trip, it's footage meant for tourism, brands and destination content: clean, steady shots ready to edit, available for anyone who needs to represent the Mallorca coast without setting up a shoot of their own from scratch.",
     },
   },
   {
