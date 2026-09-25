@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (117) — "Volver a medir esta página" en /admin/seo
+
+Mario editaba una ficha y no veía el efecto hasta el cron de la noche
+siguiente. Un botón por fila en la tabla de páginas, "Volver a medir
+esta página": mide sólo esa URL (~1 s) y actualiza sólo esa fila, sin
+tocar el resto ni esperar al cron.
+
+**Descartado a propósito el botón de "medir todo el sitio"** que se
+había hablado antes: el cron ya barre las 72 páginas cada noche a las
+03:07, y un segundo disparador haría el mismo trabajo dos veces. Con
+eso fuera, tampoco hacía falta el cerrojo ni el intervalo mínimo entre
+ejecuciones que ese botón habría necesitado — una sola URL por click no
+los necesita.
+
+**Reutilizado, no duplicado**: `medirPagina(url)`, sacada de
+`scripts/seo-paginas.mjs` a `scripts/seo-lib.mjs` junto con `clasificar`
+y `problemasDe`, que ya vivían ahí en espíritu. El barrido nocturno
+sigue llamando exactamente a la misma función dentro de su bucle —
+comprobado con una pasada de las 72 páginas antes y después del
+refactor: mismo resultado, "24 con algún problema" en los dos casos.
+
+**Autenticación, verificada de la forma que se pidió**: `POST
+/admin-seo-medir-pagina` comprueba la sesión con `payload.auth({
+headers })` —la misma comprobación que usa Payload por dentro— antes de
+tocar nada. Probado con `curl` sin cookie: `401`, y el `paginas.json` en
+disco sin cambiar ni un byte. Esto importa más que en la vista de
+sólo lectura: esta ruta SÍ ejecuta algo (una petición de red hacia
+nuestro propio dominio) si alguien la alcanza sin sesión.
+
+**Qué dato es de cuándo**: cada fila lleva su propia columna "Medido".
+Las que vienen del barrido nocturno enseñan la hora de ese barrido, en
+gris. La que se acaba de remedir a mano enseña su propia hora, en
+verde y marcada "a mano" — no se puede confundir una con otra.
+
+Se guarda en el mismo `paginas.json` que lee la vista: sólo esa fila se
+sustituye, el resto se queda exactamente como lo dejó el cron. Así
+sobrevive a una recarga de la página, no sólo a la sesión del navegador.
+
+---
+
 ## 2026-09-25 (116) — WhatsApp también en el pie
 
 Mario, sobre una captura del pie: el enlace de WhatsApp, junto a las

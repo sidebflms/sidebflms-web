@@ -109,8 +109,9 @@ export async function SeoView(props: AdminViewServerProps) {
     <Gutter>
       <h1 style={{ fontSize: 22, marginBottom: 4 }}>SEO y estadísticas</h1>
       <p style={{ fontSize: 13, opacity: 0.7, marginBottom: 20 }}>
-        Sólo lectura. Los datos de salud y de la tabla por página los recalcula un cron cada noche —esta vista no
-        ejecuta nada al abrirla—.
+        Sólo lectura: no edita ninguna ficha. Los datos de salud y de la tabla por página los recalcula un cron cada
+        noche —esta vista no ejecuta nada al abrirla—, salvo el botón «Volver a medir esta página» de cada fila, que
+        vuelve a medir sólo esa URL al pulsarlo.
       </p>
 
       <section style={{ marginBottom: 32 }}>
@@ -135,7 +136,7 @@ export async function SeoView(props: AdminViewServerProps) {
           </p>
         ) : (
           <div style={{ marginTop: 10 }}>
-            <SeoTablaPaginas paginas={paginas.paginas} enlaces={enlaces} />
+            <SeoTablaPaginas paginas={paginas.paginas} enlaces={enlaces} fechaBarrido={paginas.fecha} />
           </div>
         )}
       </section>

@@ -29,6 +29,12 @@ export type Pagina = {
   descripcion: { texto: string; longitud: number };
   h1: { cantidad: number };
   problemas: string[];
+  /**
+   * Presente SÓLO si esta fila se volvió a medir a mano con el botón
+   * (2026-09-26), aparte del barrido nocturno que fecha el conjunto. Si
+   * falta, la fila es de la fecha de `Paginas.fecha`, como todas las demás.
+   */
+  medida?: string;
 };
 export type Paginas = { fecha: string; base: string; paginas: Pagina[] };
 
