@@ -391,7 +391,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Site owner",
-        text: "SIDEBFLMS · contact@sidebflms.com",
+        text: "SIDEBFLMS · Tax ID BSIDEBFLMS · Calle de Cuba 43, Fuenlabrada, Madrid, Spain · contact@sidebflms.com",
       },
       {
         heading: "Purpose",
@@ -413,7 +413,7 @@ export const en: Dictionary = {
     body: [
       {
         heading: "Controller",
-        text: "SIDEBFLMS · contact@sidebflms.com",
+        text: "SIDEBFLMS · Tax ID BSIDEBFLMS · Calle de Cuba 43, Fuenlabrada, Madrid, Spain · contact@sidebflms.com",
       },
       {
         heading: "Purpose",

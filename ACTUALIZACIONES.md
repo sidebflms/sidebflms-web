@@ -5,6 +5,27 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (102) — NIF y domicilio fiscal en el Aviso Legal y la Privacidad
+
+Cierra la mitad del punto (100). Mario dio el NIF (`BSIDEBFLMS`) y el
+domicilio fiscal (`Calle de Cuba 43, Fuenlabrada, Madrid`, el mismo que ya
+se usaba en el pie desde la Fase 9 de SEO) el 2026-09-25. Añadidos a
+`legal.body[0]` ("Titular del sitio") y `privacy.body[0]` ("Responsable"),
+en `content/dictionaries/es.ts` y `en.ts`.
+
+**Aviso sobre el NIF:** `BSIDEBFLMS` no tiene forma de CIF español (letra +
+7 dígitos + 1 carácter de control, ej. `B12345678` — esto son sólo letras,
+sin ningún dígito). Se lo señalé a Mario antes de escribir nada y confirmó
+explícitamente que lo publicara tal cual, así que así se ha hecho. Queda
+constancia aquí por si algún día hace falta revisarlo.
+
+Con esto el Aviso Legal ya nombra, NIF y domicilio, como pide el art. 10 de
+la LSSI-CE — sigue pendiente que alguien con el título revise el conjunto
+antes de darlo por blindado del todo (nota que ya estaba en el código desde
+el 2026-09-10, sin resolver).
+
+---
+
 ## 2026-09-25 (101) — Barrido de "pendientes" sueltos por el código
 
 Tras el punto (100), Mario pidió un barrido de todo el repositorio en busca

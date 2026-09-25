@@ -473,17 +473,14 @@ export const es = {
 
   legal: {
     title: ["Aviso", "legal"],
-    // DECISIÓN (Mario, 2026-09-10): aquí va sólo "SIDEBFLMS". Se quitaron los
-    // huecos del CIF y del domicilio fiscal en vez de rellenarlos.
-    //
-    // Que conste lo que eso implica: el art. 10 de la LSSI-CE obliga a que un
-    // sitio comercial publique el nombre, el NIF y el domicilio de quien lo
-    // opera. Sin ellos el aviso legal NO cumple. Si algún día se quiere que
-    // cumpla, es aquí y en `privacy.body[0]`, y en los mismos sitios de `en.ts`.
+    // NIF y domicilio fiscal dados por Mario el 2026-09-25 (completa la
+    // DECISIÓN del 2026-09-10, que los había dejado fuera). El art. 10 de la
+    // LSSI-CE obliga a que un sitio comercial publique el nombre, el NIF y
+    // el domicilio de quien lo opera; con esto ya lo hace.
     body: [
       {
         heading: "Titular del sitio",
-        text: "SIDEBFLMS · contact@sidebflms.com",
+        text: "SIDEBFLMS · NIF BSIDEBFLMS · Calle de Cuba 43, Fuenlabrada, Madrid · contact@sidebflms.com",
       },
       {
         heading: "Objeto",
@@ -502,13 +499,13 @@ export const es = {
 
   privacy: {
     title: ["Política de", "privacidad"],
-    // PENDIENTE: validar con asesoría antes de abrir la web al público. El
-    // responsable queda como "SIDEBFLMS" por decisión de Mario (ver la nota
-    // del aviso legal), sin NIF ni domicilio, que el RGPD también espera.
+    // PENDIENTE: validar con asesoría legal — la web lleva pública desde el
+    // 2026-09-24 sin esa validación. El NIF y el domicilio (2026-09-25) ya
+    // están; lo que falta es que alguien con el título revise el conjunto.
     body: [
       {
         heading: "Responsable",
-        text: "SIDEBFLMS · contact@sidebflms.com",
+        text: "SIDEBFLMS · NIF BSIDEBFLMS · Calle de Cuba 43, Fuenlabrada, Madrid · contact@sidebflms.com",
       },
       {
         heading: "Finalidad",
