@@ -22,6 +22,13 @@ import { DEFAULT_LOCALE, LOCALES, ROUTES, type Locale } from "@/lib/routes";
 const LOCALE_COOKIE = "sideb_locale";
 /** Un año: es una preferencia, no una sesión. */
 const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+/**
+ * `false` sólo en local: `next dev` sirve por `http://`, y un navegador
+ * descarta una cookie `Secure` que llega por ahí sin cifrar — la cookie
+ * dejaría de guardarse en desarrollo. En producción la web siempre va por
+ * HTTPS (auditoría de seguridad, 2026-09-25).
+ */
+const COOKIE_SECURE = process.env.NODE_ENV === "production";
 
 /**
  * Parsea `Accept-Language` a mano en vez de tirar de `negotiator` +
@@ -113,6 +120,7 @@ export function proxy(request: NextRequest) {
     response.cookies.set(LOCALE_COOKIE, localeEnRuta, {
       maxAge: LOCALE_COOKIE_MAX_AGE,
       sameSite: "lax",
+      secure: COOKIE_SECURE,
     });
     return response;
   }
@@ -133,6 +141,7 @@ export function proxy(request: NextRequest) {
   response.cookies.set(LOCALE_COOKIE, locale, {
     maxAge: LOCALE_COOKIE_MAX_AGE,
     sameSite: "lax",
+    secure: COOKIE_SECURE,
   });
   return response;
 }

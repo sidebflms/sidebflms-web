@@ -5,6 +5,61 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (100) — Auditoría de seguridad: lo barato ya, y dos correcciones mías
+
+Mario trajo una auditoría de seguridad externa de sidebflms.com. Del triaje,
+esto es lo que se arregló sin necesitar más decisión suya (lo demás —2FA,
+investigar las caídas del vigilante, HSTS `preload`, el test de inyección
+del formulario— queda pendiente de que él diga qué quiere).
+
+**Arreglado:**
+
+- `proxy.ts` — la cookie `sideb_locale` no llevaba `Secure`. Ahora sí, en
+  producción (`COOKIE_SECURE = NODE_ENV === "production"`; en `false` en
+  local, porque `next dev` sirve por `http://` y un navegador descarta una
+  cookie `Secure` que llega sin cifrar).
+- `app/.well-known/security.txt/route.ts` (nuevo) — no existía. RFC 9116,
+  con el único contacto real de la empresa (`contact@sidebflms.com`, el
+  mismo de `lib/correo.ts`) y caduca en un año, como pide la RFC.
+
+**Dos cosas que el informe daba por ausentes y no lo estaban — comprobado
+en el código antes de tocar nada, no de memoria:**
+
+- El honeypot del formulario de contacto SÍ existe (`components/ui/contact-
+  form.tsx`, campo oculto `company`, comprobado en el servidor en
+  `app/[locale]/contact/actions.ts`). Lo escribí yo mismo en una fase
+  anterior de esta misma web.
+- El *rate-limiting* del lado servidor también existe, y no es trivial:
+  `lib/limite-envios.ts` — 3 envíos por IP y hora, 8 por IP y día, 60 de
+  toda la web al día, en memoria porque la web corre como un solo proceso
+  Node. La IP sale de `x-real-ip`, que pone `proxy.php` a partir de la
+  conexión real (no de lo que diga el visitante) — ver `lib/ip-
+  visitante.ts`. Cubre los dos formularios (contacto y "Trabaja con
+  nosotros"). Se lo dije a Mario como si faltara y no era así: correcto
+  aquí para que quede constancia.
+
+**Sobre el 502 "cacheado" que abría la auditoría:** investigado a fondo
+(configuración real de nginx en el servidor, código de `proxy.php`, logs
+del vigilante) y el diagnóstico del informe no encaja con cómo está
+montado esto: no hay ninguna caché de nginx ni CDN delante de la web —
+comprobado, es un proxy simple— así que la cabecera `s-maxage` que puso
+Next.js en una respuesta buena es inerte aquí, no hay nada que la
+obedezca. Cuando Node de verdad no responde, `proxy.php` da un 502 en
+texto plano sin cabeceras de caché. Lo real y ya sabido: el vigilante
+registra caídas breves, casi siempre durante despliegues (presión de
+memoria del VPS, ver `[[project_pending_robustness_test]]` en la memoria
+de sesiones anteriores). No se ha tocado nada de esto — Mario dijo que lo
+investigaría o no según quisiera, y de momento no lo ha pedido.
+
+**Ya eran correctos sin tocar nada, y se confirmaron mirando el código
+en vez de fiarse del informe:** el bloqueo de `/admin` tras 5 intentos en
+10 minutos (valor de fábrica de Payload en cuanto hay `auth: true`, no
+algo que alguien configurara a mano) y la política de `unsafe-inline` en
+la CSP, que es una decisión consciente y documentada en `next.config.ts`
+desde antes de esta auditoría, con el criterio exacto de cuándo revisarla.
+
+---
+
 ## 2026-09-25 (99) — Fase 13: reescritura de identidad, drone y "el circuito" incluidos
 
 Mario corrigió el rumbo de la empresa: drone profesional de alto nivel —
