@@ -85,6 +85,7 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
           principal={{ texto: dict.services.cta, id: ID_FORM }}
           secundario={{ texto: dict.faq.label, id: ID_FAQ }}
           whatsapp
+          telefono
         />
         {/* SIDEBFLMS-web (2026-09-25): la dirección se quita del pie —salía
             apretada junto al teléfono y las redes en las 72 páginas— y se

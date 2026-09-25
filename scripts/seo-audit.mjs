@@ -203,14 +203,32 @@ async function auditar() {
   // Ahora se buscan tramos de cifras y separadores, se les quitan los
   // separadores, y se comprueba la LONGITUD final (9 cifras, u 11 con el 34
   // del prefijo) en vez de una forma concreta de agruparlas.
-  const hayTelefono = (textoTodo.match(/(\+?\d[\d\s.-]{6,14}\d)/g) ?? []).some((m) => {
+  /**
+   * EL TELÉFONO NO TIENE POR QUÉ ESTAR COMO TEXTO SUELTO. Mario lo quitó del
+   * pie a propósito el 2026-09-25: prefiere un botón de WhatsApp, y la calle
+   * sólo en Contacto. Esa decisión es suya y el criterio no debe castigarla
+   * —antes daba 2/5 con el número perfectamente publicado—.
+   *
+   * Lo que de verdad importa es que el número esté donde una máquina pueda
+   * leerlo y cruzarlo con la ficha de Google, y lo está en tres sitios: el
+   * texto visible, un enlace `tel:` o `wa.me`, y el campo `telephone` del
+   * JSON-LD. Vale cualquiera de los tres.
+   *
+   * OJO: aquí se mira el HTML COMPLETO, no el texto sin etiquetas, porque
+   * `wa.me/34614963693` y el JSON-LD viven en atributos y en un <script>.
+   */
+  const htmlTodo = vivas.map((p) => p.html).join(" ");
+  const enTexto = (textoTodo.match(/(\+?\d[\d\s.-]{6,14}\d)/g) ?? []).some((m) => {
     const cifras = m.replace(/\D/g, "");
     return cifras.length === 9 || (cifras.length === 11 && cifras.startsWith("34"));
   });
+  const enEnlace = /(?:tel:|wa\.me\/|api\.whatsapp\.com\/send\?phone=)\+?\d{9,}/i.test(htmlTodo);
+  const enSchema = /"telephone"\s*:\s*"[^"]*\d{6}/.test(htmlTodo);
+  const hayTelefono = enTexto || enEnlace || enSchema;
   const hayDireccion = /\b(calle|c\/|avenida|avda|plaza|polígono|carrer)\b/i.test(textoTodo);
   const ptsNap = (hayTelefono ? 3 : 0) + (hayDireccion ? 2 : 0);
   check("local", "nap", "Teléfono y dirección visibles en la web", ptsNap, 5,
-    `teléfono: ${hayTelefono ? "sí" : "no"}, dirección: ${hayDireccion ? "sí" : "no"}`);
+    `teléfono: ${hayTelefono ? (enTexto ? "sí, como texto" : "sí, en enlace/schema") : "no"}, dirección: ${hayDireccion ? "sí" : "no"}`);
 
   /**
    * Las ciudades CANDIDATAS, no las conseguidas. La lista salió de las cinco

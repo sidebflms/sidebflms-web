@@ -5,6 +5,55 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (115) — El teléfono, en texto legible, sólo en Contacto
+
+El número existía sólo dentro del enlace `wa.me/` y del `telephone` del
+JSON-LD —comprobado con curl sobre el HTML sin los `<script>`—, así que
+Google lo lee bien, pero quien prefiere llamar en vez de escribir no lo
+encontraba en ningún sitio. En producción de cine se llama; el día del
+rodaje nadie mira el móvil.
+
+Añadido, SÓLO en `/es/contact` y `/en/contact`, junto a la pastilla de
+WhatsApp que ya existía (sin tocarla): una pastilla más, con el mismo
+estilo exacto que la del correo —`CabeceraFormulario`, prop nueva
+`telefono`, aparte de `whatsapp` a propósito para no rozar esa pastilla—.
+Enseña `+34 614 96 36 93`, el mismo formato 3-2-2-2 que el JSON-LD y la
+ficha de Google Business —si no coincidieran letra a letra, Google podría
+tomarlos por datos distintos—, y enlaza a `tel:+34614963693` para poder
+llamar tocando en el móvil.
+
+El pie sigue sin teléfono ni dirección: esa decisión no se toca. «Trabaja
+con nosotros» tampoco lleva esta pastilla nueva: comparte `CabeceraFormulario`
+con Contacto, pero la prop `telefono` sólo se pasa desde `contacto-tarjetas.tsx`.
+
+---
+
+## 2026-09-25 (114) — El criterio del teléfono, corregido (no la web)
+
+Mario quitó a propósito el teléfono y la calle del pie: prefiere un botón de
+WhatsApp, y la dirección sólo en Contacto. El auditor lo marcó como fallo
+—2/5, y la nota bajó de 91 a 88— porque buscaba el número **como texto
+suelto**, y ahí ya no está.
+
+La web está bien; el criterio estaba mal. El número SÍ está publicado y en
+sitios que una máquina lee sin problema: el enlace `wa.me/34614963693` y el
+campo `telephone` del JSON-LD, que es justo lo que Google cruza con la ficha
+de Google Business. Ahora vale cualquiera de las tres formas (texto, enlace
+`tel:`/`wa.me`, o schema), y el detalle dice cuál se encontró.
+
+LA PRUEBA QUE SE APLICÓ PARA TOCAR EL MEDIDOR, la misma que se usó para
+revertir el cambio de `urlsDinero` en su día: ¿el dato existe de verdad y el
+criterio no sabía verlo, o el criterio tenía razón y falta el trabajo? Aquí
+es lo primero —el número está publicado y comprobado con curl en el enlace y
+en el schema—, así que se corrige el criterio. Cuando es lo segundo, no se
+toca nada.
+
+Sin relación con esto: en el barrido salió que el número no se LEE en ningún
+sitio, tampoco en Contacto. Se le ha dicho a Mario; es decisión suya si lo
+pone o no.
+
+---
+
 ## 2026-09-25 (113) — Fix urgente: /admin/seo estuvo pública sin sesión
 
 Encontrado por verificación propia tras desplegar la Fase 22, con un

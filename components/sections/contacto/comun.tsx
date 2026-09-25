@@ -104,6 +104,7 @@ export function CabeceraFormulario({
   principal,
   secundario,
   whatsapp,
+  telefono,
 }: {
   dict: Dictionary;
   rotulo: string;
@@ -119,10 +120,20 @@ export function CabeceraFormulario({
    * de ahí, sin un campo nuevo que pueda desincronizarse del real.
    */
   whatsapp?: boolean;
+  /**
+   * El teléfono, en texto legible y como enlace `tel:` (2026-09-25). Prop
+   * aparte de `whatsapp` a propósito: esa pastilla no se toca —decisión ya
+   * tomada—, y esto es un añadido distinto, sólo en Contacto, para quien
+   * prefiere llamar. Mismo teléfono, mismo formato que el JSON-LD y la
+   * ficha de Google Business: si no coinciden letra a letra, Google puede
+   * tomarlos por datos distintos.
+   */
+  telefono?: boolean;
 }) {
   const redes = redesContacto(dict);
   const textoMovil = secundario ? "text-[10px] tracking-[0.04em]" : "text-xs tracking-[0.08em]";
   const numeroWhatsapp = dict.contact.phone.replace(/\D/g, "");
+  const hrefTelefono = `tel:+${numeroWhatsapp}`;
 
   return (
     <Reveal>
@@ -182,6 +193,14 @@ export function CabeceraFormulario({
               <span className="truncate">{dict.contact.whatsapp}</span>
             </a>
           )}
+          {telefono && (
+            <a
+              href={hrefTelefono}
+              className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+            >
+              <span className="truncate">{dict.contact.phone}</span>
+            </a>
+          )}
         </div>
       </div>
 
@@ -211,6 +230,14 @@ export function CabeceraFormulario({
             className="glass inline-flex h-11 items-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300"
           >
             {dict.contact.whatsapp}
+          </a>
+        )}
+        {telefono && (
+          <a
+            href={hrefTelefono}
+            className="glass inline-flex h-11 items-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300"
+          >
+            {dict.contact.phone}
           </a>
         )}
         {redes.map((red) => (
