@@ -116,6 +116,11 @@ export function datosNegocio(dict: { contact: { phone: string; email: string; ad
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "SIDEBFLMS",
+    // Fase 19 (2026-09-25): buscando "sideb films" o "sidebfilms" salían
+    // otras empresas (Perth, Riverside, Los Ángeles) porque nadie le decía
+    // a Google que son la misma marca. `alternateName` es el mecanismo
+    // estándar de schema.org para esto.
+    alternateName: ["SIDEB FILMS", "Side B Films", "SideB Films"],
     url: SITE_URL,
     logo: `${SITE_URL}${conBase("/logo/mark.svg")}`,
     sameAs: REDES.map((red) => red.href),
