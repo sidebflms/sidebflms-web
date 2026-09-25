@@ -56,13 +56,37 @@ datos, no tiempo de pintado.
 Los tres arreglos de este punto se quedan: son correctos y ahorran
 datos reales en el móvil de quien visita, aunque no muevan el número de
 Lighthouse. Pero el problema que Mario quería resolver —LCP pobre—
-sigue sin arreglar, y el camino para arreglarlo de verdad (aligerar lo
-que bloquea el pintado antes de que llegue el JavaScript, o mover el
-`<h1>` fuera de un componente cliente tan grande) es un cambio de otra
-naturaleza, más profundo, que puede tocar cómo está construido el hero
-—no el diseño visual, pero sí su arquitectura—. Se para aquí a
-propósito para que Mario decida si seguir por ese camino antes de tocar
-más.
+sigue sin arreglar.
+
+**CIERRE, decisión de Mario (2026-09-25): se para aquí.** El propio
+informe de Lighthouse lo dice: *"The Chrome User Experience Report does
+not have sufficient real-world speed data for this page"*. Google
+posiciona con datos de campo (CrUX/Search Console), no con Lighthouse
+—que es un laboratorio, una sola carga simulada, no lo que ven las
+visitas reales—. Sin datos de campo, este 68/100 no le está costando
+nada a la web hoy. Y el cambio que arreglaría el LCP de verdad —sacar
+el `<h1>` de `HeroFrame`, que es un componente cliente entero— toca el
+hero justo la misma semana en que la Fase 20 deshizo un cambio grande
+de la portada hecho con buena intención. Dos motivos para no repetirlo
+sin necesidad probada.
+
+**Se retoma cuando Search Console tenga datos de Core Web Vitals de
+campo reales.** Si entonces el LCP de campo sigue por encima de 4 s, la
+versión estrecha ya está pensada: sacar sólo el `<h1>` pequeño del
+componente cliente, sin tocar la animación ni el resto de `HeroFrame`.
+
+**Lo que vale la pena recordar dentro de tres meses**, para que nadie
+vuelva a perseguir los 33 MB de vídeo creyendo que son el problema:
+
+- Las cintas de proyecto bajo el pliegue ya iban en diferido
+  (`preload="none"` + `IntersectionObserver`) desde el 22 de
+  septiembre, antes de esta ronda — nunca fue el problema.
+- El hero sólo baja `reel-720.mp4` en móvil — nunca `reel-1920.mp4`.
+- El elemento LCP no es ningún vídeo ni ninguna imagen: es el `<h1>`
+  pequeño «PRODUCTORA AUDIOVISUAL Y GRABACIÓN CON DRONE EN ESPAÑA»,
+  retrasado ~2,1 s por lo que bloquea el pintado antes de que
+  `HeroFrame` (GSAP, SplitText, ScrollTrigger) termine de hidratarse.
+  El peso de vídeo nunca competía con eso.
 
 Cifras completas y el JSON de Lighthouse (antes y después), guardados
 para consulta si hace falta: pedir a Claude, no están en el repositorio.
