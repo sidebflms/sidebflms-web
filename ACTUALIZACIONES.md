@@ -5,6 +5,31 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (113) — Fix urgente: /admin/seo estuvo pública sin sesión
+
+Encontrado por verificación propia tras desplegar la Fase 22, con un
+`curl` sin ninguna cookie contra producción ya publicada — no lo avisó
+Mario, lo comprobé yo mismo después de desplegar. **Payload NO exige
+sesión en las vistas de admin personalizadas por defecto**, a
+diferencia de las vistas de colección: `RootPage` (en
+`@payloadcms/next`) salta su propio redirect a `/admin/login` cuando la
+ruta coincide con una vista registrada en `admin.components.views`. La
+vista de la Fase 22 —con la tabla de 72 páginas y sus problemas— estuvo
+servida en un `200` a cualquiera que la pidiera, sin login, durante los
+minutos que van entre ese primer despliegue y este arreglo.
+
+Arreglado en `panel/vistas/seo-view.tsx`: si `props.user` no existe,
+`redirect("/admin/login")` antes de leer o pintar nada. Verificado en
+local y en producción, con `curl` sin cookie, antes y después del
+arreglo.
+
+Nadie vio datos sensibles de verdad —esto son estadísticas internas de
+SEO, no datos de clientes—, pero queda anotado por si alguna vista de
+admin personalizada se añade en el futuro: **Payload no la protege
+sola, hay que comprobarlo a mano en cada una.**
+
+---
+
 ## 2026-09-25 (112) — Fase 22: "SEO y estadísticas" en el panel
 
 Vista propia de Payload, en `/admin/seo`, con su enlace junto a las
