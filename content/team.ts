@@ -115,10 +115,9 @@ export type Miembro = {
  *     estado del móvil arriba y la de «Send message» abajo. Se recortó a mano
  *     (`crop=900:1125:417:926`) para quitar el interfaz.
  *
- *     **ATENCIÓN AL CRÉDITO:** la story llevaba «@minifont» sobreimpreso, que
- *     es presumiblemente quien hizo la foto. Publicarla en una web comercial
- *     necesita su permiso, igual que hizo falta el de las marcas. PENDIENTE de
- *     confirmar con Mario.
+ *     La story llevaba «@minifont» sobreimpreso. CONFIRMADO con Mario
+ *     (2026-09-25): la foto la hizo el propio equipo, así que ese crédito no
+ *     es de un tercero y no hace falta ningún permiso para publicarla.
  *   · **Natalia** venía en HEIC y `ffprobe` decía 512×512 — era mentira: el
  *     HEIC va en baldosas de 512 y `sips` da el tamaño real, 3024×4032. Si se
  *     hubiera hecho caso a `ffprobe` se habría descartado una foto buena por

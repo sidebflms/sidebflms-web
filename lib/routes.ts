@@ -107,6 +107,6 @@ export function translatePath(pathname: string, to: Locale): string {
   return `/${[to, translated, ...rest].filter(Boolean).join("/")}`;
 }
 
-/** URL canónica del sitio. TODO (cliente): confirmar el dominio definitivo. */
+/** URL canónica del sitio: sidebflms.com, confirmado y en producción. */
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://sidebflms.com";

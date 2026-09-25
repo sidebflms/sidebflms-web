@@ -5,6 +5,41 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (101) — Barrido de "pendientes" sueltos por el código
+
+Tras el punto (100), Mario pidió un barrido de todo el repositorio en busca
+de otras notas tipo "PENDIENTE"/"TODO" olvidadas de la misma manera que el
+NIF y el domicilio del aviso legal (ese, el (100), sigue abierto — falta que
+Mario dé esos datos). Del barrido salieron dos cosas reales, ya resueltas
+con su confirmación, y dos que eran ruido de comentarios sin actualizar:
+
+**Confirmado por Mario, código actualizado:**
+
+- `content/team.ts` — la foto de María llevaba sobreimpreso el crédito
+  "@minifont", que parecía de un tercero y necesitaría su permiso para
+  publicarse en una web comercial. Confirmado: la hizo el propio equipo, no
+  hace falta ningún permiso.
+- `components/layout/footer.tsx` — las tres URLs de redes sociales del pie
+  (Instagram, LinkedIn, YouTube) estaban deducidas del nombre de la marca,
+  no verificadas. Confirmadas por Mario: son las cuentas reales.
+
+**Comentarios viejos sin nada real detrás, limpiados:**
+
+- `lib/routes.ts` — el TODO de "confirmar el dominio definitivo" ya estaba
+  resuelto hace semanas (sidebflms.com lleva en producción todo este
+  proyecto); sólo faltaba borrar la nota.
+- `content/dictionaries/en.ts` — la sección de cobertura aérea llevaba un
+  aviso de "BLOCKING BEFORE LAUNCH" que en realidad ya estaba resuelto igual
+  que la versión en español (piloto certificado confirmado, `pending:
+  false`); el texto del comentario no se había actualizado.
+
+**Quedó fuera del barrido, no es un fallo:** `lib/fonts.ts` — Akira
+Expanded no tiene licencia comercial todavía, pero el fichero de verdad no
+existe y la web usa una alternativa mientras tanto, así que no se sirve nada
+sin licencia. Sólo un recordatorio de que sigue sin comprarse.
+
+---
+
 ## 2026-09-25 (100) — Auditoría de seguridad: lo barato ya, y dos correcciones mías
 
 Mario trajo una auditoría de seguridad externa de sidebflms.com. Del triaje,

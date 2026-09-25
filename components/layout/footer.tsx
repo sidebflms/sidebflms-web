@@ -6,11 +6,8 @@ import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
 
 /**
- * ⚠️ TODO (cliente) — LAS TRES URLs ESTÁN SIN CONFIRMAR.
- *
- * Están deducidas del nombre de la marca, no verificadas. Un enlace social
- * roto en el pie de una web comercial es de las cosas que más barato se
- * arreglan y peor sientan, así que **confírmalas antes de abrir la web**.
+ * Las tres URLs de `social-icons.tsx` están CONFIRMADAS por Mario
+ * (2026-09-25): son las cuentas reales.
  *
  * Vimeo se retiró el 2026-09-10 y entran LinkedIn y YouTube: quien contrata
  * producción para una marca o un festival está en LinkedIn, no en Vimeo.

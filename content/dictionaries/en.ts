@@ -207,12 +207,11 @@ export const en: Dictionary = {
       {
         number: "03",
         title: "Aerial coverage",
-        // TODO (client) — BLOCKING BEFORE LAUNCH: same as the Spanish version.
-        // Deliberately generic wording. The exact claim about permits and
-        // flight category must be checked against the real paperwork.
+        // RESUELTO — ver la nota de es.ts: confirmado que hay piloto
+        // certificado. Redacción deliberadamente genérica: la categoría de
+        // vuelo exacta y el papeleo con ENAIRE no se escriben de memoria.
         body: "Aerial shots with a certified pilot and a safety perimeter coordinated with production.",
         items: ["Certified pilot", "Hyperlapse and sunrise", "Crowd-scale shots", "Production liaison"],
-        // Ver la nota de es.ts: confirmado que hay piloto certificado.
         pending: false,
       },
       {
