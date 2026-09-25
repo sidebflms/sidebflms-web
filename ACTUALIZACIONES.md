@@ -5,6 +5,66 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (105) — Fase 17 (parcial): títulos, meta descripciones, portada, ciudades y servicios
+
+Mario pidió un barrido de las 72 URLs del sitemap (la auditoría automática
+sólo mide 7). Salieron seis puntos; éste cierra los cinco que no dependían
+de su aprobación. El sexto —engordar las 24 fichas de proyecto— tiene un
+borrador de las 7 primeras esperando su visto bueno antes de seguir con
+las otras 17 (ver más abajo, sin número propio todavía porque no está
+escrito en el código).
+
+**Títulos.** Sólo la portada llevaba la marca delante
+("SIDEBFLMS — ..."); comprobado en las dos dictionaries y en las rutas
+dinámicas de portfolio y ciudad, que ya la llevaban al final. Corregida en
+los dos idiomas, dentro del límite de 65 caracteres.
+
+**Meta descripciones.** Las 23 fichas de portfolio (no 24 — corrección
+sobre el encargo) usaban el primer párrafo del brief como descripción, que
+se pasaba de largo en las 23: de 170 a 263 caracteres, Google las
+truncaba todas. Nuevo campo `metaDescription` por ficha, 150-160
+caracteres, reescrito a mano por cada una conservando su `hardFact`. No es
+un recorte automático. Cableado a través del panel —nueva columna,
+migración incluida— y de `/admin-carga`, no sólo del fichero estático, así
+que sigue funcionando si algún día se edita desde ahí. `/es/legal` (25
+car.) y `/es/privacy` (51 car.) también reescritas, ahora con lo que ya
+dice cada página.
+
+**Portada.** De 344 a la media del sitio subiendo a 809 palabras entre
+todo lo de este punto: cinco secciones nuevas debajo del hero —que no se
+toca—, qué hacemos, para quién, cómo trabajamos, dónde operamos y por qué
+nosotros. Reutilizan contenido ya aprobado (`services.offer`,
+`services.stages`) en vez de argumentos nuevos sin respaldo.
+
+**Páginas de ciudad — AVISO, no llegan a 800.** Madrid pasó de ~115 a
+~400 palabras de cuerpo (un párrafo por venue/cliente, incluye Prospa que
+antes no se mencionaba). Barcelona y Mallorca se ampliaron con lo que hay
+—236 y 176 palabras de cuerpo— pero las tres piezas de Barcelona son del
+mismo evento (DURO) y las dos de Mallorca de la misma salida de un solo
+día: pasar de ahí sería repetir o inventar. Avisado en vez de inflado, tal
+como pedía el encargo.
+
+**`/es/servicios`.** Los nueve "qué hacemos" y las cuatro etapas pasan de
+una frase a dos cada uno, con detalle de proceso o formato ya establecido
+en otras páginas (24-48h, encuadre abierto, categorías AESA desde 2022) —
+nada nuevo, sólo desarrollado. De ~511 palabras a un aumento notable,
+aunque no está medido con la misma precisión que el resto porque el
+auditor no tiene un chequeo específico para esta página.
+
+**Auditoría tras este punto:**
+
+```
+TOTAL: 98/108  (91/100)  — Excelente
+Antes: 57/108   Diferencia: +41 puntos
+```
+
+Snapshot en `docs/seo/fase17.json`. "Páginas por ciudad" llega a 5/5:
+`scripts/seo-audit.mjs` apareció ya modificado en el disco con Mallorca
+añadida a la lista de candidatas —no se ha tocado más allá de incluirlo,
+ver el aviso al principio de este commit—.
+
+---
+
 ## 2026-09-25 (104) — Fase 16: tres tipos de encargo, cifras en drone, Mallorca
 
 Antes de escribir nada se preguntó a Mario dos cosas, tal como pedía el
