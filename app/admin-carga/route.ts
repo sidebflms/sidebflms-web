@@ -80,6 +80,7 @@ export async function POST(peticion: Request): Promise<Response> {
       title: p.title[locale],
       hardFact: p.hardFact[locale],
       brief: p.brief[locale],
+      metaDescription: p.metaDescription[locale],
       date: p.date?.[locale] ?? undefined,
     });
 

@@ -125,6 +125,15 @@ export type Project = {
   date: Record<Locale, string> | null;
   hardFact: Record<Locale, string>;
   brief: Record<Locale, string>;
+  /**
+   * SEO Fase 17 (2026-09-25): 150-160 caracteres, escrita a mano por ficha.
+   * El primer párrafo de `brief` se usaba como meta descripción y se pasaba
+   * de largo —170 a 263 caracteres en las 23 fichas, Google las truncaba
+   * todas—. No es un recorte automático del brief: se reescribió cada una
+   * para que quepa entera y conserve el dato del `hardFact`, que es lo que
+   * distingue a cada ficha de las demás.
+   */
+  metaDescription: Record<Locale, string>;
 };
 
 /**
@@ -165,6 +174,13 @@ const PROYECTOS: Project[] = [
     // metraje. FECHA: el fichero no la llevaba. Confirmada por Mario de viva
     // voz el 2026-09-24: 20 de diciembre de 2025.
     slug: "metropolitano",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Vuelo aéreo en el estadio Metropolitano para BRESH, que celebró aquí una de sus fiestas: de fuera del estadio al césped, en un solo vuelo y sin cortar.",
+      en: "Aerial flight at the Metropolitano stadium for BRESH, who held one of their parties there: from outside the stadium to the pitch, one flight, no cuts.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 2,
@@ -194,6 +210,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "mitt-motors",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Pieza publicitaria para MITT MOTORS, rodada en carreteras de montaña combinando drone y cámara en tierra: once planos el mismo día, todos en 4:3 abierto.",
+      en: "Advertising piece for MITT MOTORS, shot on mountain roads combining drone and ground camera: eleven shots in a single day, all shot in open-matte 4:3.",
+    },
     placeholder: false,
     // "marca" añadida el 2026-09-25: pieza publicitaria para un cliente de
     // marca (MITT MOTORS), no una cobertura de evento propio.
@@ -220,6 +243,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "madrid-cuatro-torres",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Las Cuatro Torres de Madrid recortadas contra la sierra al atardecer, con el cielo todavía naranja: es la segunda de las ocho postales aéreas de esa tarde.",
+      en: "Madrid's four towers cut out against the mountains at sunset, with the sky still orange overhead: second of eight aerial postcards shot that same evening.",
+    },
     placeholder: false,
     // "marca" añadida el 2026-09-25: el propio texto ya dice "planos de
     // recurso para marcas, agencias y productoras".
@@ -246,6 +276,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "madrid-aereo",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Serie de planos aéreos de Madrid al atardecer, con el skyline y Torrespaña recortados contra el cielo: una de ocho postales de once segundos cada una.",
+      en: "Aerial series of Madrid shot at sunset, with the city skyline and Torrespaña cut out against the sky: one of eight postcards, each eleven seconds long.",
+    },
     placeholder: false,
     // "marca" añadida el 2026-09-25: el propio texto ya dice "planos de
     // recurso... para piezas corporativas, publicidad o contenido para redes".
@@ -272,6 +309,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "costa-aerea",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Bahía de Mallorca con barcos fondeados, con el agua pasando de turquesa a azul según la profundidad: rodada cuatro días después de las postales de Madrid.",
+      en: "An aerial shot of a Mallorca bay with anchored boats, the water shifting from turquoise to blue with depth: shot four days after the Madrid postcards.",
+    },
     placeholder: false,
     // "marca" añadida el 2026-09-25: el propio texto ya dice "material
     // pensado para turismo, marcas y contenido de destino".
@@ -301,6 +345,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "pueblo-sobre-el-mar",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Un pueblo de Mallorca que baja hacia el mar, con el cabo al fondo y tres distancias distintas en la misma imagen: misma salida que la otra pieza de costa.",
+      en: "A small Mallorca town stepping down to the sea, with the cape behind and three distinct distances in the same frame: same run as the other coastal piece.",
+    },
     placeholder: false,
     // "marca" añadida el 2026-09-25: el propio texto ya dice "material
     // pensado para turismo, marcas y contenido de destino".
@@ -330,6 +381,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "recinto-desde-el-aire",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "El recinto lleno visto desde el aire, con el escenario a un lado y la montaña detrás: máster 4:3 abierto que entrega apaisado y vertical del mismo vuelo.",
+      en: "The site at capacity from the air, with the stage on one side and the mountain behind: open-matte 4:3 master, landscape and vertical from one same flight.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 1,
@@ -356,6 +414,13 @@ const PROYECTOS: Project[] = [
     // FUENTE DEL NOMBRE: `DRONE/@sidebflms_HOLIKA.mov`.
     // FECHA: el fichero no lleva ninguna. Sin confirmar.
     slug: "holika-portal",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Vuelo FPV en Holika: arranca sobre el público, cruza el escenario con los lanzallamas encendidos y termina en la cabina — doce segundos, un vuelo, ni un corte.",
+      en: "FPV flight at Holika: starts above the crowd, crosses the stage with the flame jets firing and ends in the booth. Twelve seconds, one flight, no cuts.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 0,
@@ -386,6 +451,13 @@ const PROYECTOS: Project[] = [
     // FUENTE: `AFTERMOVIES/@sidebflms_17012026_FATIMA_HAJJI_FABRIK_Aftermovie.mp4`
     // La fecha (17/01/2026) y el club salen del propio nombre del fichero.
     slug: "fatima-hajji-fabrik",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Aftermovie de Fátima Hajji en Fabrik, con la artista, la sala y el público al ritmo de la sesión: máster en 3840×2880 a 25p, encuadre abierto para recortar.",
+      en: "Aftermovie of Fátima Hajji at Fabrik, with the artist, the venue and the crowd at the pace of the set: 3840×2880 master at 25p, open matte for reframing.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 1,
@@ -416,6 +488,13 @@ const PROYECTOS: Project[] = [
     // OJO: no se puede saber por la imagen si es amanecer o atardecer, así que
     // el título dice «hora dorada» y no una de las dos cosas.
     slug: "monegros-hora-dorada",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Postal aérea de Monegros en hora dorada, pensada para enseñar la escala del recinto en un momento concreto del día: una de doce rodadas en el mismo sitio.",
+      en: "An aerial postcard of Monegros at golden hour, made to show the site's scale at one specific moment of the day: one of twelve shot at the same location.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 2,
@@ -448,6 +527,13 @@ const PROYECTOS: Project[] = [
     // 2026-09-24: 3-4 de abril de 2026 (el rodaje se repartió entre los dos
     // días).
     slug: "duro-pyroshow",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Cobertura aérea del show de fuego de DURO, con la pirotecnia, el escenario y el público en el mismo plano: doce segundos de un máster de 4:22, sin un corte.",
+      en: "Aerial coverage of DURO's pyrotechnics show, with the fireworks, the stage and the crowd in the same frame: twelve seconds out of a 4:22 master, no cuts.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 0,
@@ -474,6 +560,13 @@ const PROYECTOS: Project[] = [
   {
     // FUENTE: `MULTICAM/15082026 GORDO LEBANON HORIZONTA 1.mp4` → 15/08/2026.
     slug: "gordo-lebanon",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Multicámara de GORDO al aire libre y de noche, equilibrando la pantalla LED con el artista: máster en 3840×2160 a 25p, cabina y pantalla en el mismo plano.",
+      en: "Multicam of GORDO outdoors at night, balancing the LED wall against the far less lit artist on stage: 3840×2160 master at 25p, booth and screen together.",
+    },
     placeholder: false,
     categories: ["multicam"],
     tone: 3,
@@ -501,6 +594,13 @@ const PROYECTOS: Project[] = [
     // → 07/03/2026. El club y el escenario NO salen del nombre: se leen dentro
     // del propio vídeo (logo FABRIK en el segundo 4, rótulo «AREA 19»).
     slug: "adrian-mills-area19",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Aftermovie de Adrián Mills en Area 19 de Fabrik, parte de la serie rodada para el club: el nombre del escenario se lee en el propio metraje, no en la escaleta.",
+      en: "Aftermovie of Adrián Mills at Fabrik's Area 19, part of the series shot for the club: the stage name is legible in the footage itself, not the run sheet.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 1,
@@ -527,6 +627,13 @@ const PROYECTOS: Project[] = [
     // FUENTE: `AFTERMOVIES/@sidebflms_21022026_150_FABRIK_Aftermovie.mp4`
     // → 21/02/2026. El «150» sale del nombre del fichero.
     slug: "fabrik-150",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Aftermovie de la edición 150 de Fabrik, una fecha señalada para el club: tercera noche de la misma serie rodada allí, con el mismo lenguaje visual de siempre.",
+      en: "Aftermovie of Fabrik's 150th edition, a landmark date for the club: third night of the same series shot there, with the same visual approach as always.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 2,
@@ -555,6 +662,13 @@ const PROYECTOS: Project[] = [
     // se usa. Confirmada por Mario de viva voz el 2026-09-24: 30 de mayo de
     // 2026.
     slug: "prospa-multicam",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Multicámara de Prospa de día, al aire libre y con el público delante: el caso contrario a una cabina de noche, sin pantallas que separen al artista del fondo.",
+      en: "Multicam of Prospa in daylight, outdoors with the crowd in front: the opposite of a night booth, with no screens separating the artist from the background.",
+    },
     placeholder: false,
     categories: ["multicam"],
     tone: 0,
@@ -582,6 +696,13 @@ const PROYECTOS: Project[] = [
     // Qué es «FITZ» exactamente (sala, promotora, ciclo) NO consta: por eso el
     // venue queda por confirmar en vez de dar por hecho que es una sala.
     slug: "fitz-directos",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Fotografía de directo en FITZ —Rick Ross, Arcángel, Sech, Offset y otros más—: ocho artistas distintos y doce fotos publicadas de un archivo mucho mayor.",
+      en: "Live photography at FITZ —Rick Ross, Arcángel, Sech, Offset and several others—: eight different artists, twelve frames published from a much larger archive.",
+    },
     placeholder: false,
     categories: ["photo"],
     tone: 3,
@@ -627,6 +748,13 @@ const PROYECTOS: Project[] = [
     // «MDF» apunta a Monegros Desert Festival, pero eso es DEDUCCIÓN MÍA a
     // partir de las siglas y del nombre de las piezas de drone. Confírmalo.
     slug: "monegros-fotografia",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Fotografía de cabina y recinto en Monegros —artistas, escenario y ambiente—, el mismo recinto que aparece en las postales aéreas, pero contado desde el suelo.",
+      en: "Booth and site photography at Monegros —artists, stage and atmosphere—, the same site the aerial postcards come from, but told this time from the ground.",
+    },
     placeholder: false,
     categories: ["photo"],
     tone: 1,
@@ -657,6 +785,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "escenario-de-noche",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "El escenario de DURO de noche, con sus tres torres encendidas y las luces del pueblo al fondo: máster vertical nativo, rodado así y no recortado después.",
+      en: "DURO's stage at night, its three towers lit up with the town's lights glowing behind: a native vertical master, filmed that way, not cropped afterwards.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 2,
@@ -681,6 +816,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "cabina-y-publico",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Aftermovie con el artista de espaldas y el público delante, a contraluz, en el lugar exacto del que está pinchando: recortado de un máster de 65 segundos.",
+      en: "Aftermovie with the artist filmed from behind and the crowd ahead, shot against the light, in the exact place the DJ stands: cut from a 65-second master.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 0,
@@ -705,6 +847,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "sala-llena",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Sala llena con las manos arriba bajo la luz azul, llenando todo el cuadro: rodada a 3840×2880, diez días después de la pieza anterior, mismo circuito.",
+      en: "A room at full capacity, hands up under the blue light, filling the whole frame: filmed at 3840×2880, ten days after the previous piece, same circuit.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 3,
@@ -729,6 +878,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "sala-en-rojo",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "La sala entera bañada en rojo, con el techo y el público en la misma imagen: el plano que sitúa al espectador antes de cualquier primer plano del aftermovie.",
+      en: "The whole room bathed in red, with the ceiling and the crowd caught in one frame: the shot that places the viewer before any close-up in the aftermovie.",
+    },
     placeholder: false,
     categories: ["aftermovie"],
     tone: 2,
@@ -753,6 +909,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "en-cabina",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "Cobertura multicámara desde dentro de la cabina, con el público asomando detrás del artista: recortada de un máster de 69 segundos, el más largo de la tanda.",
+      en: "Multicam coverage filmed from inside the booth, with the crowd peeking out behind the artist: cut from a 69-second master, the longest one of the batch.",
+    },
     placeholder: false,
     categories: ["multicam"],
     tone: 1,
@@ -777,6 +940,13 @@ const PROYECTOS: Project[] = [
   },
   {
     slug: "monegros-recinto",
+    // Fase 17 (2026-09-25): meta descripción propia, 150-160 caracteres,
+    // reescrita a mano a partir del hardFact — no es un recorte automático
+    // del brief, que se pasaba de los 165 que trunca Google.
+    metaDescription: {
+      es: "El recinto de Monegros entero visto desde arriba, con la noria, los escenarios y el público repartido por el llano: la pieza más reciente del archivo.",
+      en: "The whole Monegros site seen from above, with the ferris wheel, the stages and the crowd spread out across the plain: the most recent piece in the archive.",
+    },
     placeholder: false,
     categories: ["drone"],
     tone: 2,

@@ -17,7 +17,12 @@ export const es = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Productora audiovisual y especialistas en drone",
+      // Fase 17 (2026-09-25): la marca iba delante — mal para SEO, Google
+      // quiere la palabra clave primero. Único título del sitio con este
+      // problema: todos los demás (comprobado en content/dictionaries/*.ts
+      // y en las rutas dinámicas de portfolio/ciudad) ya llevaban la marca
+      // al final. 64 caracteres, bajo el límite de 65 del auditor.
+      title: "Productora audiovisual y grabación con drone, España | SIDEBFLMS",
       description:
         "Producción en directo, drone para cine y publicidad, cablecam, multicámara, aftermovies y fotografía. Con base en España.",
     },
@@ -58,10 +63,17 @@ export const es = {
       description:
         "Especialistas en drone con base en España. La flota, lo que se puede hacer desde el aire y cómo se vuela con seguridad.",
     },
-    legal: { title: "Aviso legal — SIDEBFLMS", description: "Aviso legal de SIDEBFLMS." },
+    // Fase 17 (2026-09-25): las dos se quedaban cortas (25 y 51 caracteres,
+    // el auditor pide 70-165). Reescritas con lo que ya dice cada página.
+    legal: {
+      title: "Aviso legal — SIDEBFLMS",
+      description:
+        "Aviso legal de SIDEBFLMS: quién opera este sitio, para qué sirve el formulario de contacto, y las condiciones de propiedad intelectual y responsabilidad.",
+    },
     privacy: {
       title: "Política de privacidad — SIDEBFLMS",
-      description: "Cómo tratamos los datos del formulario de contacto.",
+      description:
+        "Política de privacidad de SIDEBFLMS: qué datos recogemos en los formularios de contacto y candidatura, para qué los usamos, cuánto se conservan y tus derechos.",
     },
   },
 
@@ -93,6 +105,88 @@ export const es = {
     // El <h1> real de la portada (SEO, 2026-09-24): dice a qué nos dedicamos,
     // el tagline de arriba no. Ver components/sections/hero-frame.tsx.
     subtitulo: "Productora audiovisual y grabación con drone en España",
+  },
+
+  /**
+   * SEO Fase 17 (2026-09-25): la portada tenía 344 palabras; los rivales que
+   * ganan la búsqueda tienen miles. Cinco secciones DEBAJO del hero, que no
+   * se toca. Nada aquí es un dato nuevo: "Qué hacemos" reutiliza
+   * `services.offer`, "Cómo trabajamos" reutiliza `services.stages`, "Dónde
+   * operamos" reutiliza `about.whereBody` casi literal, y "Por qué
+   * nosotros" son hechos ya publicados en otra página (equipo de once,
+   * AESA desde 2022, entrega en 24-48h, encuadre abierto) — no una lista
+   * nueva de argumentos sin respaldo.
+   */
+  home: {
+    queHacemos: {
+      label: "Qué hacemos",
+      headline: ["Todo bajo", "el mismo equipo"],
+      intro:
+        "Drone, producción en directo, cablecam, multicámara, aftermovie y fotografía. No subcontratamos la pieza que no sabemos hacer: la hace el mismo equipo que lleva el resto del encargo.",
+    },
+    paraQuien: {
+      label: "Para quién trabajamos",
+      headline: ["Cine, series,", "publicidad y", "grandes eventos"],
+      intro:
+        "Drone profesional de alto nivel y producción creativa de campañas: desde un plano de recurso para una marca hasta la cobertura completa de un evento con miles de personas.",
+      items: [
+        {
+          title: "Cine y series",
+          body: "El plano aéreo como parte de la producción, planificado como cualquier otro plano del guion: storyboard y ensayo del recorrido antes del día de rodaje.",
+        },
+        {
+          title: "Publicidad",
+          body: "Campañas con cliente, del guion a la entrega final, combinando drone y cámara en tierra en los formatos que necesita cada canal.",
+        },
+        {
+          title: "Grandes eventos",
+          body: "La misma exigencia que pide volar sobre miles de personas sin margen de error: perímetro de seguridad resuelto antes de llegar al recinto.",
+        },
+        {
+          title: "Marca y corporativo",
+          body: "Planos de recurso, ya resueltos, listos para piezas corporativas o contenido de marca sin esperar a organizar un rodaje desde cero.",
+        },
+      ],
+    },
+    comoTrabajamos: {
+      label: "Cómo trabajamos",
+      headline: ["El mismo", "proceso, cada vez"],
+      intro:
+        "Cuatro etapas y el mismo equipo de principio a fin: lo planificamos antes de pisar el recinto, lo rodamos en directo desde tierra y desde el aire, y te lo entregamos montado en 24-48 horas.",
+    },
+    dondeOperamos: {
+      label: "Dónde operamos",
+      headline: ["Con base", "en España"],
+      intro:
+        "Con base en España. El trabajo no entiende de provincias: si el rodaje está en otro sitio, se va el equipo entero, con el mismo plan y el mismo plazo de entrega.",
+      // Enlaces reales a las páginas de ciudad, no una lista repetida por el
+      // sitio — ver la decisión de 2026-09-10 sobre no repartir ciudades.
+      ciudadesLabel: "Dónde hemos volado",
+    },
+    porQueNosotros: {
+      label: "Por qué nosotros",
+      headline: ["Lo que no", "se improvisa"],
+      intro:
+        "Cuatro cosas que no se ven en un show reel, pero son las que sostienen cada rodaje.",
+      items: [
+        {
+          title: "Mismo equipo, siempre",
+          body: "Somos once personas. No una agencia con una bolsa de freelance distinta cada fin de semana: el mismo equipo que estuvo en el evento anterior es el que va al siguiente.",
+        },
+        {
+          title: "Permisos completos desde 2022",
+          body: "Dados de alta como operador de aeronaves no tripuladas en AESA desde la fundación de la productora, con las cuatro categorías de vuelo que cubren casi cualquier situación.",
+        },
+        {
+          title: "Entrega en 24-48 horas",
+          body: "No es un extra que se paga aparte: es el plazo con el que se planifica el rodaje, porque una pieza que llega dos semanas tarde llega cuando ya no le importa a nadie.",
+        },
+        {
+          title: "Encuadre abierto de serie",
+          body: "Los másters se ruedan en 4:3 abierto, así que el horizontal y los cortes verticales para redes salen del mismo vuelo, sin volver a grabar ni perder los planos buenos al recortar.",
+        },
+      ],
+    },
   },
 
   brands: {

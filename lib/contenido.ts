@@ -98,6 +98,7 @@ function aProyecto(es: Documento, en: Documento): Project {
     date: oNulo(es.date) ? porIdioma(es.date, en.date) : null,
     hardFact: porIdioma(es.hardFact, en.hardFact),
     brief: porIdioma(es.brief, en.brief),
+    metaDescription: porIdioma(es.metaDescription, en.metaDescription),
   };
 }
 

@@ -15,7 +15,7 @@ export const en: Dictionary = {
   meta: {
     siteName: "SIDEBFLMS",
     home: {
-      title: "SIDEBFLMS — Audiovisual production and drone specialists",
+      title: "Audiovisual production and drone filming in Spain | SIDEBFLMS",
       description:
         "Live production, drone for film and advertising, cablecam, multicam, aftermovies and stills. Based in Spain.",
     },
@@ -56,10 +56,15 @@ export const en: Dictionary = {
       description:
         "Drone specialists based in Spain. The fleet, what can be done from the air, and how we fly safely.",
     },
-    legal: { title: "Legal notice — SIDEBFLMS", description: "SIDEBFLMS legal notice." },
+    legal: {
+      title: "Legal notice — SIDEBFLMS",
+      description:
+        "SIDEBFLMS legal notice: who operates this site, what the contact form is for, and the terms on intellectual property and liability for published content.",
+    },
     privacy: {
       title: "Privacy policy — SIDEBFLMS",
-      description: "How we handle the data from the contact form.",
+      description:
+        "SIDEBFLMS privacy policy: what personal data we collect through the contact and job application forms, what for, how long we keep it, and your rights.",
     },
   },
 
@@ -88,6 +93,76 @@ export const en: Dictionary = {
     // The homepage's real <h1> (SEO, 2026-09-24): says what we do, the
     // tagline above doesn't. See components/sections/hero-frame.tsx.
     subtitulo: "Audiovisual production and drone filming in Spain",
+  },
+
+  home: {
+    queHacemos: {
+      label: "What we do",
+      headline: ["Everything under", "one crew"],
+      intro:
+        "Drone, live production, cablecam, multicam, aftermovie and photography. We don't outsource what we can't do ourselves: the same crew that handles the rest of the job does it.",
+    },
+    paraQuien: {
+      label: "Who we work for",
+      headline: ["Film, series,", "advertising and", "large events"],
+      intro:
+        "High-level professional drone work and creative campaign production: from a single resource shot for a brand to full coverage of an event with thousands of people.",
+      items: [
+        {
+          title: "Film and series",
+          body: "The aerial shot as part of the production, planned like any other shot on the script: storyboarded and the route rehearsed before shoot day.",
+        },
+        {
+          title: "Advertising",
+          body: "Client campaigns from script to final delivery, combining drone and ground camera in whatever formats each channel needs.",
+        },
+        {
+          title: "Large events",
+          body: "The same discipline it takes to fly over thousands of people with zero margin for error: the safety perimeter sorted before arriving on site.",
+        },
+        {
+          title: "Brand and corporate",
+          body: "Resource shots, already in the can, ready for corporate pieces or brand content without waiting to set up a shoot from scratch.",
+        },
+      ],
+    },
+    comoTrabajamos: {
+      label: "How we work",
+      headline: ["The same", "process, every time"],
+      intro:
+        "Four stages and the same crew from start to finish: we plan before setting foot on site, shoot live from the ground and the air, and deliver it edited in 24-48 hours.",
+    },
+    dondeOperamos: {
+      label: "Where we operate",
+      headline: ["Based in", "Spain"],
+      intro:
+        "Based in Spain. The work doesn't care about provinces: if the shoot is somewhere else, the whole crew goes, with the same plan and the same delivery window.",
+      ciudadesLabel: "Where we've flown",
+    },
+    porQueNosotros: {
+      label: "Why us",
+      headline: ["What doesn't", "get improvised"],
+      intro:
+        "Four things you won't see in a show reel, but that hold up every shoot.",
+      items: [
+        {
+          title: "Same crew, always",
+          body: "There are eleven of us. Not an agency with a different pool of freelancers every weekend: the same crew that worked the last event works the next one.",
+        },
+        {
+          title: "Full permits since 2022",
+          body: "Registered as an unmanned aircraft operator with AESA since the production company was founded, with the four flight categories that cover almost any situation.",
+        },
+        {
+          title: "24-48 hour delivery",
+          body: "It isn't an extra you pay for separately: it's the timeline the shoot is planned around, because a piece that lands two weeks late lands when nobody cares any more.",
+        },
+        {
+          title: "Open-matte by default",
+          body: "Masters are shot open-matte 4:3, so the landscape version and the vertical social cuts come out of the same flight, without reshooting or losing the good shots when reframing.",
+        },
+      ],
+    },
   },
 
   brands: {

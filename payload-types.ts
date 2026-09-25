@@ -205,6 +205,10 @@ export interface Proyecto {
    */
   brief?: string | null;
   /**
+   * Lo que sale bajo el título en Google. 150-160 caracteres: más y lo corta.
+   */
+  metaDescription?: string | null;
+  /**
    * Tal como se lee: «17 de enero de 2026» / «17 January 2026». Vacío si no se sabe.
    */
   date?: string | null;
@@ -417,6 +421,7 @@ export interface ProyectosSelect<T extends boolean = true> {
   title?: T;
   hardFact?: T;
   brief?: T;
+  metaDescription?: T;
   date?: T;
   year?: T;
   venue?: T;

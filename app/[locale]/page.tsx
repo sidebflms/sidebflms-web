@@ -6,6 +6,7 @@ import { IntroCasete } from "@/components/sections/intro-casete";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { HeroFrame } from "@/components/sections/hero-frame";
+import { HomeMas } from "@/components/sections/home-mas";
 import { HomeSliders } from "@/components/sections/home-sliders";
 import { PillLink } from "@/components/ui/button";
 import { aPiezasLigeras } from "@/content/projects";
@@ -27,11 +28,14 @@ export async function generateMetadata({
  * PORTADA — VERSIÓN GLASS (rama `glass`).
  *
  *   1. El marco con muescas (hero-frame.tsx): reel, menú, cifras y destacados.
- *   2. La entrada al trabajo: titular, descripción y «Ver todo el trabajo».
- *   3. Las tres cintas de proyectos, las mismas de `main`
+ *   2. Cinco secciones de contenido real (home-mas.tsx, SEO Fase 17,
+ *      2026-09-25): qué hacemos, para quién, cómo trabajamos, dónde
+ *      operamos y por qué nosotros. Van DEBAJO del hero, que no se toca.
+ *   3. La entrada al trabajo: titular, descripción y «Ver todo el trabajo».
+ *   4. Las tres cintas de proyectos, las mismas de `main`
  *      (home-sliders.tsx). Hubo un bento de tarjetas en su lugar; se quitó a
  *      petición del cliente.
- *   4. La llamada final en cristal.
+ *   5. La llamada final en cristal.
  */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
@@ -49,6 +53,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           script que decide si sale está en la cabecera, en layout.tsx. */}
       <IntroCasete textoSaltar={dict.intro.skip} />
       <HeroFrame dict={dict} locale={locale} featured={featured} cifras={cifras} />
+
+      {/* SEO Fase 17 (2026-09-25): cinco secciones de contenido real debajo
+          del hero — ver components/sections/home-mas.tsx. El hero no se
+          toca, esto va DESPUÉS. */}
+      <HomeMas locale={locale} dict={dict} />
 
       <section data-reglet={dict.featured.label} className="seccion overflow-hidden">
         {/* Titular a la izquierda; descripción y botón a la derecha, pegados

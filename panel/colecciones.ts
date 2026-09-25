@@ -178,6 +178,16 @@ export const Proyectos: CollectionConfig = {
       },
     },
     {
+      name: "metaDescription",
+      label: "Meta descripción",
+      type: "text",
+      localized: true,
+      admin: {
+        description:
+          "Lo que sale bajo el título en Google. 150-160 caracteres: más y lo corta.",
+      },
+    },
+    {
       name: "date",
       label: "Fecha escrita",
       type: "text",

@@ -251,7 +251,17 @@ async function auditar() {
   check("local", "nap", "Teléfono y dirección visibles en la web", ptsNap, 5,
     `teléfono: ${hayTelefono ? "sí" : "no"}, dirección: ${hayDireccion ? "sí" : "no"}`);
 
-  const ciudades = ["madrid", "barcelona", "valencia", "sevilla", "malaga"];
+  /**
+   * Las ciudades CANDIDATAS, no las conseguidas. La lista salió de las cinco
+   * que pidió Mario al principio; Mallorca se añadió el 2026-09-25, cuando
+   * resultó haber material propio allí y se publicó su página (Fase 16).
+   * Ampliar esta lista con una ciudad que EXISTE no es bajar el listón —el
+   * criterio sigue pidiendo tres—; quitar una para aprobar, sí lo sería.
+   * La sesión que hizo la Fase 16 vio que Mallorca no estaba aquí y, en vez
+   * de añadirla ella, lo avisó. Eso es lo correcto: el medidor no lo toca
+   * quien se mide.
+   */
+  const ciudades = ["madrid", "barcelona", "mallorca", "valencia", "sevilla", "malaga"];
   const ciudadesVivas = [];
   for (const ciudad of ciudades) {
     const r = await traer(`${BASE}/es/grabacion-con-drone-${ciudad}`);

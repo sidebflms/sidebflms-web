@@ -31,7 +31,11 @@ export async function generateMetadata({
     extraSegments: [slug],
     copy: {
       title: `${project.title[l]} — SIDEBFLMS`,
-      description: project.brief[l].split("\n\n")[0],
+      // SEO Fase 17 (2026-09-25): antes era el primer párrafo del brief, que
+      // se escribió para leerse en la página, no para caber en un resultado
+      // de búsqueda — se pasaba de los 165 caracteres que trunca Google en
+      // las 23 fichas. `metaDescription` es su propio campo, 150-160.
+      description: project.metaDescription[l],
     },
   });
 }
