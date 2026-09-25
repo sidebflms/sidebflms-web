@@ -13,7 +13,7 @@ import { isLocale, path, type RouteKey } from "@/lib/routes";
 /**
  * PÁGINAS DE CIUDAD (SEO Fase 6, 2026-09-24).
  *
- * Una única carpeta física para las dos ciudades —no una por ciudad—: el
+ * Una única carpeta física para las tres ciudades —no una por ciudad—: el
  * contenido real vive en `content/ciudades-drone.ts`, esta página sólo lo
  * pinta. La URL bonita (`/es/grabacion-con-drone-madrid`) la sirve un
  * rewrite de `next.config.ts` sobre esta misma ruta interna
@@ -31,6 +31,7 @@ import { isLocale, path, type RouteKey } from "@/lib/routes";
 const CLAVE_RUTA: Record<SlugCiudad, RouteKey> = {
   madrid: "droneMadrid",
   barcelona: "droneBarcelona",
+  mallorca: "droneMallorca",
 };
 
 export async function generateStaticParams() {

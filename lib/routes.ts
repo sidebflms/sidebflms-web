@@ -56,13 +56,14 @@ export const ROUTES = {
   // idénticos a propósito (ver la decisión escrita arriba en este mismo mapa).
   about: { es: "about", en: "about" },
   drone: { es: "grabacion-con-drone", en: "drone-filming" },
-  // Páginas de ciudad (SEO Fase 6, 2026-09-24): mismo mecanismo que
-  // `drone` de arriba —un slug distinto por idioma, servido por rewrite
-  // desde una única carpeta física (`app/[locale]/ciudad-drone/[ciudad]`,
-  // ver `next.config.ts`)—. Qué ciudades hay y por qué sólo esas dos, en
-  // `content/ciudades-drone.ts`.
+  // Páginas de ciudad (SEO Fase 6, 2026-09-24; Mallorca añadida en la Fase
+  // 16, 2026-09-25): mismo mecanismo que `drone` de arriba —un slug
+  // distinto por idioma, servido por rewrite desde una única carpeta
+  // física (`app/[locale]/ciudad-drone/[ciudad]`, ver `next.config.ts`)—.
+  // Qué ciudades hay y por qué sólo esas tres, en `content/ciudades-drone.ts`.
   droneMadrid: { es: "grabacion-con-drone-madrid", en: "drone-filming-madrid" },
   droneBarcelona: { es: "grabacion-con-drone-barcelona", en: "drone-filming-barcelona" },
+  droneMallorca: { es: "grabacion-con-drone-mallorca", en: "drone-filming-mallorca" },
   // SEO Fase 11 (2026-09-24): "servicios" sí es una palabra que se busca de
   // verdad —a diferencia de "drone" a secas, "services" en español no era
   // ni siquiera español—. Mismo mecanismo que `drone`: rewrite desde

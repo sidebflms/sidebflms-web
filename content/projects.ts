@@ -61,10 +61,14 @@ import type { Locale } from "@/lib/routes";
  *   · `costa-aerea`   → 2026-05-21
  *   · `mitt-motors`   → 2026-07-16
  *
- * Lo que NO se sabe y por eso no se escribe: dónde es exactamente la costa
- * —se ve una bahía con barcos fondeados, y poner «Ibiza» o «Mallorca» a ojo
- * en la ficha de un cliente es justo lo que este fichero no hace— y dónde se
- * rodó el anuncio de la moto.
+ * DÓNDE ES LA COSTA: quedó sin escribir a propósito —se veía una bahía con
+ * barcos fondeados, y poner «Ibiza» o «Mallorca» a ojo en la ficha de un
+ * cliente es justo lo que este fichero no hace—. CONFIRMADO por Mario el
+ * 2026-09-25, al pedir la página de ciudad de Mallorca (Fase 16): tanto
+ * `costa-aerea` como `pueblo-sobre-el-mar` son de la costa de Mallorca. Con
+ * esto ya no hace falta el `null`, y de paso se cierra la contradicción que
+ * había con `content/ciudades-drone.ts`, que ya daba las dos por Mallorca.
+ * Sigue sin saberse dónde se rodó el anuncio de la moto (`mitt-motors`).
  *
  * ── REGLA DE `hardFact`, que se mantiene ─────────────────────────────────
  * Un dato concreto que nadie podría inventar. Aquí todos salen de medir el
@@ -275,7 +279,10 @@ const PROYECTOS: Project[] = [
     tone: 0,
     featured: false,
     year: "2026",
-    venue: null,
+    // CONFIRMADO por Mario el 2026-09-25 (Fase 16): es la costa de Mallorca.
+    // "Mallorca" y no "Palma": es como se busca, y el plano es de costa, no
+    // de ciudad. Antes null — ver la nota de cabecera de este fichero.
+    venue: "Mallorca",
     media: {
       video: "/media/costa-aerea.mp4",
       poster: "/media/costa-aerea.jpg",
@@ -301,7 +308,10 @@ const PROYECTOS: Project[] = [
     tone: 3,
     featured: false,
     year: "2026",
-    venue: null,
+    // CONFIRMADO por Mario el 2026-09-25 (Fase 16): es la costa de Mallorca.
+    // "Mallorca" y no "Palma": es como se busca, y el plano es de costa, no
+    // de ciudad. Antes null — ver la nota de cabecera de este fichero.
+    venue: "Mallorca",
     media: {
       video: "/media/pueblo-sobre-el-mar.mp4",
       poster: "/media/pueblo-sobre-el-mar.jpg",

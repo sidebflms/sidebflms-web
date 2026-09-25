@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
 import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
-import { traeProyectos } from "@/lib/contenido";
+import { traeCifras, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
-import { pad } from "@/lib/utils";
+import { cn, pad } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -37,6 +37,10 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
   // no una plantilla ni una lista escrita a mano que se desincroniza en
   // cuanto se añade un proyecto nuevo.
   const proyectosDrone = (await traeProyectos()).filter((p) => p.categories.includes("drone") && !p.placeholder);
+  // SEO Fase 16 (2026-09-25): las mismas cifras de la portada y de
+  // Nosotros — ver `content/cifras.ts` para el origen y el matiz de
+  // "va de 2026, no histórico".
+  const cifras = await traeCifras();
 
   return (
     <main id="main" className="pagina">
@@ -66,6 +70,30 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
           </div>
         </Reveal>
       </header>
+
+      {/* CIFRAS (SEO Fase 16, 2026-09-25): mismas cinco de la portada y de
+          Nosotros — content/cifras.ts —, aquí porque esto es lo que lee
+          una productora antes de escribir, y hasta ahora no había ni un
+          número en esta página. */}
+      {cifras.length > 0 && (
+        <section className="shell seccion border-t border-ink-600 pt-14">
+          <Reveal>
+            <h2 className="font-display subtitulo">{dict.drone.cifrasLabel}</h2>
+          </Reveal>
+          <Reveal stagger>
+            <ul className="mt-8 grid grid-cols-2 gap-px bg-ink-600 sm:grid-cols-3 lg:grid-cols-5">
+              {cifras.map((cifra) => (
+                <li key={cifra.etiqueta.es} className="bg-ink-800 p-7">
+                  <p className="font-display text-[clamp(1.75rem,3vw,3rem)] leading-none whitespace-nowrap text-bone tabular-nums">
+                    {cifra.valor}
+                  </p>
+                  <p className="label mt-3 text-smoke">{cifra.etiqueta[locale]}</p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
+      )}
 
       {/* LA FLOTA */}
       <section className="shell seccion border-t border-ink-600 pt-14">
@@ -152,16 +180,25 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </div>
       </section>
 
-      {/* TIPOS DE ENCARGO (SEO Fase 3). Sólo los dos con evidencia real en el
-          portfolio y confirmados por Mario — ver el comentario en
-          content/dictionaries/es.ts. */}
+      {/* TIPOS DE ENCARGO (SEO Fase 3, ampliado en la Fase 16). Sólo los que
+          tienen evidencia real en el portfolio y confirmados por Mario —
+          ver el comentario en content/dictionaries/es.ts. */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
           <h2 className="font-display subtitulo">{dict.drone.encargos.label}</h2>
         </Reveal>
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {dict.drone.encargos.items.map((item) => (
-            <Reveal key={item.heading} as="article" className="border-t border-ink-600 pt-6">
+          {dict.drone.encargos.items.map((item, i, items) => (
+            <Reveal
+              key={item.heading}
+              as="article"
+              className={cn(
+                "border-t border-ink-600 pt-6",
+                // Con un número impar de tipos, el último ocupa las dos
+                // columnas en vez de dejar un hueco vacío al lado.
+                i === items.length - 1 && items.length % 2 === 1 && "lg:col-span-2"
+              )}
+            >
               <h3 className="font-display text-display-m text-bone">{item.heading}</h3>
               <p className="measure mt-3 text-smoke">{item.body}</p>
             </Reveal>

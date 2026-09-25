@@ -529,6 +529,7 @@ export const en: Dictionary = {
       "Drone isn't an add-on to the coverage: it's our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
     fieldsLabel: "Who we fly for",
     fields: ["Film", "Series", "Advertising", "Events"],
+    cifrasLabel: "So far in 2026",
     fleetLabel: "The fleet",
     fleetNote:
       "Not a rental catalogue: it is what flies with us, and nearly all of it can be traced in the metadata of our own archive.",
@@ -601,12 +602,16 @@ export const en: Dictionary = {
       label: "Types of work",
       items: [
         {
-          heading: "Film and advertising",
-          body: "The aerial shot as a production tool, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script: storyboarded and the route rehearsed before shoot day, not improvised at the end of the day once the light is going.",
+          heading: "Advertising",
+          body: "The aerial shot as part of the production, not a last-minute add-on: for MITT MOTORS we combined drone and ground camera in a single day of shooting, with the bike as the star and the landscape giving it scale. It's planned like any other shot on the script: storyboarded and the route rehearsed before shoot day, not improvised at the end of the day once the light is going.",
         },
         {
           heading: "Large events",
           body: "Flying over thousands of people with zero margin for error takes the same discipline as a film shoot or a live-audience campaign, and it's where we have the most flight hours: Monegros, DURO, Fabrik, or the flight over the Metropolitano. The flight is timed to the event itself —a pyro show doesn't wait, capacity changes by the hour— so it's planned in pre-production, with the safety perimeter already sorted before arriving on site. The shot isn't just a pretty postcard of the venue: it also works as communication material for the next edition, for sponsors who want to see the real turnout, and for the event's own channels the day after.",
+        },
+        {
+          heading: "Brand and corporate",
+          body: "Shots flown on our own account, not commissioned by a specific client: sunset over Cuatro Torres and the rest of the Madrid skyline, a Mallorca bay with the water changing colour by depth, the village stepping down to the sea. It's resource material, already in the can, ready for corporate pieces, advertising or brand content without waiting for someone to set up a shoot from scratch — flown taking time over the light, which is exactly what shows against a shot rushed together the day someone needs it.",
         },
       ],
     },

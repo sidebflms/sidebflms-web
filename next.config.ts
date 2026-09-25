@@ -161,13 +161,16 @@ const nextConfig: NextConfig = {
     return [
       { source: "/es/grabacion-con-drone", destination: "/es/drone" },
       { source: "/en/drone-filming", destination: "/en/drone" },
-      // SEO Fase 6 (2026-09-24): las páginas de ciudad, mismo mecanismo.
-      // Una sola carpeta física (`app/[locale]/ciudad-drone/[ciudad]`) para
-      // las dos, ver la nota de `droneMadrid` en `lib/routes.ts`.
+      // SEO Fase 6 (2026-09-24; Mallorca en la Fase 16, 2026-09-25): las
+      // páginas de ciudad, mismo mecanismo. Una sola carpeta física
+      // (`app/[locale]/ciudad-drone/[ciudad]`) para las tres, ver la nota
+      // de `droneMadrid` en `lib/routes.ts`.
       { source: "/es/grabacion-con-drone-madrid", destination: "/es/ciudad-drone/madrid" },
       { source: "/en/drone-filming-madrid", destination: "/en/ciudad-drone/madrid" },
       { source: "/es/grabacion-con-drone-barcelona", destination: "/es/ciudad-drone/barcelona" },
       { source: "/en/drone-filming-barcelona", destination: "/en/ciudad-drone/barcelona" },
+      { source: "/es/grabacion-con-drone-mallorca", destination: "/es/ciudad-drone/mallorca" },
+      { source: "/en/drone-filming-mallorca", destination: "/en/ciudad-drone/mallorca" },
       // SEO Fase 11 (2026-09-24): "servicios", mismo mecanismo. El inglés no
       // cambia de slug, así que no hace falta rewrite para "/en/services".
       { source: "/es/servicios", destination: "/es/services" },
