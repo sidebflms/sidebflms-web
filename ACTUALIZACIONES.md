@@ -28,6 +28,15 @@ del formulario— queda pendiente de que él diga qué quiere).
   certificado sin pasar por Node— y lo sirve como fichero estático desde
   `public_html`. Un fichero suelto en `public/` sí llega ahí: el despliegue
   copia `public/` entero a la raíz (`despliegue/publicar.sh`).
+- `despliegue/publicar.sh` — al corregir lo anterior (borrar la ruta de Next
+  y poner el fichero estático) el despliegue siguiente falló solo: `tsc`
+  revienta contra `.next/types/validator.ts`, que es de la compilación
+  VIEJA (la que sigue sirviendo mientras se compila `.next-nueva`) y todavía
+  nombra la ruta que este mismo cambio borraba. Es un fallo estructural del
+  despliegue azul-verde que no había aparecido antes porque nunca se había
+  borrado una ruta entre un despliegue y el siguiente. Arreglado borrando
+  `.next/types` antes de compilar — `next start` no lo lee para nada en
+  producción, así que es seguro quitarlo de la compilación que sigue viva.
 
 **Dos cosas que el informe daba por ausentes y no lo estaban — comprobado
 en el código antes de tocar nada, no de memoria:**
