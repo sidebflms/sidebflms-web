@@ -233,8 +233,9 @@ export const es = {
   services: {
     label: "Servicios",
     headline: ["Cuatro etapas", "del mismo", "encargo"],
+    // Fase 17 (2026-09-25): intro ampliada de una frase a dos.
     intro:
-      "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subes a Instagram.",
+      "El orden no es decorativo: es el proceso real, desde el moodboard hasta el archivo que subes a Instagram. Cada disciplina de la lista de abajo la cubre el mismo equipo que lleva el resto del encargo, no un proveedor distinto por cada pieza.",
     // LA LÍNEA DE DISCIPLINAS.
     //
     // Estuvo unas horas en el hero de la portada, el 2026-09-15, en el sitio
@@ -261,69 +262,78 @@ export const es = {
     // Nada de aquí nombra un rodaje concreto: son capacidades, no créditos.
     // Los créditos van en el portfolio, con su material detrás.
     offerLabel: "Qué hacemos",
+    // Fase 17 (2026-09-25): los nueve cuerpos pasan de una frase a dos,
+    // añadiendo el detalle de proceso o formato que ya está establecido en
+    // otras páginas (24-48h, encuadre abierto, categorías AESA) — nada
+    // nuevo, sólo desarrollado.
     offer: [
       {
         key: "live",
         title: "Producción en directo",
-        body: "Realización de eventos en vivo con varias cámaras coordinadas desde un único punto de control.",
+        body: "Realización de eventos en vivo con varias cámaras coordinadas desde un único punto de control: un operador por escenario, radio abierta y el plan de cortes cerrado antes de que abran las puertas.",
       },
       {
         key: "drone",
         title: "Drone",
-        body: "Nuestra especialidad. Para cine, series, publicidad y eventos, con piloto certificado y la flota adecuada a cada plano.",
+        body: "Nuestra especialidad. Para cine, series, publicidad y eventos, con piloto certificado y la flota adecuada a cada plano: un aparato ligero para acercarse a la gente, uno más pesado y estable para un plano abierto. Categorías de vuelo completas desde 2022.",
       },
       {
         key: "cablecam",
         title: "Cablecam",
-        body: "Cámara suspendida por cable para recorrer un recinto por encima del público, con un movimiento que ni el drone ni la grúa consiguen.",
+        body: "Cámara suspendida por cable para recorrer un recinto por encima del público, con un movimiento que ni el drone ni la grúa consiguen: entra y sale de la multitud en el mismo plano, sin cortar.",
       },
       {
         key: "multicam",
         title: "Grabación multicámara",
-        body: "Varios operadores sincronizados, cada uno con su escenario, y el plan de cortes cerrado antes de que abran las puertas.",
+        body: "Varios operadores sincronizados, cada uno con su escenario, y el plan de cortes cerrado antes de que abran las puertas. La sesión entera queda cubierta de principio a fin, con material de sobra para los cortes de redes.",
       },
       {
         key: "aftermovie",
         title: "Aftermovie",
-        body: "La pieza que resume una noche y vende la siguiente edición. Entregada en 24-48 horas, con los cortes verticales para redes.",
+        body: "La pieza que resume una noche y vende la siguiente edición. Se rueda pensando ya en la entrega —encuadre abierto para sacar horizontal y vertical del mismo material— y sale en 24-48 horas.",
       },
       {
         key: "ads",
         title: "Publicidad",
-        body: "Anuncios y piezas de marca, del guion a la entrega final.",
+        body: "Anuncios y piezas de marca, del guion a la entrega final: storyboard y ensayo del recorrido antes del día de rodaje, combinando drone y cámara en tierra cuando el plano lo pide.",
       },
       {
         key: "vj",
         title: "VJ",
-        body: "Contenido para las pantallas del propio evento: visuales preparados y operados en directo, al ritmo de la sesión.",
+        body: "Contenido para las pantallas del propio evento: visuales preparados de antemano y operados en directo, al ritmo de la sesión y sincronizados con lo que pasa en el escenario.",
       },
       {
         key: "podcast",
         title: "Podcast",
-        body: "Grabación en plató o en localización, con varias cámaras y sonido cuidado, lista para publicar en vídeo y en audio.",
+        body: "Grabación en plató o en localización, con varias cámaras y sonido cuidado, lista para publicar en vídeo y en audio sin depender de un montaje largo.",
       },
       {
         key: "photo",
         title: "Fotografía",
-        body: "De cabina, de recinto y de artista, dentro de la misma cobertura o como encargo aparte.",
+        body: "De cabina, de recinto y de artista, dentro de la misma cobertura o como encargo aparte: imágenes listas para prensa y redes noche tras noche, sin esperar al montaje del vídeo.",
       },
     ],
     offerDroneLink: "Ver la flota",
     processLabel: "Cómo lo hacemos",
     processIntro:
       "Cuatro etapas y el mismo equipo de principio a fin: lo planificamos antes de pisar el recinto, lo rodamos en directo desde tierra y desde el aire, y te lo entregamos montado en 24-48 horas.",
+    // Fase 17 (2026-09-25): los cuatro cuerpos, ampliados. El de "Cobertura
+    // aérea" mantiene la frase genérica original (ver la nota de
+    // 2026-09-10 más abajo) y sólo añade la misma frase ya usada en
+    // `drone.safetyBody` sobre las restricciones de espacio aéreo — nada
+    // nuevo, texto ya aprobado en otra página.
     stages: [
       {
         number: "01",
         title: "Preproducción",
-        body: "Moodboard, shotlist y plan por franjas horarias. Un dossier de producción con prioridades por color para coordinar drone y cámara cuando hay varios escenarios a la vez.",
+        body: "Moodboard, shotlist y plan por franjas horarias. Un dossier de producción con prioridades por color para coordinar drone y cámara cuando hay varios escenarios a la vez, así que nadie llega al recinto sin saber qué cubre y cuándo.",
         items: ["Moodboard y referencias", "Shotlist por franja", "Plan de escenarios", "Coordinación con producción"],
         pending: false,
       },
       {
         number: "02",
         title: "Rodaje en directo",
-        body: "Multicámara, hero shots y golden hour. Un operador por escenario, radio abierta y el plan de cortes acordado antes de que abran las puertas.",
+        body: "Multicámara, hero shots y golden hour. Un operador por escenario, radio abierta y el plan de cortes acordado antes de que abran las puertas: cada uno sabe qué escenario es suyo antes de empezar, sin solapes ni huecos sin cubrir.",
         items: ["Multicámara", "Fotografía de directo", "Hero shots", "Backstage y ambiente"],
         pending: false,
       },
@@ -342,14 +352,14 @@ export const es = {
         // escribir de memoria: hay que sacarlo del papeleo. Todo el
         // posicionamiento del sitio es "somos los que sí tienen los
         // permisos", y es el peor sitio para una imprecisión.
-        body: "Planos aéreos con piloto certificado y perímetro de seguridad coordinado con producción.",
+        body: "Planos aéreos con piloto certificado y perímetro de seguridad coordinado con producción. Las restricciones de espacio aéreo del lugar se resuelven en preproducción, no el mismo día del rodaje.",
         items: ["Piloto certificado", "Hyperlapse y amanecer", "Planos de aforo", "Coordinación con producción"],
         pending: false,
       },
       {
         number: "04",
         title: "Postproducción",
-        body: "DaVinci Resolve, etalonaje y entrega en 24-48 horas. Salimos con el aftermovie y con los cortes verticales listos para Reels y TikTok.",
+        body: "DaVinci Resolve, etalonaje y entrega en 24-48 horas. Salimos con el aftermovie y con los cortes verticales listos para Reels y TikTok — el montaje empieza mientras el evento todavía está en marcha, no cuando termina.",
         items: ["Montaje y etalonaje", "Aftermovie", "Cortes verticales", "Entrega en 24-48 h"],
         pending: false,
       },

@@ -206,7 +206,7 @@ export const en: Dictionary = {
     label: "Services",
     headline: ["Four stages", "of the same", "job"],
     intro:
-      "The order isn't decorative: it's the actual process, from the moodboard to the file you post on Instagram.",
+      "The order isn't decorative: it's the actual process, from the moodboard to the file you post on Instagram. Every discipline below is covered by the same crew that runs the rest of the job, not a different supplier for each piece.",
     // THE DISCIPLINES LINE. Ver la nota en es.ts: estuvo unas horas en el
     // hero de la portada y se movió aquí el 2026-09-15. No se traduce —son
     // nombres de oficio— así que es idéntica a la castellana.
@@ -217,47 +217,47 @@ export const en: Dictionary = {
       {
         key: "live",
         title: "Live production",
-        body: "Live event direction with several cameras coordinated from a single control point.",
+        body: "Live event direction with several cameras coordinated from a single control point: one operator per stage, radio open, and the cut plan locked before doors open.",
       },
       {
         key: "drone",
         title: "Drone",
-        body: "Our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot.",
+        body: "Our specialty. For film, series, advertising and events, with a certified pilot and the right aircraft for each shot: a light one to get close to people, a heavier, steadier one for a wide shot. Full flight categories since 2022.",
       },
       {
         key: "cablecam",
         title: "Cablecam",
-        body: "A cable-suspended camera that travels a venue above the crowd, with a movement neither a drone nor a crane can give you.",
+        body: "A cable-suspended camera that travels a venue above the crowd, with a movement neither a drone nor a crane can give you: it moves through the crowd in a single shot, no cuts.",
       },
       {
         key: "multicam",
         title: "Multicam recording",
-        body: "Several synced operators, each on their own stage, with the cut plan locked before doors open.",
+        body: "Several synced operators, each on their own stage, with the cut plan locked before doors open. The whole set stays covered start to finish, with footage to spare for the social cuts afterwards.",
       },
       {
         key: "aftermovie",
         title: "Aftermovie",
-        body: "The piece that sums up a night and sells the next edition. Delivered within 24-48 hours, with vertical cuts for social.",
+        body: "The piece that sums up a night and sells the next edition. Shot with delivery already in mind —open-matte for both horizontal and vertical from the same footage— and out within 24-48 hours.",
       },
       {
         key: "ads",
         title: "Advertising",
-        body: "Commercials and brand pieces, from script to final delivery.",
+        body: "Commercials and brand pieces, from script to final delivery: storyboarded and the route rehearsed before shoot day, combining drone and ground camera when the shot calls for it.",
       },
       {
         key: "vj",
         title: "VJ",
-        body: "Content for the event's own screens: visuals prepared and run live, in time with the set.",
+        body: "Content for the event's own screens: visuals prepared ahead of time and run live, in time with the set and synced to what's happening on stage.",
       },
       {
         key: "podcast",
         title: "Podcast",
-        body: "Recorded in studio or on location, multi-camera and with sound done properly, ready to publish as video and as audio.",
+        body: "Recorded in studio or on location, multi-camera and with sound done properly, ready to publish as video and as audio without a long edit in between.",
       },
       {
         key: "photo",
         title: "Photography",
-        body: "Booth, venue and artist photography, as part of the same coverage or as a separate job.",
+        body: "Booth, venue and artist photography, as part of the same coverage or as a separate job: images ready for press and social media night after night, without waiting on the video edit.",
       },
     ],
     offerDroneLink: "See the fleet",
@@ -268,14 +268,14 @@ export const en: Dictionary = {
       {
         number: "01",
         title: "Pre-production",
-        body: "Moodboard, shotlist and an hour-by-hour plan. A production sheet with colour-coded priorities to coordinate drone and camera when several stages run at once.",
+        body: "Moodboard, shotlist and an hour-by-hour plan. A production sheet with colour-coded priorities to coordinate drone and camera when several stages run at once, so no one arrives on site without knowing what to cover and when.",
         items: ["Moodboard and references", "Shotlist by slot", "Stage plan", "Production liaison"],
         pending: false,
       },
       {
         number: "02",
         title: "Live shoot",
-        body: "Multicam, hero shots and golden hour. One operator per stage, radio open, and the cut plan agreed before doors.",
+        body: "Multicam, hero shots and golden hour. One operator per stage, radio open, and the cut plan agreed before doors: everyone knows their stage before it starts, no overlaps and no gaps.",
         items: ["Multicam", "Live stills", "Hero shots", "Backstage and atmosphere"],
         pending: false,
       },
@@ -285,14 +285,14 @@ export const en: Dictionary = {
         // RESUELTO — ver la nota de es.ts: confirmado que hay piloto
         // certificado. Redacción deliberadamente genérica: la categoría de
         // vuelo exacta y el papeleo con ENAIRE no se escriben de memoria.
-        body: "Aerial shots with a certified pilot and a safety perimeter coordinated with production.",
+        body: "Aerial shots with a certified pilot and a safety perimeter coordinated with production. Airspace restrictions at the venue are resolved in pre-production, not on shoot day.",
         items: ["Certified pilot", "Hyperlapse and sunrise", "Crowd-scale shots", "Production liaison"],
         pending: false,
       },
       {
         number: "04",
         title: "Post-production",
-        body: "DaVinci Resolve, colour grading and delivery in 24-48 hours. You get the aftermovie and the vertical cuts ready for Reels and TikTok.",
+        body: "DaVinci Resolve, colour grading and delivery in 24-48 hours. You get the aftermovie and the vertical cuts ready for Reels and TikTok — editing starts while the event is still under way, not once it's over.",
         items: ["Edit and grade", "Aftermovie", "Vertical cuts", "24-48 h delivery"],
         pending: false,
       },
