@@ -57,3 +57,9 @@ next-env.d.ts
 /sidebflms-web.log.1
 /vigilante.log
 .clave-panel
+
+# Lo que escriben scripts/seo-audit.mjs (--guardar) y scripts/seo-paginas.mjs
+# cuando se lanzan a mano, sin SEO_DATOS_DIR (Fase 22, 2026-09-25). Son
+# fotos de trabajo, no algo que versionar; en el servidor el cron nocturno
+# ya escribe fuera del repositorio, en $SEO_DATOS_DIR.
+/docs/seo/

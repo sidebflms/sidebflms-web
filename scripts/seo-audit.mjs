@@ -18,7 +18,20 @@
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const BASE = process.env.SEO_BASE ?? "https://sidebflms.com";
+import {
+  BASE,
+  BLOQUES,
+  CARPETA_DATOS,
+  UMBRALES,
+  canonico,
+  etiqueta,
+  hreflangs,
+  meta,
+  palabras,
+  sinEtiquetas,
+  tiposJsonLd,
+  traer,
+} from "./seo-lib.mjs";
 
 /** Lo que no se puede medir desde fuera. Cámbialo cuando sea verdad. */
 const MANUAL = {
@@ -42,61 +55,7 @@ const PAGINAS = [
 /** Términos que debería contener el H1 de la portada para decir a qué nos dedicamos. */
 const TERMINOS_NEGOCIO = ["drone", "dron", "audiovisual", "productora", "aérea", "aerea"];
 
-// ---------------------------------------------------------------- utilidades
-
-async function traer(url) {
-  const t0 = Date.now();
-  try {
-    const res = await fetch(url, { redirect: "follow" });
-    const html = await res.text();
-    return { ok: true, status: res.status, html, ms: Date.now() - t0, bytes: html.length, url: res.url };
-  } catch (e) {
-    return { ok: false, status: 0, html: "", ms: Date.now() - t0, bytes: 0, error: String(e) };
-  }
-}
-
-const sinEtiquetas = (html) =>
-  html
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&[a-z]+;/gi, " ");
-
-const palabras = (html) => sinEtiquetas(html).split(/\s+/).filter((p) => p.length > 1).length;
-
-function etiqueta(html, tag) {
-  const m = [...html.matchAll(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, "gi"))];
-  return m.map((x) => x[1].replace(/<[^>]*>/g, "").trim());
-}
-
-const meta = (html, nombre) =>
-  html.match(new RegExp(`<meta[^>]+name=["']${nombre}["'][^>]+content=["']([^"']*)["']`, "i"))?.[1] ?? null;
-
-const canonico = (html) =>
-  html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)["']/i)?.[1] ?? null;
-
-const hreflangs = (html) =>
-  [...html.matchAll(/<link[^>]+rel=["']alternate["'][^>]+hreflang=["']([^"']*)["']/gi)].map((m) => m[1]);
-
-const tiposJsonLd = (html) => {
-  const out = new Set();
-  for (const m of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
-    for (const t of m[1].matchAll(/"@type"\s*:\s*"([^"]+)"/g)) out.add(t[1]);
-  }
-  return [...out];
-};
-
-// ------------------------------------------------------------------- bloques
-
-const BLOQUES = [
-  { id: "tecnico",       nombre: "Técnico y rastreo",        max: 19 },
-  { id: "metadatos",     nombre: "Metadatos e indexación",   max: 15 },
-  { id: "contenido",     nombre: "Contenido y palabras clave", max: 29 },
-  { id: "local",         nombre: "SEO local",                max: 20 },
-  { id: "estructurados", nombre: "Datos estructurados",      max: 10 },
-  { id: "rendimiento",   nombre: "Rendimiento y accesibilidad", max: 10 },
-  { id: "autoridad",     nombre: "Autoridad y enlaces",      max: 5 },
-];
+// ---------------------------------------------------------------------------
 
 async function auditar() {
   const paginas = {};
@@ -159,14 +118,14 @@ async function auditar() {
 
   // ---- METADATOS (15)
   const titulos = vivas.map((p) => etiqueta(p.html, "title")[0] ?? "");
-  const titulosBien = titulos.filter((t) => t.length >= 30 && t.length <= 65).length;
+  const titulosBien = titulos.filter((t) => t.length >= UMBRALES.tituloMin && t.length <= UMBRALES.tituloMax).length;
   const titulosUnicos = new Set(titulos).size === titulos.length;
   const ptsTitulo = Math.round((titulosBien / vivas.length) * 4 * (titulosUnicos ? 1 : 0.5));
   check("metadatos", "titulos", "Títulos únicos y de 30-65 caracteres", ptsTitulo, 4,
     `${titulosBien}/${vivas.length} en rango, ${titulosUnicos ? "todos únicos" : "hay repetidos"}`);
 
   const descs = vivas.map((p) => meta(p.html, "description") ?? "");
-  const descsBien = descs.filter((d) => d.length >= 70 && d.length <= 165).length;
+  const descsBien = descs.filter((d) => d.length >= UMBRALES.descripcionMin && d.length <= UMBRALES.descripcionMax).length;
   check("metadatos", "descripciones", "Descripciones únicas de 70-165 caracteres",
     Math.round((descsBien / vivas.length) * 4), 4, `${descsBien}/${vivas.length} en rango`);
 
@@ -214,12 +173,14 @@ async function auditar() {
     urlsBien.length ? urlsBien.join(", ") : "/es/grabacion-con-drone no responde 200");
 
   const palabrasDrone = drone.ok ? palabras(drone.html) : 0;
-  const ptsDrone = palabrasDrone >= 1200 ? 5 : palabrasDrone >= 800 ? 3 : palabrasDrone >= 400 ? 1 : 0;
+  const ptsDrone =
+    palabrasDrone >= UMBRALES.droneExcelente ? 5 : palabrasDrone >= UMBRALES.droneBien ? 3 : palabrasDrone >= UMBRALES.droneMinimo ? 1 : 0;
   check("contenido", "profundidad-drone", "La página de drone tiene ≥1200 palabras", ptsDrone, 5,
     `${palabrasDrone} palabras`);
 
   const mediaPalabras = Math.round(vivas.reduce((a, p) => a + palabras(p.html), 0) / vivas.length);
-  const ptsMedia = mediaPalabras >= 600 ? 4 : mediaPalabras >= 400 ? 2 : mediaPalabras >= 250 ? 1 : 0;
+  const ptsMedia =
+    mediaPalabras >= UMBRALES.mediaExcelente ? 4 : mediaPalabras >= UMBRALES.mediaBien ? 2 : mediaPalabras >= UMBRALES.mediaMinima ? 1 : 0;
   check("contenido", "profundidad-media", "Media del sitio ≥600 palabras por página", ptsMedia, 4,
     `${mediaPalabras} palabras de media`);
 
@@ -424,7 +385,7 @@ const checks = await auditar();
 const comparar = opt("--comparar");
 let previo = null;
 if (comparar) {
-  const f = join("docs", "seo", `${comparar}.json`);
+  const f = join(CARPETA_DATOS, `${comparar}.json`);
   if (existsSync(f)) previo = JSON.parse(readFileSync(f, "utf8"));
   else console.log(`\n  (no encuentro ${f}, mido sin comparar)`);
 }
@@ -433,7 +394,7 @@ const resultado = informe(checks, previo);
 
 const guardar = opt("--guardar");
 if (guardar) {
-  const f = join("docs", "seo", `${guardar}.json`);
+  const f = join(CARPETA_DATOS, `${guardar}.json`);
   mkdirSync(dirname(f), { recursive: true });
   writeFileSync(f, JSON.stringify(resultado, null, 2));
   console.log(`  Guardado en ${f}\n`);

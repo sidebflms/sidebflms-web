@@ -185,6 +185,63 @@ rebote. Hay que crearlo en Hestia o cambiar los textos.
 
 ---
 
+## El panel de "SEO y estadísticas" (Fase 22, 2026-09-25)
+
+Vista de sólo lectura en `/admin/seo`. Dos cosas que no vienen solas con el
+código y hay que dar de alta a mano en el servidor:
+
+### 1. El cron nocturno
+
+```bash
+crontab -e
+```
+
+y añadir (una vez; no lo pone ningún script de despliegue):
+
+```
+7 3 * * * /home/bote/sidebflms-web/despliegue/seo-nocturno.sh >> /home/bote/datos-seo/seo-nocturno.log 2>&1
+```
+
+`despliegue/seo-nocturno.sh` usa `/usr/local/bin/node` con ruta absoluta a
+propósito —el cron no hereda el `PATH` del usuario, y un `node` a secas no
+encontraría nada—, y escribe en `~/datos-seo/`, **fuera** de
+`~/sidebflms-web/`: el despliegue hace `rsync --delete` sobre esa carpeta y
+cualquier cosa de aquí dentro que no esté en su lista de exclusiones
+desaparece en la siguiente publicación. Es el mismo motivo por el que
+`~/analitica/datos/` tampoco vive en un repositorio desplegado.
+
+Para verlo funcionar sin esperar a las 3 de la noche:
+
+```bash
+~/sidebflms-web/despliegue/seo-nocturno.sh
+cat ~/datos-seo/nocturno.json | head -5
+```
+
+Si la carpeta `~/datos-seo/` no existe, el script la crea solo.
+
+### 2. El token de GoatCounter
+
+El bloque de visitas llama a GoatCounter (`127.0.0.1:3400`) con un token que
+**no genera ningún script**: se crea a mano desde su propio panel.
+
+```bash
+ssh -N -L 3400:127.0.0.1:3400 bote@nastos.barrasa.dev
+```
+
+y con eso abierto, en `http://localhost:3400` → Ajustes → API → crear un
+token. Copiarlo en `~/sidebflms-web/.env`:
+
+```
+GOATCOUNTER_TOKEN=el-token-de-verdad
+```
+
+y reiniciar la web (`./despliegue/sidebflms-web.sh reiniciar`). El `.env` ya
+está excluido del `rsync --delete` del despliegue (ver más abajo), así que el
+token sobrevive a cada publicación sin tocar nada más. Sin este token, el
+bloque de visitas lo dice con claridad en la propia vista — no rompe nada.
+
+---
+
 ## Despliegue automático
 
 `.github/workflows/deploy.yml`: cada empujón a `main` sube el código con

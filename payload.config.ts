@@ -129,6 +129,17 @@ export default buildConfig({
   // redirector de idioma, o /admin acabaría en /es/admin.
   admin: {
     user: "usuarios",
+    // "SEO y estadísticas" (Fase 22, 2026-09-25): vista propia de sólo
+    // lectura, en /admin/seo, con su enlace junto a las colecciones. Lee lo
+    // que deja el cron nocturno (despliegue/seo-nocturno.sh) y llama a
+    // GoatCounter desde el servidor — ver panel/vistas/seo-view.tsx para el
+    // porqué de cada decisión.
+    components: {
+      views: {
+        seo: { Component: "/panel/vistas/seo-view.tsx#SeoView", path: "/seo" },
+      },
+      afterNavLinks: ["/panel/vistas/seo-nav-link.tsx#SeoNavLink"],
+    },
     livePreview: {
       collections: ["proyectos", "equipo", "preguntas"],
       globals: ["cifras", "clientes", "textos", "etapas"],

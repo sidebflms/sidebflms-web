@@ -5,6 +5,76 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (112) — Fase 22: "SEO y estadísticas" en el panel
+
+Vista propia de Payload, en `/admin/seo`, con su enlace junto a las
+colecciones (`afterNavLinks`). **De sólo lectura: no guarda nada, no toca
+ninguna colección.** Tres bloques, tal como se pidió, con la nota general
+pequeña y discreta a propósito —lo que se usa de verdad es la tabla por
+página, no un número grande que invite a optimizar el número—.
+
+**Antes de escribir la vista**, extraídas a `scripts/seo-lib.mjs` las
+funciones puras que ya tenía `scripts/seo-audit.mjs` (`traer`, `etiqueta`,
+`meta`, `palabras`...) y los umbrales con nombre (`UMBRALES.tituloMin`,
+`.descripcionMax`..., mismos números de siempre). Comprobado con una
+auditoría real antes y después del refactor: **88/100, idéntico**. La
+puntuación no cambió; sólo dónde vive el código.
+
+**Bloque 1, visitas**: `panel/vistas/seo-visitas.tsx`, un Server Component
+que llama a GoatCounter (`127.0.0.1:3400`) con `GOATCOUNTER_TOKEN`. No hay
+ninguna ruta pública de por medio — la llamada empieza y termina en el
+servidor, así que el token no tiene forma de llegar al navegador aunque
+alguien lo intentara. Sin el token, el bloque lo dice con claridad en vez
+de romperse; Mario lo genera él mismo desde el panel de GoatCounter (túnel
+SSH) y lo pega en el `.env` del servidor.
+
+**Bloque 2, salud SEO**: la misma auditoría de siempre (`seo-audit.mjs
+--guardar nocturno`), ejecutada por un cron nocturno nuevo
+(`despliegue/seo-nocturno.sh`), NO al abrir la vista —tarda minuto y medio
+largo—. La vista sólo lee el último JSON guardado.
+
+**Bloque 3, tabla por página** (`scripts/seo-paginas.mjs`, nuevo): barre
+las 72 URLs de `/sitemap.xml` —no sólo las 7 de la auditoría fija— y guarda
+palabras, longitud de título, longitud de meta descripción, si tiene H1 y
+una lista de problemas, con los mismos umbrales de `seo-lib.mjs`. Tabla
+ordenable en el cliente (`seo-tabla-paginas.tsx`, interacción sobre datos
+ya traídos, no una edición).
+
+**Los enlaces de "arreglar en"**: sólo las ~46 URLs de fichas de trabajo
+son documentos de Payload de verdad, así que sólo ésas llevan un enlace de
+edición real (resuelto en el servidor, buscando el `id` por `slug` con la
+API local de Payload). Las ~26 páginas restantes —portada, servicios,
+ciudades, FAQ, legal...— siguen en `content/*.ts`; para ésas la fila
+enseña el fichero donde arreglarlo en vez de fingir un enlace que no
+llevaría a ningún sitio.
+
+**Dónde vive lo que escribe el cron**: `~/datos-seo/`, fuera de
+`~/sidebflms-web/` — el despliegue hace `rsync --delete` sobre esa carpeta
+y cualquier cosa que no esté en su lista de exclusiones desaparece en la
+siguiente publicación. Igual que `~/analitica/datos/`.
+
+**La fecha del último barrido**, bien visible arriba de cada bloque, en
+rojo si tiene más de 48 horas. Probado a mano con datos de tres días de
+antigüedad y con la carpeta vacía (el cron sin correr ni una vez todavía):
+en los dos casos la vista da un mensaje claro, no una pantalla rota.
+
+**Cron y `PATH`**: `despliegue/seo-nocturno.sh` usa `/usr/local/bin/node`
+con ruta absoluta, igual que `sidebflms-web.sh` usa
+`NPM=/usr/local/bin/npm` — el cron no hereda el `PATH` del usuario.
+
+**Falta, y hay que hacerlo a mano en el servidor** (documentado en
+`despliegue/README.md`): dar de alta la línea del cron, y que Mario genere
+el token de GoatCounter y lo pegue en el `.env`. El bloque de visitas
+queda listo para enchufar en cuanto eso pase; los otros dos ya funcionan
+sin depender de ello.
+
+Probado de verdad, no sólo compilado: servidor local con la base de datos
+desechable (`sideb-payload-pg`), un usuario de prueba, y los tres estados
+de la vista (con datos, con datos viejos, sin ningún dato) comprobados en
+el navegador uno por uno.
+
+---
+
 ## 2026-09-25 (111) — Fase 21: rendimiento móvil (medido, LCP sin resolver)
 
 Lighthouse móvil real contra producción, antes de tocar nada:
