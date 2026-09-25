@@ -46,6 +46,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 </span>
               ))}
             </p>
+            {/* Fase 19 (2026-09-25): cadena literal "Side B Films", igual en
+                los dos idiomas — para que salga como texto en las 72
+                páginas y Google la asocie con SIDEBFLMS. */}
+            <p className="label mt-2 text-smoke">{dict.footer.taglineEn}</p>
           </div>
 
           <div className="grid gap-12 sm:grid-cols-3 lg:gap-20">

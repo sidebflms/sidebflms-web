@@ -5,6 +5,66 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (109) — Fase 20: la portada vuelve a ser minimalista
+
+Mario vio la portada desplegada tras la Fase 17 y decidió que las cinco
+secciones de texto añadidas debajo del hero (qué hacemos, para quién, cómo
+trabajamos, dónde operamos, por qué nosotros) rompían el carácter
+minimalista que era la ventaja de esta web frente a rivales con mucho más
+texto. Palabras suyas: "el error fue mío al pedirlo, no tuyo al
+ejecutarlo".
+
+Quitado: `<HomeMas>` de `app/[locale]/page.tsx`, el propio componente
+(`components/sections/home-mas.tsx`, borrado — sin usos en ningún otro
+sitio, comprobado antes de borrarlo) y el bloque `dict.home` completo de
+`content/dictionaries/es.ts` y `en.ts` (tampoco tenía otros usos).
+
+Se queda: el hero con el vídeo tal como estaba, el slider de trabajo justo
+debajo, y la pastilla de cifras (329 · 104 · 26) — compacta, en cristal,
+y este sector se vende con historial. Todo lo demás de la Fase 17 que NO
+era la portada se queda intacto: títulos, meta descripciones, ciudades,
+servicios y las 23 fichas.
+
+**Sin compensar en ningún sitio, por instrucción expresa de Mario**: con
+la portada de vuelta a ~350 palabras, la media del sitio queda en 716 —
+sigue por encima del ≥600 que pide el auditor sin rellenar nada. La
+profundidad de contenido ya vive en la página de drone, el portfolio,
+servicios, las ciudades y las fichas.
+
+---
+
+## 2026-09-25 (108) — Fase 19: "Side B Films" lleva a SIDEBFLMS
+
+Buscando "sideb films" o "sidebfilms" salían otras tres empresas (Perth,
+Riverside, Los Ángeles) porque nada le decía a Google que SIDEBFLMS y
+"Side B Films" son la misma marca.
+
+**En el JSON-LD**, `alternateName: ["SIDEB FILMS", "Side B Films",
+"SideB Films"]` en `datosNegocio()` (`lib/metadata.ts`) — el mecanismo
+estándar de schema.org para esto. El `<title>` de la portada no se tocó,
+tal como pidió Mario: ya estaba en 65 caracteres justos.
+
+**En texto, dos sitios, los dos enseñados a Mario antes de escribir nada
+y con una ronda de corrección suya:**
+
+- `/about`, una frase AÑADIDA después del párrafo de las once personas
+  —ese párrafo se queda intacto, es "la mejor línea de la web"—, que
+  explica el nombre en vez de sólo declararlo: "El nombre viene de ahí:
+  SIDEBFLMS, Side B Films, la cara B de cada rodaje." La versión en
+  inglés no es traducción literal: se recortó de un primer borrador que
+  repetía "Side B" dos veces en seis palabras, porque el tagline del pie
+  en inglés ("Side B of every shoot") ya lleva esa explicación. Queda:
+  "That's where the name comes from: SIDEBFLMS, Side B Films."
+- Pie, debajo del tagline, línea pequeña en estilo `label`, la misma
+  cadena en los dos idiomas: "Side B Films" — sale en las 72 páginas.
+
+**Sobre la cursiva que sugería el encargo original:** comprobado el
+código entero, no hay ni un precedente de texto en cursiva o formato
+mixto dentro de un párrafo en toda la web. Se dejó en texto plano en vez
+de inventar el mecanismo para una sola línea; Mario lo confirmó.
+
+---
+
 ## 2026-09-25 (107) — Fase 18: la portada ya enseña el rumbo nuevo
 
 **Arreglo suelto.** La meta descripción de `/es/grabacion-con-drone-mallorca`

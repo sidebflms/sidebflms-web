@@ -67,6 +67,10 @@ export async function NosotrosBento({ dict, locale }: { dict: Dictionary; locale
                 <LineasTitular lineas={dict.about.headline} />
               </h1>
               <p className="text-lead measure mt-6 text-smoke">{dict.about.intro}</p>
+              {/* Fase 19 (2026-09-25): AÑADIDA, no sustituye al párrafo de
+                  arriba — explica el nombre, aprobada por Mario tras
+                  rechazar una primera versión que sí lo sustituía. */}
+              <p className="measure mt-3 text-smoke">{dict.about.nombreOrigen}</p>
             </div>
           </header>
 
