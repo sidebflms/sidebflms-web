@@ -5,6 +5,85 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (104) — Fase 16: tres tipos de encargo, cifras en drone, Mallorca
+
+Antes de escribir nada se preguntó a Mario dos cosas, tal como pedía el
+encargo, y se esperó su respuesta:
+
+- **"Cine y series"**: no hay ninguna ficha del portfolio etiquetada
+  "cine" (decisión a propósito de la Fase 15). Mario confirmó dejarlo
+  fuera: de momento son tres tipos de encargo, no cuatro.
+- **Mallorca**: `content/ciudades-drone.ts` decía que la costa aérea y el
+  pueblo sobre el mar eran de Mallorca; `content/projects.ts` decía que la
+  costa aérea no se sabía dónde era. Mario confirmó que las dos son de la
+  costa de Mallorca.
+
+**Parte 1 — la página de drone:**
+
+- "Tipos de encargo" pasa de dos a tres: **Publicidad** (antes "Cine y
+  publicidad", con MITT MOTORS como único ejemplo real) y **Marca y
+  corporativo** (nueva, con las cuatro fichas etiquetadas "marca" en la
+  Fase 15: las Cuatro Torres, el aéreo de Madrid, la costa de Mallorca y el
+  pueblo sobre el mar) se separan porque son cosas distintas de verdad —un
+  anuncio con cliente no es lo mismo que planos de recurso sin encargo
+  detrás—. "Grandes eventos" no se toca.
+- Las cinco cifras de `content/cifras.ts` (329 proyectos, 104 rodajes con
+  drone, 26 ciudades, 6 países, +2.000 horas de vuelo) se añaden a la
+  página, con el mismo rótulo "En lo que va de 2026" que llevan en portada
+  y en Nosotros — mismo origen, mismo matiz de que es de 2026 y no el
+  histórico.
+- Palabras: de 1121 a **1234** — supera las 1200 sin meter relleno, sólo
+  con las cifras y el tercer tipo de encargo.
+
+**Parte 2 — Mallorca, tercera página de ciudad:**
+
+- `content/projects.ts`: `costa-aerea` y `pueblo-sobre-el-mar` pasan de
+  `venue: null` a `venue: "Mallorca"`, y la nota de cabecera que explicaba
+  por qué se desconocía se corrige para contar la confirmación de Mario.
+  Esto cierra la contradicción entre los dos ficheros — la nota de
+  `ciudades-drone.ts` ya decía Mallorca y no hizo falta tocarla, sólo
+  ampliarla para que la página tenga sitio.
+- `/es/grabacion-con-drone-mallorca` y `/en/drone-filming-mallorca`,
+  mismo patrón que Madrid y Barcelona: `content/ciudades-drone.ts`,
+  `next.config.ts` (rewrites), `lib/routes.ts` (mapa de rutas) y
+  `app/sitemap.ts`. Sitio "Mallorca", no "Palma", por instrucción de
+  Mario. Comprobados en vivo: las dos URLs responden 200, el `venue` sale
+  ya en la ficha de cada proyecto, y las tres páginas de ciudad se enlazan
+  entre sí ("También volamos en...").
+
+**Parte 3 — auditoría:**
+
+```
+node scripts/seo-audit.mjs --comparar antes
+
+  Técnico y rastreo              ██████████ 19/19
+  Metadatos e indexación         ██████████ 15/15
+  Contenido y palabras clave     ██████████ 29/29
+  SEO local                      ███████··· 13/20
+  Datos estructurados            ██████████ 10/10
+  Rendimiento y accesibilidad    ██████████ 10/10
+  Autoridad y enlaces            ··········  0/5
+
+  TOTAL: 96/108  (89/100)  — Bien
+  Antes: 57/108   Diferencia: +39 puntos
+```
+
+"Contenido y palabras clave" llega a 29/29 completo por primera vez —la
+página de drone ya pasa de 1200 palabras—. Snapshot guardado en
+`docs/seo/fase16.json`.
+
+**Un criterio que no se ha tocado, avisado y no arreglado (regla
+expresa):** "Páginas por ciudad" sigue marcando sólo `madrid, barcelona` y
+da 3/5 en vez de 5/5, aunque Mallorca esté publicada y viva. La causa está
+en `scripts/seo-audit.mjs` línea 254: la lista de ciudades candidatas que
+prueba el script es fija —`["madrid", "barcelona", "valencia", "sevilla",
+"malaga"]`, las cinco que se pidieron al principio de todo— y nunca
+incluyó "mallorca" porque esa ciudad no estaba en el encargo original. No
+se ha tocado el script, tal como se pidió; queda aquí para que Mario
+decida si se añade "mallorca" a esa lista.
+
+---
+
 ## 2026-09-25 (103) — Segunda auditoría: bucle de redirección arreglado, una falsa alarma
 
 Mario trajo una ronda más de la auditoría externa (API/GraphQL, subdominios,
