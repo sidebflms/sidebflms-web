@@ -5,7 +5,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
-import { Cifras, Clientes, Equipo, EtapasFotos, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
+import { Cifras, Ciudades, Clientes, Equipo, EtapasFotos, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
 import { isLocale, path as rutaDe } from "./lib/routes.ts";
 
 /**
@@ -87,7 +87,7 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [Usuarios, Proyectos, Equipo, Preguntas, Media],
+  collections: [Usuarios, Proyectos, Equipo, Preguntas, Ciudades, Media],
   globals: [Cifras, Clientes, Textos, EtapasFotos],
 
   /**
@@ -141,7 +141,7 @@ export default buildConfig({
       afterNavLinks: ["/panel/vistas/seo-nav-link.tsx#SeoNavLink"],
     },
     livePreview: {
-      collections: ["proyectos", "equipo", "preguntas"],
+      collections: ["proyectos", "equipo", "preguntas", "ciudades"],
       globals: ["cifras", "clientes", "textos", "etapas"],
       url: ({ collectionConfig, globalConfig, data, locale, req }) => {
         const idioma = isLocale(locale.code) ? locale.code : "es";
@@ -161,6 +161,17 @@ export default buildConfig({
           }
           if (collectionConfig?.slug === "equipo") return rutaDe(idioma, "about");
           if (collectionConfig?.slug === "preguntas") return rutaDe(idioma, "contact");
+          if (collectionConfig?.slug === "ciudades") {
+            // Sólo las tres ciudades que ya tienen su propia clave de ruta
+            // (ver la nota de `Ciudades` en panel/colecciones.ts: una ciudad
+            // NUEVA todavía pide una línea de código aparte). Si el `slug`
+            // no es una de ésas, la vista previa cae a la página de drone
+            // general en vez de romperse.
+            const claves = { madrid: "droneMadrid", barcelona: "droneBarcelona", mallorca: "droneMallorca" } as const;
+            const slug = typeof data.slug === "string" ? data.slug : "";
+            const clave = claves[slug as keyof typeof claves];
+            return rutaDe(idioma, clave ?? "drone");
+          }
           if (globalConfig?.slug === "cifras") return rutaDe(idioma, "home");
           if (globalConfig?.slug === "clientes") return rutaDe(idioma, "portfolio");
           if (globalConfig?.slug === "textos") return rutaDe(idioma, "home");

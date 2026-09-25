@@ -2,6 +2,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 
 import { CIFRAS } from "@/content/cifras";
+import { CIUDAD_DRONE, CIUDADES_DRONE } from "@/content/ciudades-drone";
 import { CLIENTES } from "@/content/clientes";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
@@ -13,10 +14,15 @@ import { PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto } from "@/lib/conten
  *   curl -X POST "http://localhost:3005/admin-carga?clave=LA_CLAVE"
  *
  * Lee todo lo que hasta ahora vivía en código —proyectos, equipo, cifras,
- * clientes, preguntas frecuentes y las entradillas de página— y lo mete en la
- * base de datos. Se puede repetir: si algo ya está, lo actualiza en vez de
- * duplicarlo, así que sirve igual para la primera carga que para rehacerla.
- * NO borra nada que no venga de los ficheros.
+ * clientes, preguntas frecuentes, las páginas de ciudad y las entradillas de
+ * página— y lo mete en la base de datos. Se puede repetir: si algo ya está,
+ * lo actualiza en vez de duplicarlo, así que sirve igual para la primera
+ * carga que para rehacerla. NO borra nada que no venga de los ficheros.
+ *
+ * IMPORTANTE con Ciudades: las ejecuta DESPUÉS de Proyectos, porque su
+ * relación a fichas de trabajo se resuelve por `slug` contra lo que YA
+ * esté guardado — si algún día esto se reordena, Ciudades tiene que
+ * seguir yendo después.
  *
  * ── EL MATERIAL NO ENTRA AQUÍ (Fase 3) ───────────────────────────────────
  * Vídeo, póster y foto son campos `upload` desde la Fase 3: hacen falta los
@@ -170,6 +176,64 @@ export async function POST(peticion: Request): Promise<Response> {
 
   const resumenPreguntas = `Preguntas: ${creados} creadas, ${actualizados} actualizadas.`;
 
+  // ── Ciudades (páginas de drone por ciudad) ──────────────────────────────
+  // El titular se guarda con saltos de línea de verdad (`\n`), no como
+  // array: ver la nota de `headline` en `Ciudades`, panel/colecciones.ts.
+  creados = 0;
+  actualizados = 0;
+
+  for (const [i, slug] of CIUDADES_DRONE.entries()) {
+    const c = CIUDAD_DRONE[slug];
+
+    // La relación a Proyectos guarda IDs, no slugs: hay que resolverlos
+    // antes de guardar. Si algún slug no existe todavía como proyecto
+    // (fuera de orden en un `admin-carga` a medias), se omite sin más —no
+    // es motivo para que falle toda la carga.
+    const relacionados = await payload.find({
+      collection: "proyectos",
+      where: { slug: { in: c.proyectos } },
+      limit: c.proyectos.length,
+      depth: 0,
+    });
+    const idPorSlug = new Map(relacionados.docs.map((p) => [p.slug, p.id]));
+    const idsEnOrden = c.proyectos.map((s) => idPorSlug.get(s)).filter((id): id is number => id != null);
+
+    const datos = {
+      orden: i,
+      slug,
+      nombre: c.nombre,
+      proyectos: idsEnOrden,
+    };
+    const porIdioma = (locale: "es" | "en") => ({
+      headline: c.headline[locale].join("\n"),
+      intro: c.intro[locale],
+      cuerpo: c.cuerpo[locale],
+    });
+
+    const existente = await payload.find({
+      collection: "ciudades",
+      where: { slug: { equals: slug } },
+      limit: 1,
+    });
+
+    if (existente.docs.length > 0) {
+      const id = existente.docs[0].id;
+      await payload.update({ collection: "ciudades", id, locale: "es", data: { ...datos, ...porIdioma("es") } });
+      await payload.update({ collection: "ciudades", id, locale: "en", data: porIdioma("en") });
+      actualizados += 1;
+    } else {
+      const creado = await payload.create({
+        collection: "ciudades",
+        locale: "es",
+        data: { ...datos, ...porIdioma("es") },
+      });
+      await payload.update({ collection: "ciudades", id: creado.id, locale: "en", data: porIdioma("en") });
+      creados += 1;
+    }
+  }
+
+  const resumenCiudades = `Ciudades: ${creados} creadas, ${actualizados} actualizadas.`;
+
   // ── Cifras, clientes y textos: los tres Globals, sólo hay una copia ────
   //
   // OJO con el array de «items»: a diferencia de un campo suelto, si la
@@ -213,6 +277,7 @@ export async function POST(peticion: Request): Promise<Response> {
     proyectos: resumenProyectos,
     equipo: resumenEquipo,
     preguntas: resumenPreguntas,
+    ciudades: resumenCiudades,
     cifras: `${CIFRAS.length} cifras cargadas.`,
     clientes: `${CLIENTES.length} clientes cargados.`,
     textos: `${claves.length} entradillas cargadas.`,

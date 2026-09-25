@@ -4,6 +4,7 @@ import { getPayload } from "payload";
 
 import config from "@payload-config";
 import { CIFRAS_CON_DATO, type Cifra } from "@/content/cifras";
+import { CIUDAD_DRONE, CIUDADES_DRONE } from "@/content/ciudades-drone";
 import { CLIENTES } from "@/content/clientes";
 import { en as diccionarioEn } from "@/content/dictionaries/en";
 import { es as diccionarioEs } from "@/content/dictionaries/es";
@@ -159,11 +160,13 @@ export const TEXTOS_FICHERO: Textos = {
  * documento. Dos consultas y no una por idioma y pieza: son 23 proyectos, no
  * hace falta más.
  */
-async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas") {
+async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas" | "ciudades") {
   const payload = await getPayload({ config });
   // Proyectos y equipo llevan campos `upload` (el material, Fase 3): con
   // `depth: 0` sólo traerían el id suelto de cada fichero, no su dirección.
-  // Preguntas no tiene ninguno, así que se queda en 0: una consulta menos.
+  // Ciudades lleva una `relationship` a Proyectos y necesita lo mismo, para
+  // traer el `slug` de cada ficha enlazada y no sólo su id. Preguntas no
+  // tiene ninguno de los dos, así que se queda en 0: una consulta menos.
   const depth = coleccion === "preguntas" ? 0 : 1;
   // OJO, no es lo que parece: `payload.find()` SIN `draft: true` NO filtra
   // por `_status` sola —trae la tabla principal tal cual, borradores
@@ -398,4 +401,68 @@ export async function traeTextos(): Promise<Textos> {
     avisa("los textos", error);
     return TEXTOS_FICHERO;
   }
+}
+
+/**
+ * Una página de ciudad (roadmap del panel, 2026-09-26). Misma forma que
+ * devolvía `CIUDAD_DRONE[slug]` de `content/ciudades-drone.ts` —ese fichero
+ * sigue siendo el plan B—, así que `app/[locale]/ciudad-drone/[ciudad]/page.tsx`
+ * no cambia cómo lo usa, sólo de dónde sale.
+ */
+export type Ciudad = {
+  slug: string;
+  nombre: string;
+  headline: Record<"es" | "en", string[]>;
+  intro: Record<"es" | "en", string>;
+  cuerpo: Record<"es" | "en", string>;
+  /** Slugs de Proyectos, en el orden en que se enlazan desde esta ciudad. */
+  proyectos: string[];
+};
+
+/** El mismo `CIUDAD_DRONE` de siempre, pero como lista — es lo que espera el plan B de aquí abajo. */
+const CIUDADES_FICHERO: Ciudad[] = CIUDADES_DRONE.map((slug) => {
+  const c = CIUDAD_DRONE[slug];
+  return { slug, nombre: c.nombre, headline: c.headline, intro: c.intro, cuerpo: c.cuerpo, proyectos: c.proyectos };
+});
+
+/** Cada salto de línea es una línea del titular — sin línea en blanco entre ellas, ver `Ciudades` en `panel/colecciones.ts`. */
+const lineas = (v: unknown): string[] =>
+  typeof v === "string" ? v.split("\n").map((l) => l.trim()).filter(Boolean) : [];
+
+/** Los slugs de los proyectos enlazados, con `depth: 1` ya vienen como documentos, no como ids sueltos. */
+const proyectosDe = (v: unknown): string[] =>
+  Array.isArray(v)
+    ? (v as unknown[])
+        .map((p) => (p && typeof p === "object" && "slug" in p ? oNulo((p as Documento).slug) : null))
+        .filter((s): s is string => s !== null)
+    : [];
+
+function aCiudad(es: Documento, en: Documento): Ciudad {
+  return {
+    slug: String(es.slug),
+    nombre: String(es.nombre),
+    headline: { es: lineas(es.headline), en: lineas(en.headline) },
+    intro: porIdioma(es.intro, en.intro),
+    cuerpo: porIdioma(es.cuerpo, en.cuerpo),
+    proyectos: proyectosDe(es.proyectos),
+  };
+}
+
+/** Todas las páginas de ciudad, en el orden en que se enlazan entre sí. */
+export async function traeCiudades(): Promise<Ciudad[]> {
+  if (!HAY_BASE) return CIUDADES_FICHERO;
+  try {
+    const filas = await enDosIdiomas("ciudades");
+    if (filas.length === 0) return CIUDADES_FICHERO;
+    return filas.map(([es, en]) => aCiudad(es, en));
+  } catch (error) {
+    avisa("las ciudades", error);
+    return CIUDADES_FICHERO;
+  }
+}
+
+/** Una ciudad por su `slug` («madrid»), o `undefined` si no existe. */
+export async function traeCiudad(slug: string): Promise<Ciudad | undefined> {
+  const todas = await traeCiudades();
+  return todas.find((c) => c.slug === slug);
 }

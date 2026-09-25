@@ -301,6 +301,95 @@ export const Preguntas: CollectionConfig = {
 };
 
 /**
+ * LAS PÁGINAS DE CIUDAD (`/grabacion-con-drone-madrid`, etc.), pasadas del
+ * fichero fijo `content/ciudades-drone.ts` al panel (roadmap del panel,
+ * 2026-09-26): antes, cambiar una palabra del cuerpo de Madrid exigía un
+ * despliegue. `content/ciudades-drone.ts` sigue siendo el plan B si la base
+ * no responde (ver `lib/contenido.ts`), igual que con Proyectos o Equipo.
+ *
+ * ── LO QUE ESTO NO HACE ──────────────────────────────────────────────────
+ * AÑADIR UNA CIUDAD NUEVA AQUÍ NO LA PUBLICA SOLA. La URL bonita
+ * (`/es/grabacion-con-drone-<ciudad>`) todavía la sirve un `rewrite` fijo en
+ * `next.config.ts`, uno por ciudad: sin esa línea (y su pareja en inglés), la
+ * ficha existe en el panel pero no tiene ninguna dirección que la enseñe.
+ * Añadir una ciudad de verdad sigue pidiendo ese cambio de código — lo que
+ * esta colección arregla es que EDITAR una ciudad que ya existe (Madrid,
+ * Barcelona, Mallorca) no lo pida.
+ *
+ * ── EL TITULAR, EN TEXTO CON SALTOS DE LÍNEA ─────────────────────────────
+ * `Textos` (más abajo) deja fuera a propósito los titulares de otras
+ * páginas, porque son arrays de líneas para la animación de entrada. Aquí sí
+ * se incluye: cada salto de línea del texto se convierte en una línea del
+ * titular grande, sin línea en blanco entre ellas —distinto de `cuerpo`,
+ * donde la línea en blanco separa párrafos—.
+ */
+export const Ciudades: CollectionConfig = {
+  slug: "ciudades",
+  hooks: {
+    afterChange: [avisaALaWeb],
+    afterDelete: [avisaALaWeb],
+  },
+  labels: { singular: "Ciudad", plural: "Ciudades (drone)" },
+  admin: {
+    useAsTitle: "nombre",
+    defaultColumns: ["nombre", "slug", "orden"],
+    group: "Contenido",
+    description:
+      "Las páginas de ciudad de la web de drone. Añadir una ciudad NUEVA aquí no la publica sola: " +
+      "todavía hace falta una línea de rewrite en next.config.ts para su URL — pregunta antes de darla " +
+      "por publicada. Editar una ciudad que ya existe (Madrid, Barcelona, Mallorca) sí funciona entero " +
+      "desde aquí, sin desplegar nada.",
+  },
+  defaultSort: "orden",
+  fields: [
+    { name: "orden", type: "number", required: true, defaultValue: 0, admin: { position: "sidebar" } },
+    {
+      name: "slug",
+      type: "text",
+      required: true,
+      unique: true,
+      admin: {
+        position: "sidebar",
+        description: "minúsculas y sin espacios: «madrid», «barcelona». Tiene que ser el mismo que el rewrite de next.config.ts.",
+      },
+    },
+    { name: "nombre", label: "Nombre", type: "text", required: true, admin: { description: "Con mayúscula: «Madrid»." } },
+    {
+      name: "headline",
+      label: "Titular",
+      type: "textarea",
+      required: true,
+      localized: true,
+      admin: { description: "El titular grande. Cada línea del texto es una línea del titular — sin línea en blanco entre ellas." },
+    },
+    {
+      name: "intro",
+      label: "Entradilla",
+      type: "textarea",
+      required: true,
+      localized: true,
+      admin: { description: "También hace de meta descripción: 150-160 caracteres." },
+    },
+    {
+      name: "cuerpo",
+      label: "Cuerpo",
+      type: "textarea",
+      required: true,
+      localized: true,
+      admin: { description: "Los párrafos se separan con una línea en blanco, como en las fichas de Proyectos." },
+    },
+    {
+      name: "proyectos",
+      label: "Fichas de esta ciudad",
+      type: "relationship",
+      relationTo: "proyectos",
+      hasMany: true,
+      admin: { description: "Qué fichas de trabajo salen en esta página, y en qué orden — se puede arrastrar." },
+    },
+  ],
+};
+
+/**
  * EL MATERIAL: fotos y vídeos YA PREPARADOS.
  *
  * «Ya preparados» es la palabra que importa: esto NO convierte el máster de

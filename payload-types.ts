@@ -71,6 +71,7 @@ export interface Config {
     proyectos: Proyecto;
     equipo: Equipo;
     preguntas: Pregunta;
+    ciudades: Ciudade;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,6 +84,7 @@ export interface Config {
     proyectos: ProyectosSelect<false> | ProyectosSelect<true>;
     equipo: EquipoSelect<false> | EquipoSelect<true>;
     preguntas: PreguntasSelect<false> | PreguntasSelect<true>;
+    ciudades: CiudadesSelect<false> | CiudadesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -298,6 +300,42 @@ export interface Pregunta {
   createdAt: string;
 }
 /**
+ * Las páginas de ciudad de la web de drone. Añadir una ciudad NUEVA aquí no la publica sola: todavía hace falta una línea de rewrite en next.config.ts para su URL — pregunta antes de darla por publicada. Editar una ciudad que ya existe (Madrid, Barcelona, Mallorca) sí funciona entero desde aquí, sin desplegar nada.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ciudades".
+ */
+export interface Ciudade {
+  id: number;
+  orden: number;
+  /**
+   * minúsculas y sin espacios: «madrid», «barcelona». Tiene que ser el mismo que el rewrite de next.config.ts.
+   */
+  slug: string;
+  /**
+   * Con mayúscula: «Madrid».
+   */
+  nombre: string;
+  /**
+   * El titular grande. Cada línea del texto es una línea del titular — sin línea en blanco entre ellas.
+   */
+  headline: string;
+  /**
+   * También hace de meta descripción: 150-160 caracteres.
+   */
+  intro: string;
+  /**
+   * Los párrafos se separan con una línea en blanco, como en las fichas de Proyectos.
+   */
+  cuerpo: string;
+  /**
+   * Qué fichas de trabajo salen en esta página, y en qué orden — se puede arrastrar.
+   */
+  proyectos?: (number | Proyecto)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -336,6 +374,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'preguntas';
         value: number | Pregunta;
+      } | null)
+    | ({
+        relationTo: 'ciudades';
+        value: number | Ciudade;
       } | null)
     | ({
         relationTo: 'media';
@@ -463,6 +505,21 @@ export interface PreguntasSelect<T extends boolean = true> {
   orden?: T;
   q?: T;
   a?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ciudades_select".
+ */
+export interface CiudadesSelect<T extends boolean = true> {
+  orden?: T;
+  slug?: T;
+  nombre?: T;
+  headline?: T;
+  intro?: T;
+  cuerpo?: T;
+  proyectos?: T;
   updatedAt?: T;
   createdAt?: T;
 }

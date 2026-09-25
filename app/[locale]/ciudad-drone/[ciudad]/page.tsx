@@ -4,28 +4,33 @@ import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
-import { CIUDAD_DRONE, CIUDADES_DRONE, type SlugCiudad } from "@/content/ciudades-drone";
-import { traeProyectos } from "@/lib/contenido";
+import { CIUDADES_DRONE, type SlugCiudad } from "@/content/ciudades-drone";
+import { traeCiudad, traeCiudades, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path, type RouteKey } from "@/lib/routes";
 
 /**
- * PÁGINAS DE CIUDAD (SEO Fase 6, 2026-09-24).
+ * PÁGINAS DE CIUDAD (SEO Fase 6, 2026-09-24; pasadas al panel en el roadmap
+ * de 2026-09-26).
  *
  * Una única carpeta física para las tres ciudades —no una por ciudad—: el
- * contenido real vive en `content/ciudades-drone.ts`, esta página sólo lo
- * pinta. La URL bonita (`/es/grabacion-con-drone-madrid`) la sirve un
- * rewrite de `next.config.ts` sobre esta misma ruta interna
- * (`/es/ciudad-drone/madrid`); mismo mecanismo que ya usa `/grabacion-con-drone`
- * a secas para la página de drone. Ver la nota de `droneMadrid` en
- * `lib/routes.ts`.
+ * contenido real sale de `traeCiudad`/`traeCiudades` (`lib/contenido.ts`),
+ * que leen la colección `Ciudades` del panel y caen a
+ * `content/ciudades-drone.ts` si la base no responde — el mismo mecanismo
+ * que Proyectos o Equipo. Esta página sólo lo pinta. La URL bonita
+ * (`/es/grabacion-con-drone-madrid`) la sirve un rewrite de
+ * `next.config.ts` sobre esta misma ruta interna (`/es/ciudad-drone/madrid`);
+ * mismo mecanismo que ya usa `/grabacion-con-drone` a secas para la página
+ * de drone. Ver la nota de `droneMadrid` en `lib/routes.ts`.
  *
  * NADA DE PLANTILLA CON LA CIUDAD CAMBIADA: `generateStaticParams` sólo
- * genera las ciudades de `CIUDADES_DRONE`, que son las que de verdad tienen
- * trabajo real —Mario asignó cada proyecto de viva voz, ver la cabecera de
- * `content/ciudades-drone.ts`—. Cualquier otra ciudad da 404, no una página
- * de relleno.
+ * genera las ciudades de `CIUDADES_DRONE` —el mapa de rutas fijo, no la
+ * lista que devuelva el panel—, que son las que de verdad tienen trabajo
+ * real y, sobre todo, las que tienen una URL que las sirva (ver el aviso de
+ * `Ciudades` en `panel/colecciones.ts`: añadir una ciudad al panel no le da
+ * dirección propia sola). Cualquier otra ciudad da 404, no una página de
+ * relleno.
  */
 
 const CLAVE_RUTA: Record<SlugCiudad, RouteKey> = {
@@ -47,7 +52,8 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/ciudad-drone/[ciudad]">): Promise<Metadata> {
   const { locale, ciudad } = await params;
   if (!isLocale(locale) || !esCiudad(ciudad)) return {};
-  const copy = CIUDAD_DRONE[ciudad];
+  const copy = await traeCiudad(ciudad);
+  if (!copy) return {};
 
   return buildMetadata({
     locale,
@@ -70,13 +76,23 @@ export default async function CiudadDronePage({
   const locale = rawLocale;
 
   const dict = await getDictionary(locale);
-  const copy = CIUDAD_DRONE[ciudad];
+  const copy = await traeCiudad(ciudad);
+  if (!copy) notFound();
   const proyectos = await traeProyectos();
   const piezas = copy.proyectos
     .map((slug) => proyectos.find((p) => p.slug === slug))
     .filter((p): p is NonNullable<typeof p> => !!p && !p.placeholder);
 
-  const otrasCiudades = CIUDADES_DRONE.filter((c) => c !== ciudad);
+  // Las «otras ciudades» del enlace cruzado de más abajo también salen del
+  // panel, no de la lista fija: si un día hay cuatro en Payload —aunque
+  // sólo tres tengan URL propia todavía— este enlace lo refleja sin tocar
+  // código. Se filtra a las que SÍ tienen ruta (`CLAVE_RUTA`), para no
+  // enlazar a una ciudad sin dirección.
+  const todasLasCiudades = await traeCiudades();
+  const otrasCiudades = todasLasCiudades
+    .map((c) => c.slug)
+    .filter((s): s is SlugCiudad => s !== ciudad && esCiudad(s));
+  const nombrePorSlug = new Map(todasLasCiudades.map((c) => [c.slug, c.nombre]));
 
   return (
     <main id="main" className="pagina">
@@ -137,7 +153,7 @@ export default async function CiudadDronePage({
                     href={path(locale, CLAVE_RUTA[c])}
                     className="text-bone underline decoration-ink-600 underline-offset-4 transition-colors hover:text-rust-300"
                   >
-                    {CIUDAD_DRONE[c].nombre}
+                    {nombrePorSlug.get(c) ?? c}
                   </Link>
                 </span>
               ))}

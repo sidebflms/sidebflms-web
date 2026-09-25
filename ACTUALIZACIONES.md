@@ -5,6 +5,60 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (118) — Roadmap del panel, Fase A: Ciudades
+
+Mario notó que el panel se sentía "poco desarrollado" — no se podía
+cambiar la distribución de la web desde ahí. Auditado a fondo (con un
+agente de exploración) qué vive en Payload hoy y qué sigue en código:
+5 colecciones y 4 globals, ~35 campos en total, y todo el resto —el
+diccionario entero, las páginas de ciudad, la flota de drones, el
+orden de las secciones de cada página— sigue siendo código puro.
+Ninguna página usa el campo `blocks` de Payload, que es su mecanismo
+nativo para dejar componer una página desde el panel: nunca se llegó
+a usar aquí.
+
+Roadmap acordado en tres fases, ejecutándose por orden:
+
+- **Fase A** — meter en el panel lo que hoy sólo se edita a mano en
+  código (empezando por lo de más valor).
+- **Fase B** — orden y visibilidad de las secciones que ya existen.
+- **Fase C** — un constructor de páginas de verdad, con el campo
+  `blocks` nativo de Payload (no hace falta instalar nada nuevo:
+  ni un editor visual de pago, ni un constructor externo como Puck o
+  Plasmic). Empezando por una página piloto antes de tocar las siete.
+
+**Esta entrada es la primera pieza de la Fase A: la colección
+`Ciudades`.** Antes, cambiar una palabra del cuerpo de la página de
+Madrid exigía tocar `content/ciudades-drone.ts` y desplegar. Ahora
+Madrid, Barcelona y Mallorca se editan enteras desde `/admin` —titular,
+entradilla, cuerpo, y qué fichas de trabajo se enlazan y en qué
+orden—, con vista previa en vivo como el resto de colecciones.
+`content/ciudades-drone.ts` sigue siendo el plan B si la base de datos
+no responde, igual que `content/projects.ts` o `content/team.ts`.
+
+**Lo que esto NO hace, a propósito**: añadir una ciudad NUEVA (una
+cuarta) sigue pidiendo una línea de `rewrite` en `next.config.ts` y una
+entrada en `lib/routes.ts` — la URL bonita
+(`/es/grabacion-con-drone-<ciudad>`) todavía la sirve un mapa de rutas
+fijo, no algo que el panel pueda generar solo. Hacer eso también
+dinámico tocaba el selector de idioma y el `sitemap.xml`, piezas
+delicadas para el SEO ya indexado de esta web, y no compensaba
+mezclarlo con esta pieza. El aviso está también dentro del propio
+panel, en la descripción de la colección, para que no se dé una
+ciudad nueva por publicada sin ese paso.
+
+Probado de verdad: colección creada, vista previa en vivo con Madrid
+—titular en sus tres líneas, entradilla, cuerpo—, y la página pública
+sirviendo el mismo contenido desde Payload, con las fichas de trabajo
+enlazadas correctamente. Migración formal para producción, aparte del
+`push` de desarrollo.
+
+`/admin-carga` sincroniza ahora también Ciudades desde el fichero,
+después de Proyectos —su relación de fichas se resuelve por `slug`
+contra lo que ya esté guardado—.
+
+---
+
 ## 2026-09-26 (117) — "Volver a medir esta página" en /admin/seo
 
 Mario editaba una ficha y no veía el efecto hasta el cron de la noche

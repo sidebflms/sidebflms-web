@@ -5,6 +5,7 @@ import * as migration_20260924_153600_fase4_borradores_proyectos from './2026092
 import * as migration_20260924_155705_fase4bis_etapas_fotos from './20260924_155705_fase4bis_etapas_fotos';
 import * as migration_20260924_222423_fase15_categorias_cine_marca from './20260924_222423_fase15_categorias_cine_marca';
 import * as migration_20260925_033651_fase17_meta_descripcion_proyectos from './20260925_033651_fase17_meta_descripcion_proyectos';
+import * as migration_20260925_235159_roadmap_colecciones_ciudades from './20260925_235159_roadmap_colecciones_ciudades';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260925_033651_fase17_meta_descripcion_proyectos.up,
     down: migration_20260925_033651_fase17_meta_descripcion_proyectos.down,
-    name: '20260925_033651_fase17_meta_descripcion_proyectos'
+    name: '20260925_033651_fase17_meta_descripcion_proyectos',
+  },
+  {
+    up: migration_20260925_235159_roadmap_colecciones_ciudades.up,
+    down: migration_20260925_235159_roadmap_colecciones_ciudades.down,
+    name: '20260925_235159_roadmap_colecciones_ciudades'
   },
 ];
