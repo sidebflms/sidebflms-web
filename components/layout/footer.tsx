@@ -127,21 +127,15 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     </a>
                   </li>
                 ))}
-                {/* SEO Fase 9 (2026-09-24): teléfono y dirección, en texto —no
-                    en una imagen, que Google no lee—, idénticos a la ficha de
-                    Google Business. La dirección lleva la ciudad (Fuenlabrada,
-                    Madrid): no es la lista de "dónde trabajamos" que la
-                    decisión de más abajo reserva al FAQ —es dónde está la
-                    empresa, un dato distinto—, así que no la contradice. */}
-                <li>
-                  <a
-                    href={`tel:${dict.contact.phone.replace(/\s+/g, "")}`}
-                    className="text-bone transition-colors hover:text-rust-300"
-                  >
-                    {dict.contact.phone}
-                  </a>
-                </li>
-                <li className="text-bone">{dict.contact.address}</li>
+                {/* SEO Fase 9 (2026-09-24) puso aquí el teléfono y la
+                    dirección; una petición posterior de Mario (2026-09-25)
+                    los quita de esta columna, apretada entre las redes y el
+                    correo. El teléfono pasa a Contacto como enlace de
+                    WhatsApp (`comun.tsx`, prop `whatsapp`) y la dirección se
+                    queda visible como texto en esa misma página —el auditor
+                    de SEO sólo mira 7 páginas concretas, y Contacto es una
+                    de ellas—, así que ninguno de los dos datos desaparece
+                    de la web, sólo de aquí. */}
                 <li>
                   <a
                     href={`mailto:${dict.contact.email}`}

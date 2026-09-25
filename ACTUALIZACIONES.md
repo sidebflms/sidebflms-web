@@ -5,6 +5,38 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (110) — El teléfono y la dirección salen del pie
+
+Mario vio el pie desplegado: en la columna "Síguenos", las redes, el
+teléfono, la dirección y el correo iban todos apretados uno detrás de
+otro, en las 72 páginas. Pidió quitar la dirección de ahí y mover el
+teléfono a otro apartado de contacto, como enlace de WhatsApp.
+
+**El pie** (`components/layout/footer.tsx`) ya no lleva teléfono ni
+dirección: la columna "Síguenos" se queda con las tres redes y el correo.
+
+**Contacto** (`components/sections/contacto/contacto-tarjetas.tsx`) gana
+dos cosas: un enlace de WhatsApp (`https://wa.me/<número sin espacios>`,
+calculado del `dict.contact.phone` de siempre, no un dato nuevo que
+pueda desincronizarse) y la dirección en texto plano, sin cambiar ni una
+letra respecto a la ficha de Google Business.
+
+El enlace de WhatsApp vive en `CabeceraFormulario`
+(`components/sections/contacto/comun.tsx`), compartida con "Trabaja con
+nosotros", detrás de una prop opcional `whatsapp` que sólo activa
+Contacto — la página de empleo no lleva WhatsApp y no cambia.
+
+**Por qué la dirección no desaparece de la web, sólo del pie**:
+`scripts/seo-audit.mjs` comprueba "teléfono y dirección visibles" en 7
+páginas concretas (home, drone, servicios, portfolio, about, contacto,
+faq), no en el sitio entero. Contacto es una de esas 7, así que el dato
+sigue siendo visible donde el auditor mira y el criterio no baja.
+
+Nueva clave de diccionario: `contact.whatsapp` ("WhatsApp"/"WhatsApp"),
+en `content/dictionaries/es.ts` y `en.ts`.
+
+---
+
 ## 2026-09-25 (109) — Fase 20: la portada vuelve a ser minimalista
 
 Mario vio la portada desplegada tras la Fase 17 y decidió que las cinco

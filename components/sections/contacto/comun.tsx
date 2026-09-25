@@ -103,6 +103,7 @@ export function CabeceraFormulario({
   entradilla,
   principal,
   secundario,
+  whatsapp,
 }: {
   dict: Dictionary;
   rotulo: string;
@@ -110,9 +111,18 @@ export function CabeceraFormulario({
   entradilla: string;
   principal: SaltoCabecera;
   secundario?: SaltoCabecera;
+  /**
+   * SIDEBFLMS-web Fase (2026-09-25): pastilla de WhatsApp, sólo en Contacto
+   * —no en «Trabaja con nosotros», que comparte este mismo componente—.
+   * El teléfono ya es el WhatsApp Business de la empresa (ver
+   * `content/dictionaries/es.ts`, `contact.phone`), así que el enlace sale
+   * de ahí, sin un campo nuevo que pueda desincronizarse del real.
+   */
+  whatsapp?: boolean;
 }) {
   const redes = redesContacto(dict);
   const textoMovil = secundario ? "text-[10px] tracking-[0.04em]" : "text-xs tracking-[0.08em]";
+  const numeroWhatsapp = dict.contact.phone.replace(/\D/g, "");
 
   return (
     <Reveal>
@@ -143,7 +153,7 @@ export function CabeceraFormulario({
             </EnlaceAncla>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {redes.map((red) => (
             <a
               key={red.key}
@@ -162,6 +172,16 @@ export function CabeceraFormulario({
           >
             <span className="truncate">{dict.contact.email}</span>
           </a>
+          {whatsapp && (
+            <a
+              href={`https://wa.me/${numeroWhatsapp}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+            >
+              <span className="truncate">{dict.contact.whatsapp}</span>
+            </a>
+          )}
         </div>
       </div>
 
@@ -183,6 +203,16 @@ export function CabeceraFormulario({
         >
           {dict.contact.email}
         </a>
+        {whatsapp && (
+          <a
+            href={`https://wa.me/${numeroWhatsapp}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="glass inline-flex h-11 items-center rounded-full px-5 text-sm text-bone transition-colors hover:text-rust-300"
+          >
+            {dict.contact.whatsapp}
+          </a>
+        )}
         {redes.map((red) => (
           <a
             key={red.key}

@@ -336,6 +336,7 @@ export const en: Dictionary = {
     email: "contact@sidebflms.com",
     phone: "+34 614 96 36 93",
     address: "Calle de Cuba 43, Fuenlabrada, Madrid",
+    whatsapp: "WhatsApp",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     youtube: "YouTube",

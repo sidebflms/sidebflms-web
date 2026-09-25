@@ -401,6 +401,9 @@ export const es = {
     // también el WhatsApp Business de la empresa.
     phone: "+34 614 96 36 93",
     address: "Calle de Cuba 43, Fuenlabrada, Madrid",
+    // SIDEBFLMS-web (2026-09-25): etiqueta del enlace de WhatsApp en
+    // Contacto (comun.tsx). El número sale del propio `phone` de arriba.
+    whatsapp: "WhatsApp",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     youtube: "YouTube",

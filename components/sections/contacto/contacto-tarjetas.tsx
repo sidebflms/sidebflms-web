@@ -84,7 +84,16 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
           entradilla={dict.contact.intro}
           principal={{ texto: dict.services.cta, id: ID_FORM }}
           secundario={{ texto: dict.faq.label, id: ID_FAQ }}
+          whatsapp
         />
+        {/* SIDEBFLMS-web (2026-09-25): la dirección se quita del pie —salía
+            apretada junto al teléfono y las redes en las 72 páginas— y se
+            deja aquí, en Contacto, como texto plano. Sigue siendo idéntica,
+            letra a letra, a la ficha de Google Business (ver comentario en
+            `content/dictionaries/es.ts`, `contact.address`): el auditor de
+            SEO (`scripts/seo-audit.mjs`) sólo mira 7 páginas concretas para
+            «dirección visible», y ésta es una de ellas. */}
+        <p className="label mt-4 text-smoke">{dict.contact.address}</p>
       </section>
 
       {/* ── 2. EL FORMULARIO POR PASOS ───────────────────────────────────── */}
