@@ -1,0 +1,4 @@
+Contact: mailto:contact@sidebflms.com
+Expires: 2027-09-25T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://sidebflms.com/.well-known/security.txt

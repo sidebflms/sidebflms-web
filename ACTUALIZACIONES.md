@@ -18,9 +18,16 @@ del formulario— queda pendiente de que él diga qué quiere).
   producción (`COOKIE_SECURE = NODE_ENV === "production"`; en `false` en
   local, porque `next dev` sirve por `http://` y un navegador descarta una
   cookie `Secure` que llega sin cifrar).
-- `app/.well-known/security.txt/route.ts` (nuevo) — no existía. RFC 9116,
-  con el único contacto real de la empresa (`contact@sidebflms.com`, el
-  mismo de `lib/correo.ts`) y caduca en un año, como pide la RFC.
+- `public/.well-known/security.txt` (nuevo) — no existía. RFC 9116, con el
+  único contacto real de la empresa (`contact@sidebflms.com`, el mismo de
+  `lib/correo.ts`) y caduca en un año, como pide la RFC. Primer intento
+  fallido: una ruta de Next (`app/.well-known/security.txt/route.ts`)
+  compilaba bien pero daba 404 en producción, porque el `.htaccess`
+  (`despliegue/proxy-php/htaccess`) intercepta TODO `/.well-known/` antes de
+  llegar a `proxy.php` —a propósito, para que Let's Encrypt pueda renovar el
+  certificado sin pasar por Node— y lo sirve como fichero estático desde
+  `public_html`. Un fichero suelto en `public/` sí llega ahí: el despliegue
+  copia `public/` entero a la raíz (`despliegue/publicar.sh`).
 
 **Dos cosas que el informe daba por ausentes y no lo estaban — comprobado
 en el código antes de tocar nada, no de memoria:**
