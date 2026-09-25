@@ -29,11 +29,15 @@ export const montserrat = Montserrat({
 /**
  * DISPLAY FALLBACK — Archivo con el eje de anchura abierto.
  * Akira Expanded se declara en `globals.css` con CSS plano y apunta a
- * `public/fonts/akira-expanded-super-bold.woff2`, que TODAVÍA NO EXISTE
- * (pendiente de licencia comercial). Mientras tanto el navegador cae aquí.
+ * `public/fonts/akira-expanded-super-bold.woff2`, que SÍ EXISTE: la
+ * licencia comercial se confirmó el 2026-09-12 (ver la nota en
+ * `app/globals.css` y en el README). Corregido el 2026-09-25 — este
+ * comentario llevaba meses diciendo lo contrario.
  *
+ * Este fallback sigue haciendo falta igualmente: es lo que se ve mientras
+ * Akira carga (`font-display: swap`) o si alguna vez falla la carga.
  * Archivo a peso 900 con `font-stretch: 125%` ocupa un ancho parecido al de
- * Akira Expanded, así que al colocar la fuente real el layout no da un salto.
+ * Akira Expanded, así que el cambio de una a otra no da un salto de maquetación.
  */
 export const archivoFallback = Archivo({
   variable: "--font-archivo",

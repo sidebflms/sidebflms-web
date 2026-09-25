@@ -107,8 +107,13 @@ export const CIUDAD_DRONE: Record<SlugCiudad, CopyCiudad> = {
       es: ["Grabación con", "drone en", "Mallorca"],
       en: ["Drone filming", "in Mallorca"],
     },
+    // Fase 18 (2026-09-25): el ES se pasaba de 165 a 171 caracteres —esta
+    // frase también hace de meta descripción, ver `generateMetadata` en
+    // ciudad-drone/[ciudad]/page.tsx—. Recortada a 155 sin perder el dato
+    // concreto (la bahía, el pueblo, los cuatro días de diferencia con
+    // Madrid). El EN ya estaba en rango (155) y no se ha tocado.
     intro: {
-      es: "Dos postales de la misma salida por la costa de Mallorca, rodadas cuatro días después que las de Madrid: una bahía con barcos fondeados y un pueblo que baja hacia el agua.",
+      es: "Dos postales de la misma salida por la costa de Mallorca: una bahía con barcos fondeados y un pueblo que baja hacia el agua, cuatro días después de Madrid.",
       en: "Two postcards from the same coastal run in Mallorca, shot four days after the Madrid ones: a bay with anchored boats and a town stepping down to the water.",
     },
     // Ampliado en la Fase 17 (2026-09-25): de 112 a ~176 palabras. Las dos

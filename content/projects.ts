@@ -186,7 +186,15 @@ const PROYECTOS: Project[] = [
     placeholder: false,
     categories: ["drone"],
     tone: 2,
-    featured: false,
+    // Fase 18 (2026-09-25): showpiece movido aquí desde holika-portal —la
+    // portada seguía enseñando un festival aunque el texto ya había
+    // cambiado de rumbo—. Elegido sobre mitt-motors (la otra opción
+    // razonable) porque es un plano secuencia continuo sin cortes, la
+    // misma cualidad que hacía funcionar a Holika como showpiece, y
+    // porque demuestra la misma capacidad de volar sobre grandes
+    // multitudes que antes sólo probaban las piezas de festival.
+    featured: true,
+    showpiece: true,
     year: "2025",
     venue: "Metropolitano",
     media: {
@@ -331,7 +339,9 @@ const PROYECTOS: Project[] = [
     // pensado para turismo, marcas y contenido de destino".
     categories: ["drone", "marca"],
     tone: 0,
-    featured: false,
+    // Fase 18 (2026-09-25): pasa a destacada para reequilibrar la portada
+    // hacia el rumbo nuevo — ver la nota de metropolitano.
+    featured: true,
     year: "2026",
     // CONFIRMADO por Mario el 2026-09-25 (Fase 16): es la costa de Mallorca.
     // "Mallorca" y no "Palma": es como se busca, y el plano es de costa, no
@@ -445,8 +455,12 @@ const PROYECTOS: Project[] = [
     placeholder: false,
     categories: ["drone"],
     tone: 0,
+    // Fase 18 (2026-09-25): showpiece movido a metropolitano — la portada
+    // seguía enseñando un festival como primera imagen aunque el H1 ya
+    // hablaba de cine, series, publicidad y grandes eventos. Se queda
+    // destacada: sigue siendo prueba real de que se sabe volar sobre
+    // grandes multitudes, sólo que ya no es lo primero que se ve.
     featured: true,
-    showpiece: true,
     // FECHA: el fichero no llevaba ninguna. Confirmada por Mario de viva voz
     // el 2026-09-24: 3 de julio de 2026.
     year: "2026",
@@ -484,7 +498,10 @@ const PROYECTOS: Project[] = [
     placeholder: false,
     categories: ["aftermovie"],
     tone: 1,
-    featured: true,
+    // Fase 18 (2026-09-25): deja de estar destacada para reequilibrar la
+    // portada hacia el rumbo nuevo — ver la nota de metropolitano. Sigue
+    // publicada en el portfolio, sólo baja de la portada.
+    featured: false,
     year: "2026",
     venue: "Fabrik",
     media: {
@@ -599,7 +616,10 @@ const PROYECTOS: Project[] = [
     placeholder: false,
     categories: ["multicam"],
     tone: 3,
-    featured: true,
+    // Fase 18 (2026-09-25): deja de estar destacada para reequilibrar la
+    // portada hacia el rumbo nuevo — ver la nota de metropolitano. Sigue
+    // publicada en el portfolio, sólo baja de la portada.
+    featured: false,
     year: "2026",
     venue: null,
     media: {

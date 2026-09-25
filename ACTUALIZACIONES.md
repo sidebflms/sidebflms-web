@@ -5,6 +5,52 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (107) — Fase 18: la portada ya enseña el rumbo nuevo
+
+**Arreglo suelto.** La meta descripción de `/es/grabacion-con-drone-mallorca`
+se pasaba de 165 a 171 caracteres —también es el `intro` visible de la
+página, ver `generateMetadata` en `ciudad-drone/[ciudad]/page.tsx`—.
+Recortada a 155 sin perder el dato concreto (la bahía, el pueblo, los
+cuatro días de diferencia con Madrid). El EN ya estaba en rango (155) y no
+se tocó.
+
+**La portada.** La Fase 15 reordenó el portfolio, pero la portada no lee
+ese orden: usa `featured` y `showpiece` de `content/projects.ts`, que no
+se habían tocado. Resultado: el H1 hablaba de "cine, series, publicidad y
+grandes eventos" y la primera imagen era un festival (Holika), con 5 de
+las 7 piezas destacadas también de festival o club.
+
+- **`showpiece` movido de `holika-portal` a `metropolitano`.** Entre las
+  dos opciones razonables del rumbo nuevo —metropolitano y mitt-motors—,
+  elegido metropolitano porque es un plano secuencia continuo sin cortes
+  (misma cualidad que hacía funcionar a Holika ahí) y porque demuestra la
+  misma capacidad de volar sobre grandes multitudes que antes sólo
+  probaban las piezas de festival.
+- **Las 7 `featured` reequilibradas** a 4 del rumbo nuevo + 3 de festival,
+  el mínimo que pedía el encargo: añadidas `metropolitano` y
+  `costa-aerea`; quitadas `fatima-hajji-fabrik` y `gordo-lebanon` (siguen
+  publicadas en el portfolio, sólo bajan de la portada). Se mantienen
+  `mitt-motors`, `recinto-desde-el-aire`, `holika-portal`,
+  `monegros-hora-dorada` y `escenario-de-noche` — estas tres últimas son
+  las de festival que se conservan, todas piezas de drone: siguen siendo
+  la prueba de que se sabe volar sobre multitudes, tal como pedía Mario
+  que no se perdiera.
+
+Comprobado en `/es`: showpiece y las 7 destacadas coinciden exactamente
+con lo de arriba, sincronizado con la base de datos vía `/admin-carga`.
+
+**De propina.** `lib/fonts.ts` seguía diciendo que
+`akira-expanded-super-bold.woff2` "TODAVÍA NO EXISTE (pendiente de
+licencia comercial)" — el fichero existe desde el 2026-09-12, misma fecha
+en que se confirmó la licencia (ya documentado en `app/globals.css` y en
+`README.md`, sólo este comentario se había quedado atrás). Corregido, y
+explicado por qué el fallback de Archivo sigue haciendo falta de todos
+modos (`font-display: swap`).
+
+No se ha tocado `scripts/seo-audit.mjs`.
+
+---
+
 ## 2026-09-25 (106) — Fase 17, punto 6: las 23 fichas de proyecto, ampliadas
 
 Cierra la Fase 17. El punto más delicado del encargo: engordar las 23
