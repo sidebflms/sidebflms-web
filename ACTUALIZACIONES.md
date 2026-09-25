@@ -5,6 +5,70 @@ reciente arriba.
 
 ---
 
+## 2026-09-25 (111) — Fase 21: rendimiento móvil (medido, LCP sin resolver)
+
+Lighthouse móvil real contra producción, antes de tocar nada:
+**68/100, LCP 6,8 s** (`simulate`, `mobile`). Los tres puntos que pidió
+Mario, comprobados uno a uno:
+
+1. **Cintas de proyecto bajo el pliegue**: ya llevaban `preload="none"` +
+   `IntersectionObserver` desde el commit `455fc20` (22 de septiembre,
+   previo a esta ronda). Comprobado con JavaScript contra la página en
+   vivo (`video.readyState`): las ~48 cintas siguen en `readyState: 0`
+   —cero bytes— hasta que se ven. No era el problema.
+
+2. **El hero, ¿baja las dos versiones del vídeo?** Comprobado en la
+   pestaña de red en móvil: sólo `reel-720.mp4`. Nunca `reel-1920.mp4`.
+   Tampoco era el problema.
+
+3. **`width`/`height` en las imágenes sin `next/image`**: añadidos a los
+   dos logos (`components/layout/logo.tsx`) y al póster de respaldo de
+   las cintas (`home-sliders.tsx`). No cambia el tamaño en pantalla —lo
+   sigue poniendo el CSS—, sólo evita que el navegador tenga que
+   recalcular el hueco cuando llega el archivo.
+
+**Lo que sí era un problema real, encontrado con la pestaña de red y no
+en el código**: la tarjeta de piezas destacadas del hero
+(`DestacadosRotativos`, en `hero-frame.tsx`) es `hidden` en móvil por
+CSS, pero seguía montada en JavaScript con `autoplay` y `.play()` en
+cada cambio de pieza. Los cuatro vídeos destacados se descargaban
+igual, invisibles, para nadie. Arreglado: el `<video>` sólo se monta
+con `matchMedia("(min-width: 1024px)")`.
+
+**Resultado, medido otra vez con Lighthouse contra producción ya
+desplegada**: **68/100, LCP 6,9 s.** Prácticamente igual. El peso de
+red que ve Lighthouse en su propia traza sí bajó (2 vídeos a 1, de 4,5
+a 3,3 MB en la ventana que audita), pero el LCP no se mueve.
+
+**Por qué**: el elemento LCP no es el vídeo ni la imagen del hero —es
+el `<h1>` pequeño «PRODUCTORA AUDIOVISUAL Y GRABACIÓN CON DRONE EN
+ESPAÑA», debajo del titular grande. Según el desglose de Lighthouse,
+2,1 de los 6,9 segundos son «retraso de renderizado del elemento»
+—tiempo después de recibir el HTML hasta que se pinta ese texto—, lo
+que apunta a CSS/fuente que bloquean el pintado y al coste de
+JavaScript de hidratar `HeroFrame` (es un componente cliente entero,
+con GSAP, SplitText y ScrollTrigger) antes de que el navegador pueda
+pintar, no al peso de los vídeos. El peso de vídeo de las cintas y de
+la tarjeta rotativa nunca competía con el LCP: la primera lo tiene
+bien resuelto desde el 22 de septiembre, y la segunda sólo desperdiciaba
+datos, no tiempo de pintado.
+
+Los tres arreglos de este punto se quedan: son correctos y ahorran
+datos reales en el móvil de quien visita, aunque no muevan el número de
+Lighthouse. Pero el problema que Mario quería resolver —LCP pobre—
+sigue sin arreglar, y el camino para arreglarlo de verdad (aligerar lo
+que bloquea el pintado antes de que llegue el JavaScript, o mover el
+`<h1>` fuera de un componente cliente tan grande) es un cambio de otra
+naturaleza, más profundo, que puede tocar cómo está construido el hero
+—no el diseño visual, pero sí su arquitectura—. Se para aquí a
+propósito para que Mario decida si seguir por ese camino antes de tocar
+más.
+
+Cifras completas y el JSON de Lighthouse (antes y después), guardados
+para consulta si hace falta: pedir a Claude, no están en el repositorio.
+
+---
+
 ## 2026-09-25 (110) — El teléfono y la dirección salen del pie
 
 Mario vio el pie desplegado: en la columna "Síguenos", las redes, el
