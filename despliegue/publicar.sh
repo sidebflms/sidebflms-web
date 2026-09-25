@@ -59,6 +59,16 @@ fi
 
 echo "==> Compilando en .next-nueva (la web sigue sirviendo desde .next)"
 rm -rf "$RAIZ/.next-nueva"
+# `tsconfig.json` incluye `.next/types/**/*.ts` (hace falta en local, donde
+# `next dev`/`next build` escriben ahí). En el servidor `.next` es la
+# compilación VIEJA, que sigue sirviendo mientras se compila ésta en
+# `.next-nueva`, y sus tipos son un residuo: `next start` no los lee para
+# nada, sólo los usó `tsc` la vez anterior. Si esa vez había una ruta que
+# esta compilación borra, el validador viejo la sigue nombrando y `tsc`
+# revienta contra una ruta que ya no existe (pasó el 2026-09-25, borrando
+# `app/.well-known/security.txt/route.ts`). Se borra antes de compilar para
+# que el chequeo de tipos sólo vea la compilación de verdad.
+rm -rf "$RAIZ/.next/types"
 # La variable la lee next.config.ts (`distDir`). Al arrancar no se define, así
 # que `next start` sirve desde `.next`, que es donde `estrenar` la deja.
 SIDEB_CARPETA_COMPILACION=.next-nueva "$NPM" run build
