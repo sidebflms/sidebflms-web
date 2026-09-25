@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Gutter } from "@payloadcms/ui";
+import { redirect } from "next/navigation";
 import type { AdminViewServerProps } from "payload";
 
 import { ficheroDeOrigen, horasDesde, leerPaginas, leerSalud, type Pagina } from "./seo-datos";
@@ -15,6 +16,15 @@ import { SeoVisitas } from "./seo-visitas";
  * usa para arreglar cosas, así que la nota general va pequeña y discreta, no
  * como lo más grande de la pantalla (pedido explícito: un número grande
  * invita a optimizar el número, no la web).
+ *
+ * OJO, ESTO NO ES OPCIONAL: Payload NO exige sesión en las vistas
+ * personalizadas por defecto —a diferencia de las de colección, que sí la
+ * exigen solas—. `RootPage` mira `isCustomAdminView()` y, si es una vista
+ * de las registradas en `admin.components.views`, SALTA su propio redirect a
+ * /admin/login. Comprobado con un `curl` sin ninguna cookie contra
+ * producción tras el primer despliegue: la vista entera —la tabla, los
+ * problemas de cada página— se servía en un 200 a cualquiera. El caso lo
+ * tiene que cubrir cada vista personalizada, así que se cubre aquí.
  */
 
 function Frescura({ fechaISO, etiqueta }: { fechaISO: string | undefined; etiqueta: string }) {
@@ -85,6 +95,12 @@ async function resolverEnlaces(paginas: Pagina[], props: AdminViewServerProps): 
 }
 
 export async function SeoView(props: AdminViewServerProps) {
+  // Ver el aviso de arriba: sin esto, la vista es pública. `props.user` es
+  // el usuario autenticado con permisos de lectura de campo ya aplicados
+  // (no `req.user`, que es el principal completo para control de acceso, y
+  // que no hace falta aquí: sólo hace falta saber si hay alguien logueado).
+  if (!props.user) redirect("/admin/login");
+
   const salud = leerSalud();
   const paginas = leerPaginas();
   const enlaces = paginas ? await resolverEnlaces(paginas.paginas, props) : {};
