@@ -13,8 +13,12 @@ export function LogoMark({ className, blanco = false }: { className?: string; bl
   // tile eliminado, así que se ve lo que haya detrás). Lo usa el header desde 2026-09-16;
   // el footer y el favicon siguen con el naranja.
   const src = `${BASE_PATH}${blanco ? "/logo/mark-blanco.svg" : "/logo/mark.svg"}`;
+  // `width`/`height` con la proporción real del SVG (714×478): el tamaño en
+  // pantalla lo sigue poniendo `className` (p. ej. `h-7 w-auto`), esto sólo
+  // le da al navegador la proporción antes de descargar el archivo, para que
+  // no tenga que recalcular el hueco cuando llega (Fase 21, 2026-09-25).
   // eslint-disable-next-line @next/next/no-img-element -- SVG decorativo de tamaño fijo, no necesita next/image.
-  return <img src={src} alt="" aria-hidden="true" className={className} />;
+  return <img src={src} alt="" aria-hidden="true" width={714} height={478} className={className} />;
 }
 
 /**
@@ -63,8 +67,16 @@ export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={className}>
       <span className="sr-only">SIDEBFLMS</span>
+      {/* width/height con la proporción real del SVG (1243.37×100), ver LogoMark arriba. */}
       {/* eslint-disable-next-line @next/next/no-img-element -- logotipo de tamaño fijo, no necesita next/image. */}
-      <img src={`${BASE_PATH}/logo/wordmark.svg`} alt="" aria-hidden="true" className="h-full w-auto" />
+      <img
+        src={`${BASE_PATH}/logo/wordmark.svg`}
+        alt=""
+        aria-hidden="true"
+        width={1243.37}
+        height={100}
+        className="h-full w-auto"
+      />
     </span>
   );
 }

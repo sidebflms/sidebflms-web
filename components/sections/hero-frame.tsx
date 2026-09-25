@@ -422,6 +422,29 @@ function DestacadosRotativos({ featured, dict, locale }: { featured: PiezaLigera
   const videoRef = useRef<HTMLVideoElement>(null);
   const primeraRef = useRef(true);
 
+  // LA TARJETA ES `hidden lg:block` (CSS): en móvil no se ve. Pero antes de
+  // este arreglo el <video> se montaba igual, con `autoPlay` y `preload`, y el
+  // "play()" de más abajo lo lanzaba en cada cambio de pieza — cuatro vídeos
+  // de ~1,2 MB descargándose para una tarjeta invisible. Fase 21
+  // (2026-09-25), medido en la pestaña de red en móvil: sin esto,
+  // metropolitano/mitt-motors/recinto-desde-el-aire/costa-aerea-cinta.mp4
+  // bajaban los cuatro nada más entrar, aunque nadie los viera.
+  //
+  // `esEscritorio` empieza en `false` a propósito, igual que el resto del
+  // fichero: así el primer render en el cliente coincide con el del
+  // servidor (que no sabe el ancho de pantalla) y no hay salto de
+  // hidratación. Con el listener de `matchMedia`, si la ventana cruza el
+  // punto de corte —p. ej. al girar una tablet— el vídeo arranca o se para
+  // solo, sin recargar la página.
+  const [esEscritorio, setEsEscritorio] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const fija = () => setEsEscritorio(mq.matches);
+    fija();
+    mq.addEventListener("change", fija);
+    return () => mq.removeEventListener("change", fija);
+  }, []);
+
   useEffect(() => {
     if (pausa || prefersReducedMotion() || piezas.length < 2) return;
     const id = window.setTimeout(() => setActivo((a) => (a + 1) % piezas.length), SEGUNDOS_POR_PIEZA * 1000);
@@ -435,13 +458,13 @@ function DestacadosRotativos({ featured, dict, locale }: { featured: PiezaLigera
       return;
     }
     const el = contenidoRef.current;
-    videoRef.current?.play().catch(() => {});
+    if (esEscritorio) videoRef.current?.play().catch(() => {});
     if (!el || prefersReducedMotion()) return;
     gsap.fromTo(el.children, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "expo.out", stagger: 0.05 });
-  }, [activo]);
+  }, [activo, esEscritorio]);
 
   const p = piezas[activo];
-  const cinta = p.media.video?.replace(/\.mp4$/, "-cinta.mp4");
+  const cinta = esEscritorio ? p.media.video?.replace(/\.mp4$/, "-cinta.mp4") : undefined;
   const poster = p.media.poster?.replace(/\.jpg$/, "-cinta.webp");
 
   return (

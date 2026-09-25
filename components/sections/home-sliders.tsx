@@ -139,6 +139,8 @@ function Pieza({
             src={poster}
             alt=""
             loading="lazy"
+            width={854}
+            height={480}
             onError={(e) => {
               const img = e.currentTarget;
               if (img.dataset.completo === "si" || !project.media.poster) return;
