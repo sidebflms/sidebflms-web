@@ -5,6 +5,28 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (125) — Menú lateral propio: Portada primero
+
+Continuación de la 124. Payload ordena los grupos del menú por aparición
+—colecciones primero, globals después— y no da forma de cambiarlo, así
+que «Portada», que sólo tiene globals, salía la última. Ahora
+`admin.components.Nav` apunta a `panel/vistas/nav-propio.tsx`: es
+`DefaultNav` de Payload con una única diferencia, los grupos se ordenan
+según la lista `ORDEN_GRUPOS` (Portada, Trabajo, Drone, Nosotros y
+servicios, Panel) antes de pintarlos con el mismo `DefaultNavClient`,
+así que se ve igual. Un grupo nuevo que no esté en la lista sale al
+final, no desaparece. El enlace «SEO y estadísticas» pasó de
+`afterNavLinks` a pintarse dentro de este menú.
+
+Lo que NO replica del menú original, porque aquí no se usa: `beforeNav`
+/`afterNav`, el menú de ajustes y recordar qué grupos se han plegado.
+Y las tarjetas de la pantalla de inicio (`/admin`) siguen con el orden
+por defecto de Payload; sólo cambia el menú de la izquierda. Comprobado
+en local con el panel real. Si una actualización de Payload cambia su
+`DefaultNav`, este menú no se entera: hay que compararlos.
+
+---
+
 ## 2026-09-26 (124) — El menú lateral del panel, ordenado por temas
 
 Mario preguntó si el menú lateral se podía ordenar: todo estaba en un solo

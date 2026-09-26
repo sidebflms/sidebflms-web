@@ -138,7 +138,10 @@ export default buildConfig({
       views: {
         seo: { Component: "/panel/vistas/seo-view.tsx#SeoView", path: "/seo" },
       },
-      afterNavLinks: ["/panel/vistas/seo-nav-link.tsx#SeoNavLink"],
+      // Menú propio: mismo que el de Payload pero con los grupos en el orden
+      // que se quiere (Portada primero) e incluyendo el enlace a «SEO y
+      // estadísticas». Ver panel/vistas/nav-propio.tsx.
+      Nav: "/panel/vistas/nav-propio.tsx#NavPropio",
     },
     livePreview: {
       collections: ["proyectos", "equipo", "preguntas", "ciudades"],
