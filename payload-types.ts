@@ -69,10 +69,10 @@ export interface Config {
   collections: {
     usuarios: Usuario;
     proyectos: Proyecto;
+    media: Media;
+    ciudades: Ciudade;
     equipo: Equipo;
     preguntas: Pregunta;
-    ciudades: Ciudade;
-    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,10 +82,10 @@ export interface Config {
   collectionsSelect: {
     usuarios: UsuariosSelect<false> | UsuariosSelect<true>;
     proyectos: ProyectosSelect<false> | ProyectosSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    ciudades: CiudadesSelect<false> | CiudadesSelect<true>;
     equipo: EquipoSelect<false> | EquipoSelect<true>;
     preguntas: PreguntasSelect<false> | PreguntasSelect<true>;
-    ciudades: CiudadesSelect<false> | CiudadesSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -96,24 +96,24 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('es' | 'en') | ('es' | 'en')[];
   globals: {
-    cifras: Cifra;
-    clientes: Cliente;
-    textos: Texto;
-    etapas: Etapa;
-    'equipo-tecnico': EquipoTecnico;
-    'drone-secciones': DroneSeccione;
-    'drone-distribucion': DroneDistribucion;
     'home-bloques': HomeBloque;
+    cifras: Cifra;
+    textos: Texto;
+    clientes: Cliente;
+    'equipo-tecnico': EquipoTecnico;
+    'drone-distribucion': DroneDistribucion;
+    'drone-secciones': DroneSeccione;
+    etapas: Etapa;
   };
   globalsSelect: {
-    cifras: CifrasSelect<false> | CifrasSelect<true>;
-    clientes: ClientesSelect<false> | ClientesSelect<true>;
-    textos: TextosSelect<false> | TextosSelect<true>;
-    etapas: EtapasSelect<false> | EtapasSelect<true>;
-    'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
-    'drone-secciones': DroneSeccionesSelect<false> | DroneSeccionesSelect<true>;
-    'drone-distribucion': DroneDistribucionSelect<false> | DroneDistribucionSelect<true>;
     'home-bloques': HomeBloquesSelect<false> | HomeBloquesSelect<true>;
+    cifras: CifrasSelect<false> | CifrasSelect<true>;
+    textos: TextosSelect<false> | TextosSelect<true>;
+    clientes: ClientesSelect<false> | ClientesSelect<true>;
+    'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
+    'drone-distribucion': DroneDistribucionSelect<false> | DroneDistribucionSelect<true>;
+    'drone-secciones': DroneSeccionesSelect<false> | DroneSeccionesSelect<true>;
+    etapas: EtapasSelect<false> | EtapasSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -270,6 +270,42 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Las páginas de ciudad de la web de drone. Añadir una ciudad NUEVA aquí no la publica sola: todavía hace falta una línea de rewrite en next.config.ts para su URL — pregunta antes de darla por publicada. Editar una ciudad que ya existe (Madrid, Barcelona, Mallorca) sí funciona entero desde aquí, sin desplegar nada.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ciudades".
+ */
+export interface Ciudade {
+  id: number;
+  orden: number;
+  /**
+   * minúsculas y sin espacios: «madrid», «barcelona». Tiene que ser el mismo que el rewrite de next.config.ts.
+   */
+  slug: string;
+  /**
+   * Con mayúscula: «Madrid».
+   */
+  nombre: string;
+  /**
+   * El titular grande. Cada línea del texto es una línea del titular — sin línea en blanco entre ellas.
+   */
+  headline: string;
+  /**
+   * También hace de meta descripción: 150-160 caracteres.
+   */
+  intro: string;
+  /**
+   * Los párrafos se separan con una línea en blanco, como en las fichas de Proyectos.
+   */
+  cuerpo: string;
+  /**
+   * Qué fichas de trabajo salen en esta página, y en qué orden — se puede arrastrar.
+   */
+  proyectos?: (number | Proyecto)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * La rejilla de Nosotros. El orden de la lista es el de la web.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -308,42 +344,6 @@ export interface Pregunta {
   createdAt: string;
 }
 /**
- * Las páginas de ciudad de la web de drone. Añadir una ciudad NUEVA aquí no la publica sola: todavía hace falta una línea de rewrite en next.config.ts para su URL — pregunta antes de darla por publicada. Editar una ciudad que ya existe (Madrid, Barcelona, Mallorca) sí funciona entero desde aquí, sin desplegar nada.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ciudades".
- */
-export interface Ciudade {
-  id: number;
-  orden: number;
-  /**
-   * minúsculas y sin espacios: «madrid», «barcelona». Tiene que ser el mismo que el rewrite de next.config.ts.
-   */
-  slug: string;
-  /**
-   * Con mayúscula: «Madrid».
-   */
-  nombre: string;
-  /**
-   * El titular grande. Cada línea del texto es una línea del titular — sin línea en blanco entre ellas.
-   */
-  headline: string;
-  /**
-   * También hace de meta descripción: 150-160 caracteres.
-   */
-  intro: string;
-  /**
-   * Los párrafos se separan con una línea en blanco, como en las fichas de Proyectos.
-   */
-  cuerpo: string;
-  /**
-   * Qué fichas de trabajo salen en esta página, y en qué orden — se puede arrastrar.
-   */
-  proyectos?: (number | Proyecto)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -376,20 +376,20 @@ export interface PayloadLockedDocument {
         value: number | Proyecto;
       } | null)
     | ({
-        relationTo: 'equipo';
-        value: number | Equipo;
-      } | null)
-    | ({
-        relationTo: 'preguntas';
-        value: number | Pregunta;
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'ciudades';
         value: number | Ciudade;
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'equipo';
+        value: number | Equipo;
+      } | null)
+    | ({
+        relationTo: 'preguntas';
+        value: number | Pregunta;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -492,6 +492,39 @@ export interface ProyectosSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ciudades_select".
+ */
+export interface CiudadesSelect<T extends boolean = true> {
+  orden?: T;
+  slug?: T;
+  nombre?: T;
+  headline?: T;
+  intro?: T;
+  cuerpo?: T;
+  proyectos?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "equipo_select".
  */
 export interface EquipoSelect<T extends boolean = true> {
@@ -515,39 +548,6 @@ export interface PreguntasSelect<T extends boolean = true> {
   a?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ciudades_select".
- */
-export interface CiudadesSelect<T extends boolean = true> {
-  orden?: T;
-  slug?: T;
-  nombre?: T;
-  headline?: T;
-  intro?: T;
-  cuerpo?: T;
-  proyectos?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -590,6 +590,51 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Secciones NUEVAS para la portada, entre el trabajo destacado y la llamada final. Vacío no cambia nada: la portada se queda exactamente como está. Arrastra para reordenar, la papelera para quitar un bloque entero.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-bloques".
+ */
+export interface HomeBloque {
+  id: number;
+  bloques?:
+    | (
+        | {
+            rotulo?: string | null;
+            /**
+             * Cada línea del texto es una línea del titular grande.
+             */
+            titular: string;
+            cuerpo?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'texto';
+          }
+        | {
+            /**
+             * El texto que va encima de los números, p. ej. «En lo que va de 2026».
+             */
+            rotulo: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cifras';
+          }
+        | {
+            /**
+             * Cada línea del texto es una línea del titular.
+             */
+            titular: string;
+            entradilla: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * La ficha técnica de la portada y de Nosotros. El orden de la lista es el de la web.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -604,23 +649,6 @@ export interface Cifra {
          */
         valor?: string | null;
         etiqueta: string;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * La cinta de nombres de Trabajo. Mismo nombre en los dos idiomas.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clientes".
- */
-export interface Cliente {
-  id: number;
-  items?:
-    | {
-        nombre: string;
         id?: string | null;
       }[]
     | null;
@@ -647,17 +675,19 @@ export interface Texto {
   createdAt?: string | null;
 }
 /**
- * Una foto por etapa del proceso, en Servicios. Vacía: se pinta el número en su lugar.
+ * La cinta de nombres de Trabajo. Mismo nombre en los dos idiomas.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "etapas".
+ * via the `definition` "clientes".
  */
-export interface Etapa {
+export interface Cliente {
   id: number;
-  etapa01?: (number | null) | Media;
-  etapa02?: (number | null) | Media;
-  etapa03?: (number | null) | Media;
-  etapa04?: (number | null) | Media;
+  items?:
+    | {
+        nombre: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -695,6 +725,33 @@ export interface EquipoTecnico {
          * El fichero o dato concreto que lo demuestra (nombre de archivo, resolución...). NO sale en la web pública: es la prueba de que esto es verdad, para quien lo edite después.
          */
         prueba: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Arrastra para reordenar las secciones de la página de Drone. Desmarca «Visible» para ocultar una sección sin borrar su contenido. El titular de arriba y la llamada final no están aquí: son fijos.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-distribucion".
+ */
+export interface DroneDistribucion {
+  id: number;
+  secciones?:
+    | {
+        seccion:
+          | 'cifras'
+          | 'flota'
+          | 'capacidades'
+          | 'seguridad'
+          | 'permisos'
+          | 'encargos'
+          | 'portfolio'
+          | 'presupuesto'
+          | 'entrega';
+        visible?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -745,76 +802,56 @@ export interface DroneSeccione {
   createdAt?: string | null;
 }
 /**
- * Arrastra para reordenar las secciones de la página de Drone. Desmarca «Visible» para ocultar una sección sin borrar su contenido. El titular de arriba y la llamada final no están aquí: son fijos.
+ * Una foto por etapa del proceso, en Servicios. Vacía: se pinta el número en su lugar.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drone-distribucion".
+ * via the `definition` "etapas".
  */
-export interface DroneDistribucion {
+export interface Etapa {
   id: number;
-  secciones?:
-    | {
-        seccion:
-          | 'cifras'
-          | 'flota'
-          | 'capacidades'
-          | 'seguridad'
-          | 'permisos'
-          | 'encargos'
-          | 'portfolio'
-          | 'presupuesto'
-          | 'entrega';
-        visible?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
+  etapa01?: (number | null) | Media;
+  etapa02?: (number | null) | Media;
+  etapa03?: (number | null) | Media;
+  etapa04?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Secciones NUEVAS para la portada, entre el trabajo destacado y la llamada final. Vacío no cambia nada: la portada se queda exactamente como está. Arrastra para reordenar, la papelera para quitar un bloque entero.
- *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "home-bloques".
+ * via the `definition` "home-bloques_select".
  */
-export interface HomeBloque {
-  id: number;
+export interface HomeBloquesSelect<T extends boolean = true> {
   bloques?:
-    | (
-        | {
-            rotulo?: string | null;
-            /**
-             * Cada línea del texto es una línea del titular grande.
-             */
-            titular: string;
-            cuerpo?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'texto';
-          }
-        | {
-            /**
-             * El texto que va encima de los números, p. ej. «En lo que va de 2026».
-             */
-            rotulo: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cifras';
-          }
-        | {
-            /**
-             * Cada línea del texto es una línea del titular.
-             */
-            titular: string;
-            entradilla: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cta';
-          }
-      )[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | T
+    | {
+        texto?:
+          | T
+          | {
+              rotulo?: T;
+              titular?: T;
+              cuerpo?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cifras?:
+          | T
+          | {
+              rotulo?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              titular?: T;
+              entradilla?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -826,21 +863,6 @@ export interface CifrasSelect<T extends boolean = true> {
     | {
         valor?: T;
         etiqueta?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clientes_select".
- */
-export interface ClientesSelect<T extends boolean = true> {
-  items?:
-    | T
-    | {
-        nombre?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -866,13 +888,15 @@ export interface TextosSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "etapas_select".
+ * via the `definition` "clientes_select".
  */
-export interface EtapasSelect<T extends boolean = true> {
-  etapa01?: T;
-  etapa02?: T;
-  etapa03?: T;
-  etapa04?: T;
+export interface ClientesSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        nombre?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -900,6 +924,22 @@ export interface EquipoTecnicoSelect<T extends boolean = true> {
     | {
         texto?: T;
         prueba?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-distribucion_select".
+ */
+export interface DroneDistribucionSelect<T extends boolean = true> {
+  secciones?:
+    | T
+    | {
+        seccion?: T;
+        visible?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -955,53 +995,13 @@ export interface DroneSeccionesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drone-distribucion_select".
+ * via the `definition` "etapas_select".
  */
-export interface DroneDistribucionSelect<T extends boolean = true> {
-  secciones?:
-    | T
-    | {
-        seccion?: T;
-        visible?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "home-bloques_select".
- */
-export interface HomeBloquesSelect<T extends boolean = true> {
-  bloques?:
-    | T
-    | {
-        texto?:
-          | T
-          | {
-              rotulo?: T;
-              titular?: T;
-              cuerpo?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cifras?:
-          | T
-          | {
-              rotulo?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cta?:
-          | T
-          | {
-              titular?: T;
-              entradilla?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
+export interface EtapasSelect<T extends boolean = true> {
+  etapa01?: T;
+  etapa02?: T;
+  etapa03?: T;
+  etapa04?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
