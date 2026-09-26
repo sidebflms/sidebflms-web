@@ -5,6 +5,32 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (123) — El piloto de bloques pasa a `main`, sin pasar por la web de pruebas
+
+La entrada de abajo (122) decía que esto se quedaba en la rama `glass`
+hasta probarlo ahí. No se pudo: `/admin` en la web de pruebas
+(`prueba-glass-47f47ad5`) da 500 — un fallo de Next.js/Turbopack
+cargando un módulo interno de Payload (`pino`) al compilar esa rama,
+**no algo que rompiera este piloto**: la MISMA vista de la Fase B,
+desplegada allí desde antes de este commit, falla igual. Producción
+seguía sana durante todo esto (`/admin` en `sidebflms.com` responde
+200 sin problema). Mario decidió no perseguir el fallo de la web de
+pruebas y pasar el piloto directamente a `main`.
+
+`glass` era, en ese momento, exactamente `main` más el commit del
+piloto —sin nada propio que perder—, así que pasar a `main` fue un
+fast-forward de verdad, no una fusión con conflictos. El piloto ya
+estaba probado a fondo en local antes de este commit (los tres tipos
+de bloque a la vez, capturas reales, la portada vacía sin cambios) —
+ver la entrada 122 para el detalle completo de esa prueba.
+
+**El panel de producción SÍ funciona** —comprobado durante toda esta
+sesión, incluida la vista de "SEO y estadísticas" de la Fase 22—, así
+que Mario ya puede entrar a `/admin` → "Portada — bloques extra" y
+probarlo de verdad, sin depender de la web de pruebas para nada.
+
+---
+
 ## 2026-09-26 (122) — Roadmap del panel, Fase C: el piloto de bloques (rama `glass`, NO en main)
 
 **Esto vive SÓLO en la rama `glass` y en la web de pruebas
