@@ -8,6 +8,7 @@ import * as migration_20260925_033651_fase17_meta_descripcion_proyectos from './
 import * as migration_20260925_235159_roadmap_colecciones_ciudades from './20260925_235159_roadmap_colecciones_ciudades';
 import * as migration_20260926_000052_roadmap_equipo_tecnico from './20260926_000052_roadmap_equipo_tecnico';
 import * as migration_20260926_001053_roadmap_drone_secciones from './20260926_001053_roadmap_drone_secciones';
+import * as migration_20260926_002215_roadmap_drone_distribucion from './20260926_002215_roadmap_drone_distribucion';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20260926_001053_roadmap_drone_secciones.up,
     down: migration_20260926_001053_roadmap_drone_secciones.down,
-    name: '20260926_001053_roadmap_drone_secciones'
+    name: '20260926_001053_roadmap_drone_secciones',
+  },
+  {
+    up: migration_20260926_002215_roadmap_drone_distribucion.up,
+    down: migration_20260926_002215_roadmap_drone_distribucion.down,
+    name: '20260926_002215_roadmap_drone_distribucion'
   },
 ];

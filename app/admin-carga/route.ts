@@ -7,7 +7,14 @@ import { CLIENTES } from "@/content/clientes";
 import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
-import { DRONE_SECCIONES_FICHERO, PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto, type SeccionConItems } from "@/lib/contenido";
+import {
+  DRONE_DISTRIBUCION_FICHERO,
+  DRONE_SECCIONES_FICHERO,
+  PREGUNTAS_FICHERO,
+  TEXTOS_FICHERO,
+  type ClaveTexto,
+  type SeccionConItems,
+} from "@/lib/contenido";
 
 /**
  * CARGA EL CONTENIDO DE LOS FICHEROS EN EL PANEL.
@@ -331,6 +338,22 @@ export async function POST(peticion: Request): Promise<Response> {
     },
   });
 
+  // El orden de las secciones de Drone (Fase B, 2026-09-26) es DISTINTO al
+  // resto de este fichero: no viene de ningún content/*.ts ni del
+  // diccionario, es una preferencia que sólo existe en el panel. Por eso
+  // esto SÓLO la rellena la primera vez —si ya hay algo guardado, no se
+  // toca nunca—: `admin-carga` se vuelve a ejecutar cada vez que cambia
+  // cualquier otro contenido, y machacar el orden en cada pasada borraría
+  // sin avisar cualquier reordenación que Mario hubiera hecho desde el panel.
+  const distribucionActual = await payload.findGlobal({ slug: "drone-distribucion", depth: 0 });
+  const yaTeniaOrden = Array.isArray(distribucionActual.secciones) && distribucionActual.secciones.length > 0;
+  if (!yaTeniaOrden) {
+    await payload.updateGlobal({ slug: "drone-distribucion", data: { secciones: DRONE_DISTRIBUCION_FICHERO } });
+  }
+  const resumenDistribucion = yaTeniaOrden
+    ? "ya tenía orden guardado, no se toca (es de Mario, no del código)."
+    : `orden inicial cargado (${DRONE_DISTRIBUCION_FICHERO.length} secciones).`;
+
   const claves = Object.keys(TEXTOS_FICHERO) as ClaveTexto[];
   const datosTextos = (locale: "es" | "en") =>
     Object.fromEntries(claves.map((clave) => [clave, TEXTOS_FICHERO[clave][locale]]));
@@ -346,6 +369,7 @@ export async function POST(peticion: Request): Promise<Response> {
     clientes: `${CLIENTES.length} clientes cargados.`,
     equipoTecnico: `${DRONES.length} drones, ${CAMARAS_DE_ACCION.length} cámaras de acción, ${CAPACIDADES.length} capacidades cargadas.`,
     droneSecciones: `permisos: ${DRONE_SECCIONES_FICHERO.permisos.items.length}, presupuesto: ${DRONE_SECCIONES_FICHERO.presupuesto.items.length}, encargos: ${DRONE_SECCIONES_FICHERO.encargos.items.length}.`,
+    droneDistribucion: resumenDistribucion,
     textos: `${claves.length} entradillas cargadas.`,
   });
 }

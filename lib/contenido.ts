@@ -588,3 +588,60 @@ export async function traeDroneSecciones(): Promise<DroneSecciones> {
     return DRONE_SECCIONES_FICHERO;
   }
 }
+
+/**
+ * ROADMAP DEL PANEL, FASE B (2026-09-26): el orden y la visibilidad de las
+ * nueve secciones de la página de Drone. Sin plan B de fichero —esto es una
+ * preferencia del propio panel, nunca vivió en código—, así que si la base
+ * no responde se usa el orden de siempre, el mismo que ya tenía la página.
+ *
+ * No es `localized`: el orden de las secciones es el mismo en los dos
+ * idiomas.
+ */
+export type ClaveSeccionDrone =
+  | "cifras"
+  | "flota"
+  | "capacidades"
+  | "seguridad"
+  | "permisos"
+  | "encargos"
+  | "portfolio"
+  | "presupuesto"
+  | "entrega";
+
+export type FilaDistribucion = { seccion: ClaveSeccionDrone; visible: boolean };
+
+export const DRONE_DISTRIBUCION_FICHERO: FilaDistribucion[] = [
+  { seccion: "cifras", visible: true },
+  { seccion: "flota", visible: true },
+  { seccion: "capacidades", visible: true },
+  { seccion: "seguridad", visible: true },
+  { seccion: "permisos", visible: true },
+  { seccion: "encargos", visible: true },
+  { seccion: "portfolio", visible: true },
+  { seccion: "presupuesto", visible: true },
+  { seccion: "entrega", visible: true },
+];
+
+export async function traeDroneDistribucion(): Promise<FilaDistribucion[]> {
+  if (!HAY_BASE) return DRONE_DISTRIBUCION_FICHERO;
+  try {
+    const payload = await getPayload({ config });
+    const doc = (await payload.findGlobal({ slug: "drone-distribucion", depth: 0 })) as unknown as Documento;
+    const filas = (Array.isArray(doc.secciones) ? doc.secciones : []) as Documento[];
+    if (filas.length === 0) return DRONE_DISTRIBUCION_FICHERO;
+
+    // Se descarta cualquier fila cuya `seccion` ya no exista en el código
+    // —por ejemplo, si algún día se quita una sección de la página—: mejor
+    // no pintar nada raro que reventar por un valor que ya no se reconoce.
+    const validas = new Set(DRONE_DISTRIBUCION_FICHERO.map((f) => f.seccion));
+    const filtradas = filas
+      .map((f) => ({ seccion: String(f.seccion) as ClaveSeccionDrone, visible: f.visible !== false }))
+      .filter((f) => validas.has(f.seccion));
+
+    return filtradas.length > 0 ? filtradas : DRONE_DISTRIBUCION_FICHERO;
+  } catch (error) {
+    avisa("el orden de las secciones de la página de drone", error);
+    return DRONE_DISTRIBUCION_FICHERO;
+  }
+}

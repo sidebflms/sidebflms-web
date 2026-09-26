@@ -102,6 +102,7 @@ export interface Config {
     etapas: Etapa;
     'equipo-tecnico': EquipoTecnico;
     'drone-secciones': DroneSeccione;
+    'drone-distribucion': DroneDistribucion;
   };
   globalsSelect: {
     cifras: CifrasSelect<false> | CifrasSelect<true>;
@@ -110,6 +111,7 @@ export interface Config {
     etapas: EtapasSelect<false> | EtapasSelect<true>;
     'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
     'drone-secciones': DroneSeccionesSelect<false> | DroneSeccionesSelect<true>;
+    'drone-distribucion': DroneDistribucionSelect<false> | DroneDistribucionSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -741,6 +743,33 @@ export interface DroneSeccione {
   createdAt?: string | null;
 }
 /**
+ * Arrastra para reordenar las secciones de la página de Drone. Desmarca «Visible» para ocultar una sección sin borrar su contenido. El titular de arriba y la llamada final no están aquí: son fijos.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-distribucion".
+ */
+export interface DroneDistribucion {
+  id: number;
+  secciones?:
+    | {
+        seccion:
+          | 'cifras'
+          | 'flota'
+          | 'capacidades'
+          | 'seguridad'
+          | 'permisos'
+          | 'encargos'
+          | 'portfolio'
+          | 'presupuesto'
+          | 'entrega';
+        visible?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cifras_select".
  */
@@ -872,6 +901,22 @@ export interface DroneSeccionesSelect<T extends boolean = true> {
               body?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-distribucion_select".
+ */
+export interface DroneDistribucionSelect<T extends boolean = true> {
+  secciones?:
+    | T
+    | {
+        seccion?: T;
+        visible?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

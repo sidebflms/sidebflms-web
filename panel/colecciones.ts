@@ -666,6 +666,59 @@ export const DroneSecciones: GlobalConfig = {
   ],
 };
 
+/**
+ * LAS NUEVE SECCIONES DE LA PÁGINA DE DRONE que se pueden ocultar o
+ * reordenar. El titular de arriba y la llamada final no están en la lista:
+ * son el marco de la página, no una sección más.
+ */
+const SECCIONES_DRONE = [
+  { label: "Cifras", value: "cifras" },
+  { label: "La flota", value: "flota" },
+  { label: "Capacidades", value: "capacidades" },
+  { label: "Cómo volamos (seguridad)", value: "seguridad" },
+  { label: "Permisos y normativa", value: "permisos" },
+  { label: "Tipos de encargo", value: "encargos" },
+  { label: "Trabajo con drone (portfolio)", value: "portfolio" },
+  { label: "Qué hace falta para el presupuesto", value: "presupuesto" },
+  { label: "Plazos y formatos (entrega)", value: "entrega" },
+] as const;
+
+/**
+ * ROADMAP DEL PANEL, FASE B (2026-09-26): orden y visibilidad de secciones
+ * que YA EXISTEN, sin construir un editor de páginas completo (eso es la
+ * Fase C). Una lista arrastrable de las nueve secciones de la página de
+ * Drone: reordenar aquí cambia el orden real de la página, y desmarcar
+ * «Visible» la oculta SIN borrar su contenido —los textos siguen en
+ * `DroneSecciones`/`EquipoTecnico`/el diccionario, sólo deja de pintarse—.
+ *
+ * SIN plan B de fichero: esto es una preferencia del propio panel, no un
+ * dato que venga del código. `/admin-carga` sólo la RELLENA la primera vez
+ * —si ya hay un orden guardado, no lo toca nunca—, precisamente para no
+ * deshacer un cambio de orden que haya hecho Mario. Ver `lib/contenido.ts`.
+ */
+export const DroneDistribucion: GlobalConfig = {
+  slug: "drone-distribucion",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Drone — orden de las secciones",
+  admin: {
+    group: "Contenido",
+    description:
+      "Arrastra para reordenar las secciones de la página de Drone. Desmarca «Visible» para ocultar una " +
+      "sección sin borrar su contenido. El titular de arriba y la llamada final no están aquí: son fijos.",
+  },
+  fields: [
+    {
+      name: "secciones",
+      label: "Secciones",
+      type: "array",
+      fields: [
+        { name: "seccion", label: "Sección", type: "select", required: true, options: [...SECCIONES_DRONE] },
+        { name: "visible", type: "checkbox", defaultValue: true },
+      ],
+    },
+  ],
+};
+
 export const Textos: GlobalConfig = {
   slug: "textos",
   hooks: { afterChange: [avisaALaWeb] },

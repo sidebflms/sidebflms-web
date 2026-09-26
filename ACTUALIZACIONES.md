@@ -5,6 +5,44 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (121) — Roadmap del panel, Fase B: orden de la página de Drone
+
+Primera pieza de la Fase B: orden y visibilidad de secciones que ya
+existen, sin construir un editor de páginas completo (eso es la Fase
+C). Nuevo Global, `DroneDistribucion`: una lista arrastrable de las
+nueve secciones de la página de Drone —cifras, la flota, capacidades,
+cómo volamos, permisos, encargos, portfolio, presupuesto, entrega—.
+Reordenar ahí cambia el orden real de la página; desmarcar «Visible»
+la oculta sin borrar su contenido, que sigue viviendo donde ya vivía
+(`DroneSecciones`, `EquipoTecnico`, el diccionario).
+
+**`app/[locale]/drone/page.tsx` pasó de JSX fijo a una lista que se
+pinta según el panel diga**: cada sección es ahora una función guardada
+en un mapa, y la página la recorre en el orden que devuelva
+`traeDroneDistribucion()`. El titular de arriba y la llamada final no
+están en esa lista: son el marco de la página, no una sección que se
+pueda quitar. Ni un píxel de diseño cambia — comprobado comparando el
+HTML antes y después del refactor con el orden por defecto: idéntico.
+
+**Sin plan B de fichero, a propósito**: el orden nunca vivió en código,
+así que si la base no responde se usa el orden de siempre (el mismo
+que tenía la página). Y `/admin-carga` sólo rellena este Global la
+PRIMERA vez —si ya hay un orden guardado, no lo toca nunca más—: a
+diferencia de todo lo demás de este fichero, esto es una preferencia
+de Mario, no un dato que sincronizar desde el código en cada pasada.
+Machacarlo en cada `admin-carga` habría deshecho en silencio cualquier
+reordenación hecha desde el panel.
+
+Probado de verdad, no sólo compilado: ocultada la sección de cifras
+desde el panel y comprobado que desaparece de la página pública;
+reordenadas las secciones a mano (con una llamada directa a la API
+local de Payload, para probar el mecanismo de orden sin depender de un
+arrastre pixel a pixel en el navegador) y comprobado que la página
+sirve exactamente ese orden nuevo. Migración formal aparte del `push`
+de desarrollo.
+
+---
+
 ## 2026-09-26 (120) — Roadmap del panel, Fase A: listas de la página de Drone
 
 Tercera y última pieza de la Fase A (Ciudades y Equipo técnico son las
