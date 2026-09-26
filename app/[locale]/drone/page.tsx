@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
-import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
-import { traeCifras, traeProyectos } from "@/lib/contenido";
+import { traeCifras, traeEquipoTecnico, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -23,16 +22,20 @@ export async function generateMetadata({
 /**
  * DRONE — la especialidad, con su flota.
  *
- * Todo lo que sale aquí viene de `content/fleet.ts`, y todo lo de ese fichero
- * está respaldado por un fichero concreto del archivo. Lee su cabecera antes
- * de añadir nada: esta página se enseña a producciones de cine que piden la
- * ficha técnica, y un aparato que no se tiene se detecta ahí.
+ * La flota sale de `traeEquipoTecnico()` (`lib/contenido.ts`), que lee el
+ * global `EquipoTecnico` del panel y cae a `content/fleet.ts` si la base no
+ * responde. TODO lo de ese fichero está respaldado por un fichero concreto
+ * del archivo —lee su cabecera, y la del propio global en
+ * `panel/colecciones.ts`, antes de añadir nada—: esta página se enseña a
+ * producciones de cine que piden la ficha técnica, y un aparato que no se
+ * tiene se detecta ahí.
  */
 export default async function DronePage({ params }: PageProps<"/[locale]/drone">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
   const dict = await getDictionary(locale);
+  const flota = await traeEquipoTecnico();
   // SEO Fase 3 (2026-09-24): piezas reales del portfolio que son de drone,
   // no una plantilla ni una lista escrita a mano que se desincroniza en
   // cuanto se añade un proyecto nuevo.
@@ -103,7 +106,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </Reveal>
 
         <div className="mt-10">
-          {DRONES.map((aparato, i) => (
+          {flota.drones.map((aparato, i) => (
             <Reveal
               key={aparato.modelo}
               as="article"
@@ -121,7 +124,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         <Reveal>
           <div className="mt-8 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-t border-ink-600 pt-6">
             <p className="label">{dict.drone.actionLabel}</p>
-            {CAMARAS_DE_ACCION.map((c) => (
+            {flota.camarasAccion.map((c) => (
               <p key={c} className="text-bone">
                 {c}
               </p>
@@ -137,9 +140,9 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
         </Reveal>
         <Reveal stagger>
           <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
-            {CAPACIDADES.map((cap) => (
-              <li key={cap.es} className="bg-ink-800 p-7 text-bone">
-                {cap[locale]}
+            {flota.capacidades.map((cap) => (
+              <li key={cap.texto.es} className="bg-ink-800 p-7 text-bone">
+                {cap.texto[locale]}
               </li>
             ))}
           </ul>

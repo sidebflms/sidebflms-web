@@ -533,6 +533,80 @@ export const EtapasFotos: GlobalConfig = {
   ],
 };
 
+/**
+ * LA FLOTA (roadmap del panel, 2026-09-26). Hasta ahora vivía fija en
+ * `content/fleet.ts` —el mismo fichero sigue siendo el plan B, ver
+ * `lib/contenido.ts`—.
+ *
+ * ── LO QUE HAY QUE LEER ANTES DE TOCAR ESTO ──────────────────────────────
+ * `content/fleet.ts` no es una lista escrita a mano: cada aparato sale de
+ * los METADATOS reales de ficheros del archivo (comprobado con `ffprobe`),
+ * y cada capacidad está respaldada por un fichero concreto —su nombre va en
+ * el campo «Prueba», que NO sale en la web pública—. Esta página se enseña
+ * a producciones de cine que piden la ficha técnica: un aparato o una
+ * capacidad que no se tiene de verdad se detecta ahí. NO añadas nada aquí
+ * sin poder enseñarlo.
+ */
+export const EquipoTecnico: GlobalConfig = {
+  slug: "equipo-tecnico",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Equipo técnico (flota)",
+  admin: {
+    group: "Contenido",
+    description:
+      "La flota de la página de Drone. Cada aparato y cada capacidad tiene que poder demostrarse con un " +
+      "fichero real del archivo — ver la cabecera de content/fleet.ts antes de añadir nada.",
+  },
+  fields: [
+    {
+      name: "drones",
+      label: "Drones",
+      type: "array",
+      fields: [
+        {
+          name: "modelo",
+          type: "text",
+          required: true,
+          admin: { description: "«DJI Mavic 4 Pro». No se traduce." },
+        },
+        {
+          name: "uso",
+          label: "Para qué se usa",
+          type: "textarea",
+          required: true,
+          localized: true,
+          admin: { description: "Una frase." },
+        },
+      ],
+    },
+    {
+      name: "camarasAccion",
+      label: "Cámaras de acción (no son drones)",
+      type: "array",
+      fields: [{ name: "modelo", type: "text", required: true }],
+    },
+    {
+      name: "capacidades",
+      label: "Capacidades",
+      type: "array",
+      fields: [
+        { name: "texto", type: "textarea", required: true, localized: true },
+        {
+          name: "prueba",
+          label: "Prueba",
+          type: "text",
+          required: true,
+          admin: {
+            description:
+              "El fichero o dato concreto que lo demuestra (nombre de archivo, resolución...). NO sale en " +
+              "la web pública: es la prueba de que esto es verdad, para quien lo edite después.",
+          },
+        },
+      ],
+    },
+  ],
+};
+
 export const Textos: GlobalConfig = {
   slug: "textos",
   hooks: { afterChange: [avisaALaWeb] },

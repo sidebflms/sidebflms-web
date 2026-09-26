@@ -4,6 +4,7 @@ import config from "@payload-config";
 import { CIFRAS } from "@/content/cifras";
 import { CIUDAD_DRONE, CIUDADES_DRONE } from "@/content/ciudades-drone";
 import { CLIENTES } from "@/content/clientes";
+import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
 import { PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto } from "@/lib/contenido";
@@ -267,6 +268,35 @@ export async function POST(peticion: Request): Promise<Response> {
     data: { items: CLIENTES.map((nombre) => ({ nombre })) },
   });
 
+  // Mismo motivo que Cifras arriba: `drones` y `capacidades` llevan un campo
+  // `localized` dentro del array, así que la segunda pasada (inglés) tiene
+  // que reutilizar los `id` de la primera o crea filas nuevas y huérfanas.
+  const camarasAccion = CAMARAS_DE_ACCION.map((modelo) => ({ modelo }));
+  const equipoEs = await payload.updateGlobal({
+    slug: "equipo-tecnico",
+    locale: "es",
+    data: {
+      drones: DRONES.map((d) => ({ modelo: d.modelo, uso: d.uso.es })),
+      camarasAccion,
+      capacidades: CAPACIDADES.map((c) => ({ texto: c.es, prueba: c.prueba })),
+    },
+  });
+  const idsDrones = (equipoEs.drones ?? []).map((d) => d.id);
+  const idsCapacidades = (equipoEs.capacidades ?? []).map((c) => c.id);
+  await payload.updateGlobal({
+    slug: "equipo-tecnico",
+    locale: "en",
+    data: {
+      drones: DRONES.map((d, i) => ({ id: idsDrones[i] ?? undefined, modelo: d.modelo, uso: d.uso.en })),
+      camarasAccion,
+      capacidades: CAPACIDADES.map((c, i) => ({
+        id: idsCapacidades[i] ?? undefined,
+        texto: c.en,
+        prueba: c.prueba,
+      })),
+    },
+  });
+
   const claves = Object.keys(TEXTOS_FICHERO) as ClaveTexto[];
   const datosTextos = (locale: "es" | "en") =>
     Object.fromEntries(claves.map((clave) => [clave, TEXTOS_FICHERO[clave][locale]]));
@@ -280,6 +310,7 @@ export async function POST(peticion: Request): Promise<Response> {
     ciudades: resumenCiudades,
     cifras: `${CIFRAS.length} cifras cargadas.`,
     clientes: `${CLIENTES.length} clientes cargados.`,
+    equipoTecnico: `${DRONES.length} drones, ${CAMARAS_DE_ACCION.length} cámaras de acción, ${CAPACIDADES.length} capacidades cargadas.`,
     textos: `${claves.length} entradillas cargadas.`,
   });
 }

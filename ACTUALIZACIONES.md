@@ -5,6 +5,32 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (119) — Roadmap del panel, Fase A: Equipo técnico (flota)
+
+Segunda pieza de la Fase A. La flota de la página de Drone —los cuatro
+drones, las dos cámaras de acción, las cuatro capacidades— pasa de
+`content/fleet.ts` a un Global nuevo, `EquipoTecnico`. Ese fichero
+sigue siendo el plan B si la base no responde.
+
+**La disciplina del fichero se mantiene, no se pierde en la migración**:
+`content/fleet.ts` no es una lista escrita a mano —cada aparato sale
+de metadatos reales comprobados con `ffprobe`, cada capacidad está
+respaldada por un fichero concreto del archivo, y su cabecera es
+tajante: "aquí no entra nada que no se pueda enseñar"—. El campo
+`prueba` de cada capacidad viaja también al panel, con un aviso propio
+de que NO sale en la web pública —es sólo para quien la edite después—,
+y la descripción del propio Global repite la advertencia antes de dejar
+tocar nada. No es un campo de texto libre sin más: sigue pidiendo la
+misma prueba que pedía el fichero.
+
+Probado igual que Ciudades: Global creado, panel comprobado a ojo —los
+cuatro campos "Prueba" presentes, uno por capacidad—, página de Drone
+sirviendo los cuatro drones, las dos cámaras y las cuatro capacidades
+desde Payload. Migración formal aparte del `push` de desarrollo.
+`/admin-carga` sincroniza también este Global ahora.
+
+---
+
 ## 2026-09-26 (118) — Roadmap del panel, Fase A: Ciudades
 
 Mario notó que el panel se sentía "poco desarrollado" — no se podía

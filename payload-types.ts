@@ -100,12 +100,14 @@ export interface Config {
     clientes: Cliente;
     textos: Texto;
     etapas: Etapa;
+    'equipo-tecnico': EquipoTecnico;
   };
   globalsSelect: {
     cifras: CifrasSelect<false> | CifrasSelect<true>;
     clientes: ClientesSelect<false> | ClientesSelect<true>;
     textos: TextosSelect<false> | TextosSelect<true>;
     etapas: EtapasSelect<false> | EtapasSelect<true>;
+    'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -654,6 +656,46 @@ export interface Etapa {
   createdAt?: string | null;
 }
 /**
+ * La flota de la página de Drone. Cada aparato y cada capacidad tiene que poder demostrarse con un fichero real del archivo — ver la cabecera de content/fleet.ts antes de añadir nada.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipo-tecnico".
+ */
+export interface EquipoTecnico {
+  id: number;
+  drones?:
+    | {
+        /**
+         * «DJI Mavic 4 Pro». No se traduce.
+         */
+        modelo: string;
+        /**
+         * Una frase.
+         */
+        uso: string;
+        id?: string | null;
+      }[]
+    | null;
+  camarasAccion?:
+    | {
+        modelo: string;
+        id?: string | null;
+      }[]
+    | null;
+  capacidades?:
+    | {
+        texto: string;
+        /**
+         * El fichero o dato concreto que lo demuestra (nombre de archivo, resolución...). NO sale en la web pública: es la prueba de que esto es verdad, para quien lo edite después.
+         */
+        prueba: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cifras_select".
  */
@@ -710,6 +752,35 @@ export interface EtapasSelect<T extends boolean = true> {
   etapa02?: T;
   etapa03?: T;
   etapa04?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipo-tecnico_select".
+ */
+export interface EquipoTecnicoSelect<T extends boolean = true> {
+  drones?:
+    | T
+    | {
+        modelo?: T;
+        uso?: T;
+        id?: T;
+      };
+  camarasAccion?:
+    | T
+    | {
+        modelo?: T;
+        id?: T;
+      };
+  capacidades?:
+    | T
+    | {
+        texto?: T;
+        prueba?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -6,6 +6,7 @@ import config from "@payload-config";
 import { CIFRAS_CON_DATO, type Cifra } from "@/content/cifras";
 import { CIUDAD_DRONE, CIUDADES_DRONE } from "@/content/ciudades-drone";
 import { CLIENTES } from "@/content/clientes";
+import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
 import { en as diccionarioEn } from "@/content/dictionaries/en";
 import { es as diccionarioEs } from "@/content/dictionaries/es";
 import { FOTO_ETAPA as FOTO_ETAPA_FICHERO } from "@/content/etapas-fotos";
@@ -199,7 +200,7 @@ async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas" | "c
 }
 
 /** La misma idea que `enDosIdiomas`, pero para un Global: sólo hay un documento. */
-async function globalEnDosIdiomas(slug: "cifras" | "textos") {
+async function globalEnDosIdiomas(slug: "cifras" | "textos" | "equipo-tecnico") {
   const payload = await getPayload({ config });
   const comun = { slug, depth: 0 } as const;
   const [es, en] = await Promise.all([
@@ -465,4 +466,52 @@ export async function traeCiudades(): Promise<Ciudad[]> {
 export async function traeCiudad(slug: string): Promise<Ciudad | undefined> {
   const todas = await traeCiudades();
   return todas.find((c) => c.slug === slug);
+}
+
+/**
+ * La flota de la página de Drone (roadmap del panel, 2026-09-26). Misma
+ * forma que devolvían `DRONES`/`CAMARAS_DE_ACCION`/`CAPACIDADES` de
+ * `content/fleet.ts` —ese fichero sigue siendo el plan B—, con `capacidades`
+ * ahora en un único array (antes eran tres campos sueltos por fila; aquí
+ * cada fila ya lleva sus dos idiomas más la prueba).
+ */
+export type EquipoTecnico = {
+  drones: { modelo: string; uso: Record<"es" | "en", string> }[];
+  camarasAccion: string[];
+  capacidades: { texto: Record<"es" | "en", string>; prueba: string }[];
+};
+
+const EQUIPO_TECNICO_FICHERO: EquipoTecnico = {
+  drones: DRONES.map((d) => ({ modelo: d.modelo, uso: d.uso })),
+  camarasAccion: CAMARAS_DE_ACCION,
+  capacidades: CAPACIDADES.map((c) => ({ texto: { es: c.es, en: c.en }, prueba: c.prueba })),
+};
+
+export async function traeEquipoTecnico(): Promise<EquipoTecnico> {
+  if (!HAY_BASE) return EQUIPO_TECNICO_FICHERO;
+  try {
+    const [es, en] = await globalEnDosIdiomas("equipo-tecnico");
+    const dronesEs = (Array.isArray(es.drones) ? es.drones : []) as Documento[];
+    const dronesEn = (Array.isArray(en.drones) ? en.drones : []) as Documento[];
+    const camaras = (Array.isArray(es.camarasAccion) ? es.camarasAccion : []) as Documento[];
+    const capEs = (Array.isArray(es.capacidades) ? es.capacidades : []) as Documento[];
+    const capEn = (Array.isArray(en.capacidades) ? en.capacidades : []) as Documento[];
+
+    // El Global sin inicializar (antes del primer `admin-carga`) trae los
+    // tres arrays vacíos: es cuando hay que caer al fichero, no un estado
+    // real de "sin flota".
+    if (dronesEs.length === 0 && camaras.length === 0 && capEs.length === 0) return EQUIPO_TECNICO_FICHERO;
+
+    return {
+      drones: dronesEs.map((d, i) => ({ modelo: String(d.modelo), uso: porIdioma(d.uso, dronesEn[i]?.uso) })),
+      camarasAccion: camaras.map((c) => oNulo(c.modelo)).filter((m): m is string => m !== null),
+      capacidades: capEs.map((c, i) => ({
+        texto: porIdioma(c.texto, capEn[i]?.texto),
+        prueba: typeof c.prueba === "string" ? c.prueba : "",
+      })),
+    };
+  } catch (error) {
+    avisa("el equipo técnico", error);
+    return EQUIPO_TECNICO_FICHERO;
+  }
 }
