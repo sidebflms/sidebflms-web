@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (120) — Roadmap del panel, Fase A: listas de la página de Drone
+
+Tercera y última pieza de la Fase A (Ciudades y Equipo técnico son las
+otras dos). Las tres listas largas de la página de Drone —permisos y
+normativa (5 artículos), qué hace falta para el presupuesto (5 datos),
+tipos de encargo (3)— pasan de `content/dictionaries/es.ts`/`en.ts` a
+un Global nuevo, `DroneSecciones`. A diferencia de Ciudades y la
+flota, esta prosa no tenía un fichero `content/*.ts` propio: sólo
+vivía en el diccionario, igual que pasaba con `Textos` antes de
+existir — así que el diccionario sigue siendo el plan B directamente.
+
+**Los datos de permisos son los que confirmó Mario de viva voz**
+(categorías AESA, seguro de responsabilidad civil, año de fundación de
+la empresa): el aviso de "no añadas artículos nuevos sin confirmarlo"
+va en la propia descripción del Global, igual que con la flota.
+
+Cada una de las tres listas es un grupo con su propio título,
+entradilla (donde la había: encargos no lleva) y una lista de
+artículo/apartado que se puede reordenar arrastrando. Probado igual
+que las dos piezas anteriores: creado en local, sembrado, comprobado a
+ojo en el panel, y la página de Drone sirviendo las tres listas
+completas desde Payload (5 permisos, 5 datos de presupuesto, 3 tipos
+de encargo). Migración formal aparte del `push` de desarrollo.
+
+**Con esto se cierra la Fase A del roadmap del panel** (2026-09-26,
+118-120): Ciudades, Equipo técnico y las listas de Drone eran los tres
+bloques de contenido que hasta ahora sólo se editaban tocando código y
+desplegando. Sigue la Fase B (orden y visibilidad de secciones) y la
+Fase C (bloques de verdad, con el campo nativo de Payload) cuando
+Mario lo pida.
+
+---
+
 ## 2026-09-26 (119) — Roadmap del panel, Fase A: Equipo técnico (flota)
 
 Segunda pieza de la Fase A. La flota de la página de Drone —los cuatro

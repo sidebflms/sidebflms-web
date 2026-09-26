@@ -7,7 +7,7 @@ import { CLIENTES } from "@/content/clientes";
 import { CAMARAS_DE_ACCION, CAPACIDADES, DRONES } from "@/content/fleet";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
-import { PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto } from "@/lib/contenido";
+import { DRONE_SECCIONES_FICHERO, PREGUNTAS_FICHERO, TEXTOS_FICHERO, type ClaveTexto, type SeccionConItems } from "@/lib/contenido";
 
 /**
  * CARGA EL CONTENIDO DE LOS FICHEROS EN EL PANEL.
@@ -297,6 +297,40 @@ export async function POST(peticion: Request): Promise<Response> {
     },
   });
 
+  // Mismo motivo que Cifras y Equipo técnico arriba: los `items` de cada
+  // sección llevan campos `localized`, así que la segunda pasada (inglés)
+  // tiene que reutilizar los `id` de la primera.
+  const datosSeccionEs = (s: SeccionConItems) => ({
+    label: s.label.es,
+    intro: s.intro.es,
+    items: s.items.map((item) => ({ heading: item.heading.es, body: item.body.es })),
+  });
+  const droneSeccionesEs = await payload.updateGlobal({
+    slug: "drone-secciones",
+    locale: "es",
+    data: {
+      permisos: datosSeccionEs(DRONE_SECCIONES_FICHERO.permisos),
+      presupuesto: datosSeccionEs(DRONE_SECCIONES_FICHERO.presupuesto),
+      encargos: datosSeccionEs(DRONE_SECCIONES_FICHERO.encargos),
+    },
+  });
+  const idsDe = (grupo?: { items?: ({ id?: string | null } | null)[] | null }): (string | undefined)[] =>
+    (grupo?.items ?? []).map((it) => it?.id ?? undefined);
+  const datosSeccionEn = (s: SeccionConItems, ids: (string | undefined)[]) => ({
+    label: s.label.en,
+    intro: s.intro.en,
+    items: s.items.map((item, i) => ({ id: ids[i] ?? undefined, heading: item.heading.en, body: item.body.en })),
+  });
+  await payload.updateGlobal({
+    slug: "drone-secciones",
+    locale: "en",
+    data: {
+      permisos: datosSeccionEn(DRONE_SECCIONES_FICHERO.permisos, idsDe(droneSeccionesEs.permisos)),
+      presupuesto: datosSeccionEn(DRONE_SECCIONES_FICHERO.presupuesto, idsDe(droneSeccionesEs.presupuesto)),
+      encargos: datosSeccionEn(DRONE_SECCIONES_FICHERO.encargos, idsDe(droneSeccionesEs.encargos)),
+    },
+  });
+
   const claves = Object.keys(TEXTOS_FICHERO) as ClaveTexto[];
   const datosTextos = (locale: "es" | "en") =>
     Object.fromEntries(claves.map((clave) => [clave, TEXTOS_FICHERO[clave][locale]]));
@@ -311,6 +345,7 @@ export async function POST(peticion: Request): Promise<Response> {
     cifras: `${CIFRAS.length} cifras cargadas.`,
     clientes: `${CLIENTES.length} clientes cargados.`,
     equipoTecnico: `${DRONES.length} drones, ${CAMARAS_DE_ACCION.length} cámaras de acción, ${CAPACIDADES.length} capacidades cargadas.`,
+    droneSecciones: `permisos: ${DRONE_SECCIONES_FICHERO.permisos.items.length}, presupuesto: ${DRONE_SECCIONES_FICHERO.presupuesto.items.length}, encargos: ${DRONE_SECCIONES_FICHERO.encargos.items.length}.`,
     textos: `${claves.length} entradillas cargadas.`,
   });
 }

@@ -607,6 +607,65 @@ export const EquipoTecnico: GlobalConfig = {
   ],
 };
 
+/**
+ * Una de las tres secciones de listas de `DroneSecciones`, más abajo: un
+ * título, una entradilla opcional, y una lista de artículo/apartado con su
+ * título y su texto. Es un `group` y no tres campos sueltos, para que las
+ * tres secciones guarden `label`/`intro`/`items` cada una por su lado sin
+ * chocar entre sí.
+ */
+function seccionDeDrone(nombre: string, etiqueta: string, etiquetaItems: string, conIntro: boolean) {
+  return {
+    name: nombre,
+    type: "group" as const,
+    label: etiqueta,
+    fields: [
+      { name: "label", label: "Título de la sección", type: "text" as const, required: true, localized: true },
+      ...(conIntro
+        ? [{ name: "intro", type: "textarea" as const, localized: true }]
+        : []),
+      {
+        name: "items",
+        label: etiquetaItems,
+        type: "array" as const,
+        fields: [
+          { name: "heading", label: "Título", type: "text" as const, required: true, localized: true },
+          { name: "body", label: "Texto", type: "textarea" as const, required: true, localized: true },
+        ],
+      },
+    ],
+  };
+}
+
+/**
+ * LAS TRES LISTAS DE LA PÁGINA DE DRONE (roadmap del panel, 2026-09-26):
+ * permisos y normativa, qué hace falta para el presupuesto, y tipos de
+ * encargo. Hasta ahora vivían fijas en `content/dictionaries/es.ts`/`en.ts`
+ * —esos ficheros siguen siendo el plan B, ver `lib/contenido.ts`—.
+ *
+ * ── LOS DATOS DE PERMISOS SON LOS QUE CONFIRMÓ MARIO, NO GENÉRICOS ───────
+ * Categorías AESA, seguro de responsabilidad civil, año de fundación: datos
+ * reales que Mario dio directamente (Fase 3 de SEO, 2026-09-24). No se
+ * amplían ni se inventan artículos nuevos sin confirmarlo con él primero,
+ * igual que con `EquipoTecnico`.
+ */
+export const DroneSecciones: GlobalConfig = {
+  slug: "drone-secciones",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Drone — permisos, presupuesto y encargos",
+  admin: {
+    group: "Contenido",
+    description:
+      "Los datos de permisos y seguro son los que confirmó Mario directamente (AESA, responsabilidad civil...): " +
+      "no se añaden artículos nuevos sin volver a confirmarlo con él.",
+  },
+  fields: [
+    seccionDeDrone("permisos", "Permisos y normativa", "Artículos", true),
+    seccionDeDrone("presupuesto", "Qué hace falta para el presupuesto", "Datos", true),
+    seccionDeDrone("encargos", "Tipos de encargo", "Tipos", false),
+  ],
+};
+
 export const Textos: GlobalConfig = {
   slug: "textos",
   hooks: { afterChange: [avisaALaWeb] },

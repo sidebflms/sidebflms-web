@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
-import { traeCifras, traeEquipoTecnico, traeProyectos } from "@/lib/contenido";
+import { traeCifras, traeDroneSecciones, traeEquipoTecnico, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -44,6 +44,9 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
   // Nosotros — ver `content/cifras.ts` para el origen y el matiz de
   // "va de 2026, no histórico".
   const cifras = await traeCifras();
+  // roadmap del panel (2026-09-26): las tres listas de más abajo —permisos,
+  // presupuesto, encargos— salen ahora del panel, no del diccionario a secas.
+  const secciones = await traeDroneSecciones();
 
   return (
     <main id="main" className="pagina">
@@ -163,21 +166,21 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
           un diseño nuevo. */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
-          <h2 className="font-display subtitulo">{dict.drone.permisos.label}</h2>
-          <p className="measure mt-3 text-smoke">{dict.drone.permisos.intro}</p>
+          <h2 className="font-display subtitulo">{secciones.permisos.label[locale]}</h2>
+          <p className="measure mt-3 text-smoke">{secciones.permisos.intro[locale]}</p>
         </Reveal>
         <div className="mt-10">
-          {dict.drone.permisos.items.map((item, i) => (
+          {secciones.permisos.items.map((item, i) => (
             <Reveal
-              key={item.heading}
+              key={item.heading[locale]}
               as="article"
               className="grid gap-4 border-t border-ink-600 py-8 lg:grid-cols-12 lg:gap-6"
             >
               <p aria-hidden="true" className="text-4xl font-medium text-ink-600 tabular-nums lg:col-span-2">
                 {pad(i + 1)}
               </p>
-              <h3 className="font-display text-display-m text-bone lg:col-span-5">{item.heading}</h3>
-              <p className="measure text-smoke lg:col-span-5">{item.body}</p>
+              <h3 className="font-display text-display-m text-bone lg:col-span-5">{item.heading[locale]}</h3>
+              <p className="measure text-smoke lg:col-span-5">{item.body[locale]}</p>
             </Reveal>
           ))}
         </div>
@@ -188,12 +191,12 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
           ver el comentario en content/dictionaries/es.ts. */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
-          <h2 className="font-display subtitulo">{dict.drone.encargos.label}</h2>
+          <h2 className="font-display subtitulo">{secciones.encargos.label[locale]}</h2>
         </Reveal>
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {dict.drone.encargos.items.map((item, i, items) => (
+          {secciones.encargos.items.map((item, i, items) => (
             <Reveal
-              key={item.heading}
+              key={item.heading[locale]}
               as="article"
               className={cn(
                 "border-t border-ink-600 pt-6",
@@ -202,8 +205,8 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
                 i === items.length - 1 && items.length % 2 === 1 && "lg:col-span-2"
               )}
             >
-              <h3 className="font-display text-display-m text-bone">{item.heading}</h3>
-              <p className="measure mt-3 text-smoke">{item.body}</p>
+              <h3 className="font-display text-display-m text-bone">{item.heading[locale]}</h3>
+              <p className="measure mt-3 text-smoke">{item.body[locale]}</p>
             </Reveal>
           ))}
         </div>
@@ -235,15 +238,15 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
       {/* QUÉ HACE FALTA PARA EL PRESUPUESTO (SEO Fase 3). */}
       <section className="shell seccion border-t border-ink-600 pt-14">
         <Reveal>
-          <h2 className="font-display subtitulo">{dict.drone.presupuesto.label}</h2>
-          <p className="measure mt-3 text-smoke">{dict.drone.presupuesto.intro}</p>
+          <h2 className="font-display subtitulo">{secciones.presupuesto.label[locale]}</h2>
+          <p className="measure mt-3 text-smoke">{secciones.presupuesto.intro[locale]}</p>
         </Reveal>
         <Reveal stagger>
           <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
-            {dict.drone.presupuesto.items.map((item) => (
-              <li key={item.heading} className="bg-ink-800 p-7">
-                <p className="font-semibold text-bone">{item.heading}</p>
-                <p className="mt-2 text-sm text-smoke">{item.body}</p>
+            {secciones.presupuesto.items.map((item) => (
+              <li key={item.heading[locale]} className="bg-ink-800 p-7">
+                <p className="font-semibold text-bone">{item.heading[locale]}</p>
+                <p className="mt-2 text-sm text-smoke">{item.body[locale]}</p>
               </li>
             ))}
           </ul>

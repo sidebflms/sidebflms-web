@@ -200,7 +200,7 @@ async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas" | "c
 }
 
 /** La misma idea que `enDosIdiomas`, pero para un Global: sólo hay un documento. */
-async function globalEnDosIdiomas(slug: "cifras" | "textos" | "equipo-tecnico") {
+async function globalEnDosIdiomas(slug: "cifras" | "textos" | "equipo-tecnico" | "drone-secciones") {
   const payload = await getPayload({ config });
   const comun = { slug, depth: 0 } as const;
   const [es, en] = await Promise.all([
@@ -513,5 +513,78 @@ export async function traeEquipoTecnico(): Promise<EquipoTecnico> {
   } catch (error) {
     avisa("el equipo técnico", error);
     return EQUIPO_TECNICO_FICHERO;
+  }
+}
+
+/**
+ * Las tres listas de la página de Drone —permisos, presupuesto, encargos—
+ * (roadmap del panel, 2026-09-26). A diferencia del resto de este fichero,
+ * no había un `content/*.ts` aparte: esta prosa sólo vivía en
+ * `content/dictionaries/es.ts`/`en.ts` (`drone.permisos`, `drone.presupuesto`,
+ * `drone.encargos`), igual que pasaba con `Textos` antes de esto — así que
+ * el plan B sale de ahí directamente.
+ */
+export type SeccionConItems = {
+  label: Record<"es" | "en", string>;
+  intro: Record<"es" | "en", string>;
+  items: { heading: Record<"es" | "en", string>; body: Record<"es" | "en", string> }[];
+};
+
+export type DroneSecciones = {
+  permisos: SeccionConItems;
+  presupuesto: SeccionConItems;
+  encargos: SeccionConItems;
+};
+
+type ItemFichero = { heading: string; body: string };
+type SeccionFichero = { label: string; intro?: string; items: readonly ItemFichero[] };
+
+function seccionDesdeFichero(es: SeccionFichero, en: SeccionFichero): SeccionConItems {
+  return {
+    label: porIdioma(es.label, en.label),
+    intro: porIdioma(es.intro, en.intro),
+    items: es.items.map((item, i) => ({
+      heading: porIdioma(item.heading, en.items[i]?.heading),
+      body: porIdioma(item.body, en.items[i]?.body),
+    })),
+  };
+}
+
+export const DRONE_SECCIONES_FICHERO: DroneSecciones = {
+  permisos: seccionDesdeFichero(diccionarioEs.drone.permisos, diccionarioEn.drone.permisos),
+  presupuesto: seccionDesdeFichero(diccionarioEs.drone.presupuesto, diccionarioEn.drone.presupuesto),
+  encargos: seccionDesdeFichero(diccionarioEs.drone.encargos, diccionarioEn.drone.encargos),
+};
+
+function aSeccion(es: Documento, en: Documento): SeccionConItems {
+  const esItems = (Array.isArray(es.items) ? es.items : []) as Documento[];
+  const enItems = (Array.isArray(en.items) ? en.items : []) as Documento[];
+  return {
+    label: porIdioma(es.label, en.label),
+    intro: porIdioma(es.intro, en.intro),
+    items: esItems.map((item, i) => ({
+      heading: porIdioma(item.heading, enItems[i]?.heading),
+      body: porIdioma(item.body, enItems[i]?.body),
+    })),
+  };
+}
+
+export async function traeDroneSecciones(): Promise<DroneSecciones> {
+  if (!HAY_BASE) return DRONE_SECCIONES_FICHERO;
+  try {
+    const [es, en] = await globalEnDosIdiomas("drone-secciones");
+    const permisos = aSeccion((es.permisos ?? {}) as Documento, (en.permisos ?? {}) as Documento);
+    const presupuesto = aSeccion((es.presupuesto ?? {}) as Documento, (en.presupuesto ?? {}) as Documento);
+    const encargos = aSeccion((es.encargos ?? {}) as Documento, (en.encargos ?? {}) as Documento);
+
+    // El Global sin inicializar trae los tres grupos vacíos: es cuando hay
+    // que caer al fichero, no un estado real de "sin listas".
+    if (permisos.items.length === 0 && presupuesto.items.length === 0 && encargos.items.length === 0) {
+      return DRONE_SECCIONES_FICHERO;
+    }
+    return { permisos, presupuesto, encargos };
+  } catch (error) {
+    avisa("las listas de la página de drone", error);
+    return DRONE_SECCIONES_FICHERO;
   }
 }

@@ -7,6 +7,7 @@ import * as migration_20260924_222423_fase15_categorias_cine_marca from './20260
 import * as migration_20260925_033651_fase17_meta_descripcion_proyectos from './20260925_033651_fase17_meta_descripcion_proyectos';
 import * as migration_20260925_235159_roadmap_colecciones_ciudades from './20260925_235159_roadmap_colecciones_ciudades';
 import * as migration_20260926_000052_roadmap_equipo_tecnico from './20260926_000052_roadmap_equipo_tecnico';
+import * as migration_20260926_001053_roadmap_drone_secciones from './20260926_001053_roadmap_drone_secciones';
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20260926_000052_roadmap_equipo_tecnico.up,
     down: migration_20260926_000052_roadmap_equipo_tecnico.down,
-    name: '20260926_000052_roadmap_equipo_tecnico'
+    name: '20260926_000052_roadmap_equipo_tecnico',
+  },
+  {
+    up: migration_20260926_001053_roadmap_drone_secciones.up,
+    down: migration_20260926_001053_roadmap_drone_secciones.down,
+    name: '20260926_001053_roadmap_drone_secciones'
   },
 ];

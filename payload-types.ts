@@ -101,6 +101,7 @@ export interface Config {
     textos: Texto;
     etapas: Etapa;
     'equipo-tecnico': EquipoTecnico;
+    'drone-secciones': DroneSeccione;
   };
   globalsSelect: {
     cifras: CifrasSelect<false> | CifrasSelect<true>;
@@ -108,6 +109,7 @@ export interface Config {
     textos: TextosSelect<false> | TextosSelect<true>;
     etapas: EtapasSelect<false> | EtapasSelect<true>;
     'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
+    'drone-secciones': DroneSeccionesSelect<false> | DroneSeccionesSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -696,6 +698,49 @@ export interface EquipoTecnico {
   createdAt?: string | null;
 }
 /**
+ * Los datos de permisos y seguro son los que confirmó Mario directamente (AESA, responsabilidad civil...): no se añaden artículos nuevos sin volver a confirmarlo con él.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-secciones".
+ */
+export interface DroneSeccione {
+  id: number;
+  permisos: {
+    label: string;
+    intro?: string | null;
+    items?:
+      | {
+          heading: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  presupuesto: {
+    label: string;
+    intro?: string | null;
+    items?:
+      | {
+          heading: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  encargos: {
+    label: string;
+    items?:
+      | {
+          heading: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cifras_select".
  */
@@ -780,6 +825,53 @@ export interface EquipoTecnicoSelect<T extends boolean = true> {
         texto?: T;
         prueba?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "drone-secciones_select".
+ */
+export interface DroneSeccionesSelect<T extends boolean = true> {
+  permisos?:
+    | T
+    | {
+        label?: T;
+        intro?: T;
+        items?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+            };
+      };
+  presupuesto?:
+    | T
+    | {
+        label?: T;
+        intro?: T;
+        items?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+            };
+      };
+  encargos?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
