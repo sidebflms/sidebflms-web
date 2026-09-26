@@ -200,7 +200,7 @@ async function enDosIdiomas(coleccion: "proyectos" | "equipo" | "preguntas" | "c
 }
 
 /** La misma idea que `enDosIdiomas`, pero para un Global: sólo hay un documento. */
-async function globalEnDosIdiomas(slug: "cifras" | "textos" | "equipo-tecnico" | "drone-secciones") {
+async function globalEnDosIdiomas(slug: "cifras" | "textos" | "equipo-tecnico" | "drone-secciones" | "home-bloques") {
   const payload = await getPayload({ config });
   const comun = { slug, depth: 0 } as const;
   const [es, en] = await Promise.all([
@@ -643,5 +643,62 @@ export async function traeDroneDistribucion(): Promise<FilaDistribucion[]> {
   } catch (error) {
     avisa("el orden de las secciones de la página de drone", error);
     return DRONE_DISTRIBUCION_FICHERO;
+  }
+}
+
+/**
+ * ROADMAP DEL PANEL, FASE C — EL PILOTO (2026-09-26). Los bloques extra de
+ * la portada: un `blocks` de Payload, el mecanismo nativo para componer una
+ * página desde el panel —añadir, quitar, reordenar—, no sólo reordenar lo
+ * que ya existe (eso fue la Fase B). Ver `HomeBloques` en
+ * `panel/colecciones.ts` para los tres tipos de bloque del piloto.
+ *
+ * SIN plan B de fichero: esto nunca vivió en código, así que si la base no
+ * responde el resultado es una lista vacía — la portada se queda tal cual
+ * está hoy, sin bloques extra, que es lo correcto: no inventar contenido
+ * que nadie ha escrito.
+ */
+export type BloqueHome =
+  | { tipo: "texto"; id: string; rotulo: Record<"es" | "en", string>; titular: Record<"es" | "en", string[]>; cuerpo: Record<"es" | "en", string> }
+  | { tipo: "cifras"; id: string; rotulo: Record<"es" | "en", string> }
+  | { tipo: "cta"; id: string; titular: Record<"es" | "en", string[]>; entradilla: Record<"es" | "en", string> };
+
+export async function traeHomeBloques(): Promise<BloqueHome[]> {
+  if (!HAY_BASE) return [];
+  try {
+    const [es, en] = await globalEnDosIdiomas("home-bloques");
+    const bloquesEs = (Array.isArray(es.bloques) ? es.bloques : []) as Documento[];
+    const bloquesEn = (Array.isArray(en.bloques) ? en.bloques : []) as Documento[];
+
+    return bloquesEs
+      .map((b, i): BloqueHome | null => {
+        const enB = bloquesEn[i] ?? {};
+        const id = String(b.id ?? i);
+        switch (b.blockType) {
+          case "texto":
+            return {
+              tipo: "texto",
+              id,
+              rotulo: porIdioma(b.rotulo, enB.rotulo),
+              titular: { es: lineas(b.titular), en: lineas(enB.titular) },
+              cuerpo: porIdioma(b.cuerpo, enB.cuerpo),
+            };
+          case "cifras":
+            return { tipo: "cifras", id, rotulo: porIdioma(b.rotulo, enB.rotulo) };
+          case "cta":
+            return {
+              tipo: "cta",
+              id,
+              titular: { es: lineas(b.titular), en: lineas(enB.titular) },
+              entradilla: porIdioma(b.entradilla, enB.entradilla),
+            };
+          default:
+            return null;
+        }
+      })
+      .filter((b): b is BloqueHome => b !== null);
+  } catch (error) {
+    avisa("los bloques de la portada", error);
+    return [];
   }
 }

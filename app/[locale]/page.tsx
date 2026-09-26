@@ -4,12 +4,13 @@ import { notFound } from "next/navigation";
 import { Magnetic } from "@/components/motion/magnetic";
 import { IntroCasete } from "@/components/sections/intro-casete";
 import { Reveal } from "@/components/motion/reveal";
+import { BloquesHome } from "@/components/sections/bloques/bloques-home";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { HeroFrame } from "@/components/sections/hero-frame";
 import { HomeSliders } from "@/components/sections/home-sliders";
 import { PillLink } from "@/components/ui/button";
 import { aPiezasLigeras } from "@/content/projects";
-import { traeCifras, traeProyectos } from "@/lib/contenido";
+import { traeCifras, traeHomeBloques, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
 import { isLocale, path } from "@/lib/routes";
@@ -41,6 +42,15 @@ export async function generateMetadata({
  * portfolio, servicios, las ciudades y las 23 fichas — eso se queda. La
  * media de palabras del sitio baja a 716, sigue por encima del ≥600 que
  * pide el auditor sin necesidad de rellenar nada aquí.
+ *
+ * ROADMAP DEL PANEL, FASE C (2026-09-26): entre el punto 3 y el punto 4
+ * pueden salir bloques extra que Mario añada desde el panel
+ * (`<BloquesHome>`, ver `components/sections/bloques/`). Por defecto está
+ * vacío y no cambia nada — es el piloto del constructor de páginas,
+ * probado primero en la rama `glass` antes de decidir si se usa de verdad.
+ * Si algún día vuelve a pasar lo de la Fase 17 —la portada creciendo más de
+ * la cuenta—, la solución ya no es revertir código: es vaciar los bloques
+ * desde el panel.
  */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
@@ -49,7 +59,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const dict = await getDictionary(locale);
   // Ligeras también aquí: el carrusel del hero sólo usa el material y el
   // slug, y así el HTML no arrastra los textos largos de cada pieza.
-  const [proyectos, cifras] = await Promise.all([traeProyectos(), traeCifras()]);
+  const [proyectos, cifras, bloques] = await Promise.all([traeProyectos(), traeCifras(), traeHomeBloques()]);
   const featured = aPiezasLigeras(proyectos.filter((p) => p.featured && p.media.video));
 
   return (
@@ -108,6 +118,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <HomeSliders projects={aPiezasLigeras(proyectos)} locale={locale} dict={dict} />
         </div>
       </section>
+
+      {/* ROADMAP DEL PANEL, FASE C — EL PILOTO (2026-09-26): bloques extra
+          desde el panel (`HomeBloques`), entre el trabajo destacado y la
+          llamada final. Vacío por defecto: no pinta nada, la portada se
+          queda exactamente como estaba. Ver components/sections/bloques/. */}
+      <BloquesHome bloques={bloques} locale={locale} dict={dict} cifras={cifras} />
 
       <ContactCta locale={locale} dict={dict} headline={dict.contact.headline} intro={dict.contact.intro} />
     </main>

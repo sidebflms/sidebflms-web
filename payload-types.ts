@@ -103,6 +103,7 @@ export interface Config {
     'equipo-tecnico': EquipoTecnico;
     'drone-secciones': DroneSeccione;
     'drone-distribucion': DroneDistribucion;
+    'home-bloques': HomeBloque;
   };
   globalsSelect: {
     cifras: CifrasSelect<false> | CifrasSelect<true>;
@@ -112,6 +113,7 @@ export interface Config {
     'equipo-tecnico': EquipoTecnicoSelect<false> | EquipoTecnicoSelect<true>;
     'drone-secciones': DroneSeccionesSelect<false> | DroneSeccionesSelect<true>;
     'drone-distribucion': DroneDistribucionSelect<false> | DroneDistribucionSelect<true>;
+    'home-bloques': HomeBloquesSelect<false> | HomeBloquesSelect<true>;
   };
   locale: 'es' | 'en';
   widgets: {
@@ -770,6 +772,51 @@ export interface DroneDistribucion {
   createdAt?: string | null;
 }
 /**
+ * Secciones NUEVAS para la portada, entre el trabajo destacado y la llamada final. Vacío no cambia nada: la portada se queda exactamente como está. Arrastra para reordenar, la papelera para quitar un bloque entero.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-bloques".
+ */
+export interface HomeBloque {
+  id: number;
+  bloques?:
+    | (
+        | {
+            rotulo?: string | null;
+            /**
+             * Cada línea del texto es una línea del titular grande.
+             */
+            titular: string;
+            cuerpo?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'texto';
+          }
+        | {
+            /**
+             * El texto que va encima de los números, p. ej. «En lo que va de 2026».
+             */
+            rotulo: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cifras';
+          }
+        | {
+            /**
+             * Cada línea del texto es una línea del titular.
+             */
+            titular: string;
+            entradilla: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cifras_select".
  */
@@ -917,6 +964,43 @@ export interface DroneDistribucionSelect<T extends boolean = true> {
         seccion?: T;
         visible?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-bloques_select".
+ */
+export interface HomeBloquesSelect<T extends boolean = true> {
+  bloques?:
+    | T
+    | {
+        texto?:
+          | T
+          | {
+              rotulo?: T;
+              titular?: T;
+              cuerpo?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cifras?:
+          | T
+          | {
+              rotulo?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              titular?: T;
+              entradilla?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

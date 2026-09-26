@@ -5,7 +5,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
-import { Cifras, Ciudades, Clientes, DroneDistribucion, DroneSecciones, Equipo, EquipoTecnico, EtapasFotos, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
+import { Cifras, Ciudades, Clientes, DroneDistribucion, DroneSecciones, Equipo, EquipoTecnico, EtapasFotos, HomeBloques, Media, Preguntas, Proyectos, Textos, Usuarios } from "./panel/colecciones.ts";
 import { isLocale, path as rutaDe } from "./lib/routes.ts";
 
 /**
@@ -88,7 +88,7 @@ export default buildConfig({
   },
 
   collections: [Usuarios, Proyectos, Equipo, Preguntas, Ciudades, Media],
-  globals: [Cifras, Clientes, Textos, EtapasFotos, EquipoTecnico, DroneSecciones, DroneDistribucion],
+  globals: [Cifras, Clientes, Textos, EtapasFotos, EquipoTecnico, DroneSecciones, DroneDistribucion, HomeBloques],
 
   /**
    * VISTA PREVIA EN VIVO: la pestaña «Live Preview» de cada ficha enseña la
@@ -150,6 +150,7 @@ export default buildConfig({
         "equipo-tecnico",
         "drone-secciones",
         "drone-distribucion",
+        "home-bloques",
       ],
       url: ({ collectionConfig, globalConfig, data, locale, req }) => {
         const idioma = isLocale(locale.code) ? locale.code : "es";
@@ -187,6 +188,7 @@ export default buildConfig({
           if (globalConfig?.slug === "equipo-tecnico") return rutaDe(idioma, "drone");
           if (globalConfig?.slug === "drone-secciones") return rutaDe(idioma, "drone");
           if (globalConfig?.slug === "drone-distribucion") return rutaDe(idioma, "drone");
+          if (globalConfig?.slug === "home-bloques") return rutaDe(idioma, "home");
           return rutaDe(idioma, "home");
         })();
 

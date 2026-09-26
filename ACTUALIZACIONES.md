@@ -5,6 +5,55 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (122) — Roadmap del panel, Fase C: el piloto de bloques (rama `glass`, NO en main)
+
+**Esto vive SÓLO en la rama `glass` y en la web de pruebas
+(`https://sidebflms.com/prueba-glass-47f47ad5`), a propósito.** No se ha
+tocado `main` ni la web de verdad. Antes de este commit se puso `glass`
+al día con `main` (llevaba desde el 25 de septiembre parada, muy por
+detrás) para que el piloto se vea sobre la web actual, no sobre una
+versión vieja.
+
+Es el mecanismo de verdad para "cambiar la distribución" que pedía el
+roadmap: el campo `blocks` nativo de Payload —nada instalado aparte—,
+que deja añadir, quitar y reordenar secciones NUEVAS desde el panel, no
+sólo reordenar las que ya existen (eso fue la Fase B).
+
+**Nuevo Global `HomeBloques`**, con tres tipos de bloque para el
+piloto, cada uno reutilizando un patrón visual que YA existe en la web
+—nada de diseño nuevo—:
+- **Texto**: rótulo, titular y cuerpo. El mismo patrón que la cabecera
+  de Servicios o de Drone.
+- **Cifras**: la ficha técnica de la empresa, la misma rejilla que ya
+  sale en Drone — sólo se elige el rótulo que lleva encima.
+- **Llamada a la acción**: el mismo panel de cristal naranja
+  (`ContactCta`) que ya cierra todas las páginas, con su propio
+  titular y entradilla.
+
+Se pintan entre el trabajo destacado y la llamada final de la portada
+(`components/sections/bloques/bloques-home.tsx`). **Vacío no cambia
+nada**: sin bloques, la portada queda exactamente como está hoy — no
+es una sección con un hueco, es que no se monta nada. Comprobado
+comparando el HTML antes y después de añadir el campo, sin datos: sin
+diferencia.
+
+Probado de verdad con los tres tipos a la vez: un bloque de texto, uno
+de cifras y uno de llamada a la acción, en ese orden — se ven, en la
+propia captura de pantalla del navegador, integrados con el resto de
+la web sin ninguna diferencia de estilo. Datos de prueba retirados
+después de comprobarlo. Migración formal generada y probada aparte
+del `push` de desarrollo.
+
+**Qué falta para decidir si esto pasa a `main`**: que Mario lo pruebe
+de verdad en `/prueba-glass-47f47ad5`, añadiendo y quitando bloques
+desde el panel, y decida si el mecanismo convence antes de usarlo en
+la portada real o de extenderlo a más páginas. Ojo: la base de datos
+de `glass` es la MISMA que la de producción —cualquier bloque que se
+guarde ahí desde el panel ya existe en la base de verdad, pero no se ve
+en `main` hasta que ese código también se despliegue ahí—.
+
+---
+
 ## 2026-09-26 (121) — Roadmap del panel, Fase B: orden de la página de Drone
 
 Primera pieza de la Fase B: orden y visibilidad de secciones que ya

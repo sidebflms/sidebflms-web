@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import type { CollectionConfig, GlobalConfig } from "payload";
+import type { Block, CollectionConfig, GlobalConfig } from "payload";
 
 /** La carpeta del material subido: `media/`, junto a `public/`, pero NUNCA
  * dentro de ella. Ver el comentario de `Media` más abajo. */
@@ -715,6 +715,97 @@ export const DroneDistribucion: GlobalConfig = {
         { name: "seccion", label: "Sección", type: "select", required: true, options: [...SECCIONES_DRONE] },
         { name: "visible", type: "checkbox", defaultValue: true },
       ],
+    },
+  ],
+};
+
+/**
+ * ROADMAP DEL PANEL, FASE C — EL PILOTO (2026-09-26).
+ *
+ * A diferencia de las Fases A y B —meter contenido en el panel, reordenar
+ * secciones que ya existen—, esto es el mecanismo de verdad para "cambiar
+ * la distribución": añadir, quitar y reordenar secciones NUEVAS, no sólo
+ * las nueve fijas de Drone. Es el campo `blocks` nativo de Payload, sin
+ * instalar nada aparte.
+ *
+ * PROBADO PRIMERO EN LA WEB DE PRUEBAS (rama `glass`, no en producción)
+ * antes de decidir si se extiende más allá de la portada.
+ *
+ * Sólo tres bloques para el piloto, cada uno reutilizando un patrón visual
+ * que YA existe en la web —nada de diseño nuevo—:
+ *   · Texto: un rótulo, un titular y un cuerpo. El mismo patrón que la
+ *     cabecera de Servicios o de Drone.
+ *   · Cifras: la ficha técnica de la empresa (329 · 104 · 26...), la misma
+ *     que ya sale en la portada y en Nosotros — aquí sólo se elige el
+ *     rótulo que lleva encima.
+ *   · Llamada a la acción: el mismo panel de cristal naranja que ya cierra
+ *     todas las páginas (`ContactCta`), con su propio titular y entradilla.
+ */
+const BloqueTexto: Block = {
+  slug: "texto",
+  labels: { singular: "Texto", plural: "Textos" },
+  fields: [
+    { name: "rotulo", label: "Rótulo (opcional)", type: "text", localized: true },
+    {
+      name: "titular",
+      label: "Titular",
+      type: "textarea",
+      required: true,
+      localized: true,
+      admin: { description: "Cada línea del texto es una línea del titular grande." },
+    },
+    { name: "cuerpo", label: "Cuerpo", type: "textarea", localized: true },
+  ],
+};
+
+const BloqueCifras: Block = {
+  slug: "cifras",
+  labels: { singular: "Cifras", plural: "Cifras" },
+  fields: [
+    {
+      name: "rotulo",
+      label: "Rótulo",
+      type: "text",
+      required: true,
+      localized: true,
+      admin: { description: "El texto que va encima de los números, p. ej. «En lo que va de 2026»." },
+    },
+  ],
+};
+
+const BloqueCta: Block = {
+  slug: "cta",
+  labels: { singular: "Llamada a la acción", plural: "Llamadas a la acción" },
+  fields: [
+    {
+      name: "titular",
+      label: "Titular",
+      type: "textarea",
+      required: true,
+      localized: true,
+      admin: { description: "Cada línea del texto es una línea del titular." },
+    },
+    { name: "entradilla", label: "Entradilla", type: "textarea", required: true, localized: true },
+  ],
+};
+
+export const HomeBloques: GlobalConfig = {
+  slug: "home-bloques",
+  hooks: { afterChange: [avisaALaWeb] },
+  label: "Portada — bloques extra",
+  admin: {
+    group: "Contenido",
+    description:
+      "Secciones NUEVAS para la portada, entre el trabajo destacado y la llamada final. Vacío no cambia " +
+      "nada: la portada se queda exactamente como está. Arrastra para reordenar, la papelera para quitar " +
+      "un bloque entero.",
+  },
+  fields: [
+    {
+      name: "bloques",
+      label: "Bloques",
+      type: "blocks",
+      blocks: [BloqueTexto, BloqueCifras, BloqueCta],
     },
   ],
 };
