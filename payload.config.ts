@@ -87,8 +87,8 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [Usuarios, Proyectos, Equipo, Preguntas, Ciudades, Media],
-  globals: [Cifras, Clientes, Textos, EtapasFotos, EquipoTecnico, DroneSecciones, DroneDistribucion, HomeBloques],
+  collections: [Usuarios, Proyectos, Media, Ciudades, Equipo, Preguntas],
+  globals: [HomeBloques, Cifras, Textos, Clientes, EquipoTecnico, DroneDistribucion, DroneSecciones, EtapasFotos],
 
   /**
    * VISTA PREVIA EN VIVO: la pestaña «Live Preview» de cada ficha enseña la

@@ -5,6 +5,24 @@ reciente arriba.
 
 ---
 
+## 2026-09-26 (124) — El menú lateral del panel, ordenado por temas
+
+Mario preguntó si el menú lateral se podía ordenar: todo estaba en un solo
+grupo, «Contenido», en el orden en que se habían ido añadiendo las
+cosas. Payload no deja arrastrar el menú, pero sí decide el orden por
+el de `collections`/`globals` en `payload.config.ts` y por el `group`
+de cada una. Ahora hay cinco grupos: **Panel** (usuarios), **Trabajo**
+(proyectos, material, clientes), **Drone** (ciudades, equipo técnico,
+orden de secciones, permisos y presupuesto), **Nosotros y servicios**
+(equipo, preguntas frecuentes, fotos de «cómo lo hacemos») y
+**Portada** (bloques extra, cifras, textos). Sólo cambia el menú: ni
+esquema ni migración. Limitación de Payload: los grupos salen por orden
+de aparición, colecciones primero y globals después, así que «Portada»
+—que sólo tiene globals— queda el último; para cambiarlo haría falta
+un menú propio.
+
+---
+
 ## 2026-09-26 (123) — El piloto de bloques pasa a `main`, sin pasar por la web de pruebas
 
 La entrada de abajo (122) decía que esto se quedaba en la rama `glass`

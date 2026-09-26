@@ -92,7 +92,7 @@ export const Proyectos: CollectionConfig = {
   admin: {
     useAsTitle: "slug",
     defaultColumns: ["slug", "year", "venue", "featured", "_status"],
-    group: "Contenido",
+    group: "Trabajo",
     description:
       "Las fichas de Trabajo. El orden de esta lista es el orden en que salen en la web.",
   },
@@ -246,7 +246,7 @@ export const Equipo: CollectionConfig = {
   admin: {
     useAsTitle: "nombre",
     defaultColumns: ["nombre", "slug", "orden"],
-    group: "Contenido",
+    group: "Nosotros y servicios",
     description: "La rejilla de Nosotros. El orden de la lista es el de la web.",
   },
   defaultSort: "orden",
@@ -289,7 +289,7 @@ export const Preguntas: CollectionConfig = {
   admin: {
     useAsTitle: "q",
     defaultColumns: ["q", "orden"],
-    group: "Contenido",
+    group: "Nosotros y servicios",
     description: "El FAQ de la web. El orden de la lista es el de la web.",
   },
   defaultSort: "orden",
@@ -333,7 +333,7 @@ export const Ciudades: CollectionConfig = {
   admin: {
     useAsTitle: "nombre",
     defaultColumns: ["nombre", "slug", "orden"],
-    group: "Contenido",
+    group: "Drone",
     description:
       "Las páginas de ciudad de la web de drone. Añadir una ciudad NUEVA aquí no la publica sola: " +
       "todavía hace falta una línea de rewrite en next.config.ts para su URL — pregunta antes de darla " +
@@ -435,7 +435,7 @@ export const Media: CollectionConfig = {
   },
   labels: { singular: "Archivo", plural: "Material" },
   admin: {
-    group: "Contenido",
+    group: "Trabajo",
     description:
       "Fotos y vídeos ya convertidos a su versión ligera. El máster se prepara en el Mac; aquí sólo se sube el resultado.",
   },
@@ -471,7 +471,7 @@ export const Cifras: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Cifras",
   admin: {
-    group: "Contenido",
+    group: "Portada",
     description: "La ficha técnica de la portada y de Nosotros. El orden de la lista es el de la web.",
   },
   fields: [
@@ -497,7 +497,7 @@ export const Clientes: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Clientes",
   admin: {
-    group: "Contenido",
+    group: "Trabajo",
     description: "La cinta de nombres de Trabajo. Mismo nombre en los dos idiomas.",
   },
   fields: [
@@ -522,7 +522,7 @@ export const EtapasFotos: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Cómo lo hacemos (fotos)",
   admin: {
-    group: "Contenido",
+    group: "Nosotros y servicios",
     description: "Una foto por etapa del proceso, en Servicios. Vacía: se pinta el número en su lugar.",
   },
   fields: [
@@ -552,7 +552,7 @@ export const EquipoTecnico: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Equipo técnico (flota)",
   admin: {
-    group: "Contenido",
+    group: "Drone",
     description:
       "La flota de la página de Drone. Cada aparato y cada capacidad tiene que poder demostrarse con un " +
       "fichero real del archivo — ver la cabecera de content/fleet.ts antes de añadir nada.",
@@ -654,7 +654,7 @@ export const DroneSecciones: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Drone — permisos, presupuesto y encargos",
   admin: {
-    group: "Contenido",
+    group: "Drone",
     description:
       "Los datos de permisos y seguro son los que confirmó Mario directamente (AESA, responsabilidad civil...): " +
       "no se añaden artículos nuevos sin volver a confirmarlo con él.",
@@ -701,7 +701,7 @@ export const DroneDistribucion: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Drone — orden de las secciones",
   admin: {
-    group: "Contenido",
+    group: "Drone",
     description:
       "Arrastra para reordenar las secciones de la página de Drone. Desmarca «Visible» para ocultar una " +
       "sección sin borrar su contenido. El titular de arriba y la llamada final no están aquí: son fijos.",
@@ -794,7 +794,7 @@ export const HomeBloques: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Portada — bloques extra",
   admin: {
-    group: "Contenido",
+    group: "Portada",
     description:
       "Secciones NUEVAS para la portada, entre el trabajo destacado y la llamada final. Vacío no cambia " +
       "nada: la portada se queda exactamente como está. Arrastra para reordenar, la papelera para quitar " +
@@ -815,7 +815,7 @@ export const Textos: GlobalConfig = {
   hooks: { afterChange: [avisaALaWeb] },
   label: "Textos",
   admin: {
-    group: "Contenido",
+    group: "Portada",
     description:
       "La entradilla de cada página: el párrafo bajo el titular. Vacío: se ve el texto de siempre. " +
       "Los titulares y los rótulos del menú no están aquí a propósito: son arrays de líneas para la " +
