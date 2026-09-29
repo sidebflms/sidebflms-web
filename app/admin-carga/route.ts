@@ -1,6 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+import { claveAdminValida } from "@/lib/clave-admin";
 import { CIFRAS } from "@/content/cifras";
 import { CIUDAD_DRONE, CIUDADES_DRONE } from "@/content/ciudades-drone";
 import { CLIENTES } from "@/content/clientes";
@@ -57,8 +58,7 @@ import {
  * la web normal.
  */
 export async function POST(peticion: Request): Promise<Response> {
-  const clave = new URL(peticion.url).searchParams.get("clave");
-  if (!process.env.PAYLOAD_SECRET || clave !== process.env.PAYLOAD_SECRET) {
+  if (!claveAdminValida(peticion)) {
     return new Response("No encontrado", { status: 404 });
   }
 

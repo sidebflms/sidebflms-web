@@ -4,6 +4,7 @@ import path from "node:path";
 import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 
+import { claveAdminValida } from "@/lib/clave-admin";
 import { PROJECTS } from "@/content/projects";
 import { EQUIPO } from "@/content/team";
 import { FOTO_ETAPA } from "@/content/etapas-fotos";
@@ -143,8 +144,7 @@ async function subeCarpetaEntera(
 }
 
 export async function POST(peticion: Request): Promise<Response> {
-  const clave = new URL(peticion.url).searchParams.get("clave");
-  if (!process.env.PAYLOAD_SECRET || clave !== process.env.PAYLOAD_SECRET) {
+  if (!claveAdminValida(peticion)) {
     return new Response("No encontrado", { status: 404 });
   }
 
