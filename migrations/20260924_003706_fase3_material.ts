@@ -12,7 +12,7 @@ import { sql } from '@payloadcms/db-postgres'
  * nivel de base de datos mientras `/admin-migra-material` no haya enlazado
  * esas filas viejas. (2026-09-24)
  */
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TABLE "media" (
   	"id" serial PRIMARY KEY NOT NULL,
@@ -62,7 +62,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "equipo" DROP COLUMN "foto";`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db }: MigrateDownArgs): Promise<void> {
   // A MANO también aquí: la versión generada intentaba borrar las
   // restricciones de clave foránea DESPUÉS de `DROP TABLE "media" CASCADE`,
   // que ya se las había llevado por delante —el `down()` original ni

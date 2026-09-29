@@ -1,7 +1,7 @@
 import type { MigrateUpArgs, MigrateDownArgs } from '@payloadcms/db-postgres'
 import { sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TABLE "equipo_tecnico_drones" (
   	"_order" integer NOT NULL,
@@ -59,7 +59,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE UNIQUE INDEX "equipo_tecnico_capacidades_locales_locale_parent_id_unique" ON "equipo_tecnico_capacidades_locales" USING btree ("_locale","_parent_id");`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    DROP TABLE "equipo_tecnico_drones" CASCADE;
   DROP TABLE "equipo_tecnico_drones_locales" CASCADE;
