@@ -1,6 +1,8 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+import { claveAdminValida } from "@/lib/clave-admin";
+
 /**
  * LA SALIDA DE EMERGENCIA: saca todo el contenido del panel a un fichero.
  *
@@ -26,8 +28,7 @@ import config from "@payload-config";
  * Pide la misma clave que la carga, y por lo mismo.
  */
 export async function GET(peticion: Request): Promise<Response> {
-  const clave = new URL(peticion.url).searchParams.get("clave");
-  if (!process.env.PAYLOAD_SECRET || clave !== process.env.PAYLOAD_SECRET) {
+  if (!claveAdminValida(peticion)) {
     return new Response("No encontrado", { status: 404 });
   }
 
