@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Reveal } from "@/components/motion/reveal";
 import { BrandStrip } from "@/components/sections/brand-strip";
 import { TrabajoYoutube } from "@/components/sections/trabajo/trabajo-youtube";
-import { aPiezasDeTrabajo } from "@/components/sections/trabajo/medios";
+import { aPiezasDeTrabajo, mediosLigeros } from "@/components/sections/trabajo/medios";
 import { traeClientes, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata, datosMigas } from "@/lib/metadata";
@@ -40,8 +40,20 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
     traeClientes(),
   ]);
 
+  const piezas = aPiezasDeTrabajo(proyectos, locale);
+  // El póster de la primera tarjeta del feed móvil es lo que más tarda en verse
+  // (Lighthouse lo marca como «LCP request discovery»: el navegador lo pide
+  // tarde y con prioridad media). Se anuncia aquí con prioridad alta, SÓLO por
+  // debajo de `lg`, que es donde existe el feed. Mismo criterio que la tarjeta:
+  // el vertical si lo hay, y si no el ligero.
+  const primera = piezas[0];
+  const posterPrimera = primera ? (primera.media.vertical?.poster ?? mediosLigeros(primera).poster) : null;
+
   return (
     <main id="main" className="pagina">
+      {posterPrimera && (
+        <link rel="preload" as="image" href={posterPrimera} fetchPriority="high" media="(max-width: 1023px)" />
+      )}
       {/* Titular y descripción, como el resto de páginas interiores. */}
       <header data-reglet={dict.portfolio.label} className="shell">
         <Reveal>
@@ -62,7 +74,7 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       <div className="mt-10 lg:mt-12">
         {/* Recortadas: la página monta las dos versiones —escritorio y móvil—,
             así que todo lo que se pase viaja dos veces en el HTML. */}
-        <TrabajoYoutube projects={aPiezasDeTrabajo(proyectos, locale)} locale={locale} copy={dict.portfolio} />
+        <TrabajoYoutube projects={piezas} locale={locale} copy={dict.portfolio} />
       </div>
 
       {/* La credencial, justo después del trabajo que la respalda. */}

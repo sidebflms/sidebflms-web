@@ -5,6 +5,59 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (131) — Google puede ver las imágenes, y el móvil pide menos al cargar el portfolio y servicios
+
+Puntos 1 y 2 de la segunda auditoría.
+
+**1. `robots.txt`: `Allow: /api/media/`** (`app/robots.ts`). Todas las fotos y
+vídeos de la web cuelgan de `/api/media/file/...` y `/api` estaba bloqueado
+entero: Google no podía pedir ninguna imagen ni póster (ni Google Imágenes, ni
+miniaturas de vídeo, ni pintar bien las páginas). Gana la regla más específica,
+así que el resto de `/api` (REST y GraphQL de Payload) sigue cerrado. Comprobado
+en local. **Qué hacer al actualizar:** nada; Google tarda días o semanas en
+volver a leer `robots.txt` y rastrear las imágenes.
+
+**2. Rendimiento en móvil** (medido con Lighthouse simulando un móvil modesto con
+4G lenta, antes de tocar nada: portfolio 7,7 a 13,7 s hasta ver el contenido
+principal, servicios 5,9 s, contacto 4,5 s, drone y FAQ 4,3 s; escritorio 1,6 a
+2,1 s). Lo que sí se corrige aquí, en código:
+- **Portfolio, póster de la primera tarjeta con prioridad alta**
+  (`app/[locale]/portfolio/page.tsx`): `<link rel="preload" fetchpriority="high">`
+  sólo por debajo de `lg`. Lighthouse lo marcaba como «LCP request discovery».
+- **Portfolio, dos fotos que se precargaban sin que se vieran**
+  (`components/sections/trabajo/trabajo-feed.tsx`): la primera foto de CADA
+  tarjeta de fotos era `eager`, y React emite un `preload` por cada `eager`:
+  un móvil se bajaba dos fotos de 90-120 KB de tarjetas muy abajo. Ahora `eager`
+  sólo en las dos primeras tarjetas.
+- **Portfolio, pósteres diferidos** (mismo fichero): se pedían los 23 a la vez
+  (130-180 KB cada uno). Las dos primeras tarjetas los traen al instante; el
+  resto, cuando el navegador está ocioso o en cuanto la tarjeta se activa.
+- **Servicios, vídeo de fondo de Drone diferido**
+  (`components/sections/servicios-visor.tsx`, `VideoFondo`): no pide su cinta de
+  1,2 MB ni su póster de 170 KB hasta que la tarjeta está a menos de 300 px de
+  verse. En escritorio está a la vista y arranca igual; en móvil queda por
+  debajo de la primera pantalla.
+
+Comprobado en local: el `<head>` del portfolio ya sólo precarga los logos, el
+póster de escritorio y el vertical con prioridad alta; el feed móvil empieza con
+2 pósteres y a los pocos segundos tiene los 21; el vídeo de servicios no tiene
+`src` si la tarjeta está lejos y sí si está cerca (en Chrome sin interfaz); sin
+errores de hidratación. `tsc` y `eslint` limpios. **No medido todavía en
+producción: hay que repetir Lighthouse tras el despliegue.**
+
+**Lo que NO se ha tocado, y por qué:**
+- **La portada (8 s):** la mide la intro del casete, que tapa la página los
+  primeros segundos. Es una decisión de diseño; acortarla es cosa de Mario.
+- **El póster de escritorio del portfolio (177 KB)** también se precarga en
+  móvil: es un `<img>` del reproductor de escritorio (oculto en móvil) y React lo
+  precarga por estar en el HTML. Ponerlo en `lazy` podría empeorar el escritorio.
+- **CSS que bloquea el pintado** (0,4-0,7 s simulados) y **70 KB de JavaScript sin
+  usar**: arreglarlos pide cambios de más riesgo (CSS en línea, dividir paquetes).
+- **Un error de hidratación de React (#418) en `/es/servicios`** que sale en
+  producción en Lighthouse y no se reproduce en local. Pendiente de investigar.
+
+---
+
 ## 2026-10-01 (130) — El despliegue no copiaba los ficheros nuevos de `public/media`
 
 **Qué pasó.** Tras publicar la 128, `/media/reel-540.mp4` daba 404 y la portada
