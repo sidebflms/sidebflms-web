@@ -5,6 +5,50 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (129) — La web se compila en GitHub, no en el nastos
+
+**Por qué.** Tres despliegues seguidos (29-sep y 1-oct) murieron en
+`next build` con `Killed` (código 137). Diagnóstico en el propio servidor:
+7,8 GB de RAM, **2,2 GB disponibles y ningún swap**, ocupados sobre todo por
+ClamAV (1,3 GB), MariaDB, Redis, PHP-FPM y SpamAssassin del Hestia compartido;
+la web en sí gasta unos 750 MB. Crear swap exige root y no lo hay. Mientras
+tanto, los arreglos fusionados (PR #9, #10, #11) no llegaban a producción.
+
+**Qué cambia.**
+- `.github/workflows/deploy.yml`: el servidor sólo **prepara** (`npm ci` si
+  cambió el lock y `payload migrate`), el runner de GitHub **compila** y envía
+  `.next-nueva` por rsync, y el servidor **estrena** (cambia la carpeta y
+  reinicia) y comprueba. Lo demás (copia de seguridad previa, subida del
+  código, comprobación final desde fuera) queda igual.
+- `.github/actions/compilar-fuera/action.yml` (nuevo): la compilación. Se hace
+  en la MISMA ruta que el servidor (`/home/bote/sidebflms-web`) para que el
+  resultado sea idéntico. Como al compilar la web lee el panel (proyectos,
+  equipo, ciudades) y PostgreSQL sólo escucha en `127.0.0.1` del servidor, abre
+  un **túnel SSH de sólo lectura** a esa base; si no abre, o si el build acaba
+  usando los ficheros de respaldo, **el paso falla** (publicar contenido viejo
+  sin avisar sería peor que no publicar). `.env` y `.clave-panel` se copian del
+  servidor en cada ejecución y se borran al terminar: no hay secretos nuevos en
+  GitHub.
+- `despliegue/publicar.sh` admite tres modos: sin argumento (todo, como
+  siempre, para hacerlo a mano), `preparar` y `estrenar`. `estrenar` se niega a
+  seguir si falta `.next-nueva/BUILD_ID`.
+- `.github/workflows/compilar-prueba.yml` (nuevo): ensayo sin desplegar. Compila
+  en GitHub, arranca esa compilación en el runner y pide siete páginas. Corre
+  solo en PR de este repositorio que toquen `.github/` o `despliegue/`.
+
+**Qué hacer al actualizar.** Nada en el servidor: el despliegue sube el
+`publicar.sh` nuevo antes de usarlo. **Ojo si hay que volver al método
+antiguo:** `./despliegue/publicar.sh` sin argumentos sigue compilando en el
+servidor, y volverá a morir mientras no haya memoria. Para el 2.º intento tras
+un fallo basta con relanzar el workflow desde Actions.
+
+**Lo que no está probado.** Que una compilación hecha en GitHub arranque
+idéntica en el nastos solo se ha comprobado en el runner (ensayo). El primer
+despliegue real es la prueba definitiva; si algo sale mal, la web sigue
+sirviendo la versión anterior porque `estrenar` es lo último que se hace.
+
+---
+
 ## 2026-10-01 (128) — Reel más ligero en móvil y velo de transición más corto
 
 Los puntos 13 y 15 de la auditoría.

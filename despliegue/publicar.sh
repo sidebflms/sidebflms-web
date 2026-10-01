@@ -8,6 +8,18 @@
 # ---------------------------------------------------------------------
 set -euo pipefail
 
+# TRES MODOS (2026-10-01). El build moría con «Killed» (código 137): el nastos
+# tiene 2,2 GB libres y ningún swap, y `next build` necesita bastante más.
+# Ahora la compilación se hace en GitHub y aquí sólo se prepara y se estrena:
+#
+#   publicar.sh            todo, como siempre (a mano, o si GitHub no puede)
+#   publicar.sh preparar   dependencias y migraciones, y termina
+#   publicar.sh estrenar   da por buena la `.next-nueva` que ya está aquí
+#                          (compilada fuera) y hace el resto: public_html,
+#                          cambio de carpeta, reinicio y comprobación
+MODO="${1:-todo}"
+case "$MODO" in todo|preparar|estrenar) ;; *) echo "uso: $0 [todo|preparar|estrenar]"; exit 2 ;; esac
+
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PUBLICO="$HOME/web/sidebflms.com/public_html"
 NPM=/usr/local/bin/npm
@@ -29,6 +41,7 @@ cd "$RAIZ"
 # compilación va a `.next-nueva`; `estrenar` la cambia de nombre en el
 # instante del reinicio.
 
+if [ "$MODO" != "estrenar" ]; then
 echo "==> Dependencias"
 # La huella se guarda DENTRO de node_modules a propósito: si alguien borra la
 # carpeta a mano, la huella se va con ella y se reinstala sin preguntar.
@@ -56,7 +69,17 @@ if grep -q "^PGDATABASE=\|^DATABASE_URI=" "$RAIZ/.env" 2>/dev/null; then
 else
   echo "    sin base de datos configurada: el panel no se toca"
 fi
+fi
 
+if [ "$MODO" = "preparar" ]; then echo "==> Preparado (dependencias y migraciones)"; exit 0; fi
+
+if [ "$MODO" = "estrenar" ]; then
+  # Sin esto, `estrenar` cambiaría de nombre una carpeta a medias o ausente y
+  # dejaría la web sin poder arrancar.
+  [ -f "$RAIZ/.next-nueva/BUILD_ID" ] \
+    || { echo "No hay una compilación completa en .next-nueva (falta BUILD_ID)"; exit 1; }
+  echo "==> Compilación recibida de fuera: $(cat "$RAIZ/.next-nueva/BUILD_ID")"
+else
 echo "==> Compilando en .next-nueva (la web sigue sirviendo desde .next)"
 rm -rf "$RAIZ/.next-nueva"
 # `tsconfig.json` incluye `.next/types/**/*.ts` (hace falta en local, donde
@@ -72,6 +95,7 @@ rm -rf "$RAIZ/.next/types"
 # La variable la lee next.config.ts (`distDir`). Al arrancar no se define, así
 # que `next start` sirve desde `.next`, que es donde `estrenar` la deja.
 SIDEB_CARPETA_COMPILACION=.next-nueva "$NPM" run build
+fi
 
 echo "==> Preparando $PUBLICO"
 
