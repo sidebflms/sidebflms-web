@@ -41,7 +41,7 @@ runs:
         mkdir -p /home/bote/sidebflms-web
         rsync -a --delete \
           --exclude '.git' --exclude 'node_modules' --exclude '.next' \
-          --exclude '.next-nueva' --exclude '.next-anterior' --exclude 'media' \
+          --exclude '.next-nueva' --exclude '.next-anterior' --exclude '/media' \
           ./ /home/bote/sidebflms-web/
 
     - uses: actions/setup-node@v7
