@@ -12,7 +12,7 @@
    (jobs-form.tsx) usa los mismos campos: así las dos páginas se leen como una
    sola y ninguno de los dos formularios importa al otro (ni su server action). */
 const campoBase =
-  "w-full rounded-2xl border border-white/12 bg-white/[0.05] px-4 text-base text-bone md:text-[1.0625rem] shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-300 placeholder:text-smoke/70 hover:border-white/20 focus:border-rust-300/70 focus:bg-white/[0.08] focus:shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_0_0_4px_rgb(232_69_29/0.15)] focus:outline-none aria-[invalid=true]:border-rust-300/70";
+  "w-full rounded-2xl border border-white/12 bg-white/[0.05] px-4 text-base text-bone md:text-[1.0625rem] shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-300 placeholder:text-bone/55 hover:border-white/20 focus:border-rust-300/70 focus:bg-white/[0.08] focus:shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_0_0_4px_rgb(232_69_29/0.15)] focus:outline-none aria-[invalid=true]:border-rust-300/70";
 
 export const fieldClasses = `${campoBase} py-3.5`;
 

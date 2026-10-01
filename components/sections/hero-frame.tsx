@@ -375,7 +375,7 @@ function Timecode({ className }: { className?: string }) {
   const ahora = useHoraTimecode();
   return (
     <p className={cn("flex min-h-4 items-center gap-2", className)}>
-      <span className="text-smoke/50">TC</span>
+      <span className="text-smoke">TC</span>
       <span className="tabular-nums">{ahora}</span>
     </p>
   );

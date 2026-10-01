@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
+import { aislaFondo } from "@/lib/aisla-fondo";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { bloqueaScroll } from "@/lib/scroll-lock";
 
@@ -36,6 +37,11 @@ export function ReelModal({
 
   useEffect(() => {
     const libera = bloqueaScroll();
+    // Foco: recordar quién abrió el reel («Ver reel») y devolvérselo al cerrar;
+    // y la página de detrás, inerte (ver lib/aisla-fondo.ts).
+    const abrio = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const raiz = panelRef.current?.closest<HTMLElement>('[role="dialog"]');
+    const suelta = raiz ? aislaFondo(raiz) : () => {};
     closeRef.current?.focus();
 
     const video = videoRef.current;
@@ -56,7 +62,9 @@ export function ReelModal({
 
     return () => {
       libera();
+      suelta();
       document.removeEventListener("keydown", onKeyDown);
+      if (abrio?.isConnected) abrio.focus();
     };
   }, [onClose, src.desktop, src.mobile]);
 
