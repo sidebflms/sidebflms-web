@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { FichaProyecto } from "@/components/sections/proyecto/ficha-proyecto";
-import { type Project } from "@/content/projects";
+import { type Category, type Project } from "@/content/projects";
 import { traeProyecto, traeProyectos, traeProyectoVistaPrevia } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata, datosMigas } from "@/lib/metadata";
@@ -10,6 +10,42 @@ import { path, SITE_URL, type Locale } from "@/lib/routes";
 
 export async function generateStaticParams() {
   return (await traeProyectos()).map((project) => ({ slug: project.slug }));
+}
+
+/**
+ * LO QUE DICE EL TÍTULO DE CADA FICHA SOBRE QUÉ ES (2026-10-01).
+ *
+ * Antes era «Metropolitano — SIDEBFLMS»: 25 caracteres sin ninguna palabra que
+ * diga qué se ve, y con dos rayas largas cuando el nombre ya llevaba una
+ * («Adrián Mills — Area 19 — SIDEBFLMS»), de modo que no se sabía cuál separaba
+ * la marca. Ahora «Título: qué es — SIDEBFLMS», con la PRIMERA categoría del
+ * proyecto en la frase de búsqueda de cada una. Sólo dice lo que la propia
+ * ficha ya declara; no se inventa nada.
+ */
+const FRASE_CATEGORIA: Record<Category, Record<Locale, string>> = {
+  cine: { es: "cine", en: "film" },
+  marca: { es: "contenido de marca", en: "branded content" },
+  aftermovie: { es: "aftermovie", en: "aftermovie" },
+  multicam: { es: "multicámara en directo", en: "live multicam" },
+  drone: { es: "grabación con drone", en: "drone filming" },
+  photo: { es: "fotografía", en: "photography" },
+  ads: { es: "publicidad", en: "advertising" },
+};
+
+function tituloDeFicha(project: Project, l: Locale): string {
+  // El nombre ya puede traer « — » (artista — sala): se pasa a coma para que
+  // la única raya larga del título sea la que separa la marca.
+  const nombre = project.title[l].replace(/\s+[—–]\s+/g, ", ");
+  const categoria = project.categories[0];
+  if (!categoria) return `${nombre} — SIDEBFLMS`;
+  const frase = FRASE_CATEGORIA[categoria][l];
+  // Si el nombre ya dice lo mismo («Monegros, fotografía», «Prospa,
+  // multicámara») no se repite: saldría «fotografía: fotografía».
+  const plano = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const yaLoDice = plano(frase)
+    .split(" ")
+    .some((palabra) => palabra.length > 4 && plano(nombre).includes(palabra));
+  return yaLoDice ? `${nombre} — SIDEBFLMS` : `${nombre}: ${frase} — SIDEBFLMS`;
 }
 
 export async function generateMetadata({
@@ -30,7 +66,7 @@ export async function generateMetadata({
     route: "portfolio",
     extraSegments: [slug],
     copy: {
-      title: `${project.title[l]} — SIDEBFLMS`,
+      title: tituloDeFicha(project, l),
       // SEO Fase 17 (2026-09-25): antes era el primer párrafo del brief, que
       // se escribió para leerse en la página, no para caber en un resultado
       // de búsqueda — se pasaba de los 165 caracteres que trunca Google en

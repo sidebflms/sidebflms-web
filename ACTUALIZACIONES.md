@@ -5,6 +5,58 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (132) — Lote de textos de la segunda auditoría
+
+Sólo lo que es objetivo o ya estaba acordado; lo que depende de datos o de una
+decisión de Mario NO se ha tocado (ver el final).
+
+1. **Plazo de entrega unificado a «24-48 horas».** «Nosotros» decía «Entregamos
+   en 48 horas» (`content/dictionaries/es.ts` y `en.ts`) y Servicios, FAQ y Drone
+   decían «24-48 horas»: ahora dicen lo mismo en todas partes.
+2. **«drone», no «dron»** en la sección de permisos de la página de drone (5
+   apariciones en `es.ts`; en el resto de la web ya era «drone», que es lo que
+   la gente busca y lo que lleva el título de la página).
+3. **«solo», sin tilde** (`es.ts`, 4 líneas de texto visible): la RAE lo pide
+   desde 2010 y la web mezclaba las dos grafías. Sólo se tocaron cadenas de texto
+   visibles, ni comentarios ni código.
+4. **El filtro del portfolio ya no enseña categorías vacías**
+   (`components/sections/trabajo/medios.ts`, `opcionesFiltro`, que usan el feed
+   móvil y el reproductor de escritorio). Salía «Cine 0» en una web que se
+   posiciona en cine y publicidad, y al pulsarla decía «no hay proyectos». En
+   cuanto un proyecto lleve la categoría «Cine» en el panel, la pestaña aparece
+   sola.
+5. **Títulos de las 23 fichas de proyecto**
+   (`app/[locale]/portfolio/[slug]/page.tsx`, `tituloDeFicha`). Antes
+   «Metropolitano — SIDEBFLMS» (25 caracteres, sin ninguna palabra que dijera qué
+   es) y, en los nombres con raya larga, dos rayas («Adrián Mills — Area 19 —
+   SIDEBFLMS») sin saber cuál separaba la marca. Ahora «Metropolitano: grabación
+   con drone — SIDEBFLMS»: el nombre (su raya interna pasa a coma), la frase de
+   la PRIMERA categoría del proyecto y la marca. Si el nombre ya dice la
+   categoría no se repite («Monegros, fotografía — SIDEBFLMS»). En inglés
+   «Metropolitano: drone filming — SIDEBFLMS». Los 46 títulos (23 por idioma)
+   miden entre 34 y 58 caracteres. **Cambia títulos ya indexados:** Google tarda
+   unos días en reflejarlo; por eso va todo en un solo lote.
+
+**Qué hacer al actualizar:** nada; sin migración. Comprobado en local (`curl` a las
+46 fichas, sin la pestaña «Cine» y con las demás), `tsc` y `eslint` limpios.
+
+**Lo que NO se ha tocado, y por qué:**
+- **«Ibiza» en el FAQ** («Madrid, Barcelona e Ibiza»): la auditoría lo marcó como
+  sin respaldo, pero es una decisión expresa de Mario del 2026-09-10 (comentario
+  en `es.ts`). Si ya no es así, es cambiar esa frase en `es.ts` y `en.ts`.
+- **NIF «BSIDEBFLMS»** del Aviso legal y **texto de analítica** en Privacidad:
+  hacen falta el NIF y la razón social reales.
+- **Texto de las categorías AESA** (STS-01/STS-02, «cuatro categorías»): afirmación
+  normativa que tiene que validar quien tiene el papeleo.
+- **Textos que viven en el panel, no en el código** (fichas de proyecto,
+  ciudades): «Lebanon» en el título de GORDO, «circuito» en «Sala llena», la
+  contradicción de DURO («la misma cobertura»), frases de proceso interno. Se
+  cambian desde `/admin`.
+- **Cine y publicidad en los textos de Contacto/FAQ** («Cuéntanos qué evento
+  tienes», «Nombre del evento»): es cambio de voz, pendiente de decisión.
+
+---
+
 ## 2026-10-01 (131) — Google puede ver las imágenes, y el móvil pide menos al cargar el portfolio y servicios
 
 Puntos 1 y 2 de la segunda auditoría.

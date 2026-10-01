@@ -87,7 +87,14 @@ export function filtrar<T extends { categories: Category[] }>(projects: T[], fil
   return filtro === "all" ? projects : projects.filter((p) => p.categories.includes(filtro));
 }
 
-/** Opciones del filtro con su cuenta, en el orden de `CATEGORIES`. */
+/**
+ * Opciones del filtro con su cuenta, en el orden de `CATEGORIES`.
+ *
+ * Las categorías SIN proyectos no salen (2026-10-01): la pestaña «Cine 0» en
+ * una web que se posiciona en cine y publicidad enseña justo lo que falta, y al
+ * pulsarla sólo decía «no hay proyectos». En cuanto un proyecto lleve esa
+ * categoría en el panel, la pestaña aparece sola.
+ */
 export function opcionesFiltro(projects: { categories: Category[] }[], copy: CopyTrabajo) {
   return [
     { key: "all" as Filtro, label: copy.all, count: projects.length },
@@ -96,7 +103,7 @@ export function opcionesFiltro(projects: { categories: Category[] }[], copy: Cop
       label: copy.categories[c],
       count: projects.filter((p) => p.categories.includes(c)).length,
     })),
-  ];
+  ].filter((o) => o.key === "all" || o.count > 0);
 }
 
 export function textoResultados(n: number, copy: CopyTrabajo): string {

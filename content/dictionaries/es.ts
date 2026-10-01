@@ -144,7 +144,7 @@ export const es = {
       "Nos vamos cuando se apaga el último foco.",
       "Grabamos con varias cámaras a la vez porque un set no se repite.",
       "Volamos con los permisos en la mano.",
-      "Entregamos en 48 horas, mientras el evento todavía le importa a alguien.",
+      "Entregamos en 24-48 horas, mientras el evento todavía le importa a alguien.",
     ],
   },
 
@@ -542,7 +542,7 @@ export const es = {
       },
       {
         heading: "Qué datos se recogen",
-        text: "En el formulario de contacto: nombre, email y los datos del evento que quieras darnos. En el de «trabaja con nosotros»: nombre, edad, nacionalidad, localidad, correo, teléfono, especialidad, experiencia, idiomas, carnet de conducir y los enlaces a tu portfolio e Instagram. De esos, sólo el nombre, el correo y la especialidad son obligatorios: el resto lo das si quieres.",
+        text: "En el formulario de contacto: nombre, email y los datos del evento que quieras darnos. En el de «trabaja con nosotros»: nombre, edad, nacionalidad, localidad, correo, teléfono, especialidad, experiencia, idiomas, carnet de conducir y los enlaces a tu portfolio e Instagram. De esos, solo el nombre, el correo y la especialidad son obligatorios: el resto lo das si quieres.",
       },
       {
         heading: "Base jurídica",
@@ -696,15 +696,15 @@ export const es = {
     permisos: {
       label: "Permisos y normativa",
       intro:
-        "Volar un dron en un evento no es sólo tener el aparato: es tener el papeleo en regla antes de que nadie lo pregunte.",
+        "Volar un drone en un evento no es solo tener el aparato: es tener el papeleo en regla antes de que nadie lo pregunte.",
       items: [
         {
           heading: "Categorías AESA",
-          body: "Dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022, el año en que se fundó la productora, con las cuatro categorías que cubren casi cualquier situación: A1 y A3 —vuelo abierto, sobre o lejos de personas según el aparato—, A2 —vuelo abierto a corta distancia de personas, con el piloto certificado que exige— y las dos categorías específicas, STS-01 y STS-02, que permiten volar en entornos poblados y más allá del alcance visual, con las medidas de seguridad que cada escenario pide. Tenerlas todas no es acumular papeleo por acumular: es no tener que rechazar un plano porque el dron que hace falta para ese encuadre concreto —uno ligero para acercarse a la gente, uno más pesado y estable para un plano abierto lejos de todos— cae en una categoría que no se tiene.",
+          body: "Dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022, el año en que se fundó la productora, con las cuatro categorías que cubren casi cualquier situación: A1 y A3 —vuelo abierto, sobre o lejos de personas según el aparato—, A2 —vuelo abierto a corta distancia de personas, con el piloto certificado que exige— y las dos categorías específicas, STS-01 y STS-02, que permiten volar en entornos poblados y más allá del alcance visual, con las medidas de seguridad que cada escenario pide. Tenerlas todas no es acumular papeleo por acumular: es no tener que rechazar un plano porque el drone que hace falta para ese encuadre concreto —uno ligero para acercarse a la gente, uno más pesado y estable para un plano abierto lejos de todos— cae en una categoría que no se tiene.",
         },
         {
           heading: "Seguro de responsabilidad civil",
-          body: "El equipo vuela con seguro de responsabilidad civil contratado para las operaciones con dron, como exige la normativa para cualquier vuelo comercial. No es un trámite que se enseña sólo si lo piden: cubre a terceros en caso de accidente, y cualquier recinto o ayuntamiento serio lo exige antes de autorizar el vuelo.",
+          body: "El equipo vuela con seguro de responsabilidad civil contratado para las operaciones con drone, como exige la normativa para cualquier vuelo comercial. No es un trámite que se enseña solo si lo piden: cubre a terceros en caso de accidente, y cualquier recinto o ayuntamiento serio lo exige antes de autorizar el vuelo.",
         },
         {
           heading: "Vuelo sobre público",
@@ -714,7 +714,7 @@ export const es = {
           heading: "Vuelo nocturno",
           // Reescrito el 2026-09-25: la frase se definía por "directos y
           // festivales" (cambio de rumbo, ver ACTUALIZACIONES.md).
-          body: "Fuera de las horas de luz el dron necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje. Para nosotros esto no es la excepción, es la norma: la mayoría de lo que cubrimos —conciertos, rodajes y grandes eventos— pasa de noche.",
+          body: "Fuera de las horas de luz el drone necesita luces de posición homologadas y, según la zona, permisos adicionales. Se decide en preproducción, no la noche del rodaje. Para nosotros esto no es la excepción, es la norma: la mayoría de lo que cubrimos —conciertos, rodajes y grandes eventos— pasa de noche.",
         },
         {
           heading: "Zonas restringidas",
@@ -733,7 +733,7 @@ export const es = {
         },
         {
           heading: "Fechas",
-          body: "La fecha del evento y, si hay margen, una alternativa por si el tiempo no acompaña: el dron no vuela con lluvia o viento fuerte.",
+          body: "La fecha del evento y, si hay margen, una alternativa por si el tiempo no acompaña: el drone no vuela con lluvia o viento fuerte.",
         },
         {
           heading: "Aforo",
@@ -745,7 +745,7 @@ export const es = {
         },
         {
           heading: "Permisos del recinto",
-          body: "Si el propio recinto o el ayuntamiento exige algún permiso aparte para volar dron, mejor saberlo en preproducción que el mismo día.",
+          body: "Si el propio recinto o el ayuntamiento exige algún permiso aparte para volar drone, mejor saberlo en preproducción que el mismo día.",
         },
       ],
     },
@@ -777,7 +777,7 @@ export const es = {
           // sabemos volar sobre grandes multitudes — no como lo que define
           // a la empresa. Ver ACTUALIZACIONES.md.
           heading: "Grandes eventos",
-          body: "Volar sobre miles de personas sin margen de error es la misma exigencia que pide un rodaje de cine o una campaña con público real, y es donde tenemos más horas de vuelo: Monegros, DURO, Fabrik, o el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto. El plano no es sólo la postal bonita del recinto: sirve también como material de comunicación para la siguiente edición, para patrocinadores que quieren ver el aforo real, y para las redes del propio evento al día siguiente.",
+          body: "Volar sobre miles de personas sin margen de error es la misma exigencia que pide un rodaje de cine o una campaña con público real, y es donde tenemos más horas de vuelo: Monegros, DURO, Fabrik, o el vuelo sobre el Metropolitano. El vuelo se coordina con los tiempos del propio evento —un show de pirotecnia no espera, el aforo cambia según la hora—, así que se planifica en preproducción, con el perímetro de seguridad ya resuelto antes de llegar al recinto. El plano no es solo la postal bonita del recinto: sirve también como material de comunicación para la siguiente edición, para patrocinadores que quieren ver el aforo real, y para las redes del propio evento al día siguiente.",
         },
         {
           // Las cuatro fichas "marca" de la Fase 15: madrid-cuatro-torres,
