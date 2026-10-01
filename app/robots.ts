@@ -13,7 +13,8 @@ import { SITE_URL } from "@/lib/routes";
  * hace falta anunciar.
  *
  *   /admin      el panel (`app/(payload)/admin`)
- *   /api        la API de Payload, REST y GraphQL (`app/(payload)/api`)
+ *   /api        la API de Payload, REST y GraphQL (`app/(payload)/api`),
+ *               EXCEPTO `/api/media/`, que sirve las fotos y vídeos públicos
  *   /admin-*    las rutas de servicio de un solo uso: admin-carga,
  *               admin-volcado, admin-migra-material — y cualquier otra que
  *               se añada con ese mismo prefijo, sin tener que acordarse de
@@ -23,7 +24,12 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      // `/api/media/` SÍ se rastrea (2026-10-01): de ahí cuelgan TODAS las fotos y
+      // los vídeos de la web (`/api/media/file/...`). Con `/api` bloqueado entero,
+      // Google no podía pedir ninguna imagen ni póster: ni Google Imágenes, ni
+      // miniaturas de vídeo, ni pintar bien las páginas. Gana la regla más
+      // específica (la más larga), así que el resto de `/api` sigue cerrado.
+      allow: ["/", "/api/media/"],
       disallow: ["/admin", "/api", "/admin-*"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

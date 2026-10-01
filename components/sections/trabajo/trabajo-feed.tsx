@@ -280,6 +280,25 @@ function VideoTarjeta({
   // tiene activado y en su iPhone no se movía nada). Sigue su botón de pausa.
   const reproducir = activa && pausado !== true;
 
+  // PÓSTERES DIFERIDOS (2026-10-01). El feed pedía los 23 pósteres a la vez
+  // (~130-180 KB cada uno) junto con el vídeo de la primera tarjeta, y en un
+  // móvil con poca conexión eso retrasaba justo el póster que se ve primero.
+  // Las dos primeras tarjetas lo traen al instante; el resto, cuando el
+  // navegador está ocioso (o en cuanto la tarjeta se activa). Deterministas en
+  // el servidor: `indice < 2`, así que no hay desajuste de hidratación.
+  const [posterListo, setPosterListo] = useState(indice < 2);
+  useEffect(() => {
+    if (posterListo) return;
+    const pon = () => setPosterListo(true);
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(pon, { timeout: 4000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    // Safari antiguo no tiene `requestIdleCallback`.
+    const id = setTimeout(pon, 2500);
+    return () => clearTimeout(id);
+  }, [posterListo]);
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v || !src) return;
@@ -316,7 +335,7 @@ function VideoTarjeta({
         <video
           ref={videoRef}
           src={src}
-          poster={poster ?? undefined}
+          poster={posterListo || activa ? (poster ?? undefined) : undefined}
           muted
           loop
           playsInline
@@ -431,7 +450,12 @@ function CarruselFotos({
             <img
               src={f.grande}
               alt={`${p.title[locale]} · ${pad(i + 1)} / ${pad(n)}`}
-              loading={i === 0 ? "eager" : "lazy"}
+              // `eager` SÓLO en las dos primeras tarjetas (2026-10-01). Antes era la
+              // primera foto de CADA tarjeta de fotos, y React emite un
+              // `<link rel="preload">` por cada `eager` en el `<head>`: un móvil se
+              // bajaba dos fotos de 90-120 KB de tarjetas que quedan muy abajo, a
+              // la vez que el póster que sí se ve primero.
+              loading={i === 0 && indice < 2 ? "eager" : "lazy"}
               decoding="async"
               className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_20px_36px_rgb(0_0_0/0.6)]"
             />

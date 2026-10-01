@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IconoServicio } from "@/components/glass/iconos-servicio";
 import { ArrowUpRight } from "@/components/ui/button";
@@ -36,6 +36,50 @@ const TAMANO: Record<string, string> = {
   ads: "lg:col-span-2",
   photo: "lg:col-span-2",
 };
+
+/**
+ * El vídeo de fondo del bloque de Drone. NO pide nada hasta que la tarjeta está
+ * a punto de verse (2026-10-01): en móvil, con una columna, queda por debajo de
+ * la primera pantalla y su cinta de 1,2 MB más el póster de 170 KB competían con
+ * lo que sí hay que pintar primero. En escritorio la tarjeta está a la vista y
+ * arranca en el acto. Sin `src` en el HTML del servidor: no hay desajuste.
+ */
+function VideoFondo({ video, poster }: { video: string; poster: string | null }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [cerca, setCerca] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          setCerca(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={cerca ? video : undefined}
+      poster={cerca ? (poster ?? undefined) : undefined}
+      muted
+      loop
+      autoPlay
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+      tabIndex={-1}
+      className="absolute inset-0 -z-10 h-full w-full object-cover opacity-70 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+    />
+  );
+}
 
 /** La pieza de vídeo del bloque de Drone (la cinta corta, no el máster). */
 export type VideoDrone = { video: string; poster: string | null } | null;
@@ -217,18 +261,7 @@ export function ServiciosVisor({
               >
                 {esDrone && videoDrone && (
                   <>
-                    <video
-                      src={videoDrone.video}
-                      poster={videoDrone.poster ?? undefined}
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                      preload="metadata"
-                      aria-hidden="true"
-                      tabIndex={-1}
-                      className="absolute inset-0 -z-10 h-full w-full object-cover opacity-70 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                    />
+                    <VideoFondo video={videoDrone.video} poster={videoDrone.poster} />
                     <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-900/90 via-ink-900/30 to-ink-900/20" />
                   </>
                 )}
