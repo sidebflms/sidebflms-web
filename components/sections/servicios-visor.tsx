@@ -193,9 +193,11 @@ export function ServiciosVisor({
 
         <div
           ref={gridRef}
-          // `grid-flow-dense` también en móvil: Drone ocupa las dos columnas y, sin
-          // esto, dejaba a «Producción en directo» sola en su fila.
-          className="mt-8 grid grid-flow-dense grid-cols-2 gap-3 lg:auto-rows-[minmax(12.5rem,auto)] lg:grid-cols-4 lg:gap-4"
+          // Una columna por debajo de `sm` (2026-10-01): a 375 px las dos columnas
+          // dejaban ~110 px de texto por tarjeta, cortado y con las filas
+          // desalineadas. Desde `sm`, dos columnas; `grid-flow-dense` hace que
+          // Drone (dos columnas de ancho) no deje a «Producción en directo» sola.
+          className="mt-8 grid grid-flow-dense grid-cols-1 gap-3 sm:grid-cols-2 lg:auto-rows-[minmax(12.5rem,auto)] lg:grid-cols-4 lg:gap-4"
         >
           {dict.services.offer.map((servicio, i) => {
             const esDrone = servicio.key === "drone";
@@ -209,7 +211,7 @@ export function ServiciosVisor({
                   "glass glass-clara group relative flex min-h-[11rem] flex-col overflow-hidden rounded-2xl p-5",
                   // Al pasar el ratón la pieza sube un poco (ver «EL ENCUADRE» abajo).
                   "transition-[translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5",
-                  esDrone ? "col-span-2 min-h-[20rem]" : "",
+                  esDrone ? "min-h-[20rem] sm:col-span-2" : "",
                   TAMANO[servicio.key]
                 )}
               >

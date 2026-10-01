@@ -5,6 +5,39 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (127) — Mejoras medianas de la auditoría: contacto a un toque, servicios en móvil y títulos de cine y publicidad
+
+Segunda tanda de la auditoría de diseño y SEO (la primera es la 126). Tres
+cambios:
+
+1. **Botón «Contacto» en la cabecera móvil** (`components/layout/header.tsx`).
+   La barra flotante sólo tenía «Menú», o sea dos toques hasta pedir
+   presupuesto. Ahora lleva «Contacto» (misma etiqueta que en escritorio, sin
+   copy nueva). Para que quepa, por debajo de `sm` (640 px) el botón de menú se
+   queda en el icono (el texto sigue para lectores de pantalla) y por debajo de
+   360 px el botón de contacto se esconde. Escritorio no cambia. Ojo: es la
+   barra flotante, que sale al hacer scroll; el marco de la portada
+   (`components/glass/frame-nav.tsx`) no se ha tocado, porque lleva la
+   coreografía de la intro.
+2. **Servicios en móvil, una columna** (`components/sections/servicios-visor.tsx`).
+   A 375 px las dos columnas dejaban ~110 px de texto por tarjeta. Ahora una
+   columna por debajo de `sm`; desde ahí, igual que antes.
+3. **Títulos y descripciones de Servicios, Contacto y Preguntas frecuentes**,
+   en español e inglés (`content/dictionaries/{es,en}.ts`), alineados con el
+   rumbo de cine y publicidad (hablaban sólo de «eventos» y «cobertura»). Todos
+   dentro de la vara del auditor de SEO (títulos 54-64 caracteres, descripciones
+   107-115). No se tocó el auditor ni el texto visible de las páginas. Al
+   cambiar títulos ya indexados, Google tarda unos días en reflejarlos.
+
+**Qué hacer al actualizar:** nada; sin migración ni variables. Comprobado en
+local: sin desbordes a 320, 375, 768 y 1280 px, 4 columnas en escritorio, y los
+títulos en el HTML.
+
+**Lo que NO se hizo, y por qué:** el bloque «qué hacemos y cómo contratar» y la
+cinta de clientes en la portada chocan con la decisión de la Fase 20 (portada
+minimalista, sin secciones de texto debajo del hero) y quedan a la espera de
+Mario. Las imágenes sin `width`/`height` no se tocaron: están en contenedores
+`absolute inset-0` de proporción fija, así que no mueven la página.
 ## 2026-10-01 (126) — Seis arreglos rápidos de la auditoría de diseño
 
 Salen de la auditoría de diseño y SEO de la web pública (mirada en
