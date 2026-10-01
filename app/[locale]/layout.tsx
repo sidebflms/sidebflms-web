@@ -66,7 +66,7 @@ export default async function LocaleLayout({
       <body className="min-h-dvh text-bone">
         <a
           href="#main"
-          className="sr-only text-xs uppercase tracking-[0.08em] focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-rust-500 focus:px-4 focus:py-3 focus:text-bone"
+          className="sr-only text-xs uppercase tracking-[0.08em] focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-brand-600 focus:px-4 focus:py-3 focus:text-bone"
         >
           {dict.nav.skipToContent}
         </a>

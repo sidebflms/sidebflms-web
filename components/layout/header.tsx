@@ -9,6 +9,7 @@ import { enlacesMenu } from "@/components/layout/enlaces-menu";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { IconoRed, REDES } from "@/components/layout/social-icons";
 import { ArrowUpRight, PillLink } from "@/components/ui/button";
+import { aislaFondo } from "@/lib/aisla-fondo";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { path, type Locale } from "@/lib/routes";
 import { bloqueaScroll } from "@/lib/scroll-lock";
@@ -135,9 +136,13 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
     };
     document.addEventListener("keydown", onKeyDown);
     const libera = bloqueaScroll();
+    // Foco: se recuerda quién abrió el menú para devolvérselo al cerrar, y la
+    // página de detrás queda inerte (ver lib/aisla-fondo.ts).
+    const abrio = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const sheet = sheetRef.current;
+    const suelta = sheet ? aislaFondo(sheet) : () => {};
     closeRef.current?.focus();
 
-    const sheet = sheetRef.current;
     let ctx: gsap.Context | null = null;
     if (sheet && !prefersReducedMotion()) {
       ctx = gsap.context(() => {
@@ -154,7 +159,10 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       libera();
+      suelta();
       ctx?.revert();
+      // Tras quitar el `inert`: un elemento inerte no admite foco.
+      if (abrio?.isConnected) abrio.focus();
     };
   }, [open]);
 

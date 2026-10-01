@@ -28,7 +28,7 @@ const initialState: JobsState = { status: "idle" };
 /* La marca «· Opcional / · Obligatorio» junto al rótulo. Era `ink-600`, que
    sobre negro liso se leía; sobre cristal casi desaparecía, y esa marca es
    justo la que evita que la gente abandone (ver arriba). */
-const marca = "text-smoke/60";
+const marca = "text-bone/55";
 
 const mensajeError = (dict: Dictionary, code: string | undefined) => {
   if (code === "email") return dict.jobs.form.errorEmail;

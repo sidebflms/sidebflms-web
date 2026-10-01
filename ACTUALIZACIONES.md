@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (133) — Foco del teclado en el menú y el reel, y cinco contrastes
+
+De la auditoría de accesibilidad (WCAG 2.2 AA). Para quien navega con ratón o con
+el dedo no cambia nada del funcionamiento; los contrastes son un ajuste de claridad
+de pocos puntos.
+
+**Foco del teclado.** El menú móvil y el reel eran `role="dialog" aria-modal="true"`,
+pero `aria-modal` no bloquea nada: con Tab el foco se escapaba a la página de
+detrás (que no se ve) y al cerrar no volvía al botón que lo abrió.
+- `lib/aisla-fondo.ts` (nuevo): al abrir un diálogo, marca como `inert` todo lo que
+  hay detrás (foco, clics y lectores de pantalla). Sube desde el diálogo hasta el
+  `<body>`, así que vale tanto para el reel (portal) como para el menú. Sólo
+  deshace lo que marcó él: la barra de arriba ya lleva su propio `inert` cuando
+  está escondida y no se le quita.
+- `components/layout/header.tsx` (menú) y `components/glass/reel-modal.tsx`: usan
+  `aislaFondo` y, al cerrar, devuelven el foco al elemento que tenía antes
+  (el botón «Menú», el botón «Ver reel»).
+
+**Contrastes** (cálculos sobre los colores reales de `app/globals.css`):
+| Qué | Antes | Ahora |
+|---|---|---|
+| Enlace «Saltar al contenido» (`layout.tsx`) | bone sobre rust-500: 3,38 | sobre `brand-600`: 4,57 |
+| Texto de ejemplo en los campos (`campos-cristal.ts`) | smoke/70: ~3,1 | `bone/55`: ~4,8 |
+| Marca «Opcional» de candidaturas (`jobs-form.tsx`) | smoke/60: ~2,6 | `bone/55`: ~4,9 |
+| Etiqueta «TC» del reel (`hero-frame.tsx`) | smoke/50: ~2,2 | `smoke` |
+| `--color-smoke` sobre tarjetas (`globals.css`) | #8f8a85: 4,43 sobre ink-700 | #938e89: 4,66 |
+La regla de la casa ya decía «smoke NUNCA con opacity»; esos tres la incumplían.
+Subir `--color-smoke` toca todos los textos secundarios de la web, de forma casi
+imperceptible (un punto de claridad).
+
+**Comprobado** en local con un Chrome real (Tab, Enter y Escape): el menú móvil
+abre con el foco en «Cerrar», 14 Tab seguidos sólo recorren el menú (los enlaces,
+las redes, «Cerrar»; el resto es la barra del navegador, nunca la página), Escape
+cierra y el foco vuelve al botón «Menú», y no queda nada inerte por error. Igual con
+el reel («Ver reel»). `tsc` y `eslint` limpios.
+
+**Qué hacer al actualizar:** nada. **No medido:** el texto sobre el vídeo de la
+portada (depende de cada imagen) y lectores de pantalla reales (VoiceOver).
+
+---
+
 ## 2026-10-01 (132) — Lote de textos de la segunda auditoría
 
 Sólo lo que es objetivo o ya estaba acordado; lo que depende de datos o de una

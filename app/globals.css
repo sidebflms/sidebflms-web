@@ -62,7 +62,7 @@
 
   /* --- Texto --- */
   --color-bone: #f2ece4; /* texto principal */
-  --color-smoke: #8f8a85; /* metadatos, captions, timecodes */
+  --color-smoke: #938e89; /* metadatos, captions, timecodes */
 
   /* --- Familias --- */
   --font-display: "Akira Expanded", var(--font-archivo), "Arial Black", sans-serif;
@@ -86,7 +86,9 @@
 
      bone      14.2:1  ✅ todo
      rust-300   5.9:1  ✅ links inline, énfasis, anillo de foco   (antes 5.1)
-     smoke      4.9:1  ✅ texto pequeño — NUNCA con opacity (lo tira bajo AA)
+     smoke      5.1:1  ✅ texto pequeño — NUNCA con opacity (lo tira bajo AA)
+                4.7:1 sobre ink-700 (cards, cristal). Subido de #8f8a85 el
+                2026-10-01: sobre ink-700 daba 4.43, por debajo de AA.
      rust-500   4.2:1  ⚠️  SOLO display ≥24px bold, iconos y el playhead.
                           Nunca texto corrido ni links de párrafo.  (antes 3.1)
 
