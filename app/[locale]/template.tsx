@@ -21,6 +21,12 @@ import type { ReactNode } from "react";
  * del servidor y el del cliente tienen que ser idénticos).
  */
 export default function Template({ children }: { children: ReactNode }) {
+  // MÓVIL: velo más corto y con menos desenfoque (2026-10-01). Un desenfoque
+  // de 40 px a pantalla completa en cada navegación es lo más caro que pinta
+  // esta web, y en un móvil modesto se nota más que en un portátil. Sólo
+  // cambia la duración de la animación y una clase de CSS, nada que entre en
+  // el HTML del servidor, así que no hay desajuste de hidratación.
+  const movil = typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
   return (
     <>
       <motion.div
@@ -28,8 +34,8 @@ export default function Template({ children }: { children: ReactNode }) {
         aria-hidden="true"
         initial={{ opacity: 1 }}
         animate={{ opacity: 0 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-        className="pointer-events-none fixed inset-0 z-100 bg-ink-900/40 backdrop-blur-2xl"
+        transition={{ duration: movil ? 0.5 : 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+        className="pointer-events-none fixed inset-0 z-100 bg-ink-900/40 backdrop-blur-lg lg:backdrop-blur-2xl"
       />
       <div data-route-fade>{children}</div>
     </>

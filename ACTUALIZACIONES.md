@@ -5,6 +5,38 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (128) — Reel más ligero en móvil y velo de transición más corto
+
+Los puntos 13 y 15 de la auditoría.
+
+1. **Reel de la portada en móvil: 2,3 MB → 1,4 MB.** Nuevo
+   `public/media/reel-540.mp4` (540×960, mismo recorte vertical, 21 s, sin
+   audio, H.264 con `faststart`). Se comparó un fotograma con el original y a
+   simple vista no se distingue (SSIM 0,975 contra el de 720); es el hueco entre
+   «mucho más ligero» y «se ve peor». `components/sections/hero-frame.tsx`
+   apunta a él para pantallas de menos de 768 px; escritorio sigue con
+   `reel-1920.mp4`. **El nombre es nuevo a propósito:** el servidor sirve
+   `/media` con `max-age` de 10 años, así que un fichero distinto con el
+   mismo nombre no le llegaría a quien ya visitó la web. `reel-720.mp4` se
+   queda en el repo por si hay que volver atrás. Probado: en 375 px el
+   navegador elige `reel-540.mp4` (540×960, `readyState` 4); en 1280 px,
+   `reel-1920.mp4`. Otra recodificación a 720 px salía MÁS grande (3,1 MB): el
+   original ya estaba muy comprimido.
+2. **Velo entre páginas más corto en móvil** (`app/[locale]/template.tsx`): por
+   debajo de 1024 px dura 0,5 s en vez de 0,9 y desenfoca menos
+   (`backdrop-blur-lg`). Escritorio igual. **Qué se midió y qué no:** la
+   sospecha venía de capturas en las que el velo no terminaba de aclararse,
+   pero el panel de pruebas tiene la pestaña en `visibilityState: "hidden"` y
+   ahí las animaciones se pausan, así que eso no prueba nada. No he podido
+   medirlo en un móvil de verdad: es una mejora preventiva. Si en tu móvil se
+   ve peor o igual, basta con volver a 0,9 s.
+
+**Qué hacer al actualizar:** nada; el vídeo nuevo viene en el repo. Si el
+servidor tiene una copia propia de `public/media`, hay que llevar
+`reel-540.mp4`.
+
+---
+
 ## 2026-10-01 (127) — Mejoras medianas de la auditoría: contacto a un toque, servicios en móvil y títulos de cine y publicidad
 
 Segunda tanda de la auditoría de diseño y SEO (la primera es la 126). Tres

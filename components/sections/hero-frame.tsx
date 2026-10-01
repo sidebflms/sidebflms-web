@@ -38,7 +38,11 @@ import { cn, pad, timecode } from "@/lib/utils";
 
 const SOURCES = conBase({
   desktop: "/media/reel-1920.mp4",
-  mobile: "/media/reel-720.mp4",
+  // 540×960, 1,4 MB (2026-10-01; el de 720 pesaba 2,3 MB). NOMBRE NUEVO a
+  // propósito: el servidor sirve /media con `max-age` de 10 años, así que un
+  // fichero distinto con el mismo nombre no le llegaría a quien ya lo visitó.
+  // `reel-720.mp4` se queda en el repo por si hay que volver atrás.
+  mobile: "/media/reel-540.mp4",
   poster: "/media/reel-poster.webp",
 });
 
