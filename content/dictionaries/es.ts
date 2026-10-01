@@ -32,9 +32,9 @@ export const es = {
         "Proyectos para eventos, marcas y productoras: drone, aftermovies, multicámara, publicidad y fotografía.",
     },
     services: {
-      title: "Drone, cablecam, directo y multicámara — SIDEBFLMS",
+      title: "Drone, cablecam y multicámara para cine y publicidad — SIDEBFLMS",
       description:
-        "Preproducción, rodaje en directo, cobertura aérea y postproducción. Entrega en 24-48 horas.",
+        "Preproducción, rodaje, cobertura aérea y postproducción para cine, publicidad y eventos. Entrega en 24-48 horas.",
     },
     jobs: {
       title: "Trabaja con nosotros — SIDEBFLMS",
@@ -42,9 +42,9 @@ export const es = {
         "Filmmakers, fotografía, edición, piloto de drone, 3D y producción. El formulario está siempre abierto.",
     },
     contact: {
-      title: "Pide presupuesto de cobertura audiovisual — SIDEBFLMS",
+      title: "Pide presupuesto de producción audiovisual — SIDEBFLMS",
       description:
-        "Cuéntanos tu evento: aforo, escenarios y fechas. Respondemos con un presupuesto cerrado.",
+        "Cuéntanos tu proyecto o evento: fechas, localizaciones y qué quieres rodar. Respondemos con un presupuesto cerrado.",
     },
     about: {
       title: "Quiénes somos · Productora audiovisual en España — SIDEBFLMS",
@@ -54,7 +54,7 @@ export const es = {
         "Productora audiovisual y grabación con drone en España, especializada en cine, series, publicidad y grandes eventos. Quiénes somos, cómo trabajamos y dónde operamos.",
     },
     faq: {
-      title: "Preguntas frecuentes sobre cobertura de eventos — SIDEBFLMS",
+      title: "Preguntas frecuentes sobre rodajes y presupuestos — SIDEBFLMS",
       description:
         "Plazos de entrega, permisos de vuelo, cortes verticales, qué hace falta para un presupuesto. Las dudas que salen antes de contratar.",
     },

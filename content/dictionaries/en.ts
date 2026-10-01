@@ -25,9 +25,9 @@ export const en: Dictionary = {
         "Projects for events, brands and production companies: drone, aftermovies, multicam, advertising and stills.",
     },
     services: {
-      title: "Drone, cablecam, live and multicam — SIDEBFLMS",
+      title: "Drone, cablecam and multicam for film and ads — SIDEBFLMS",
       description:
-        "Pre-production, live shoot, aerial coverage and post. Delivered in 24-48 hours.",
+        "Pre-production, shoot, aerial coverage and post for film, advertising and events. Delivered in 24-48 hours.",
     },
     jobs: {
       title: "Work with us — SIDEBFLMS",
@@ -37,7 +37,7 @@ export const en: Dictionary = {
     contact: {
       title: "Request an audiovisual production quote — SIDEBFLMS",
       description:
-        "Tell us about your event: capacity, stages and dates. We come back with a closed quote.",
+        "Tell us about your project or event: dates, locations and what you need filmed. We come back with a closed quote.",
     },
     about: {
       title: "About us · Audiovisual production in Spain — SIDEBFLMS",
@@ -47,7 +47,7 @@ export const en: Dictionary = {
         "Audiovisual and drone production company in Spain, specialising in film, series, advertising and large-scale events. Who we are and how we work.",
     },
     faq: {
-      title: "Frequently asked questions about event coverage — SIDEBFLMS",
+      title: "Frequently asked questions about shoots and quotes — SIDEBFLMS",
       description:
         "Delivery times, flight permits, vertical cuts, what we need to quote. The questions that come up before hiring.",
     },

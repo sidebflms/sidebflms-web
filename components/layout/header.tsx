@@ -178,7 +178,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             visible ? "pointer-events-auto" : "pointer-events-none"
           )}
         >
-          <Link href={path(locale, "home")} aria-label="SIDEBFLMS" className="flex items-center gap-3">
+          <Link href={path(locale, "home")} aria-label="SIDEBFLMS" className="flex shrink-0 items-center gap-3">
             <LogoMark blanco className="hidden h-6 w-auto lg:block" />
             <Wordmark className="block h-3.5 lg:h-3" />
           </Link>
@@ -214,13 +214,25 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             <span className="hidden lg:block">
               <PillLink href={path(locale, "contact")}>{nav.contact}</PillLink>
             </span>
+            {/* Contacto a un toque en móvil (auditoría 2026-10-01: sólo había
+                «Menú», o sea dos toques hasta pedir presupuesto). Misma
+                etiqueta que en escritorio, sin copy nueva. Para que quepa a
+                375 px, por debajo de `sm` el botón de menú se queda en el
+                icono; el texto sigue ahí para lectores de pantalla. Por debajo de
+                360 px no cabe y el botón se esconde (queda el menú). */}
+            <Link
+              href={path(locale, "contact")}
+              className="inline-flex h-12 items-center rounded-full bg-brand-600 px-4 text-xs font-medium tracking-[0.08em] text-bone uppercase transition-colors duration-300 hover:bg-rust-500 max-[359px]:hidden lg:hidden"
+            >
+              {nav.contact}
+            </Link>
             <button
               type="button"
               onClick={() => setOpen(true)}
               aria-expanded={open}
-              className="inline-flex h-12 items-center gap-3 rounded-full bg-bone pr-1.5 pl-5 text-xs font-medium tracking-[0.08em] text-ink-900 uppercase lg:hidden"
+              className="inline-flex h-12 items-center gap-3 rounded-full bg-bone pr-1.5 pl-1.5 text-xs font-medium tracking-[0.08em] text-ink-900 uppercase sm:pl-5 lg:hidden"
             >
-              {nav.menu}
+              <span className="max-sm:sr-only">{nav.menu}</span>
               <MenuIcon />
             </button>
           </div>
