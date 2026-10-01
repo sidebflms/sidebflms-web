@@ -1,7 +1,7 @@
 name: Publicar en nastos
 
-# Cada empujón a `main` sube el código al VPS, lo compila allí y reinicia el
-# proceso.
+# Cada empujón a `main` sube el código al VPS, lo COMPILA EN GITHUB (el VPS no
+# tiene memoria para hacerlo) y reinicia el proceso con el resultado.
 #
 # ── En qué se diferencia del workflow del inventario ─────────────────────
 # Aquél hace `git pull` DENTRO del servidor, lo que obliga a que el servidor
@@ -114,10 +114,34 @@ jobs:
             --exclude '.operacion.lock' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/sidebflms-web/"
 
-      - name: Compilar y reiniciar
+      # LA COMPILACIÓN YA NO SE HACE EN EL SERVIDOR (2026-10-01).
+      # El nastos tiene ~2,2 GB libres y ningún swap, y no hay root para crear
+      # uno: `next build` moría con «Killed» (código 137) tres despliegues
+      # seguidos. Ahora el servidor sólo prepara (dependencias y migraciones)
+      # y estrena; compila el runner de GitHub. Detalle en
+      # `.github/actions/compilar-fuera/action.yml`.
+      - name: Preparar en el servidor (dependencias y migraciones)
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            'cd ~/sidebflms-web && ./despliegue/publicar.sh'
+            'cd ~/sidebflms-web && ./despliegue/publicar.sh preparar'
+
+      - name: Compilar en GitHub
+        uses: ./.github/actions/compilar-fuera
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          usuario: ${{ secrets.VPS_USER }}
+
+      - name: Subir la compilación
+        # Sin `cache`: es la caché de compilación, no hace falta para servir.
+        # Sin `--delete` sobre otra cosa que `.next-nueva`, que es lo único
+        # que se sincroniza.
+        run: |
+          rsync -az --delete --exclude 'cache' \
+            /home/bote/sidebflms-web/.next-nueva/ vps:sidebflms-web/.next-nueva/
+
+      - name: Estrenar y reiniciar
+        run: |
+          ssh vps 'cd ~/sidebflms-web && ./despliegue/publicar.sh estrenar'
 
       - name: Comprobar que responde de verdad desde fuera
         # Que el proceso esté vivo no significa que sirva páginas. Se acepta

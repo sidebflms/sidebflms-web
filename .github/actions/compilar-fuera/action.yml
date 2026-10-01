@@ -1,0 +1,123 @@
+name: Compilar fuera del servidor
+description: >
+  Compila la web en el runner de GitHub (16 GB de RAM) en vez de en el nastos
+  (2,2 GB libres y sin swap: el build moría con «Killed», código 137). Deja el
+  resultado en /home/bote/sidebflms-web/.next-nueva y la conexión SSH `vps`
+  lista para los pasos siguientes. NO sube nada al servidor ni lo reinicia.
+
+# POR QUÉ LA RUTA /home/bote/sidebflms-web EN EL RUNNER
+# `.next/required-server-files.json` lleva la ruta absoluta de la web, y
+# Turbopack deja enlaces en `.next/node_modules`. Compilando en la MISMA ruta
+# que tiene el servidor, el resultado es idéntico y no hay nada que reescribir.
+#
+# POR QUÉ UN TÚNEL A LA BASE
+# Al compilar, la web genera sus páginas leyendo el panel (proyectos, equipo,
+# ciudades) y PostgreSQL sólo escucha en 127.0.0.1 del servidor. Sin base, el
+# build usaría los ficheros de respaldo del repositorio y publicaría contenido
+# viejo SIN AVISAR. Por eso el túnel, y por eso el paso falla si no abre.
+# El build sólo LEE. Las migraciones se aplican antes, en el servidor
+# (`despliegue/publicar.sh preparar`).
+#
+# El `.env` y `.clave-panel` se copian del servidor en cada ejecución: no hay
+# secretos nuevos en GitHub, y no se quedan en ningún artifact.
+
+inputs:
+  host:
+    description: Dirección del VPS
+    required: true
+  usuario:
+    description: Usuario SSH del VPS
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Preparar la carpeta con la ruta del servidor
+      shell: bash
+      run: |
+        set -euo pipefail
+        sudo mkdir -p /home/bote
+        sudo chown "$(id -u):$(id -g)" /home/bote
+        mkdir -p /home/bote/sidebflms-web
+        rsync -a --delete \
+          --exclude '.git' --exclude 'node_modules' --exclude '.next' \
+          --exclude '.next-nueva' --exclude '.next-anterior' --exclude 'media' \
+          ./ /home/bote/sidebflms-web/
+
+    - uses: actions/setup-node@v7
+      with:
+        # El servidor corre Node 26 y el lock se genera con su npm (11).
+        node-version: '26'
+
+    - name: Conexión SSH al servidor (una sola, reutilizada)
+      shell: bash
+      env:
+        HOST: ${{ inputs.host }}
+        USUARIO: ${{ inputs.usuario }}
+      run: |
+        set -euo pipefail
+        mkdir -p ~/.ssh && chmod 700 ~/.ssh
+        # `-t ed25519` y con reintentos: el servidor corta las ráfagas de
+        # conexiones (ssh-keyscan sin `-t` abre cuatro seguidas).
+        for espera in 0 5 15; do
+          sleep "$espera"
+          if ssh-keyscan -t ed25519 "$HOST" >> ~/.ssh/known_hosts 2>/dev/null && [ -s ~/.ssh/known_hosts ]; then break; fi
+        done
+        cat >> ~/.ssh/config <<CONF
+        Host vps
+          HostName $HOST
+          User $USUARIO
+          ControlMaster auto
+          ControlPath ~/.ssh/cm-%C
+          ControlPersist 30m
+          ServerAliveInterval 30
+          ConnectionAttempts 3
+        CONF
+        ssh vps true
+
+    - name: Traer la configuración del servidor
+      shell: bash
+      run: |
+        set -euo pipefail
+        scp vps:sidebflms-web/.env /home/bote/sidebflms-web/.env
+        scp vps:sidebflms-web/.clave-panel /home/bote/sidebflms-web/.clave-panel
+        chmod 600 /home/bote/sidebflms-web/.env /home/bote/sidebflms-web/.clave-panel
+        # Que no se pueda compilar «a ciegas» contra los ficheros de respaldo.
+        grep -q '^PGDATABASE=' /home/bote/sidebflms-web/.env
+        grep -q '^PGPASSWORD_FILE=/home/bote/sidebflms-web/.clave-panel' /home/bote/sidebflms-web/.env
+
+    - name: Abrir el túnel a PostgreSQL del servidor
+      shell: bash
+      run: |
+        set -euo pipefail
+        # Conexión propia (sin la compartida) para poder cerrarla al final.
+        ssh -f -N -o ControlMaster=no -o ControlPath=none -o ExitOnForwardFailure=yes \
+          -L 5432:127.0.0.1:5432 vps
+        for i in $(seq 1 20); do
+          nc -z 127.0.0.1 5432 && { echo "túnel abierto"; exit 0; }
+          sleep 1
+        done
+        echo "::error::No se pudo abrir el túnel a PostgreSQL"; exit 1
+
+    - name: Instalar dependencias
+      shell: bash
+      working-directory: /home/bote/sidebflms-web
+      run: npm ci --no-audit --no-fund
+
+    - name: Compilar (en .next-nueva, leyendo la base por el túnel)
+      shell: bash
+      working-directory: /home/bote/sidebflms-web
+      env:
+        SIDEB_CARPETA_COMPILACION: .next-nueva
+        NEXT_TELEMETRY_DISABLED: '1'
+      run: |
+        set -euo pipefail
+        npm run build 2>&1 | tee /tmp/build.log
+        # Si la base no respondió, la web compila igualmente con los ficheros
+        # de respaldo y deja el aviso «se usan los ficheros del repositorio»
+        # (lib/contenido.ts, `avisa`). Eso aquí es un fallo.
+        if grep -q 'se usan los ficheros del repositorio' /tmp/build.log; then
+          echo "::error::El build no leyó la base de datos (ha usado los ficheros de respaldo)"; exit 1
+        fi
+        test -f .next-nueva/BUILD_ID
+        du -sh .next-nueva

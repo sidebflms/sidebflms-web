@@ -1,0 +1,69 @@
+name: Probar la compilación en GitHub
+
+# Ensayo del despliegue SIN desplegar: compila igual que `deploy.yml` (en el
+# runner, leyendo la base del panel por un túnel SSH de sólo lectura), arranca
+# esa compilación en el propio runner y comprueba que sirve páginas. No sube
+# nada al servidor ni lo reinicia.
+#
+# Corre en las PR que tocan el despliegue, y a mano desde la pestaña Actions.
+#
+# SEGURIDAD: usa la llave del VPS, así que sólo se ejecuta para ramas de ESTE
+# repositorio. Una PR de un fork no recibe secretos (GitHub lo impide) y además
+# se descarta aquí con el `if`.
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - 'despliegue/**'
+  workflow_dispatch: {}
+
+concurrency:
+  group: compilar-prueba-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compilar:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cargar la llave del VPS
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Compilar en GitHub
+        uses: ./.github/actions/compilar-fuera
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          usuario: ${{ secrets.VPS_USER }}
+
+      - name: Arrancar la compilación y comprobar que sirve
+        working-directory: /home/bote/sidebflms-web
+        env:
+          SIDEB_CARPETA_COMPILACION: .next-nueva
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          set -euo pipefail
+          npx next start --hostname 127.0.0.1 --port 3200 > /tmp/start.log 2>&1 &
+          PID=$!
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://127.0.0.1:3200/es && break
+            sleep 1
+          done
+          fallo=0
+          for ruta in /es /en /es/portfolio /es/servicios /es/contact /es/faq /es/grabacion-con-drone; do
+            codigo=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "http://127.0.0.1:3200$ruta")
+            echo "GET $ruta -> $codigo"
+            [ "$codigo" = "200" ] || fallo=1
+          done
+          kill "$PID" 2>/dev/null || true
+          if [ "$fallo" = "1" ]; then echo "--- registro del arranque ---"; tail -40 /tmp/start.log; exit 1; fi
+
+      - name: Cerrar el túnel y borrar la configuración
+        if: always()
+        run: |
+          pkill -f 'L 5432:127.0.0.1:5432' || true
+          rm -f /home/bote/sidebflms-web/.env /home/bote/sidebflms-web/.clave-panel

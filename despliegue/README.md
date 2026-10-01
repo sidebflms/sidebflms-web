@@ -1,5 +1,12 @@
 # Despliegue de sidebflms.com
 
+> **Desde el 2026-10-01 la web se COMPILA EN GITHUB, no aquí.** El servidor
+> tiene ~2,2 GB libres y ningún swap (sin root no se puede crear): `next build`
+> moría con «Killed». `publicar.sh preparar` instala y migra, GitHub compila y
+> sube `.next-nueva`, y `publicar.sh estrenar` la pone en marcha.
+> `./despliegue/publicar.sh` sin argumentos sigue compilando aquí (sólo para
+> emergencias). Ver `.github/actions/compilar-fuera/action.yml`.
+
 Servidor **nastos.barrasa.dev** (161.97.179.70): Debian 12, Hestia 1.10.4,
 usuario `bote` **sin sudo y sin Docker**. Node v26 ya instalado.
 
