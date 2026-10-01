@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (126) — Seis arreglos rápidos de la auditoría de diseño
+
+Salen de la auditoría de diseño y SEO de la web pública (mirada en
+producción, en 1280 y 375 px). Ninguno toca contenido, esquema de base de
+datos ni dependencias; sólo se añadieron redirecciones, ninguna dirección
+existente cambió.
+
+1. **Contacto en móvil: email, WhatsApp y teléfono se cortaban.** Con la
+   clase `truncate` y `flex-1`, a 375 px el email tenía 30 px de los 146 que
+   necesita (se leía «con…»). Ahora cada pastilla ocupa su fila y el dato sale
+   entero (`components/sections/contacto/comun.tsx`). Escritorio no cambia.
+2. **Redirecciones `/es/contacto` → `/es/contact`, `/es/nosotros` →
+   `/es/about`, `/es/trabajo` → `/es/portfolio`** (`next.config.ts`). Los
+   slugs reales son los ingleses en los dos idiomas (nota de `lib/routes.ts`)
+   y estas tres, que la gente teclea de oído, daban 404. Next las sirve como
+   308 permanente (equivale a un 301 para Google).
+3. **404 con marca** (`app/not-found.tsx`): logo, tipografía Akira, naranja de
+   marca y tres enlaces (Inicio, Trabajo, Contacto). Antes era gris plano con
+   la tipografía del sistema. Los estilos van en una etiqueta `<style>` porque
+   este `<html>` no hereda `globals.css`.
+4. **Formulario de presupuesto:** `autocomplete="name"` y `"email"` en esos
+   dos campos y `off` en el nombre del evento, y sin corrector ortográfico en
+   el email (`components/ui/contact-form.tsx`). El formulario de empleo ya lo
+   llevaba.
+5. **Enlaces del pie con área de pulsación de 44 px en móvil** (medían 15 px)
+   (`components/layout/footer.tsx`). Desde `sm` la maqueta es la de antes.
+6. **`theme-color` `#1e1e1e`** (`app/[locale]/layout.tsx`, `viewport`): la
+   barra del navegador del móvil hace juego con el fondo.
+
+**Qué hacer al actualizar:** nada especial; no hay migración ni variables
+nuevas. Comprobado en local (dev) con medidas en el navegador: las tres
+pastillas sin cortar a 375 px, pie a 44 px en móvil, los tres redirects, 404
+y `theme-color` en el HTML. `tsc` y `eslint` limpios. No se ejecutó
+`next build` completo en esta rama.
+
+---
+
 ## 2026-09-26 (125) — Menú lateral propio: Portada primero
 
 Continuación de la 124. Payload ordena los grupos del menú por aparición

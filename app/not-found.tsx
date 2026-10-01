@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BASE_PATH, conBase } from "@/lib/base";
 import { getDictionary } from "@/lib/dictionaries";
 import { DEFAULT_LOCALE, path } from "@/lib/routes";
 
@@ -24,48 +25,55 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/**
+ * Estilos del 404 en una etiqueta `<style>` y no con `style=` en línea: este
+ * `<html>` no hereda `globals.css`, y así se pueden usar `:hover`, `:focus-visible`
+ * y la tipografía de marca (Akira, la misma de los titulares de la web).
+ * Colores de marca: fondo `--color-ink-800`, naranja `rust-300`, texto `bone`.
+ * (2026-10-01: antes era gris plano con tipografía de sistema.)
+ */
+const ESTILOS = `
+@font-face{font-family:"Akira Expanded";font-weight:900;font-display:swap;src:url("${BASE_PATH}/fonts/akira-expanded-super-bold.woff2") format("woff2")}
+.nf{min-height:100dvh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:0 1.5rem;text-align:center;background:radial-gradient(60% 50% at 50% 0%,rgb(232 69 29 / .16),transparent 70%),#1e1e1e;color:#f2ece4;font-family:system-ui,sans-serif}
+.nf-codigo{margin:0;letter-spacing:.14em;font-size:.75rem;color:#ff6a3d}
+.nf-titulo{margin:0;font-family:"Akira Expanded","Arial Black",sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(1.5rem,5.5vw,2.75rem);line-height:1.05}
+.nf-texto{margin:0;color:#8f8a85}
+.nf-enlaces{margin-top:1.5rem;display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem}
+.nf-enlace{display:inline-flex;align-items:center;min-height:2.75rem;border:1px solid #4a4745;border-radius:999px;padding:0 1.5rem;color:#f2ece4;text-decoration:none;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;transition:border-color .2s,color .2s}
+.nf-enlace:hover{border-color:#ff6a3d;color:#ff6a3d}
+.nf-enlace:focus-visible{outline:2px solid #ff6a3d;outline-offset:3px}
+.nf-principal{background:#bb4223;border-color:#bb4223}
+.nf-principal:hover{color:#f2ece4;background:#e8451d;border-color:#e8451d}
+`;
+
 export default async function NotFound() {
   const dict = await getDictionary(DEFAULT_LOCALE);
 
   return (
     <html lang={DEFAULT_LOCALE}>
-      <body
-        style={{
-          minHeight: "100dvh",
-          margin: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "1rem",
-          padding: "0 1.5rem",
-          textAlign: "center",
-          background: "#1e1e1e",
-          color: "#f2ece4",
-          fontFamily: "system-ui, sans-serif",
-        }}
-      >
-        <p style={{ letterSpacing: "0.14em", fontSize: "0.75rem", color: "#ff6a3d" }}>404</p>
-        <h1 style={{ margin: 0, fontSize: "clamp(1.75rem, 6vw, 3rem)", lineHeight: 1.05 }}>
-          {dict.common.notFoundTitle.join(" ")}
-        </h1>
-        <p style={{ margin: 0, color: "#8f8a85" }}>{dict.common.notFoundBody}</p>
-        <Link
-          href={path(DEFAULT_LOCALE, "home")}
-          style={{
-            marginTop: "1.5rem",
-            border: "1px solid #333130",
-            borderRadius: "999px",
-            padding: "0.75rem 1.5rem",
-            color: "#f2ece4",
-            textDecoration: "none",
-            fontSize: "0.8rem",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
-          {dict.common.backHome}
-        </Link>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: ESTILOS }} />
+      </head>
+      <body className="nf">
+        {/* `<img>` y no `next/image`: sin layout ni optimizador que dependan
+            de la ruta, y el SVG ya es vectorial. Decorativo: el título dice
+            lo que hay que leer. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={conBase("/logo/mark-blanco.svg")} alt="" aria-hidden="true" width={714} height={478} style={{ height: "2.5rem", width: "auto" }} />
+        <p className="nf-codigo">404</p>
+        <h1 className="nf-titulo">{dict.common.notFoundTitle.join(" ")}</h1>
+        <p className="nf-texto">{dict.common.notFoundBody}</p>
+        <div className="nf-enlaces">
+          <Link href={path(DEFAULT_LOCALE, "home")} className="nf-enlace nf-principal">
+            {dict.common.backHome}
+          </Link>
+          <Link href={path(DEFAULT_LOCALE, "portfolio")} className="nf-enlace">
+            {dict.nav.portfolio}
+          </Link>
+          <Link href={path(DEFAULT_LOCALE, "contact")} className="nf-enlace">
+            {dict.nav.contact}
+          </Link>
+        </div>
       </body>
     </html>
   );

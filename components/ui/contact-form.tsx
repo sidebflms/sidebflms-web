@@ -48,6 +48,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
         <Field
           id="name"
           name="name"
+          autoComplete="name"
           label={dict.contact.form.name}
           required
           error={errorMessage(dict, state.fieldErrors?.name)}
@@ -56,6 +57,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           id="email"
           name="email"
           type="email"
+          autoComplete="email"
           maxLength={254}
           label={dict.contact.form.email}
           required
@@ -64,6 +66,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
         <Field
           id="eventName"
           name="eventName"
+          autoComplete="off"
           label={dict.contact.form.eventName}
           required
           error={errorMessage(dict, state.fieldErrors?.eventName)}
@@ -227,6 +230,7 @@ function Field({
   // aquí para avisar a quien escribe, allí porque un robot no manda el
   // formulario, manda la petición.
   maxLength = 120,
+  autoComplete,
   error,
 }: {
   id: string;
@@ -236,6 +240,8 @@ function Field({
   required?: boolean;
   min?: number;
   maxLength?: number;
+  /** Valor estándar del navegador («name», «email»…); sin él, no autocompleta. */
+  autoComplete?: string;
   error?: string;
 }) {
   return (
@@ -250,6 +256,8 @@ function Field({
         type={type}
         min={min}
         maxLength={maxLength}
+        autoComplete={autoComplete}
+        spellCheck={type === "email" ? false : undefined}
         required={required}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}

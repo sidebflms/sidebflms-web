@@ -179,26 +179,26 @@ export function CabeceraFormulario({
           ))}
           <a
             href={`mailto:${dict.contact.email}`}
-            className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+            className="glass inline-flex h-11 w-full items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
           >
-            <span className="truncate">{dict.contact.email}</span>
+            <span>{dict.contact.email}</span>
           </a>
           {whatsapp && (
             <a
               href={`https://wa.me/${numeroWhatsapp}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+              className="glass inline-flex h-11 w-full items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
             >
-              <span className="truncate">{dict.contact.whatsapp}</span>
+              <span>{dict.contact.whatsapp}</span>
             </a>
           )}
           {telefono && (
             <a
               href={hrefTelefono}
-              className="glass inline-flex h-11 min-w-0 flex-1 items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
+              className="glass inline-flex h-11 w-full items-center justify-center rounded-full px-3 text-xs text-bone transition-colors hover:text-rust-300"
             >
-              <span className="truncate">{dict.contact.phone}</span>
+              <span>{dict.contact.phone}</span>
             </a>
           )}
         </div>

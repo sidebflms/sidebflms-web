@@ -60,11 +60,11 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 lo que menos se busca y lo que la ley sólo pide que esté. */}
             <div>
               <p className="label">{dict.nav.menu}</p>
-              <ul className="mt-4 space-y-2">
+              <ul className="mt-2 sm:mt-4 sm:space-y-2">
                 <li>
                   <Link
                     href={path(locale, "portfolio")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.nav.portfolio}
                   </Link>
@@ -72,7 +72,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <Link
                     href={path(locale, "services")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.nav.services}
                   </Link>
@@ -80,7 +80,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <Link
                     href={path(locale, "contact")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.nav.contact}
                   </Link>
@@ -91,7 +91,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <Link
                     href={path(locale, "faq")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.faq.label}
                   </Link>
@@ -104,7 +104,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <Link
                     href={path(locale, "jobs")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.nav.jobs}
                   </Link>
@@ -114,14 +114,14 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
             <div>
               <p className="label">{dict.footer.social}</p>
-              <ul className="mt-4 space-y-2">
+              <ul className="mt-2 sm:mt-4 sm:space-y-2">
                 {SOCIAL.map((item) => (
                   <li key={item.key}>
                     <a
                       href={item.href}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="text-bone transition-colors hover:text-rust-300"
+                      className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                     >
                       {dict.contact[item.key]}
                     </a>
@@ -139,7 +139,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <a
                     href={`mailto:${dict.contact.email}`}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.contact.email}
                   </a>
@@ -152,7 +152,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                     href={`https://wa.me/${dict.contact.phone.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.contact.whatsapp}
                   </a>
@@ -162,11 +162,11 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
             <div>
               <p className="label">{dict.footer.legalLinks}</p>
-              <ul className="mt-4 space-y-2">
+              <ul className="mt-2 sm:mt-4 sm:space-y-2">
                 <li>
                   <Link
                     href={path(locale, "legal")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.legal.title.join(" ")}
                   </Link>
@@ -174,7 +174,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li>
                   <Link
                     href={path(locale, "privacy")}
-                    className="text-bone transition-colors hover:text-rust-300"
+                    className="inline-flex min-h-11 items-center sm:inline text-bone transition-colors hover:text-rust-300 sm:min-h-0"
                   >
                     {dict.privacy.title.join(" ")}
                   </Link>
@@ -198,7 +198,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             href={SOCIAL[0].href}
             target="_blank"
             rel="noreferrer"
-            className="label transition-colors hover:text-rust-300"
+            className="label inline-flex min-h-11 items-center sm:inline transition-colors hover:text-rust-300 sm:min-h-0"
           >
             {dict.footer.builtNote}
           </a>
