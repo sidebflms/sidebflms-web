@@ -97,6 +97,14 @@ jobs:
           # compilar, quejándose de un fichero que nadie había tocado.
           # (2026-09-22)
           #
+          # `--exclude '/media'` LLEVA LA BARRA INICIAL A PROPÓSITO (2026-10-01).
+          # Sin ella, rsync excluye CUALQUIER carpeta llamada `media`, también
+          # `public/media`, y desde el 2026-09-24 (Panel, Fase 3) ningún fichero
+          # nuevo de `public/media` llegaba al servidor: el reel de móvil nuevo
+          # daba 404 y los móviles se bajaban el reel de escritorio de 5,4 MB.
+          # Lo que se quiere proteger es sólo `media/` de la raíz, donde Payload
+          # guarda lo que se sube desde el panel.
+          #
           # Y NADA DE COMENTARIOS ENTRE LAS LÍNEAS DEL COMANDO: con la barra
           # al final, la siguiente línea es continuación, así que una
           # almohadilla ahí NO es un comentario, es un argumento más para
@@ -106,7 +114,7 @@ jobs:
             --exclude '.next' \
             --exclude '.next-nueva' \
             --exclude '.next-anterior' \
-            --exclude 'media' \
+            --exclude '/media' \
             --exclude '.env*' \
             --exclude '.clave-panel' \
             --exclude '*.log' \

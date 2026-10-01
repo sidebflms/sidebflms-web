@@ -5,6 +5,31 @@ reciente arriba.
 
 ---
 
+## 2026-10-01 (130) — El despliegue no copiaba los ficheros nuevos de `public/media`
+
+**Qué pasó.** Tras publicar la 128, `/media/reel-540.mp4` daba 404 y la portada
+en móvil se bajaba el reel de ESCRITORIO (`reel-1920.mp4`, 5,4 MB, horizontal):
+el `<video>` pasa a la siguiente `<source>` cuando la primera falla. Peor que
+antes de tocar nada.
+
+**Causa.** `deploy.yml` sube el código con `rsync --exclude 'media'`. Sin barra
+inicial, eso excluye CUALQUIER carpeta con ese nombre, también `public/media`.
+Desde el 2026-09-24 (Panel, Fase 3, que lo añadió para proteger `media/`, donde
+Payload guarda lo que se sube desde el panel) ningún fichero nuevo de
+`public/media` llegaba al servidor. Comprobado: el servidor tenía 199 de los
+200 ficheros de `public/media`; el que faltaba era `reel-540.mp4`.
+
+**Arreglo.** `--exclude '/media'` (anclado a la raíz) en `deploy.yml` y en
+`.github/actions/compilar-fuera/action.yml`. `media/` de la raíz sigue
+protegido; `public/media` ya se sincroniza. Como el servidor y el repo tienen
+exactamente los mismos ficheros en `public/media` (salvo el reel nuevo),
+`--delete` no borra nada.
+
+**Qué hacer al actualizar.** Nada. Tras el despliegue,
+`https://sidebflms.com/media/reel-540.mp4` debe dar 200.
+
+---
+
 ## 2026-10-01 (129) — La web se compila en GitHub, no en el nastos
 
 **Por qué.** Tres despliegues seguidos (29-sep y 1-oct) murieron en
