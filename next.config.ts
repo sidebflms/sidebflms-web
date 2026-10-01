@@ -147,7 +147,16 @@ const nextConfig: NextConfig = {
   // `proxy.ts`, que sí deja fijar el código exacto. Ver la nota de `drone`
   // en `lib/routes.ts`.
   async redirects() {
-    return BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : [];
+    return [
+      ...(BASE_PATH ? [{ source: "/", destination: "/es", permanent: false }] : []),
+      // 2026-10-01: las rutas en español que la gente teclea de oído. Los
+      // slugs reales son `contact` y `about` en los dos idiomas (ver la nota
+      // de `lib/routes.ts`) y `/es/contacto` caía en el 404. Sólo se AÑADEN
+      // redirecciones: ninguna dirección existente cambia.
+      { source: "/es/contacto", destination: "/es/contact", permanent: true },
+      { source: "/es/nosotros", destination: "/es/about", permanent: true },
+      { source: "/es/trabajo", destination: "/es/portfolio", permanent: true },
+    ];
   },
 
   /**

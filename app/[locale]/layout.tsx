@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { BASE_PATH } from "@/lib/base";
 import { notFound } from "next/navigation";
@@ -34,6 +34,11 @@ export const metadata: Metadata = {
   // Con ruta base delante: Next no se la pone a un `href` escrito a mano (lib/base.ts).
   icons: { icon: `${BASE_PATH}/icon.svg` },
 };
+
+// Color de la barra del navegador en el móvil: el fondo base de la web
+// (`--color-ink-800` en globals.css). Sin esto Chrome/Safari la pintan de
+// blanco o gris por su cuenta. (2026-10-01)
+export const viewport: Viewport = { themeColor: "#1e1e1e" };
 
 export default async function LocaleLayout({
   children,
