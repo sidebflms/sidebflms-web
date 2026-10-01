@@ -34,9 +34,9 @@ local: sin desbordes a 320, 375, 768 y 1280 px, 4 columnas en escritorio, y los
 títulos en el HTML.
 
 **Lo que NO se hizo, y por qué:** el bloque «qué hacemos y cómo contratar» y la
-cinta de clientes en la portada chocan con la decisión de la Fase 20 (portada
-minimalista, sin secciones de texto debajo del hero) y quedan a la espera de
-Mario. Las imágenes sin `width`/`height` no se tocaron: están en contenedores
+cinta de clientes en la portada se propusieron en la auditoría y Mario los
+descartó el 2026-10-01: la portada se queda minimalista, como decidió en la
+Fase 20 (sin secciones de texto debajo del hero). Tampoco se rehace la portada. Las imágenes sin `width`/`height` no se tocaron: están en contenedores
 `absolute inset-0` de proporción fija, así que no mueven la página.
 ## 2026-10-01 (126) — Seis arreglos rápidos de la auditoría de diseño
 
