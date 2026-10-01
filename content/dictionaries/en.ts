@@ -128,7 +128,7 @@ export const en: Dictionary = {
       "We leave when the last light goes out.",
       "We shoot multicam because a set never happens twice.",
       "We fly with the paperwork in hand.",
-      "We deliver in 48 hours, while the event still matters to someone.",
+      "We deliver in 24-48 hours, while the event still matters to someone.",
     ],
   },
 
