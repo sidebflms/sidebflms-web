@@ -65,6 +65,7 @@ export async function generateMetadata({
     locale: l,
     route: "portfolio",
     extraSegments: [slug],
+    imagen: project.media.poster ? { ruta: project.media.poster, alt: project.title[l] } : undefined,
     copy: {
       title: tituloDeFicha(project, l),
       // SEO Fase 17 (2026-09-25): antes era el primer párrafo del brief, que

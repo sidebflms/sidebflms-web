@@ -259,6 +259,8 @@ export const en: Dictionary = {
       prev: "Previous project",
       sound: "Sound",
       watch: "Watch the piece",
+      moreDrone: "More about drone filming",
+      moreServices: "See all services",
     },
     player: {
       upNext: "Up next",

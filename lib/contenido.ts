@@ -89,6 +89,7 @@ function aProyecto(es: Documento, en: Documento): Project {
     featured: Boolean(es.featured),
     ...(es.showpiece ? { showpiece: true } : {}),
     year: typeof es.year === "string" ? es.year : "—",
+    actualizado: typeof es.updatedAt === "string" ? es.updatedAt : undefined,
     venue: oNulo(es.venue),
     media: {
       video: urlDeMedia(es.video),

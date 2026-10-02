@@ -35,12 +35,22 @@ export function buildMetadata({
   route,
   copy,
   extraSegments = [],
+  imagen,
 }: {
   locale: Locale;
   route: RouteKey;
   copy: Copy;
   extraSegments?: string[];
+  /**
+   * Imagen propia para compartir (2026-10-01): el póster de una ficha, en vez
+   * del logo genérico de siempre. Ruta ya con su base; aquí se le pone el
+   * dominio. Sin ella, la de la marca.
+   */
+  imagen?: { ruta: string; alt: string };
 }): Metadata {
+  const compartir = imagen
+    ? { url: `${SITE_URL}${imagen.ruta}`, alt: imagen.alt }
+    : IMAGEN_AL_COMPARTIR;
   // La barra de delante se pone APARTE y no como un trozo vacío de la lista:
   // `filter(Boolean)` se comía ese trozo y salía «es/about» en vez de
   // «/es/about». El canónico se salvaba porque Next lo resuelve contra
@@ -67,13 +77,13 @@ export function buildMetadata({
       description: copy.description,
       url: `${SITE_URL}${toPath(locale)}`,
       locale: locale === "es" ? "es_ES" : "en_GB",
-      images: [IMAGEN_AL_COMPARTIR],
+      images: [compartir],
     },
     twitter: {
       card: "summary_large_image",
       title: copy.title,
       description: copy.description,
-      images: [IMAGEN_AL_COMPARTIR.url],
+      images: [compartir.url],
     },
   };
 }

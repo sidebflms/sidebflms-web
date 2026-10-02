@@ -61,7 +61,7 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
           <h1 className="font-display text-display-l mt-4 text-bone">
             {dict.portfolio.headline.map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

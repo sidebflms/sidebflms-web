@@ -47,7 +47,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
           <h1 className="font-display text-display-l mt-4 text-bone">
             {dict.faq.headline.map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

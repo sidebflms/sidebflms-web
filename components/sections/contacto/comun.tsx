@@ -141,7 +141,7 @@ export function CabeceraFormulario({
       <h1 className="font-display text-display-l mt-4 text-bone">
         {titular.map((linea) => (
           <span key={linea} className="block">
-            {linea}
+            {linea}{" "}
           </span>
         ))}
       </h1>

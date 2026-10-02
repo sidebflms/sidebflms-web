@@ -100,6 +100,17 @@ export function translatePath(pathname: string, to: Locale): string {
 
   if (!first) return `/${to}`;
 
+  // LAS RUTAS INTERNAS TAMBIÉN (2026-10-01). Con los `rewrites` de drone y de
+  // las ciudades, `usePathname()` devuelve la carpeta física (`/en/drone`,
+  // `/en/ciudad-drone/madrid`) y no la dirección bonita del navegador. Sin esto
+  // el selector de idioma mandaba a `/es/drone` y `/es/ciudad-drone/madrid`,
+  // direcciones viejas que rebotaban (301) o servían lo mismo con 200.
+  if (first === "drone") return `/${to}/${ROUTES.drone[to]}`;
+  if (first === "ciudad-drone" && rest[0]) {
+    const clave = `drone${rest[0][0].toUpperCase()}${rest[0].slice(1)}` as RouteKey;
+    if (clave in ROUTES) return `/${to}/${ROUTES[clave][to]}`;
+  }
+
   const entry = Object.values(ROUTES).find((route) =>
     LOCALES.some((locale) => route[locale] !== "" && route[locale] === first)
   );

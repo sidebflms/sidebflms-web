@@ -277,7 +277,7 @@ export default async function DronePage({ params }: PageProps<"/[locale]/drone">
           <h1 className="font-display text-display-l mt-4 text-bone">
             {dict.drone.headline.map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

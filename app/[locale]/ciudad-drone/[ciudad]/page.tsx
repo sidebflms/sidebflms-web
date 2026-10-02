@@ -102,7 +102,7 @@ export default async function CiudadDronePage({
           <h1 className="font-display text-display-l mt-4 text-bone">
             {copy.headline[locale].map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

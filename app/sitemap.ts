@@ -29,6 +29,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const locale of LOCALES) {
       entries.push({
         url: `${SITE_URL}/${locale}/${ROUTES.portfolio[locale]}/${project.slug}`,
+        // Fecha REAL de la última edición en el panel; sin ella (ficheros de
+        // respaldo) no se pone nada. Poner «hoy» a todo le quitaría el valor.
+        ...(project.actualizado ? { lastModified: new Date(project.actualizado) } : {}),
         changeFrequency: "monthly",
         priority: 0.5,
       });

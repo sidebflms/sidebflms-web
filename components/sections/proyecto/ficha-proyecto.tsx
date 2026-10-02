@@ -141,6 +141,27 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
         </div>
       </Reveal>
 
+      {/* ENLACES INTERNOS (auditoría 2026-10-01): la página de drone y la de
+          servicios casi no recibían enlaces desde las fichas, que son lo que
+          más se comparte. Sólo lo que es verdad de esta pieza: el enlace a
+          drone, únicamente si es una pieza de drone. */}
+      <div className="mt-4 flex flex-wrap gap-x-6 px-1">
+        {project.categories.includes("drone") && (
+          <Link
+            href={path(locale, "drone")}
+            className="link-underline inline-flex min-h-11 items-center text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors duration-200 hover:text-bone"
+          >
+            {copy.moreDrone}
+          </Link>
+        )}
+        <Link
+          href={path(locale, "services")}
+          className="link-underline inline-flex min-h-11 items-center text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors duration-200 hover:text-bone"
+        >
+          {copy.moreServices}
+        </Link>
+      </div>
+
       <Reveal bidirectional className="glass mt-6 rounded-[1.75rem] p-2 sm:p-2.5">
         <FichaVecinos
           etiqueta={`${copy.prev} · ${copy.next}`}

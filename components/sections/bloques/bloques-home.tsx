@@ -44,7 +44,7 @@ export function BloquesHome({
                 <h2 className="font-display text-display-l mt-4 text-bone">
                   {bloque.titular[locale].map((line) => (
                     <span key={line} className="block">
-                      {line}
+                      {line}{" "}
                     </span>
                   ))}
                 </h2>

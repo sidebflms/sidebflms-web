@@ -104,6 +104,13 @@ export type Project = {
   /** La pieza central de la sección pineada. Solo una puede tenerlo. */
   showpiece?: boolean;
   year: string;
+  /**
+   * Cuándo se tocó por última vez en el panel (ISO), para el `lastmod` del
+   * sitemap. Sólo existe cuando el proyecto viene de la base de datos; los
+   * ficheros de respaldo no lo llevan y entonces no se pone fecha (mejor sin
+   * `lastmod` que con uno inventado).
+   */
+  actualizado?: string;
   venue: string | null;
   /** Rutas al material real. `null` mientras no exista. */
   media: {
