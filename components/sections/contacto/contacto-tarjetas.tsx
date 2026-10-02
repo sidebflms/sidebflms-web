@@ -131,7 +131,7 @@ export function ContactoTarjetas({ locale, dict }: { locale: Locale; dict: Dicti
               <h2 className="font-display text-display-m mt-3 text-bone">
                 {dict.faq.headline.map((line) => (
                   <span key={line} className="block">
-                    {line}
+                    {line}{" "}
                   </span>
                 ))}
               </h2>

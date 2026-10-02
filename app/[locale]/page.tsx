@@ -86,7 +86,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <h2 className="font-display mt-6 text-[clamp(2rem,4.6vw,4.5rem)] leading-[0.95] text-rust-500 mix-blend-difference">
               {dict.glass.featuredHeadline.map((line) => (
                 <span key={line} className="block">
-                  {line}
+                  {line}{" "}
                 </span>
               ))}
             </h2>

@@ -17,7 +17,7 @@ export default async function NotFound() {
       <h1 className="font-display text-display-l mt-4 text-bone">
         {dict.common.notFoundTitle.map((line) => (
           <span key={line} className="block">
-            {line}
+            {line}{" "}
           </span>
         ))}
       </h1>

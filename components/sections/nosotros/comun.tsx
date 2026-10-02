@@ -18,7 +18,7 @@ export function LineasTitular({ lineas, lineaClassName }: { lineas: readonly str
     <>
       {lineas.map((linea) => (
         <span key={linea} className={cn("block", lineaClassName)}>
-          {linea}
+          {linea}{" "}
         </span>
       ))}
     </>

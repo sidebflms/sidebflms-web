@@ -11,7 +11,7 @@ export function LegalPage({ title, entries }: { title: readonly string[]; entrie
           <h1 className="font-display text-display-l text-bone">
             {title.map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

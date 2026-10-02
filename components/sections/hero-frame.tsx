@@ -238,7 +238,7 @@ export function HeroFrame({
               <p ref={headlineRef} className="font-display text-[clamp(1rem,4.9vw,1.75rem)] leading-[1.1] text-bone lg:text-[clamp(1.5rem,3.4vw,4.25rem)] lg:leading-[0.98]">
                 {dict.hero.headline.map((line) => (
                   <span key={line} className="block">
-                    {line}
+                    {line}{" "}
                   </span>
                 ))}
               </p>

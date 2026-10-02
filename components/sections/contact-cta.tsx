@@ -39,7 +39,7 @@ export function ContactCta({
             <h2 className="font-display mt-4 text-[clamp(1.75rem,6vw,4rem)] leading-[0.92] text-bone lg:text-[clamp(1.75rem,4.2vw,4rem)]">
               {headline.map((line) => (
                 <span key={line} className="block">
-                  {line}
+                  {line}{" "}
                 </span>
               ))}
             </h2>

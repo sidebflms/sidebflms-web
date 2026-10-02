@@ -42,7 +42,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <p className="font-display text-display-l en-columna [--display-en-columna:3vw] mt-6 text-bone">
               {dict.footer.tagline.map((line) => (
                 <span key={line} className="block">
-                  {line}
+                  {line}{" "}
                 </span>
               ))}
             </p>

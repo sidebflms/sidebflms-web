@@ -314,6 +314,9 @@ export const es = {
       prev: "Proyecto anterior",
       sound: "Sonido",
       watch: "Ver la pieza",
+      // Enlaces internos del pie de la ficha (2026-10-01).
+      moreDrone: "Más sobre grabación con drone",
+      moreServices: "Ver todos los servicios",
     },
     // Reproductor de la página de trabajo (components/sections/trabajo/trabajo-youtube.tsx):
     // los mandos del vídeo y la caja de descripción, al estilo de YouTube.

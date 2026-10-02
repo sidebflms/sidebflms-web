@@ -5,6 +5,47 @@ reciente arriba.
 
 ---
 
+## 2026-10-02 (136) — Lote «fácil» de la segunda auditoría: contraste de campos, selector de idioma, titulares, SEO de fichas
+
+Seis cambios pequeños, todos comprobados en local (Chrome real y `curl`).
+
+1. **Bordes de los campos del formulario** (`components/ui/campos-cristal.ts`): de
+   `white/12` (1,7:1, casi invisibles; WCAG 1.4.11 pide 3:1) a `white/35`, y el hover
+   a `white/55`. Afecta a los campos y a las pastillas de «tipo de cobertura»:
+   ahora se ven con su contorno claro.
+2. **Selector de idioma y rutas internas** (`lib/routes.ts`, `translatePath`;
+   `proxy.ts`). `usePathname()` devuelve la carpeta física tras los `rewrites`
+   (`/en/drone`, `/en/ciudad-drone/madrid`), así que el selector mandaba a
+   `/es/drone` y `/es/ciudad-drone/madrid` (direcciones viejas). Ahora lleva a
+   `/es/grabacion-con-drone`, `/es/grabacion-con-drone-madrid`, etc. Además
+   `/es|en/ciudad-drone/<ciudad>` ya no sirve 200: da **301** a la dirección
+   buena (como ya hacían `/es/drone` y `/es/services`).
+3. **Titulares con espacio entre líneas** (14 ficheros + `nosotros/comun.tsx`):
+   «Lo que» + «hemos rodado» salía «Lo quehemos rodado» en el texto plano
+   (lectores de pantalla, texto extraído). Cada línea lleva ahora un espacio al
+   final (`{" "}`); visualmente no cambia nada (son `block`).
+4. **Imagen para compartir por ficha** (`lib/metadata.ts`, parámetro `imagen`;
+   `portfolio/[slug]/page.tsx`): `og:image` y `twitter:image` pasan a ser el póster
+   de la propia ficha (`/api/media/file/...`, que Google ya puede ver tras la 131)
+   en vez del logo genérico. Las demás páginas siguen con la imagen de marca.
+5. **`lastmod` en el sitemap** de las 46 URLs de fichas (`app/sitemap.ts`,
+   `lib/contenido.ts`, tipo `Project.actualizado`): la fecha REAL de la última
+   edición en el panel (`updatedAt`). Las páginas estáticas no llevan, y si el
+   proyecto viene de los ficheros de respaldo tampoco: sin fecha antes que con una
+   inventada. Ojo: si una importación masiva tocó todo a la vez, las fechas
+   coincidirán (es lo que dice la base).
+6. **Enlaces internos desde las fichas** (`ficha-proyecto.tsx`, y dos textos nuevos
+   en `es.ts`/`en.ts`, `detail.moreDrone` y `moreServices`): «Ver todos los
+   servicios» siempre y «Más sobre grabación con drone» sólo en las piezas que
+   llevan la categoría drone (también MITT MOTORS, que la declara). Antes la página
+   de drone recibía un solo enlace interno. Enlaces de 44 px de alto.
+
+**Qué hacer al actualizar:** nada. **Ojo con la caché de Google:** el `og:image` y
+los 301 tardan en reflejarse; para ver la imagen nueva al compartir en
+WhatsApp/LinkedIn puede hacer falta «volver a obtener» la URL en sus depuradores.
+
+---
+
 ## 2026-10-02 (135) — Tarjeta de contacto al final de las fichas y zonas pulsables de 44 px
 
 Revisión de lo que pidió la auditoría de otro chat (2026-10-02). Medido en

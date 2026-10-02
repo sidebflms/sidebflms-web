@@ -45,7 +45,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           <h1 className="font-display text-display-l mt-4 text-bone">
             {dict.services.headline.map((line) => (
               <span key={line} className="block">
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

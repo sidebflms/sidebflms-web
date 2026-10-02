@@ -95,6 +95,18 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  // 2026-10-01: lo mismo para las ciudades. `/es/ciudad-drone/madrid` es la
+  // carpeta física y servía 200 con el canónico ya apuntando a
+  // `/es/grabacion-con-drone-madrid`: dos direcciones para la misma página.
+  const ciudad = pathname.match(/^\/(es|en)\/ciudad-drone\/(madrid|barcelona|mallorca)$/);
+  if (ciudad) {
+    const locale = ciudad[1] as (typeof LOCALES)[number];
+    const clave = `drone${ciudad[2][0].toUpperCase()}${ciudad[2].slice(1)}` as keyof typeof ROUTES;
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/${ROUTES[clave][locale]}`;
+    return NextResponse.redirect(url, 301);
+  }
+
   // SEO Fase 11 (2026-09-24): mismo 301 de verdad para /es/services ->
   // /es/servicios. Sólo el español cambió de slug —"services" en español
   // no era ni siquiera español—, así que sólo hace falta esta entrada.
