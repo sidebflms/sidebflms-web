@@ -1,12 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import Link from "next/link";
 
 import { submitJobs, type JobsState } from "@/app/[locale]/work-with-us/actions";
 import { chipClasses, fieldClasses } from "@/components/ui/campos-cristal";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
+import { useConservarYEnfocar } from "@/lib/use-formulario";
 
 /**
  * Formulario de candidaturas.
@@ -39,11 +40,14 @@ const mensajeError = (dict: Dictionary, code: string | undefined) => {
 
 export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [state, formAction, pending] = useActionState(submitJobs, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
+  useConservarYEnfocar(formRef, state.values, state.fieldErrors);
   const f = dict.jobs.form;
 
   if (state.status === "success") {
     return (
-      <div role="status" className="glass glass-strong rounded-[1.5rem] p-6 lg:p-8">
+      // Foco al confirmar (ver contact-form.tsx).
+      <div role="status" tabIndex={-1} ref={(el) => el?.focus()} className="glass glass-strong rounded-[1.5rem] p-6 outline-none lg:p-8">
         <p className="font-display text-display-m text-bone">{f.successTitle}</p>
         <p className="mt-2 text-smoke">{f.successBody}</p>
       </div>
@@ -51,7 +55,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
   }
 
   return (
-    <form action={formAction} noValidate className="space-y-8">
+    <form ref={formRef} action={formAction} noValidate className="space-y-8">
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
@@ -179,7 +183,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
           </span>
         </label>
         {state.fieldErrors?.consent && (
-          <p id="consent-error" className="mt-2 text-sm text-rust-300">
+          <p id="consent-error" role="alert" className="mt-2 text-sm text-rust-300">
             {mensajeError(dict, state.fieldErrors.consent)}
           </p>
         )}
@@ -254,7 +258,7 @@ function Campo({
         className={`${fieldClasses} mt-2`}
       />
       {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm text-rust-300">
+        <p id={`${id}-error`} role="alert" className="mt-2 text-sm text-rust-300">
           {error}
         </p>
       )}
@@ -297,7 +301,7 @@ function Casillas({
           </label>
         ))}
       </div>
-      {error && <p className="mt-2 text-sm text-rust-300">{error}</p>}
+      {error && <p role="alert" className="mt-2 text-sm text-rust-300">{error}</p>}
     </fieldset>
   );
 }

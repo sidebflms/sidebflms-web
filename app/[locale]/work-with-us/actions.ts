@@ -1,13 +1,15 @@
 "use server";
 
 import { enviarCandidatura } from "@/lib/correo";
-import { campo, casillas, emailValido, TOPES } from "@/lib/formularios";
+import { campo, casillas, emailValido, TOPES, valoresDe } from "@/lib/formularios";
 import { ipDelVisitante } from "@/lib/ip-visitante";
 import { permiteEnviar } from "@/lib/limite-envios";
 
 export type JobsState = {
   status: "idle" | "success" | "error";
   fieldErrors?: Partial<Record<"name" | "email" | "speciality" | "consent", string>>;
+  /** Lo escrito, para no vaciar el formulario tras un error (lib/use-formulario.ts). */
+  values?: Record<string, string | string[]>;
 };
 
 /**
@@ -44,13 +46,13 @@ export async function submitJobs(
   if (!consent) fieldErrors.consent = "consent";
 
   if (Object.keys(fieldErrors).length > 0) {
-    return { status: "error", fieldErrors };
+    return { status: "error", fieldErrors, values: valoresDe(formData) };
   }
 
   // El mismo freno que en contacto, y por lo mismo: esto también manda un
   // acuse a la dirección que teclea quien rellena. Ver lib/limite-envios.ts.
   if (!permiteEnviar(await ipDelVisitante()).ok) {
-    return { status: "error" };
+    return { status: "error", values: valoresDe(formData) };
   }
 
   const enviado = await enviarCandidatura({
@@ -69,7 +71,7 @@ export async function submitJobs(
     instagram: campo(formData, "instagram", TOPES.instagram),
   });
 
-  if (!enviado) return { status: "error" };
+  if (!enviado) return { status: "error", values: valoresDe(formData) };
 
   return { status: "success" };
 }

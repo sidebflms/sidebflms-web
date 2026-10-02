@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import Link from "next/link";
 
 import { submitContact, type ContactState } from "@/app/[locale]/contact/actions";
@@ -8,6 +8,7 @@ import type { Dictionary } from "@/lib/dictionaries";
 import { CATEGORIES } from "@/content/projects";
 import { path, type Locale } from "@/lib/routes";
 import { chipClasses, fieldClassesCompact as fieldClasses } from "@/components/ui/campos-cristal";
+import { useConservarYEnfocar } from "@/lib/use-formulario";
 import { cn } from "@/lib/utils";
 
 const initialState: ContactState = { status: "idle" };
@@ -21,10 +22,14 @@ const errorMessage = (dict: Dictionary, code: string | undefined) => {
 
 export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
+  useConservarYEnfocar(formRef, state.values, state.fieldErrors);
 
   if (state.status === "success") {
     return (
-      <div role="status" className="glass glass-strong rounded-[1.5rem] p-6 lg:p-8">
+      // `tabIndex={-1}` y foco al montar: el formulario desaparece al enviar y, con
+      // el foco en el botón que ya no existe, un lector de pantalla no se enteraba.
+      <div role="status" tabIndex={-1} ref={(el) => el?.focus()} className="glass glass-strong rounded-[1.5rem] p-6 outline-none lg:p-8">
         <p className="font-display text-display-m text-bone">
           {dict.contact.form.successTitle}
         </p>
@@ -34,7 +39,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
   }
 
   return (
-    <form action={formAction} noValidate className="space-y-5">
+    <form ref={formRef} action={formAction} noValidate className="space-y-5">
       {/* Honeypot — oculto para personas, visible para bots que rellenan todo. */}
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
@@ -44,6 +49,8 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       {/* En pantalla ancha, dos filas de tres: con seis campos en tres filas de
           dos, el formulario no cabía en una pantalla. Por debajo de `xl` la
           columna (70 % de la ventana, menos el carril) no da para tres. */}
+      <p className="label">{dict.contact.form.requiredHint}</p>
+
       <div className="grid items-end gap-x-4 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
         <Field
           id="name"
@@ -193,7 +200,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
             </span>
           </label>
           {state.fieldErrors?.consent && (
-            <p id="consent-error" className="mt-2 text-sm text-rust-300">
+            <p id="consent-error" role="alert" className="mt-2 text-sm text-rust-300">
               {errorMessage(dict, state.fieldErrors.consent)}
             </p>
           )}
@@ -248,7 +255,10 @@ function Field({
     <div>
       <label htmlFor={id} className="label">
         {label}
-        {!required && " ·"}
+        {/* Obligatorio = asterisco (y `required` para lectores de pantalla); la leyenda
+            está arriba del formulario. Antes los opcionales llevaban un « ·» que no
+            decía nada y los obligatorios, nada. */}
+        {required && <span aria-hidden="true"> *</span>}
       </label>
       <input
         id={id}
@@ -264,7 +274,7 @@ function Field({
         className={cn(fieldClasses, "mt-2")}
       />
       {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm text-rust-300">
+        <p id={`${id}-error`} role="alert" className="mt-2 text-sm text-rust-300">
           {error}
         </p>
       )}

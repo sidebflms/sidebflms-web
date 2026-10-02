@@ -283,7 +283,7 @@ export const es = {
       },
     ],
     pendingNote: "Redacción pendiente de verificación",
-    ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
+    ctaTitle: ["Cuéntanos", "qué proyecto", "tienes"],
     cta: "Pedir presupuesto",
   },
 
@@ -393,9 +393,9 @@ export const es = {
   },
   contact: {
     label: "Contacto",
-    headline: ["Cuéntanos", "qué evento", "tienes"],
+    headline: ["Cuéntanos", "qué proyecto", "tienes"],
     intro:
-      "Cuantos más datos nos des de aforo y escenarios, más ajustado sale el presupuesto.",
+      "Cuantos más datos nos des de fechas, localizaciones y, si es un evento, aforo y escenarios, más ajustado sale el presupuesto.",
     directLabel: "O directamente",
     email: "contact@sidebflms.com",
     // SEO Fase 9 (2026-09-24), datos que Mario dio directamente: mismo
@@ -413,10 +413,10 @@ export const es = {
     form: {
       name: "Tu nombre",
       email: "Email",
-      eventName: "Nombre del evento",
+      eventName: "Nombre del proyecto o evento",
       eventDate: "Fecha prevista del evento",
-      capacity: "Aforo estimado",
-      stages: "Nº de escenarios",
+      capacity: "Aforo estimado (si aplica)",
+      stages: "Nº de escenarios (si aplica)",
       coverage: "Tipo de cobertura",
       coverageHint: "Puedes marcar varias",
       coverageOther: "Otros",
@@ -441,6 +441,7 @@ export const es = {
       errorRequired: "Completa este campo.",
       errorEmail: "Revisa el email: falta algo.",
       errorConsent: "Necesitamos tu consentimiento para poder responderte.",
+      requiredHint: "Los campos con * son obligatorios.",
       successTitle: "Recibido",
       // CONFIRMADO (Mario, 2026-09-10): el compromiso de 24 h laborables es
       // real. Era el único punto pendiente del TODO original. Estaba además
@@ -614,7 +615,7 @@ export const es = {
       { prefix: "Hasta", value: "18", label: "Personas en un mismo rodaje" },
     ],
     scaleAlt: "El equipo ampliado de SIDEBFLMS en Monegros",
-    ctaTitle: ["Cuéntanos", "qué evento", "tienes"],
+    ctaTitle: ["Cuéntanos", "qué proyecto", "tienes"],
   },
 
   faq: {
@@ -625,7 +626,7 @@ export const es = {
     items: [
       {
         q: "¿Qué hacéis exactamente?",
-        a: "Cuatro cosas, normalmente juntas: aftermovie, multicámara en directo, cobertura aérea con drone y fotografía. El encargo típico es un evento entero cubierto por el mismo equipo, no una pieza suelta.",
+        a: "Rodamos para cine, publicidad y eventos: drone, multicámara, aftermovies y fotografía. Normalmente un mismo equipo cubre todo el encargo, no una pieza suelta.",
       },
       {
         q: "¿Dónde trabajáis?",
@@ -645,7 +646,7 @@ export const es = {
       },
       {
         q: "¿Qué necesitáis para darme un presupuesto?",
-        a: "Aforo estimado, número de escenarios, fecha y qué tipo de cobertura quieres. Con eso sale un presupuesto cerrado. Sin eso solo sale una horquilla, que no le sirve a nadie.",
+        a: "Fecha, localización y qué tipo de cobertura quieres; y, si es un evento, aforo estimado y número de escenarios. Con eso sale un presupuesto cerrado. Sin eso solo sale una horquilla, que no le sirve a nadie.",
       },
       {
         q: "¿Cuánto cuesta?",
