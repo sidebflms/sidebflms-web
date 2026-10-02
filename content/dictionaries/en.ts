@@ -228,7 +228,7 @@ export const en: Dictionary = {
       },
     ],
     pendingNote: "Wording pending verification",
-    ctaTitle: ["Tell us", "what event", "you have"],
+    ctaTitle: ["Tell us", "about your", "project"],
     cta: "Request a quote",
   },
 
@@ -331,9 +331,9 @@ export const en: Dictionary = {
   },
   contact: {
     label: "Contact",
-    headline: ["Tell us", "what event", "you have"],
+    headline: ["Tell us", "about your", "project"],
     intro:
-      "The more you tell us about capacity and stages, the tighter the quote.",
+      "The more you tell us about dates, locations and, for events, capacity and stages, the tighter the quote.",
     directLabel: "Or straight to us",
     email: "contact@sidebflms.com",
     phone: "+34 614 96 36 93",
@@ -345,10 +345,10 @@ export const en: Dictionary = {
     form: {
       name: "Your name",
       email: "Email",
-      eventName: "Event name",
+      eventName: "Project or event name",
       eventDate: "Expected event date",
-      capacity: "Estimated capacity",
-      stages: "Number of stages",
+      capacity: "Estimated capacity (if applicable)",
+      stages: "Number of stages (if applicable)",
       coverage: "Coverage type",
       coverageHint: "Pick as many as you need",
       coverageOther: "Other",
@@ -373,6 +373,7 @@ export const en: Dictionary = {
       errorRequired: "Fill this in.",
       errorEmail: "Check the email — something's missing.",
       errorConsent: "We need your consent before we can reply.",
+      requiredHint: "Fields marked * are required.",
       successTitle: "Got it",
       successBody: "We'll answer within 24 working hours. If it's urgent, write to us directly.",
       errorTitle: "That didn't send",
@@ -486,7 +487,7 @@ export const en: Dictionary = {
       { prefix: "Up to", value: "18", label: "People on a single shoot" },
     ],
     scaleAlt: "The scaled-up SIDEBFLMS crew at Monegros",
-    ctaTitle: ["Tell us", "what event", "you have"],
+    ctaTitle: ["Tell us", "about your", "project"],
   },
 
   faq: {
@@ -497,7 +498,7 @@ export const en: Dictionary = {
     items: [
       {
         q: "What exactly do you do?",
-        a: "Four things, usually together: aftermovie, live multicam, aerial drone coverage and stills. The typical job is a whole event covered by the same crew, not a one-off piece.",
+        a: "We shoot for film, advertising and live events: drone, multicam, aftermovies and stills. One crew usually covers the whole job, not a one-off piece.",
       },
       {
         q: "Where do you work?",
@@ -517,7 +518,7 @@ export const en: Dictionary = {
       },
       {
         q: "What do you need to quote me?",
-        a: "Estimated capacity, number of stages, date and what kind of coverage you want. With that we can quote a fixed price. Without it all you get is a range, which helps nobody.",
+        a: "Date, location and what kind of coverage you want; and, for events, estimated capacity and number of stages. With that we can quote a fixed price. Without it all you get is a range, which helps nobody.",
       },
       {
         q: "How much does it cost?",

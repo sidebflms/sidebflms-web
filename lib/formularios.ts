@@ -68,3 +68,20 @@ export const TOPES = {
   portfolio: 300,
   instagram: 120,
 } as const;
+
+/**
+ * Lo que la persona escribió, para devolvérselo si el servidor rechaza el
+ * envío (ver `lib/use-formulario.ts`). Sin el honeypot, sin los campos internos
+ * de React y sin nada que no sea texto; las casillas con el mismo nombre
+ * salen como lista. Con un tope por valor por si alguien manda basura.
+ */
+export function valoresDe(datos: FormData): Record<string, string | string[]> {
+  const salida: Record<string, string | string[]> = {};
+  for (const [nombre, valor] of datos.entries()) {
+    if (typeof valor !== "string" || nombre === "company" || nombre.startsWith("$ACTION")) continue;
+    const v = valor.slice(0, 4000);
+    const previo = salida[nombre];
+    salida[nombre] = previo === undefined ? v : Array.isArray(previo) ? [...previo, v] : [previo, v];
+  }
+  return salida;
+}

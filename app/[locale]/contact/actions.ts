@@ -1,13 +1,15 @@
 "use server";
 
 import { enviarConsulta } from "@/lib/correo";
-import { campo, casillas, emailValido, TOPES } from "@/lib/formularios";
+import { campo, casillas, emailValido, TOPES, valoresDe } from "@/lib/formularios";
 import { ipDelVisitante } from "@/lib/ip-visitante";
 import { permiteEnviar } from "@/lib/limite-envios";
 
 export type ContactState = {
   status: "idle" | "success" | "error";
   fieldErrors?: Partial<Record<"name" | "email" | "eventName" | "consent", string>>;
+  /** Lo escrito, para no vaciar el formulario tras un error (lib/use-formulario.ts). */
+  values?: Record<string, string | string[]>;
 };
 
 /**
@@ -42,7 +44,7 @@ export async function submitContact(
   if (!consent) fieldErrors.consent = "consent";
 
   if (Object.keys(fieldErrors).length > 0) {
-    return { status: "error", fieldErrors };
+    return { status: "error", fieldErrors, values: valoresDe(formData) };
   }
 
   // EL FRENO. Va después de validar —para no gastar cupo con formularios a
@@ -50,7 +52,7 @@ export async function submitContact(
   // enviar» que un fallo del correo, con la dirección para escribir a mano: no
   // hace falta explicarle a un robot por qué no ha colado.
   if (!permiteEnviar(await ipDelVisitante()).ok) {
-    return { status: "error" };
+    return { status: "error", values: valoresDe(formData) };
   }
 
   const enviado = await enviarConsulta({
@@ -69,7 +71,7 @@ export async function submitContact(
   if (!enviado) {
     // Sin `fieldErrors`: el formulario distingue por eso entre «revisa este
     // campo» y el aviso general de arriba. Ver components/ui/contact-form.tsx.
-    return { status: "error" };
+    return { status: "error", values: valoresDe(formData) };
   }
 
   return { status: "success" };

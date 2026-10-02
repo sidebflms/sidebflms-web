@@ -5,6 +5,48 @@ reciente arriba.
 
 ---
 
+## 2026-10-02 (137) — Los formularios ya no pierden lo escrito tras un error, y errores accesibles
+
+**El fallo (comprobado en local con un Chrome real).** Si el servidor rechazaba un
+envío (un email sin arroba, el consentimiento sin marcar), React 19 VACIABA todo el
+formulario: nombre, email, nombre del evento y el mensaje quedaban en blanco, y el
+foco caía en `<body>`. Para quien pide presupuesto es perder lo escrito. Los
+errores tampoco se anunciaban a lectores de pantalla (WCAG 3.3.1, 4.1.3).
+
+**Arreglo** (contacto y «trabaja con nosotros»):
+- `lib/formularios.ts` (`valoresDe`) + `lib/use-formulario.ts` (nuevo): la acción
+  devuelve en `values` lo recibido (sin el honeypot ni campos internos) y un efecto
+  lo vuelve a poner DESPUÉS de que React vacíe el formulario, incluidas casillas y
+  botones de radio. Funciona igual si falla el correo o el freno de envíos.
+- El mismo efecto manda el foco al primer campo con error (antes, a `<body>`).
+- Los mensajes de error por campo llevan `role="alert"`; el aviso de «enviado»
+  recibe el foco al aparecer (el botón que lo tenía ha desaparecido).
+- Contacto marca los obligatorios con `*` y lo explica arriba («Los campos con * son
+  obligatorios»); antes los opcionales llevaban un « ·» que no decía nada.
+
+**Voz hacia cine y publicidad** (`es.ts` / `en.ts`): «Cuéntanos qué evento tienes» →
+«Cuéntanos qué proyecto tienes» (Contacto y las tarjetas de contacto de servicios y
+Nosotros), «Nombre del evento» → «Nombre del proyecto o evento», «Aforo» y
+«Escenarios» con «(si aplica)», y el texto de apoyo habla de fechas y localizaciones
+antes que de aforo. Mismo cambio en inglés.
+
+**Ojo, no se ve en producción: las preguntas del FAQ.** Las respuestas del FAQ salen
+del PANEL (`/admin`, colección de preguntas), que manda sobre el diccionario; los
+textos nuevos de `es.ts`/`en.ts` sólo valen de respaldo. Para que cambien hay que
+editar esas dos respuestas en `/admin`: «¿Qué hacéis exactamente?» («Rodamos para
+cine, publicidad y eventos: drone, multicámara, aftermovies y fotografía.
+Normalmente un mismo equipo cubre todo el encargo, no una pieza suelta.») y «¿Qué
+necesitáis para darme un presupuesto?» («Fecha, localización y qué tipo de
+cobertura quieres; y, si es un evento, aforo estimado y número de escenarios.
+Con eso sale un presupuesto cerrado. …»).
+
+**Qué hacer al actualizar:** nada. Comprobado: contacto y candidaturas conservan
+nombre, email, mensaje, casillas y radios tras un error, con el foco en el primer
+campo con error y `role="alert"`; `tsc` y `eslint` limpios. **No probado:** el envío
+correcto (mandaría un correo real) ni lectores de pantalla (VoiceOver).
+
+---
+
 ## 2026-10-02 (136) — Lote «fácil» de la segunda auditoría: contraste de campos, selector de idioma, titulares, SEO de fichas
 
 Seis cambios pequeños, todos comprobados en local (Chrome real y `curl`).
