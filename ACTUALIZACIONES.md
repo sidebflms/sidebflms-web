@@ -5,6 +5,38 @@ reciente arriba.
 
 ---
 
+## 2026-10-02 (134) — Se retira el botón «Contacto» de la cabecera móvil: dejaba el «Menú» fuera de la barra
+
+**Qué pasó.** La 127 (punto 1) añadió un botón «Contacto» a la barra flotante del
+móvil y dejó «Menú» sólo con el icono. Lo vio otra revisión de la web el
+2026-10-02: en producción, a 360, 375, 390 y 412 px el botón de menú (48 px) quedaba
+FUERA de la barra: a 375 px se veían 21 px y a 360 px, 6. Sin ese botón no se puede
+abrir el menú en esas páginas, que son la mayoría de móviles. Medido con un Chrome
+real en producción antes del arreglo (`menu: [354,402]` con la barra acabando en
+355) y después en local.
+
+**Causa, y mi fallo.** Comprobé que «cabía» a 375 px midiendo el ancho de cada
+elemento, pero el logo estaba siendo ENCOGIDO (119 px en vez de sus 174 px, o sea
+deformado). Luego le puse `shrink-0` para que no se deformara y ya no cabía: logo
+174 + contacto 108 + menú 48 + huecos > 335 px de barra. No volví a medir a 375
+después de ese último cambio.
+
+**Arreglo.** Se revierte la cabecera móvil a como estaba antes de la 127
+(`components/layout/header.tsx`): sólo «Menú» (con su texto y su icono) y sin
+`shrink-0` en el logo. Medido en local en `/es/servicios` y `/es/portfolio` a 320,
+360, 375, 390, 412, 430 y 768 px: el botón de menú queda siempre dentro de la barra,
+y no hay desbordes. El logo se estrecha un poco en pantallas pequeñas (166 px a 375),
+como siempre.
+
+**Lo que se pierde:** el acceso a Contacto en un solo toque desde la barra del
+móvil (la 127, punto 1). Contacto sigue a dos toques (Menú, Contacto). Si se quiere
+recuperar, no cabe en una barra de 335 px sin quitar o reducir el logo: es decisión
+de diseño, no un ajuste de clases.
+
+**Qué hacer al actualizar:** nada.
+
+---
+
 ## 2026-10-01 (133) — Foco del teclado en el menú y el reel, y cinco contrastes
 
 De la auditoría de accesibilidad (WCAG 2.2 AA). Para quien navega con ratón o con
