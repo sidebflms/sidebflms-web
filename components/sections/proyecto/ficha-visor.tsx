@@ -333,7 +333,7 @@ export function FichaVisor({
                 onClick={alternar}
                 aria-pressed={enMarcha}
                 aria-label={`${textoVer}: ${titulo}`}
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-600 text-bone transition-colors duration-300 hover:bg-rust-500"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-600 text-bone transition-colors duration-300 hover:bg-rust-500"
               >
                 {enMarcha ? <IconoPausa className="h-4 w-4" /> : <IconoPlay className="ml-0.5 h-4 w-4" />}
               </button>
@@ -344,7 +344,7 @@ export function FichaVisor({
                   onClick={alternarSonido}
                   aria-pressed={!silencio}
                   aria-label={textoSonido}
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-rust-300 hover:text-rust-300"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-rust-300 hover:text-rust-300"
                 >
                   <IconoSonido silencio={silencio} className="h-4 w-4" />
                 </button>
@@ -393,7 +393,7 @@ export function FichaVisor({
                 onClick={alternarPantallaCompleta}
                 aria-label={ampliado ? textoReducir : textoAmpliar}
                 aria-pressed={ampliado}
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-rust-300 hover:text-rust-300"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-rust-300 hover:text-rust-300"
               >
                 {ampliado ? <IconoReducir className="h-4 w-4" /> : <IconoAmpliar className="h-4 w-4" />}
               </button>

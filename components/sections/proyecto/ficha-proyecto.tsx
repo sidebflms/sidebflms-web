@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { IconoServicio } from "@/components/glass/iconos-servicio";
+import { ContactCta } from "@/components/sections/contact-cta";
 import { Reveal } from "@/components/motion/reveal";
 import { PlaceholderMedia } from "@/components/ui/placeholder-media";
 import { mediosLigeros } from "@/components/sections/trabajo/medios";
@@ -48,11 +49,14 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
   const lugarYFecha = [project.venue, project.date?.[locale]].filter(Boolean).join(" · ");
 
   return (
-    <main id="main" className="shell pagina">
+    // `shell` baja a un contenedor propio (2026-10-01) para que la tarjeta de
+    // contacto del final, que lleva su propio `shell`, no sume dos márgenes.
+    <main id="main" className="pagina">
+      <div className="shell">
       <div className="mb-4 flex items-center justify-between gap-4 sm:hidden">
         <Link
           href={path(locale, "portfolio")}
-          className="label group inline-flex items-center gap-2 transition-colors hover:text-rust-300"
+          className="label group relative inline-flex items-center gap-2 transition-colors after:absolute after:inset-x-0 after:-inset-y-[15px] after:content-[''] hover:text-rust-300"
         >
           <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:-translate-x-1">
             ←
@@ -143,6 +147,12 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
           lados={[lado(anterior, copy.prev, "anterior", dict, locale), lado(siguiente, copy.next, "siguiente", dict, locale)]}
         />
       </Reveal>
+      </div>
+
+      {/* Lo último que se ve tras el trabajo es la invitación a contarnos el
+          suyo (auditoría 2026-10-01): las demás páginas ya la llevan y la ficha
+          era justo donde más convence. Mismos textos que la página de drone. */}
+      <ContactCta locale={locale} dict={dict} headline={dict.drone.ctaTitle} intro={dict.contact.intro} />
     </main>
   );
 }

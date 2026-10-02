@@ -102,7 +102,11 @@ export function TrabajoFeed({
     <div ref={raizRef} className={className}>
       <div className="flex items-baseline justify-between gap-2">
         <nav aria-label={copy.filterLabel} className="-mx-1 min-w-0 flex-1">
-          <ul className="flex gap-1.5 overflow-x-auto px-1 pb-1 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* `overflow-x-auto` recorta también en vertical, así que el hueco que
+              se les añade a las pastillas para llegar a 44 px (6 por arriba y
+              por abajo) se reserva aquí con relleno y se devuelve con margen
+              negativo: el alto de la fila no cambia. (2026-10-01) */}
+          <ul className="-mt-[6px] -mb-[6px] flex gap-1.5 overflow-x-auto px-1 pt-[6px] pb-[10px] [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {opciones.map((o) => {
               const on = o.key === filtro;
               return (
@@ -112,7 +116,9 @@ export function TrabajoFeed({
                     aria-pressed={on}
                     onClick={() => cambiarFiltro(o.key)}
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full py-2 pr-3.5 pl-2.5 text-[11px] font-medium tracking-[0.06em] whitespace-nowrap uppercase transition-colors duration-300",
+                      // 12 px y zona pulsable de 44 (el relleno visible mide ~32): el `after` la
+                      // amplía sin cambiar el aspecto. (2026-10-01)
+                      "relative inline-flex items-center gap-1.5 rounded-full py-2 pr-3.5 pl-2.5 text-xs font-medium tracking-[0.06em] whitespace-nowrap uppercase transition-colors duration-300 after:absolute after:inset-x-0 after:-inset-y-[6px] after:content-['']",
                       on ? "bg-bone text-ink-900" : "bg-white/[0.07] text-bone/80"
                     )}
                   >
@@ -126,7 +132,7 @@ export function TrabajoFeed({
                       <IconoServicio clave={o.key} className="h-4 w-4" />
                     )}
                     {o.label}
-                    <span className="text-[10px] tabular-nums opacity-60">{o.count}</span>
+                    <span className="text-[11px] tabular-nums opacity-60">{o.count}</span>
                   </button>
                 </li>
               );
@@ -369,7 +375,7 @@ function VideoTarjeta({
         onClick={onSonido}
         aria-label={sonido ? t.mute : t.unmute}
         aria-pressed={sonido}
-        className={cn(botonVelo, "top-3 right-3 h-10 w-10")}
+        className={cn(botonVelo, "top-3 right-3 h-11 w-11")}
       >
         {sonido && activa ? <IconoSonido /> : <IconoSilencio />}
       </button>

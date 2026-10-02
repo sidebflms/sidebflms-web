@@ -5,6 +5,42 @@ reciente arriba.
 
 ---
 
+## 2026-10-02 (135) — Tarjeta de contacto al final de las fichas y zonas pulsables de 44 px
+
+Revisión de lo que pidió la auditoría de otro chat (2026-10-02). Medido en
+producción a 375 px con un Chrome real antes de tocar nada.
+
+1. **Las fichas de proyecto acaban con la tarjeta «Cuéntanos qué quieres grabar»**
+   (`components/sections/proyecto/ficha-proyecto.tsx`). Terminaban en
+   «anterior / siguiente» y el pie, sin invitar a pedir presupuesto, cuando todas
+   las demás páginas (portada, FAQ, drone, ciudades, servicios, Nosotros) ya la
+   llevan y la ficha es donde más convence. Es el mismo componente (`ContactCta`)
+   con los textos de la página de drone. Para que la tarjeta, que lleva su propio
+   `shell`, no sume dos márgenes, el `shell` de `<main>` baja a un `div` interior;
+   el aspecto del resto no cambia (`.shell` y `.pagina` son independientes).
+2. **«← Volver al trabajo» de la ficha en móvil**: medía 14 px de alto (único objetivo
+   por debajo del mínimo de 24 px de WCAG 2.5.8). Ahora tiene 44 px de zona pulsable
+   con un `::after` invisible, sin mover nada (comprobado con `elementFromPoint`).
+3. **Filtros del portfolio en móvil** (`trabajo-feed.tsx`): texto de 11 a 12 px (el
+   contador de 10 a 11) y zona pulsable de 44 px con el mismo truco. Como la lista
+   tiene `overflow-x-auto` y eso también recorta en vertical, se reservó el hueco
+   con relleno y margen negativo en el `ul`: las pastillas siguen en el mismo sitio
+   (arriba 315 px en los dos, antes y después) y el contenido de debajo se mueve 1-2
+   px. Las pastillas quedan 2 px más bajas (32 en vez de 34) porque el interlineado
+   deja de heredarse.
+4. **Botones redondos de sonido (tarjetas del portfolio) y de ver, sonido y
+   pantalla completa (ficha)**: de 40 × 40 a 44 × 44 px (`h-11 w-11`).
+
+**No se ha tocado:** el resto de textos de 10 a 11 px (etiquetas «REC», contadores,
+marcas de categoría) por ser parte del estilo de la web, y las marcas de
+categoría de 30 px de alto (pasan el mínimo de 24).
+
+**Qué hacer al actualizar:** nada. Comprobado en local con un Chrome real a 375 y a
+1280 px: la tarjeta sale y enlaza a Contacto, sin desbordes; el enlace de volver
+responde a ±15 px; los filtros a ±4 px; `tsc` y `eslint` limpios.
+
+---
+
 ## 2026-10-02 (134) — Se retira el botón «Contacto» de la cabecera móvil: dejaba el «Menú» fuera de la barra
 
 **Qué pasó.** La 127 (punto 1) añadió un botón «Contacto» a la barra flotante del
