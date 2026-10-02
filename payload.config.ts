@@ -229,6 +229,13 @@ export default buildConfig({
   // texto plano, con los párrafos separados por una línea en blanco. Si algún
   // día se quieren negritas o enlaces dentro de un texto, hay que resolver eso
   // antes. Anotado en docs/panel-de-contenido.md.
+  // SIN GRAPHQL (2026-10-02). La web y el panel no lo usan (el panel va por REST y
+  // la web por la API local), y además no llega a construirse: el esquema falla
+  // con «multiple types named "Texto"» y `/api/graphql` contesta 500. Se cierra
+  // a propósito para no depender de ese fallo. Payload ya apagaba la introspección
+  // en producción por defecto (`disableIntrospectionInProduction`), así que el
+  // issue #6 no era un agujero real; esto lo deja explícito y quita la superficie.
+  graphQL: { disable: true },
   secret: process.env.PAYLOAD_SECRET ?? "prueba-local-sin-valor",
   typescript: { outputFile: path.resolve(aqui, "payload-types.ts") },
   db: postgresAdapter({ pool: conexion() }),
