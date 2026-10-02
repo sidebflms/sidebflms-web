@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-10-03 (138) — Seguridad: nodemailer y undici parcheados, y GraphQL cerrado a propósito
+
+Issues #6 y #8 de la ronda de auditoría. `npm audit --omit=dev` pasa de **15 avisos
+(2 altos) a 7 (0 altos)**.
+
+**1. `nodemailer` 10.0.3 → 10.0.13** (dependencia directa, la del correo de los
+formularios). Tenía 3 avisos altos (recursividad cuadrática en el analizador de
+direcciones, denegación de servicio) y uno moderado. Es un salto de parche dentro
+de la misma versión mayor. Comprobado que el transporte y `sendMail` siguen
+funcionando (`jsonTransport`); no se ha mandado ningún correo real.
+
+**2. `undici` 7.29.0 → 7.30.0 por `overrides`** (`package.json`). Lo trae `payload`
+fijado a 7.29.0 (también en su última versión, la 3.90.2, así que subir Payload no
+lo arregla) y tenía 8 avisos, 3 de ellos altos (validación de certificados TLS,
+denegación de servicio por WebSocket). `overrides` obliga a la versión parcheada
+sin tocar Payload. Es un salto de parche. Comprobado con una compilación de
+producción local completa y arrancada: portada, portfolio, contacto, candidaturas,
+servicios, `/admin`, sitemap y `robots.txt` responden 200, la API REST sigue
+funcionando (la sesión devuelve 200 y un listado sin permisos, 403) y el registro no
+trae errores salvo ese 403 esperado. El `package-lock.json` sólo cambia esas dos
+entradas y conserva los 38 `libc`.
+
+**3. GraphQL cerrado** (`payload.config.ts`, `graphQL: { disable: true }`). Issue #6:
+se sospechaba que la introspección de GraphQL estaba expuesta. NO lo estaba:
+Payload la apaga en producción por defecto (`disableIntrospectionInProduction: true`,
+que el issue no encontró), y además `/api/graphql` ni siquiera funciona: el
+esquema no llega a construirse («Schema must contain uniquely named types but
+contains multiple types named "Texto"») y contestaba 500. Nadie lo usa (el panel va
+por REST, la web por la API local). Se cierra explícitamente para no depender de
+ese fallo: ahora `POST /api/graphql` da 404.
+
+**Lo que queda en `npm audit` (7, ninguno alto):** `esbuild` (cadena de
+`drizzle-kit`, herramienta de migraciones que sólo corre en desarrollo y en el
+despliegue, no sirve nada al público; arreglarlo exige bajar Payload a 3.85.1) y
+`dompurify` (bajo, vía Payload). Siguen anotados en el issue #8.
+
+**Qué hacer al actualizar:** nada; el despliegue hace `npm ci` porque cambia el lock.
+
+---
+
 ## 2026-10-02 (137) — Los formularios ya no pierden lo escrito tras un error, y errores accesibles
 
 **El fallo (comprobado en local con un Chrome real).** Si el servidor rechazaba un
