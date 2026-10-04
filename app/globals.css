@@ -919,7 +919,10 @@ html[data-intro="si"] .intro-casete {
 
 /* El color sigue el de la lámina: legible encima, del mismo modo que el
    casete. Invertido el 2026-09-24 junto con `.intro-casete-fondo` — antes era
-   negro sobre lámina naranja, ahora naranja sobre lámina negra. */
+   negro sobre lámina naranja, ahora naranja sobre lámina negra.
+   El texto va en rust-300 (5.9:1) y no en rust-500 (4.2:1): a 12 px es texto
+   pequeño y rust-500 solo vale para display grande (ver la tabla de contraste
+   de arriba). El casete y el foco siguen en rust-500. */
 .intro-casete-saltar {
   position: absolute;
   bottom: 28px;
@@ -933,7 +936,7 @@ html[data-intro="si"] .intro-casete {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-rust-500);
+  color: var(--color-rust-300);
   text-decoration: underline;
   text-underline-offset: 4px;
   cursor: pointer;

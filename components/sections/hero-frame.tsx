@@ -400,7 +400,7 @@ function TimecodeGrande({ labels }: { labels: readonly string[] }) {
 function CifrasNotch({ cifras, label, locale }: { cifras: Cifra[]; label: string; locale: Locale }) {
   return (
     <div data-intro="notch" className="glass flex items-center gap-10 rounded-full py-4 pr-12 pl-10">
-      <p className="max-w-[6rem] text-[10px] leading-snug tracking-[0.08em] text-smoke uppercase">{label}</p>
+      <p className="max-w-[6rem] text-xs leading-snug tracking-[0.08em] text-smoke uppercase">{label}</p>
       {cifras.slice(0, 3).map((c, i) => (
         <div key={c.etiqueta.es}>
           <p className="text-2xl font-semibold text-bone tabular-nums">

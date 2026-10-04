@@ -5,6 +5,35 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (139) — Legibilidad: «Saltar» en naranja legible y rótulo de cifras a 12 px
+
+Salido de la primera auditoría de diseño de la portada (skill `sidebflms-design`).
+Dos cambios pequeños y medidos; no cambia ni la estructura ni la estética.
+
+**1. Botón «Saltar» de la intro** (`app/globals.css`, `.intro-casete-saltar`):
+el texto pasa de `rust-500` (#e8451d, 4,2:1) a `rust-300` (#ff6a3d, 5,9:1). A 12 px
+es texto pequeño y, según la tabla de contraste del propio CSS, `rust-500` solo vale
+para display grande. El casete, el fondo y el anillo de foco siguen en `rust-500`.
+Medido en el navegador: el color calculado es rgb(255, 106, 61).
+
+**2. Rótulo «So far in 2026» / «En lo que va de 2026»** de la muesca de cifras en
+escritorio (`components/sections/hero-frame.tsx`, `CifrasNotch`): de 10 px a 12 px
+(`text-xs`). Medido: 12 px, el bloque conserva su forma (el rótulo sigue en dos líneas).
+
+**Comprobado:** sin desbordamiento horizontal a 320, 375 y 430 px (el ancho de página
+coincide con el de la ventana); `eslint` limpio en el archivo tocado.
+
+**Lo que NO se ha tocado, y por qué:**
+- El cuerpo de texto a 12 px en móvil (`globals.css`, comentario «cliente, 2026-09-17»)
+  es una decisión deliberada de Mario; se ha dejado a la espera de que la confirme o la
+  cambie (la auditoría propone 14-16 px).
+- Los ~40 rótulos de 9-11 px del lenguaje «HUD» (timecodes, chips, contadores): son
+  parte de la estética; se han listado en la revisión para decidirlos por grupos.
+
+**Al actualizar:** nada especial; solo CSS y una clase de Tailwind.
+
+---
+
 ## 2026-10-03 (138) — Seguridad: nodemailer y undici parcheados, y GraphQL cerrado a propósito
 
 Issues #6 y #8 de la ronda de auditoría. `npm audit --omit=dev` pasa de **15 avisos
