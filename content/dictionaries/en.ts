@@ -260,6 +260,7 @@ export const en: Dictionary = {
       sound: "Sound",
       watch: "Watch the piece",
       moreDrone: "More about drone filming",
+      cityLink: "Drone filming in {ciudad}",
       moreServices: "See all services",
     },
     player: {
@@ -635,6 +636,28 @@ export const en: Dictionary = {
     },
 
     portfolioLabel: "Drone work",
+
+    // Questions on the Madrid page (2026-10-04). Everything comes from what the
+    // site already says: no new facts.
+    madridFaqTitle: "Questions about drone filming in Madrid",
+    madridFaq: [
+      {
+        q: "Are you licensed to fly drones in Madrid?",
+        a: "Yes. We have been registered as an unmanned aircraft (UAS) operator with AESA since 2022. If a flight passes near restricted zones or the airport, the check happens in pre-production, not on shoot day.",
+      },
+      {
+        q: "Where do you work from in Madrid?",
+        a: "The crew lives in Madrid, so it's where we handle logistics best: coordination with every venue and a safety perimeter agreed with production.",
+      },
+      {
+        q: "What have you shot with a drone in Madrid?",
+        a: "A single-shot flight with no cuts from outside the Metropolitano stadium down to the pitch; the MITT MOTORS advertising piece in the mountains near Madrid, combining drone and ground camera; and our own series of aerial postcards of the city, with the skyline, Torrespaña and the Cuatro Torres.",
+      },
+      {
+        q: "How do I ask for a quote for a flight in Madrid?",
+        a: "Write to us from the contact page with the date, the location and what you want shot. If it's an event, add the capacity and the number of stages.",
+      },
+    ],
 
     ctaTitle: ["Tell us", "what you want", "to shoot"],
   },

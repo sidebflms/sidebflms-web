@@ -5,6 +5,49 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (139) — SEO de «drone Madrid»: título, descripción, preguntas, datos estructurados y enlaces desde las fichas
+
+La parte de código del plan para posicionar «drone madrid» (la parte de Mario: ficha
+de Google Business, reseñas y enlaces entrantes, sigue pendiente). Todo sale de lo
+que el sitio YA dice; no se añade ningún dato nuevo.
+
+1. **Título de la página de Madrid** (`app/[locale]/ciudad-drone/[ciudad]/page.tsx`):
+   «Grabación con drone en Madrid: cine y publicidad — SIDEBFLMS» (60 caracteres) y
+   «Drone filming in Madrid for film and advertising — SIDEBFLMS». **Sólo Madrid:**
+   tiene un encargo publicitario real (MITT MOTORS); Barcelona es un festival y
+   Mallorca, material de recurso, y un título que prometiera publicidad ahí no sería
+   verdad (se probó primero con las tres y se corrigió). Barcelona y Mallorca
+   conservan el suyo de antes.
+2. **Descripción de Madrid**, escrita en el código (152 y 151 caracteres) en vez de
+   salir de la `intro` del panel, que no decía «drone» ni a qué se dedica la empresa:
+   «Grabación con drone en Madrid para cine, publicidad y eventos: estadios, clubes
+   y la ciudad desde el aire. Operador UAS dado de alta en AESA desde 2022.»
+3. **Bloque «Preguntas sobre drone en Madrid»** (4 preguntas, `drone.madridFaq` en
+   `es.ts`/`en.ts`): permiso para volar (alta en AESA desde 2022, zonas restringidas
+   y aeropuerto en preproducción), desde dónde se trabaja (el equipo vive en Madrid),
+   qué se ha rodado (vuelo del Metropolitano en un plano, MITT MOTORS, postales
+   aéreas) y cómo pedir presupuesto. Visible en la página y como `FAQPage`. Google
+   ya no suele mostrar el desplegable de FAQ, pero es texto con las preguntas que
+   la gente teclea.
+4. **Datos estructurados `Service`** en las tres páginas de ciudad, con su zona de
+   servicio (`areaServed: City`).
+5. **Enlace desde cada ficha de drone a la página de su ciudad**
+   (`portfolio/[slug]/page.tsx`, `ficha-proyecto.tsx`, `detail.cityLink`):
+   «Grabación con drone en Madrid», que sale de la lista de proyectos que ya pinta
+   cada ciudad (Metropolitano, Cuatro Torres… a Madrid; DURO a Barcelona); las
+   fichas que no son de drone (Prospa, FITZ…) no llevan ese enlace.
+
+**Ojo:** el TEXTO largo de las ciudades vive en el panel (`/admin`, ciudades) y manda
+sobre el código; aquí no se ha tocado. Lo que SÍ se ve en producción es todo lo
+anterior (título, descripción, preguntas, enlaces, datos estructurados).
+
+**Qué hacer al actualizar:** nada. Comprobado en local (JSON-LD parseado, títulos y
+descripciones medidos, enlaces correctos en 5 fichas, captura del bloque a 1280 y
+375 px sin desbordes ni errores de hidratación; `tsc` y `eslint` limpios). Los
+títulos de ciudad ya indexados tardarán unos días en reflejarse.
+
+---
+
 ## 2026-10-03 (138) — Seguridad: nodemailer y undici parcheados, y GraphQL cerrado a propósito
 
 Issues #6 y #8 de la ronda de auditoría. `npm audit --omit=dev` pasa de **15 avisos

@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 
 import { FichaProyecto } from "@/components/sections/proyecto/ficha-proyecto";
 import { type Category, type Project } from "@/content/projects";
-import { traeProyecto, traeProyectos, traeProyectoVistaPrevia } from "@/lib/contenido";
+import { traeCiudades, traeProyecto, traeProyectos, traeProyectoVistaPrevia } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata, datosMigas } from "@/lib/metadata";
-import { path, SITE_URL, type Locale } from "@/lib/routes";
+import { path, ROUTES, SITE_URL, type Locale, type RouteKey } from "@/lib/routes";
 
 export async function generateStaticParams() {
   return (await traeProyectos()).map((project) => ({ slug: project.slug }));
@@ -110,6 +110,20 @@ export default async function ProjectDetailPage({
   const anterior = listaNav[(i - 1 + listaNav.length) % listaNav.length];
   const siguiente = listaNav[(i + 1) % listaNav.length];
 
+  // La página de ciudad donde aparece esta pieza, si es de drone (2026-10-04):
+  // enlace desde la ficha a «Grabación con drone en Madrid». Sale de la propia
+  // lista de proyectos de cada ciudad (la que ya pinta esa página), no de una
+  // suposición por el nombre del sitio.
+  const ciudades = project.categories.includes("drone") ? await traeCiudades() : [];
+  const ciudadDeLaPieza = ciudades.find((c) => c.proyectos.includes(slug));
+  const claveCiudad = ciudadDeLaPieza
+    ? (`drone${ciudadDeLaPieza.slug[0].toUpperCase()}${ciudadDeLaPieza.slug.slice(1)}` as RouteKey)
+    : null;
+  const enlaceCiudad =
+    ciudadDeLaPieza && claveCiudad && claveCiudad in ROUTES
+      ? { nombre: ciudadDeLaPieza.nombre, href: path(locale, claveCiudad) }
+      : null;
+
   const jsonLd = !project.placeholder ? datosEstructurados(project, locale) : null;
   // Migas de pan (SEO Fase 8): Inicio › Trabajo › el propio proyecto. Sólo
   // el schema, sin rastro visible —ver la nota de `datosMigas` en
@@ -122,7 +136,7 @@ export default async function ProjectDetailPage({
 
   return (
     <>
-      <FichaProyecto project={project} anterior={anterior} siguiente={siguiente} dict={dict} locale={locale} />
+      <FichaProyecto project={project} anterior={anterior} siguiente={siguiente} dict={dict} locale={locale} ciudad={enlaceCiudad} />
       {jsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       )}

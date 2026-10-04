@@ -20,6 +20,8 @@ export type PropsProyecto = {
   siguiente: Project;
   dict: Dictionary;
   locale: Locale;
+  /** Página de ciudad donde aparece esta pieza de drone, si la hay. */
+  ciudad?: { nombre: string; href: string } | null;
 };
 
 /**
@@ -39,7 +41,7 @@ export type PropsProyecto = {
  * nombre debajo.
  */
 
-export function FichaProyecto({ project, anterior, siguiente, dict, locale }: PropsProyecto) {
+export function FichaProyecto({ project, anterior, siguiente, dict, locale, ciudad }: PropsProyecto) {
   const copy = dict.portfolio.detail;
   const { media } = project;
   const titulo = project.title[locale];
@@ -152,6 +154,14 @@ export function FichaProyecto({ project, anterior, siguiente, dict, locale }: Pr
             className="link-underline inline-flex min-h-11 items-center text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors duration-200 hover:text-bone"
           >
             {copy.moreDrone}
+          </Link>
+        )}
+        {ciudad && (
+          <Link
+            href={ciudad.href}
+            className="link-underline inline-flex min-h-11 items-center text-xs font-medium tracking-[0.08em] text-rust-300 uppercase transition-colors duration-200 hover:text-bone"
+          >
+            {copy.cityLink.replace("{ciudad}", ciudad.nombre)}
           </Link>
         )}
         <Link
