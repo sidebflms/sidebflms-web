@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, useState, type FocusEvent, type FormEvent, type RefObject } from "react";
+
+import { emailValido } from "@/lib/email-valido";
 
 /** Lo que el servidor devuelve de lo escrito: un valor, o varios en casillas. */
 export type ValoresFormulario = Record<string, string | string[]>;
@@ -50,4 +52,67 @@ export function useConservarYEnfocar(
       destino?.focus();
     }
   }, [formRef, values, errores]);
+}
+
+/**
+ * AVISAR AL SALIR DEL CAMPO Y QUITAR EL AVISO AL ESCRIBIR (2026-10-04).
+ *
+ * Antes el formulario sólo validaba en el servidor, al enviar: quien se
+ * equivocaba en el correo se enteraba al final, y el aviso seguía ahí aunque
+ * ya lo hubiera corregido, hasta el siguiente envío.
+ *
+ * Reglas, a propósito discretas:
+ *  - Se valida AL SALIR del campo, y sólo si la persona ya escribió algo en él
+ *    (o lo vació después de escribir). Pasar por un campo con el tabulador sin
+ *    tocarlo no le grita; ya lo dirá el envío.
+ *  - Al escribir (o marcar) se quita el aviso de ese campo en el acto, y se
+ *    vuelve a comprobar al salir. Un aviso que no se va aunque lo hayas
+ *    arreglado es peor que no avisar.
+ *  - Lo que devuelve el servidor tras un envío manda sobre lo local: si llega
+ *    un resultado nuevo, sus errores sustituyen a los de aquí.
+ *  - Las casillas (consentimiento, especialidad) no se validan al salir, sólo
+ *    pierden el aviso al marcarlas: se puede pasar por ellas sin querer.
+ *
+ * Los códigos son los mismos que usa el servidor («required», «email»), así
+ * que cada formulario sigue traduciéndolos con su propio `errorMessage`.
+ */
+export type ReglasFormulario = Record<string, (valor: string) => string | undefined>;
+
+export const reglas = {
+  requerido: (valor: string) => (valor.trim() ? undefined : "required"),
+  correo: (valor: string) => (emailValido(valor.trim()) ? undefined : "email"),
+} as const;
+
+export function useErroresEnVivo(
+  erroresDelServidor: Partial<Record<string, string>> | undefined,
+  reglasPorCampo: ReglasFormulario
+) {
+  const [errores, setErrores] = useState<Partial<Record<string, string>>>(erroresDelServidor ?? {});
+  // Ajuste de estado al cambiar una prop, sin efecto: el patrón que documenta React.
+  const [ultimos, setUltimos] = useState(erroresDelServidor);
+  if (erroresDelServidor !== ultimos) {
+    setUltimos(erroresDelServidor);
+    setErrores(erroresDelServidor ?? {});
+  }
+  const tocados = useRef(new Set<string>());
+
+  const poner = (campo: string, codigo: string | undefined) =>
+    setErrores((previos) => (previos[campo] === codigo ? previos : { ...previos, [campo]: codigo }));
+
+  const alEscribir = (evento: FormEvent<HTMLFormElement>) => {
+    const campo = (evento.target as HTMLInputElement).name;
+    if (!campo) return;
+    tocados.current.add(campo);
+    if (errores[campo]) poner(campo, undefined);
+  };
+
+  const alSalir = (evento: FocusEvent<HTMLFormElement>) => {
+    // El destino real es el campo que pierde el foco; React lo tipa como el formulario.
+    const el = evento.target as unknown as HTMLInputElement;
+    const regla = reglasPorCampo[el.name];
+    if (!regla || !tocados.current.has(el.name)) return;
+    poner(el.name, regla(el.value));
+  };
+
+  return { errores, alEscribir, alSalir };
 }

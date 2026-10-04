@@ -5,6 +5,40 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (143) — Formularios: avisan al salir del campo y quitan el aviso al corregir
+
+Salido de las auditorías de diseño (VectorLab `forms`): los dos formularios (contacto y
+«trabaja con nosotros») solo validaban en el servidor, al enviar. Quien se equivocaba en
+el correo se enteraba al final, y el aviso seguía ahí aunque ya lo hubiera corregido,
+hasta el siguiente envío.
+
+**Cómo se comporta ahora**
+- Al **salir de un campo** (nombre, email, nombre del evento) en el que ya se escribió
+  algo, si no vale se avisa en el acto, con el mismo mensaje y `role="alert"` de siempre.
+  Pasar por un campo con el tabulador sin tocarlo **no** avisa: ya lo dirá el envío.
+- Al **escribir** en un campo con aviso, el aviso se quita al instante (y se vuelve a
+  comprobar al salir). Las casillas (consentimiento, especialidad) pierden el aviso al
+  marcarlas; no se validan al salir.
+- Tras un envío rechazado por el servidor, **sus errores mandan** y todo lo demás sigue
+  como antes: se conserva lo escrito y el foco va al primer campo con error.
+
+**Cómo está hecho:** un hook compartido `useErroresEnVivo` en `lib/use-formulario.ts`
+(un manejador en el `<form>`, sin tocar cada campo) y `reglas.requerido` / `reglas.correo`.
+El validador de correo se movió a `lib/email-valido.ts` —antes vivía en
+`lib/formularios.ts`, que es solo de servidor— para que el navegador y el servidor
+apliquen **la misma regla**; `lib/formularios.ts` la sigue exportando, así que las dos
+acciones del servidor no cambian.
+
+**Comprobado en un Chrome real, escribiendo y tabulando** (sin enviar ningún formulario
+válido, así que no sale ningún correo): email «abc» → sin aviso mientras se escribe, aviso
+al salir; completarlo a «abc@x.es» → el aviso se va al teclear; nombre sin tocar → sin
+aviso; envío incompleto → errores del servidor, email conservado y foco en el nombre;
+escribir el nombre → su aviso se va; marcar consentimiento y especialidad → sus avisos
+se van; en «trabaja con nosotros», email «mal» → aviso al salir. `tsc` y `eslint` limpios.
+
+**Al actualizar:** nada especial. Si al fusionar hay un conflicto en este archivo con
+otra entrada, se conservan las dos.
+
 ## 2026-10-04 (141) — Pulido táctil en móvil: scroll, toque, logo y cursor traducido
 
 Salido de la segunda opinión de diseño (reglas de Vercel, VectorLab y redesign) sobre

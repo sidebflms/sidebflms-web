@@ -8,25 +8,9 @@ import "server-only";
  * para las dos.
  */
 
-/**
- * LA DIRECCIÓN DE CORREO.
- *
- * Más estricta que la de antes (`[^\s@]+@[^\s@]+\.[^\s@]+`), que dejaba pasar
- * cosas como `root,otro@sitio.test`: nodemailer entiende la coma como
- * separador de direcciones, así que el acuse acababa yendo a una dirección
- * distinta de la que se validó. Comprobado el 2026-09-22.
- *
- * Aquí no se admiten comas, punto y coma, comillas ni ángulos —lo que sirve
- * para meter una segunda dirección— y el dominio tiene que parecer un dominio.
- * No pretende cumplir el RFC entero: pretende que lo que pase sea una sola
- * dirección y no una lista.
- */
-export const EMAIL_RE = /^[^\s@,;:<>"'()[\]\\]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,63}$/;
+import { EMAIL_RE, emailValido } from "@/lib/email-valido";
 
-/** Una dirección válida y de largo razonable (el RFC topa en 254). */
-export function emailValido(valor: string): boolean {
-  return valor.length <= 254 && EMAIL_RE.test(valor);
-}
+export { EMAIL_RE, emailValido };
 
 /**
  * Un campo del formulario, sin espacios sobrantes y RECORTADO.
