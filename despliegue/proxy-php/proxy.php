@@ -180,6 +180,20 @@ if ($cuerpo !== null) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $cuerpo);
 }
 
+// HEAD: la respuesta trae `Content-Length` pero, por definición, NO trae
+// cuerpo. Con `CURLOPT_CUSTOMREQUEST => 'HEAD'` a secas, curl se queda
+// esperando ese cuerpo que nunca llega, hasta que la conexión se cae (se
+// midió: 6-7 s) y `curl_exec` falla, así que cada HEAD acababa en el 502 de
+// «La aplicación no responde» de más abajo. Para HEAD curl necesita
+// `CURLOPT_NOBODY`, no sólo el nombre del método. Encontrado el 2026-10-04
+// midiendo la web: `curl -I https://sidebflms.com/en` daba 502 y el GET, 200.
+// Lo sufren los vigilantes de caída y los comprobadores de enlaces que usan
+// HEAD. (Sin probar en local: esta máquina no tiene PHP; se comprueba con
+// `curl -I` tras desplegar.)
+if ($metodo === 'HEAD') {
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+}
+
 // Las cabeceras de la respuesta se van reenviando según llegan.
 curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($ch, $linea) {
     $largo = strlen($linea);
