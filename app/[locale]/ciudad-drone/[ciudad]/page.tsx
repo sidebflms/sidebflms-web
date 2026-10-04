@@ -8,7 +8,7 @@ import { CIUDADES_DRONE, type SlugCiudad } from "@/content/ciudades-drone";
 import { traeCiudad, traeCiudades, traeProyectos } from "@/lib/contenido";
 import { getDictionary } from "@/lib/dictionaries";
 import { buildMetadata } from "@/lib/metadata";
-import { isLocale, path, type RouteKey } from "@/lib/routes";
+import { isLocale, path, SITE_URL, type RouteKey } from "@/lib/routes";
 
 /**
  * PÁGINAS DE CIUDAD (SEO Fase 6, 2026-09-24; pasadas al panel en el roadmap
@@ -47,6 +47,18 @@ function esCiudad(valor: string): valor is SlugCiudad {
   return (CIUDADES_DRONE as string[]).includes(valor);
 }
 
+/**
+ * LA DESCRIPCIÓN DE MADRID, ESCRITA AQUÍ (2026-10-04). Las demás ciudades usan su
+ * `intro` del panel; la de Madrid no decía «drone» ni «Madrid» seguidos ni a qué
+ * se dedica la empresa, que es justo lo que se busca. Sólo afirma lo que el
+ * propio sitio ya dice (alta en AESA desde 2022, estadio, publicidad, la
+ * ciudad desde el aire). 140-160 caracteres.
+ */
+const DESCRIPCION_MADRID = {
+  es: "Grabación con drone en Madrid para cine, publicidad y eventos: estadios, clubes y la ciudad desde el aire. Operador UAS dado de alta en AESA desde 2022.",
+  en: "Drone filming in Madrid for film, advertising and live events: stadiums, clubs and the city from the air. UAS operator registered with AESA since 2022.",
+} as const;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/ciudad-drone/[ciudad]">): Promise<Metadata> {
@@ -59,11 +71,19 @@ export async function generateMetadata({
     locale,
     route: CLAVE_RUTA[ciudad],
     copy: {
+      // «Cine y publicidad» SÓLO en Madrid (2026-10-04): es a lo que se
+      // posiciona la empresa, y Madrid tiene un encargo publicitario real (MITT
+      // MOTORS). Barcelona es un festival y Mallorca, material de recurso: un
+      // título que prometiera publicidad ahí no sería verdad.
       title:
-        locale === "es"
-          ? `Grabación con drone en ${copy.nombre} — SIDEBFLMS`
-          : `Drone filming in ${copy.nombre} — SIDEBFLMS`,
-      description: copy.intro[locale],
+        ciudad === "madrid"
+          ? locale === "es"
+            ? "Grabación con drone en Madrid: cine y publicidad — SIDEBFLMS"
+            : "Drone filming in Madrid for film and advertising — SIDEBFLMS"
+          : locale === "es"
+            ? `Grabación con drone en ${copy.nombre} — SIDEBFLMS`
+            : `Drone filming in ${copy.nombre} — SIDEBFLMS`,
+      description: ciudad === "madrid" ? DESCRIPCION_MADRID[locale] : copy.intro[locale],
     },
   });
 }
@@ -94,8 +114,38 @@ export default async function CiudadDronePage({
     .filter((s): s is SlugCiudad => s !== ciudad && esCiudad(s));
   const nombrePorSlug = new Map(todasLasCiudades.map((c) => [c.slug, c.nombre]));
 
+  // Datos estructurados (2026-10-04): un `Service` por ciudad con su zona de
+  // servicio, y, sólo en Madrid, las preguntas de abajo como `FAQPage`. Todo
+  // sale del diccionario y de la propia página, sin entrada de usuario.
+  const urlPagina = `${SITE_URL}${path(locale, CLAVE_RUTA[ciudad])}`;
+  const servicio = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${urlPagina}#servicio`,
+    name: locale === "es" ? `Grabación con drone en ${copy.nombre}` : `Drone filming in ${copy.nombre}`,
+    serviceType: locale === "es" ? "Grabación con drone" : "Drone filming",
+    url: urlPagina,
+    provider: { "@type": "ProfessionalService", name: "SIDEBFLMS", url: SITE_URL },
+    areaServed: { "@type": "City", name: copy.nombre },
+  };
+  const preguntas = ciudad === "madrid" ? dict.drone.madridFaq : [];
+  const faqJsonLd = preguntas.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": `${urlPagina}#preguntas`,
+        mainEntity: preguntas.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      }
+    : null;
+
   return (
     <main id="main" className="pagina">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(servicio) }} />
+      {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
       <header data-reglet={copy.nombre} className="shell">
         <Reveal>
           <p className="label">{dict.drone.label}</p>
@@ -134,6 +184,24 @@ export default async function CiudadDronePage({
                 </li>
               ))}
             </ul>
+          </Reveal>
+        </section>
+      )}
+
+      {preguntas.length > 0 && (
+        <section className="shell seccion border-t border-ink-600 pt-14">
+          <Reveal>
+            <h2 className="font-display subtitulo">{dict.drone.madridFaqTitle}</h2>
+          </Reveal>
+          <Reveal stagger>
+            <dl className="mt-8 grid gap-px bg-ink-600">
+              {preguntas.map((item) => (
+                <div key={item.q} className="bg-ink-800 p-7">
+                  <dt className="text-bone">{item.q}</dt>
+                  <dd className="measure mt-3 text-smoke">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </section>
       )}
