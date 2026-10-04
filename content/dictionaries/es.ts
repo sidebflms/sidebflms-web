@@ -316,6 +316,7 @@ export const es = {
       watch: "Ver la pieza",
       // Enlaces internos del pie de la ficha (2026-10-01).
       moreDrone: "Más sobre grabación con drone",
+      cityLink: "Grabación con drone en {ciudad}",
       moreServices: "Ver todos los servicios",
     },
     // Reproductor de la página de trabajo (components/sections/trabajo/trabajo-youtube.tsx):
@@ -793,6 +794,30 @@ export const es = {
     },
 
     portfolioLabel: "Trabajo con drone",
+
+    // Preguntas de la página de Madrid (2026-10-04). Todo sale de lo que ya dice
+    // el propio sitio (alta en AESA desde 2022, el equipo vive en Madrid, el
+    // vuelo del Metropolitano, MITT MOTORS y las postales aéreas): no se añade
+    // ningún dato nuevo.
+    madridFaqTitle: "Preguntas sobre drone en Madrid",
+    madridFaq: [
+      {
+        q: "¿Tenéis permiso para volar drone en Madrid?",
+        a: "Sí. Estamos dados de alta como operador de aeronaves no tripuladas (UAS) en AESA desde 2022. Si el vuelo pasa cerca de zonas restringidas o del aeropuerto, la comprobación se hace en preproducción y no el día del rodaje.",
+      },
+      {
+        q: "¿Desde dónde trabajáis en Madrid?",
+        a: "El equipo vive en Madrid, así que es donde mejor resolvemos la logística: coordinación con cada recinto y perímetro de seguridad acordado con producción.",
+      },
+      {
+        q: "¿Qué habéis rodado con drone en Madrid?",
+        a: "Un vuelo en un solo plano, sin cortes, desde fuera del estadio Metropolitano hasta el césped; la pieza publicitaria de MITT MOTORS en la sierra de Madrid, combinando drone y cámara en tierra; y una serie propia de postales aéreas de la ciudad, con el skyline, Torrespaña y las Cuatro Torres.",
+      },
+      {
+        q: "¿Cómo pido presupuesto para un vuelo en Madrid?",
+        a: "Escríbenos desde la página de contacto con la fecha, la localización y qué quieres rodar. Si es un evento, añade el aforo y el número de escenarios.",
+      },
+    ],
 
     ctaTitle: ["Cuéntanos", "qué quieres", "grabar"],
   },
