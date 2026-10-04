@@ -167,6 +167,21 @@
     }
   }
 
+  /* Toques: `manipulation` quita el retardo del doble toque para ampliar en
+     lo que se pulsa (enlaces, botones, campos); el pellizco para ampliar la
+     página sigue funcionando. Ningún componente declara su propio
+     `touch-action`, así que no pisa nada. */
+  a,
+  button,
+  summary,
+  label,
+  input,
+  select,
+  textarea,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
   /* Foco visible en rust-300 (5.1:1) en todo interactivo. */
   :focus-visible {
     outline: 2px solid var(--color-rust-300);
