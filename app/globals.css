@@ -146,13 +146,18 @@
     overflow: hidden;
   }
 
-  /* Texto corrido: 12 px en móvil y 17 px desde tableta (cliente,
+  /* Texto corrido: 14 px en móvil y 17 px desde tableta (cliente,
      2026-09-17: en móvil no debe medir lo mismo que en escritorio y alargaba
-     las tarjetas). Los campos de formulario van aparte, a 16 px: por debajo,
-     iOS amplía la página al tocarlos (ver campos-cristal.ts). */
+     las tarjetas). Eran 12 px; subido a 14 el 2026-10-04 tras la auditoría de
+     legibilidad: 12 px queda por debajo de lo legible (la guía de taste pide
+     16 px) y 16 px alargaba las tarjetas de servicios y las fichas de proyecto
+     entre un 15 y un 16 %, justo lo que se quería evitar; a 14 px crecen como
+     mucho un 7 % y Montserrat, ancha, se lee bien. Los campos de formulario
+     van aparte, a 16 px: por debajo, iOS amplía la página al tocarlos (ver
+     campos-cristal.ts). */
   body {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     line-height: 1.6;
     text-wrap: pretty;
   }
@@ -293,11 +298,12 @@
     color: var(--color-smoke);
   }
 
-  /* Entradilla. Mismo cuerpo que el texto corrido (12 px en móvil, 17 desde
+  /* Entradilla. Mismo cuerpo que el texto corrido (14 px en móvil, 17 desde
      tableta): el cliente pidió el 2026-09-17 un solo tamaño para todo lo que
-     no es titular. Lo que la distingue es el sitio donde va, no la talla. */
+     no es titular. Lo que la distingue es el sitio donde va, no la talla.
+     Sube con el cuerpo (12 -> 14 el 2026-10-04) para seguir siendo el mismo. */
   .text-lead {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     line-height: 1.6;
   }
   @media (min-width: 768px) {

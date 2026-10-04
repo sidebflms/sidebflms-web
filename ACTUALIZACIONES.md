@@ -5,30 +5,38 @@ reciente arriba.
 
 ---
 
-## 2026-10-04 (139) — Legibilidad: «Saltar» en naranja legible y rótulo de cifras a 12 px
+## 2026-10-04 (139) — Legibilidad: cuerpo móvil a 14 px, «Saltar» legible y rótulos mínimos
 
-Salido de la primera auditoría de diseño de la portada (skill `sidebflms-design`).
-Dos cambios pequeños y medidos; no cambia ni la estructura ni la estética.
+Salido de la primera auditoría de diseño de la web (skill `sidebflms-design`). Las
+decisiones de tamaño se tomaron con el criterio de la skill de diseño «taste» y
+midiendo el efecto real en producción antes de tocar nada.
 
-**1. Botón «Saltar» de la intro** (`app/globals.css`, `.intro-casete-saltar`):
-el texto pasa de `rust-500` (#e8451d, 4,2:1) a `rust-300` (#ff6a3d, 5,9:1). A 12 px
-es texto pequeño y, según la tabla de contraste del propio CSS, `rust-500` solo vale
-para display grande. El casete, el fondo y el anillo de foco siguen en `rust-500`.
-Medido en el navegador: el color calculado es rgb(255, 106, 61).
+**1. Cuerpo de texto en móvil: 12 px → 14 px** (`app/globals.css`, `body` y `.text-lead`).
+La decisión del cliente del 2026-09-17 era «en móvil no debe medir lo mismo que en
+escritorio y alargaba las tarjetas»; se mantiene la diferencia (14 móvil / 17 desde
+tableta) y se mantiene «un solo tamaño para todo lo que no es titular» (cuerpo y
+entradilla suben a la vez). 12 px era ilegible; 16 px (lo que pide taste) se probó y se
+descartó: alargaba las tarjetas de servicios y las fichas de proyecto un 15-16 %. A 14 px
+las páginas crecen entre un 1 y un 5 % y Montserrat, ancha, se lee bien.
+Medido a 320, 375 y 430 px en portada, servicios, contacto y sobre nosotros: sin
+desbordamiento horizontal y todo texto de más de 40 caracteres a 14 px como mínimo.
 
-**2. Rótulo «So far in 2026» / «En lo que va de 2026»** de la muesca de cifras en
-escritorio (`components/sections/hero-frame.tsx`, `CifrasNotch`): de 10 px a 12 px
-(`text-xs`). Medido: 12 px, el bloque conserva su forma (el rótulo sigue en dos líneas).
+**2. Botón «Saltar» de la intro** (`.intro-casete-saltar`): el texto pasa de `rust-500`
+(#e8451d, 4,2:1) a `rust-300` (#ff6a3d, 5,9:1). A 12 px es texto pequeño y, según la
+tabla de contraste del propio CSS, `rust-500` solo vale para display grande. El casete,
+el fondo y el anillo de foco siguen en `rust-500`.
 
-**Comprobado:** sin desbordamiento horizontal a 320, 375 y 430 px (el ancho de página
-coincide con el de la ventana); `eslint` limpio en el archivo tocado.
+**3. Rótulo «So far in 2026» / «En lo que va de 2026»** de la muesca de cifras en
+escritorio (`hero-frame.tsx`): 10 px → 12 px.
 
-**Lo que NO se ha tocado, y por qué:**
-- El cuerpo de texto a 12 px en móvil (`globals.css`, comentario «cliente, 2026-09-17»)
-  es una decisión deliberada de Mario; se ha dejado a la espera de que la confirme o la
-  cambie (la auditoría propone 14-16 px).
-- Los ~40 rótulos de 9-11 px del lenguaje «HUD» (timecodes, chips, contadores): son
-  parte de la estética; se han listado en la revisión para decidirlos por grupos.
+**4. Pastillas secundarias de Contacto en móvil** («Solicitar presupuesto», «FAQ»;
+`contacto/comun.tsx`): 10 px → 11 px. A 320 px la más ancha termina en 300 px: caben.
+
+**Lo que NO se ha tocado, y por qué:** los ~40 rótulos de 9-11 px del lenguaje «HUD»
+(numeraciones «01 / 23», contadores de filtros, marcas de timecode). Son decorativos o
+redundantes y parte de la estética; taste pide además poca etiqueta en mayúsculas, no
+más. Regla fijada en la skill: decorativo/redundante puede quedarse en 10 px; lo que
+informa o se pulsa, mínimo 11-12 px.
 
 **Al actualizar:** nada especial; solo CSS y una clase de Tailwind.
 
