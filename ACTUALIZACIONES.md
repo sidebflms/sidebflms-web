@@ -5,6 +5,33 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (144) — Portfolio: la información del reproductor ya no baja de 11 px
+
+Salido de la pasada sobre las 72 páginas de producción: la portada del portfolio tenía
+77 textos de menos de 11 px en escritorio (27 en móvil), casi todos en el reproductor de
+trabajos (`trabajo-youtube.tsx`, `trabajo-feed.tsx`).
+
+**Qué se ha subido, de 10 a 11 px:** los contadores de los filtros («Aerial 12»), el
+«Now playing» y la etiqueta «REC», la categoría y la fecha de cada pieza («Metropolitano ·
+20 December 2025») y la duración sobre la miniatura. Es información, no decoración, y 11 px
+es el mismo suelo que ya usa el resto de la web.
+
+**Ajuste para que no se corte más texto:** a 11 px tres líneas de metadatos pierden 2-10 px
+de ancho. Se reduce un poco el espaciado entre letras de esas líneas (de 0,08 em a 0,04 em
+en la categoría y el pie, y de 0,12 em a 0,08 em en una etiqueta en mayúsculas). Resultado
+medido: a 1024 px se cortan con «…» los mismos 4 textos que ya se cortaban en producción, y a
+1280 px ninguno, igual que antes.
+
+**Lo que NO se ha tocado:** las marcas de timecode («00:00», «V1/A1», «Hours/Min/Sec/Frames»)
+y las numeraciones de otras páginas («01 / 04» de servicios): son lenguaje HUD y se
+quedan, como está decidido.
+
+**Comprobado:** altura de página idéntica en 375, 768, 1024, 1280 y 1440 px (cero
+desplazamiento de diseño), sin desbordamiento horizontal, 0 textos de menos de 11 px en
+el portfolio (antes 77 en escritorio y 27 en móvil), `eslint` y `tsc` limpios.
+
+**Al actualizar:** nada especial; solo clases de Tailwind.
+
 ## 2026-10-04 (141) — Pulido táctil en móvil: scroll, toque, logo y cursor traducido
 
 Salido de la segunda opinión de diseño (reglas de Vercel, VectorLab y redesign) sobre

@@ -496,7 +496,7 @@ export function TrabajoYoutube({
                       <IconoServicio clave={o.key} className="icono-servicio h-4 w-4" />
                     )}
                     {o.label}
-                    <span className="text-[10px] tabular-nums opacity-60">{o.count}</span>
+                    <span className="text-[11px] tabular-nums opacity-60">{o.count}</span>
                   </button>
                 </li>
               );
@@ -674,7 +674,7 @@ export function TrabajoYoutube({
               )}
 
               {/* Piloto arriba a la izquierda: en marcha / posición. */}
-              <span className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full bg-ink-900/55 px-3 py-1.5 text-[10px] tracking-[0.14em] text-bone uppercase backdrop-blur-sm sm:top-4 sm:left-4">
+              <span className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full bg-ink-900/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-bone uppercase backdrop-blur-sm sm:top-4 sm:left-4">
                 <span
                   className={cn("h-1.5 w-1.5 rounded-full", enMarcha ? "animate-pulse bg-rust-500" : "bg-bone/40")}
                 />
@@ -814,12 +814,12 @@ export function TrabajoYoutube({
                     </button>
                   )}
                   {esFoto ? (
-                    <span className="ml-1 truncate text-[10px] tracking-[0.12em] uppercase tabular-nums sm:text-[11px]">
+                    <span className="ml-1 truncate text-[11px] tracking-[0.08em] uppercase tabular-nums sm:text-[11px]">
                       {t.still} {pad(fotoActual + 1)}
                       <span className="text-bone/50"> / {pad(galeria.length)}</span>
                     </span>
                   ) : (
-                    <span className="ml-1 truncate text-[10px] tracking-[0.08em] tabular-nums sm:text-[11px]">
+                    <span className="ml-1 truncate text-[11px] tracking-[0.04em] tabular-nums sm:text-[11px]">
                       <span ref={tcRef}>{timecode(0)}</span>
                       <span className="hidden text-bone/50 sm:inline">
                         {" / "}
@@ -827,7 +827,7 @@ export function TrabajoYoutube({
                       </span>
                     </span>
                   )}
-                  <span className="ml-auto hidden items-center gap-1.5 text-[10px] tracking-[0.12em] text-bone/70 uppercase sm:flex">
+                  <span className="ml-auto hidden items-center gap-1.5 text-[11px] tracking-[0.12em] text-bone/70 uppercase sm:flex">
                     {actual.categories.map((c) => (
                       <IconoServicio key={c} clave={c} className="h-3.5 w-3.5" />
                     ))}
@@ -1044,7 +1044,7 @@ export function TrabajoYoutube({
                                 activa ? "opacity-100" : "opacity-0"
                               )}
                             />
-                            <span className="absolute right-1.5 bottom-1.5 flex max-w-[calc(100%-0.75rem)] items-center gap-1 overflow-hidden rounded-md bg-ink-900/75 px-1.5 py-0.5 text-[10px] font-medium text-bone tabular-nums">
+                            <span className="absolute right-1.5 bottom-1.5 flex max-w-[calc(100%-0.75rem)] items-center gap-1 overflow-hidden rounded-md bg-ink-900/75 px-1.5 py-0.5 text-[11px] font-medium text-bone tabular-nums">
                               {activa ? (
                                 <>
                                   <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-rust-500" />
@@ -1072,7 +1072,7 @@ export function TrabajoYoutube({
                           >
                             {p.title[locale]}
                           </span>
-                          <span className="mt-1.5 flex items-center gap-1 text-[10px] font-medium tracking-[0.08em] text-bone/70 uppercase">
+                          <span className="mt-1.5 flex items-center gap-1 text-[11px] font-medium tracking-[0.04em] text-bone/70 uppercase">
                             <span aria-hidden="true" className="flex shrink-0 gap-0.5">
                               {p.categories.map((c) => (
                                 <IconoServicio key={c} clave={c} className="h-3 w-3" />
@@ -1081,7 +1081,7 @@ export function TrabajoYoutube({
                             <span className="truncate">{disciplinas(p, copy)}</span>
                           </span>
                           {p.piePieza && (
-                            <span className="label mt-1 block truncate text-[10px]">{p.piePieza}</span>
+                            <span className="label mt-1 block truncate text-[11px] tracking-[0.04em]">{p.piePieza}</span>
                           )}
                         </span>
                       </button>
