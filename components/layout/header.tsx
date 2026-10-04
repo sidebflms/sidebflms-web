@@ -186,7 +186,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
             visible ? "pointer-events-auto" : "pointer-events-none"
           )}
         >
-          <Link href={path(locale, "home")} aria-label="SIDEBFLMS" className="flex items-center gap-3">
+          <Link href={path(locale, "home")} aria-label="SIDEBFLMS" className="flex items-center gap-3 py-[15px]">
             <LogoMark blanco className="hidden h-6 w-auto lg:block" />
             <Wordmark className="block h-3.5 lg:h-3" />
           </Link>
@@ -241,7 +241,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: NavCopy }) {
           role="dialog"
           aria-modal="true"
           aria-label={nav.menu}
-          className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-ink-900/60 p-3 backdrop-blur-2xl"
+          className="fixed inset-0 z-[60] flex flex-col overflow-y-auto overscroll-contain bg-ink-900/60 p-3 backdrop-blur-2xl"
         >
           <div className="glass flex min-h-full flex-col rounded-[var(--radius-frame)] p-5">
             <div className="flex items-center justify-between">

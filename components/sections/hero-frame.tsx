@@ -249,7 +249,7 @@ export function HeroFrame({
                   type="button"
                   onClick={() => setReelOpen(true)}
                   data-cursor="media"
-                  data-cursor-label="Play"
+                  data-cursor-label={dict.portfolio.player.play}
                   className="group flex items-center gap-4 text-sm font-medium tracking-[0.1em] text-bone uppercase"
                 >
                   <span className="glass inline-flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110">

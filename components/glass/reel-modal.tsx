@@ -73,7 +73,7 @@ export function ReelModal({
       role="dialog"
       aria-modal="true"
       aria-label={label}
-      className="fixed inset-0 z-[95] flex items-center justify-center bg-ink-900/70 p-3 backdrop-blur-2xl lg:p-10"
+      className="fixed inset-0 z-[95] flex items-center justify-center overscroll-contain bg-ink-900/70 p-3 backdrop-blur-2xl lg:p-10"
       onClick={onClose}
     >
       <div

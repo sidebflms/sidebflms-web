@@ -5,6 +5,42 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (141) — Pulido táctil en móvil: scroll, toque, logo y cursor traducido
+
+Salido de la segunda opinión de diseño (reglas de Vercel, VectorLab y redesign) sobre
+el código de la web. Cuatro cambios pequeños; no cambia la estética.
+
+**1. `overscroll-behavior: contain` en el menú móvil y en el modal del reel**
+(`header.tsx`, `reel-modal.tsx`): el scroll del menú ya no se «cuela» a la página que
+hay detrás al llegar al final. Medido: el menú abierto devuelve `contain`.
+
+**2. `touch-action: manipulation`** en enlaces, botones, resúmenes, etiquetas y campos
+(`app/globals.css`): quita el retardo del doble toque para ampliar en lo que se pulsa;
+el pellizco para ampliar la página sigue funcionando. Ningún componente declaraba su
+propio `touch-action`, así que no pisa nada.
+
+**3. Zona táctil del logo de la cabecera** (`header.tsx`): de 166×14 px a 166×44 px en
+móvil (54 px en escritorio) con `py-[15px]` dentro de una barra que ya medía 64 px; la
+barra no cambia de alto ni el logo de sitio. Medido en 20 combinaciones.
+
+**4. Rótulo del cursor sobre «Ver reel»** (`hero-frame.tsx`): estaba fijo en inglés
+(«Play») también en la web en español; ahora sale del diccionario («Reproducir» / «Play»).
+
+**Comprobado:** sin desbordamiento horizontal a 320, 375, 430 y 1024 px en portada
+(es y en), servicios, contacto y portfolio; cabecera de 64 px en todas; `eslint` y
+`tsc` limpios.
+
+**Revisado y NO incluido, y por qué:**
+- Estado vacío del filtro de trabajo con salida: no es alcanzable; el filtro oculta a
+  propósito las disciplinas sin proyectos (decisión de 2026-10-01).
+- `env(safe-area-inset-*)`: sin `viewport-fit=cover`, Safari ya mantiene el contenido
+  dentro del área segura; añadirlo no hace nada.
+- Estado de pulsación (`:active`): los componentes `Button` solo se usan en la 404; casi
+  todos los CTA llevan clases en línea. Haría falta antes un componente de botón común.
+- Validación de formularios al salir del campo: cambia comportamiento; irá en su propia PR.
+
+**Al actualizar:** nada especial; solo CSS y clases de Tailwind.
+
 ## 2026-10-04 (140) — Legibilidad: cuerpo móvil a 14 px, «Saltar» legible y rótulos mínimos
 
 Salido de la primera auditoría de diseño de la web (skill `sidebflms-design`). Las
