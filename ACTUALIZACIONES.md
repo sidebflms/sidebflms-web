@@ -5,6 +5,40 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (140) — Legibilidad: cuerpo móvil a 14 px, «Saltar» legible y rótulos mínimos
+
+Salido de la primera auditoría de diseño de la web (skill `sidebflms-design`). Las
+decisiones de tamaño se tomaron con el criterio de la skill de diseño «taste» y
+midiendo el efecto real en producción antes de tocar nada.
+
+**1. Cuerpo de texto en móvil: 12 px → 14 px** (`app/globals.css`, `body` y `.text-lead`).
+La decisión del cliente del 2026-09-17 era «en móvil no debe medir lo mismo que en
+escritorio y alargaba las tarjetas»; se mantiene la diferencia (14 móvil / 17 desde
+tableta) y se mantiene «un solo tamaño para todo lo que no es titular» (cuerpo y
+entradilla suben a la vez). 12 px era ilegible; 16 px (lo que pide taste) se probó y se
+descartó: alargaba las tarjetas de servicios y las fichas de proyecto un 15-16 %. A 14 px
+las páginas crecen entre un 1 y un 5 % y Montserrat, ancha, se lee bien.
+Medido a 320, 375 y 430 px en portada, servicios, contacto y sobre nosotros: sin
+desbordamiento horizontal y todo texto de más de 40 caracteres a 14 px como mínimo.
+
+**2. Botón «Saltar» de la intro** (`.intro-casete-saltar`): el texto pasa de `rust-500`
+(#e8451d, 4,2:1) a `rust-300` (#ff6a3d, 5,9:1). A 12 px es texto pequeño y, según la
+tabla de contraste del propio CSS, `rust-500` solo vale para display grande. El casete,
+el fondo y el anillo de foco siguen en `rust-500`.
+
+**3. Rótulo «So far in 2026» / «En lo que va de 2026»** de la muesca de cifras en
+escritorio (`hero-frame.tsx`): 10 px → 12 px.
+
+**4. Pastillas secundarias de Contacto en móvil** («Solicitar presupuesto», «FAQ»;
+`contacto/comun.tsx`): 10 px → 11 px. A 320 px la más ancha termina en 300 px: caben.
+
+**Lo que NO se ha tocado, y por qué:** los ~40 rótulos de 9-11 px del lenguaje «HUD»
+(numeraciones «01 / 23», contadores de filtros, marcas de timecode). Son decorativos o
+redundantes y parte de la estética; taste pide además poca etiqueta en mayúsculas, no
+más. Regla fijada en la skill: decorativo/redundante puede quedarse en 10 px; lo que
+informa o se pulsa, mínimo 11-12 px.
+
+**Al actualizar:** nada especial; solo CSS y una clase de Tailwind.
 ## 2026-10-04 (139) — SEO de «drone Madrid»: título, descripción, preguntas, datos estructurados y enlaces desde las fichas
 
 La parte de código del plan para posicionar «drone madrid» (la parte de Mario: ficha

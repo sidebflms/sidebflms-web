@@ -131,7 +131,7 @@ export function CabeceraFormulario({
   telefono?: boolean;
 }) {
   const redes = redesContacto(dict);
-  const textoMovil = secundario ? "text-[10px] tracking-[0.04em]" : "text-xs tracking-[0.08em]";
+  const textoMovil = secundario ? "text-[11px] tracking-[0.04em]" : "text-xs tracking-[0.08em]";
   const numeroWhatsapp = dict.contact.phone.replace(/\D/g, "");
   const hrefTelefono = `tel:+${numeroWhatsapp}`;
 
