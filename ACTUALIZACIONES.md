@@ -5,6 +5,46 @@ reciente arriba.
 
 ---
 
+## 2026-10-06 (145) — Migración: dos respuestas del FAQ pasan a «cine, publicidad y eventos»
+
+**Por qué una migración.** Las respuestas del FAQ viven en la base (`/admin`,
+«Preguntas frecuentes») y MANDAN sobre el diccionario: los textos nuevos que la 137
+metió en `es.ts`/`en.ts` sólo valían de respaldo y la web seguía diciendo lo de antes.
+Cambiar datos de la base por migración es la vía normal de este proyecto: el despliegue
+las aplica ANTES de compilar (`publicar.sh preparar`) y la compilación ya lee el texto
+nuevo, sin tocar el panel a mano ni la base de producción por otro camino.
+
+**Qué cambia** (`migrations/20261004_160000_faq_cine_publicidad.ts`, registrada en
+`migrations/index.ts`; 4 filas, 2 respuestas × 2 idiomas):
+- «¿Qué hacéis exactamente?»: «Rodamos para cine, publicidad y eventos: drone,
+  multicámara, aftermovies y fotografía. Normalmente un mismo equipo cubre todo el
+  encargo, no una pieza suelta.» (antes: «Cuatro cosas, normalmente juntas… El encargo
+  típico es un evento entero…»).
+- «¿Qué necesitáis para darme un presupuesto?»: «Fecha, localización y qué tipo de
+  cobertura quieres; y, si es un evento, aforo estimado y número de escenarios. Con eso
+  sale un presupuesto cerrado…».
+
+**Seguridad de la migración.**
+- **Respeta lo editado a mano:** cada UPDATE exige que la respuesta sea EXACTAMENTE el
+  texto de antes. Si alguien ya la retocó en `/admin`, esa fila no se toca.
+- **No usa números de fila** (en producción pueden ser otros): busca por idioma y texto.
+- **Se puede repetir:** la segunda vez no encuentra nada que cambiar.
+- **Tiene `down`**, que devuelve el texto de antes (con la misma exigencia de texto exacto).
+
+**Probado** contra la base local desechable, ejecutando las mismas sentencias con los
+textos leídos de la propia migración: `up` toca 4 filas, un segundo `up` 0, `down` las 4,
+y con una respuesta retocada a mano el `down` sólo toca las otras 3. Con la base ya
+migrada, `/es/faq` y `/en/faq` muestran el texto nuevo y no el viejo. **No probado:** el
+comando `payload migrate` en local, porque la base de pruebas se creó en modo desarrollo
+y el comando se detiene a preguntar por «pérdida de datos»; en el servidor, donde la base
+nunca estuvo en ese modo, el despliegue lo ejecuta sin preguntar (así se aplicaron las
+anteriores). Si la migración fallara, el despliegue se para en el paso «Preparar» y la web
+sigue con la versión anterior.
+
+**Qué hacer al actualizar:** nada; la aplica el despliegue.
+
+---
+
 ## 2026-10-04 (144) — Portfolio: la información del reproductor ya no baja de 11 px
 
 Salido de la pasada sobre las 72 páginas de producción: la portada del portfolio tenía
