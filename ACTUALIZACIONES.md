@@ -5,6 +5,41 @@ reciente arriba.
 
 ---
 
+## 2026-10-06 (146) — `npm audit`: de 12 avisos (5 altos) a 5 moderados, sin bajar Payload
+
+Issue #8. Desde la 138 aparecieron avisos nuevos (el 3-oct eran 7; hoy 12, con 5 altos:
+`braces` y `source-map-js` y sus dependientes). Se resuelven con `overrides` en
+`package.json`, sin tocar Payload ni Next:
+- **`sass` 1.77.4 → 1.89.2** (lo traen `@payloadcms/next` y `next` fijado en 1.77.4, que
+  arrastraba `chokidar` 3 y `braces` ≤3.0.3 sin versión corregida; el sass nuevo usa
+  `chokidar` 4, que ya no lleva `braces`). Quita 4 avisos altos (`sass`, `chokidar`,
+  `braces`, `@payloadcms/next`/`richtext-lexical` por efecto).
+- **`source-map-js` 1.2.1 → 1.2.2** (denegación de servicio, alto).
+- **`dompurify` → 3.4.16** (6 avisos bajos y moderados; lo trae `monaco-editor`, el
+  editor del panel). Ojo: `npm audit fix` a secas BAJABA dompurify a 3.4.8 (peor); se
+  descartó y se fija a mano la última.
+- **`undici` 7.30.0** (de la 138, se mantiene).
+
+**Lo que queda: 5 avisos moderados, todos el MISMO** («esbuild ≤0.24.2 deja a una web
+mandar peticiones al servidor de desarrollo»), en `@esbuild-kit/core-utils`, dentro de
+`drizzle-kit`, la herramienta de migraciones. Sólo corre en desarrollo y en el
+despliegue, y no sirve nada al público. Un `overrides` anidado para forzar su esbuild
+no se aplicó (npm lo marcaba inválido), y forzarlo entero tocaría el `tsx` de
+Payload; arreglarlo de verdad exige que Payload suba `drizzle-kit`. Se deja y se
+revisa cuando salga una versión de Payload nueva.
+
+**Comprobado** con una compilación de producción local completa (7,4 s, 82 páginas) y
+arrancada: portada, inglés, portfolio, contacto, candidaturas, servicios, Madrid,
+sitemap y robots dan 200; `/admin` y `/admin/login` cargan con sus estilos (292 KB de
+CSS compilado por el sass nuevo, captura revisada); la API REST responde (sesión 200,
+listado sin permisos 403, GraphQL 404 como debe); `payload migrate:status` funciona
+(carga las migraciones por `tsx`); el registro de arranque sin errores. El lock conserva
+todos los `libc` (38 → 44: los nuevos son del sass).
+
+**Qué hacer al actualizar:** nada; el despliegue hace `npm ci` porque cambia el lock.
+
+---
+
 ## 2026-10-06 (145) — Migración: dos respuestas del FAQ pasan a «cine, publicidad y eventos»
 
 **Por qué una migración.** Las respuestas del FAQ viven en la base (`/admin`,
