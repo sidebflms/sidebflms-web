@@ -10,6 +10,7 @@ import * as migration_20260926_000052_roadmap_equipo_tecnico from './20260926_00
 import * as migration_20260926_001053_roadmap_drone_secciones from './20260926_001053_roadmap_drone_secciones';
 import * as migration_20260926_002215_roadmap_drone_distribucion from './20260926_002215_roadmap_drone_distribucion';
 import * as migration_20260926_003433_roadmap_home_bloques_piloto from './20260926_003433_roadmap_home_bloques_piloto';
+import * as migration_20261004_160000_faq_cine_publicidad from './20261004_160000_faq_cine_publicidad';
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20260926_003433_roadmap_home_bloques_piloto.up,
     down: migration_20260926_003433_roadmap_home_bloques_piloto.down,
     name: '20260926_003433_roadmap_home_bloques_piloto'
+  },
+  {
+    up: migration_20261004_160000_faq_cine_publicidad.up,
+    down: migration_20261004_160000_faq_cine_publicidad.down,
+    name: '20261004_160000_faq_cine_publicidad',
   },
 ];
