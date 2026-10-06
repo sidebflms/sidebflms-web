@@ -8,7 +8,7 @@ import type { Dictionary } from "@/lib/dictionaries";
 import { CATEGORIES } from "@/content/projects";
 import { path, type Locale } from "@/lib/routes";
 import { chipClasses, fieldClassesCompact as fieldClasses } from "@/components/ui/campos-cristal";
-import { useConservarYEnfocar } from "@/lib/use-formulario";
+import { reglas, useConservarYEnfocar, useErroresEnVivo } from "@/lib/use-formulario";
 import { cn } from "@/lib/utils";
 
 const initialState: ContactState = { status: "idle" };
@@ -24,6 +24,11 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
   const [state, formAction, pending] = useActionState(submitContact, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   useConservarYEnfocar(formRef, state.values, state.fieldErrors);
+  const { errores, alEscribir, alSalir } = useErroresEnVivo(state.fieldErrors, {
+    name: reglas.requerido,
+    email: reglas.correo,
+    eventName: reglas.requerido,
+  });
 
   if (state.status === "success") {
     return (
@@ -39,7 +44,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
   }
 
   return (
-    <form ref={formRef} action={formAction} noValidate className="space-y-5">
+    <form ref={formRef} action={formAction} onBlur={alSalir} onInput={alEscribir} noValidate className="space-y-5">
       {/* Honeypot — oculto para personas, visible para bots que rellenan todo. */}
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
@@ -58,7 +63,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           autoComplete="name"
           label={dict.contact.form.name}
           required
-          error={errorMessage(dict, state.fieldErrors?.name)}
+          error={errorMessage(dict, errores.name)}
         />
         <Field
           id="email"
@@ -68,7 +73,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           maxLength={254}
           label={dict.contact.form.email}
           required
-          error={errorMessage(dict, state.fieldErrors?.email)}
+          error={errorMessage(dict, errores.email)}
         />
         <Field
           id="eventName"
@@ -76,7 +81,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
           autoComplete="off"
           label={dict.contact.form.eventName}
           required
-          error={errorMessage(dict, state.fieldErrors?.eventName)}
+          error={errorMessage(dict, errores.eventName)}
         />
       </div>
 
@@ -186,7 +191,7 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
               required
               defaultChecked={false}
               className="mt-1 h-4 w-4 border-ink-600 accent-rust-500"
-              aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
+              aria-describedby={errores.consent ? "consent-error" : undefined}
             />
             <span>
               {dict.contact.form.consent.split(dict.contact.form.consentLink)[0]}
@@ -199,9 +204,9 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
               {dict.contact.form.consent.split(dict.contact.form.consentLink)[1]}
             </span>
           </label>
-          {state.fieldErrors?.consent && (
+          {errores.consent && (
             <p id="consent-error" role="alert" className="mt-2 text-sm text-rust-300">
-              {errorMessage(dict, state.fieldErrors.consent)}
+              {errorMessage(dict, errores.consent)}
             </p>
           )}
         </div>

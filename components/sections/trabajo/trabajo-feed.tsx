@@ -512,7 +512,7 @@ function CarruselFotos({
 
 function Piloto({ children }: { children: ReactNode }) {
   return (
-    <span className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full bg-ink-900/55 px-3 py-1.5 text-[10px] tracking-[0.14em] text-bone uppercase backdrop-blur-sm">
+    <span className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-full bg-ink-900/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-bone uppercase backdrop-blur-sm">
       {children}
     </span>
   );
