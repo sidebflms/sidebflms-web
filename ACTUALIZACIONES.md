@@ -5,6 +5,31 @@ reciente arriba.
 
 ---
 
+## 2026-10-04 (142) — Las peticiones HEAD ya no acaban en 502
+
+Encontrado midiendo la web con Lighthouse y `curl`: `curl -I https://sidebflms.com/en`
+devolvía **502** tras 6-7 s, mientras que el GET devolvía 200. Pasaba en todas las
+páginas. Lo sufren los vigilantes de caída (uptime) y los comprobadores de enlaces que
+usan HEAD; los navegadores y Google (GET) no lo notaban.
+
+**Causa** (`despliegue/proxy-php/proxy.php`): para HEAD el proxy mandaba
+`CURLOPT_CUSTOMREQUEST => 'HEAD'` sin `CURLOPT_NOBODY`. La respuesta a un HEAD trae
+`Content-Length` pero ningún cuerpo, y curl se quedaba esperándolo hasta que fallaba;
+entonces `curl_exec` devolvía error y el proxy contestaba su 502 de «La aplicación no
+responde».
+
+**Arreglo:** para HEAD se activa `CURLOPT_NOBODY`. Cuatro líneas.
+
+**SIN PROBAR EN LOCAL:** este Mac no tiene PHP, así que no se ha podido ejecutar el
+proxy. La opción es estándar y está documentada en curl, y el riesgo es bajo (solo
+afecta a HEAD; GET y POST no cambian). **Comprobar tras desplegar:**
+`curl -sI https://sidebflms.com/en | head -1` debe dar `HTTP/2 200`, y
+`curl -s -o /dev/null -w "%{http_code}" https://sidebflms.com/en` sigue dando 200.
+Si algo fallara, se vuelve atrás con la copia anterior de `proxy.php`.
+
+**Al actualizar:** `publicar.sh` copia `proxy.php` al servidor en cada despliegue
+(`despliegue/publicar.sh`, línea 116): no hay que hacer nada aparte.
+
 ## 2026-10-04 (141) — Pulido táctil en móvil: scroll, toque, logo y cursor traducido
 
 Salido de la segunda opinión de diseño (reglas de Vercel, VectorLab y redesign) sobre
