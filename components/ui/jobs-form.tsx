@@ -7,7 +7,7 @@ import { submitJobs, type JobsState } from "@/app/[locale]/work-with-us/actions"
 import { chipClasses, fieldClasses } from "@/components/ui/campos-cristal";
 import type { Dictionary } from "@/lib/dictionaries";
 import { path, type Locale } from "@/lib/routes";
-import { useConservarYEnfocar } from "@/lib/use-formulario";
+import { reglas, useConservarYEnfocar, useErroresEnVivo } from "@/lib/use-formulario";
 
 /**
  * Formulario de candidaturas.
@@ -42,6 +42,10 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
   const [state, formAction, pending] = useActionState(submitJobs, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   useConservarYEnfocar(formRef, state.values, state.fieldErrors);
+  const { errores, alEscribir, alSalir } = useErroresEnVivo(state.fieldErrors, {
+    name: reglas.requerido,
+    email: reglas.correo,
+  });
   const f = dict.jobs.form;
 
   if (state.status === "success") {
@@ -55,7 +59,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
   }
 
   return (
-    <form ref={formRef} action={formAction} noValidate className="space-y-8">
+    <form ref={formRef} action={formAction} onBlur={alSalir} onInput={alEscribir} noValidate className="space-y-8">
       <div aria-hidden="true" className="absolute -left-[9999px]" tabIndex={-1}>
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
@@ -77,7 +81,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
           dict={dict}
           required
           autoComplete="name"
-          error={mensajeError(dict, state.fieldErrors?.name)}
+          error={mensajeError(dict, errores.name)}
         />
         <Campo
           id="email"
@@ -87,7 +91,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
           dict={dict}
           required
           autoComplete="email"
-          error={mensajeError(dict, state.fieldErrors?.email)}
+          error={mensajeError(dict, errores.email)}
         />
       </div>
 
@@ -110,7 +114,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
         opciones={f.specialityOptions}
         requerido
         dict={dict}
-        error={mensajeError(dict, state.fieldErrors?.speciality)}
+        error={mensajeError(dict, errores.speciality)}
       />
 
       <Campo
@@ -167,7 +171,7 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
             type="checkbox"
             name="consent"
             className="mt-1 h-4 w-4 shrink-0 border-ink-600 accent-rust-500"
-            aria-describedby={state.fieldErrors?.consent ? "consent-error" : undefined}
+            aria-describedby={errores.consent ? "consent-error" : undefined}
           />
           {/* Como en contacto: el enlace va DENTRO de la frase. Antes se
               añadía detrás y «política de privacidad» salía dos veces. */}
@@ -182,9 +186,9 @@ export function JobsForm({ locale, dict }: { locale: Locale; dict: Dictionary })
             {f.consent.split(f.consentLink)[1]}
           </span>
         </label>
-        {state.fieldErrors?.consent && (
+        {errores.consent && (
           <p id="consent-error" role="alert" className="mt-2 text-sm text-rust-300">
-            {mensajeError(dict, state.fieldErrors.consent)}
+            {mensajeError(dict, errores.consent)}
           </p>
         )}
       </div>
