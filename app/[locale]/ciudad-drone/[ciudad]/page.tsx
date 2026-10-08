@@ -188,6 +188,36 @@ export default async function CiudadDronePage({
         </section>
       )}
 
+      {ciudad === "madrid" && (
+        <section className="shell seccion border-t border-ink-600 pt-14">
+          <Reveal>
+            <h2 className="font-display subtitulo">{dict.drone.madridDestacado.titulo}</h2>
+            <p className="measure text-lead mt-8 text-bone">{dict.drone.madridDestacado.texto}</p>
+          </Reveal>
+          <Reveal stagger>
+            <ul className="mt-8 grid gap-px bg-ink-600 sm:grid-cols-2">
+              {dict.drone.madridDestacado.videos.map((v) => (
+                <li key={v.href} className="bg-ink-800 p-7">
+                  <p className="text-bone">{v.titulo}</p>
+                  <p className="label mt-2">{v.momentos}</p>
+                  {/* Enlace fuera, no `<iframe>`: ver el comentario de `madridDestacado`
+                      en el diccionario. `noopener` porque se abre en pestaña nueva. */}
+                  <a
+                    href={v.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex min-h-11 items-center text-rust-300 underline underline-offset-4 transition-colors hover:text-bone"
+                  >
+                    {dict.drone.madridDestacado.enlace}
+                    <span className="sr-only">: {v.titulo}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
+      )}
+
       {preguntas.length > 0 && (
         <section className="shell seccion border-t border-ink-600 pt-14">
           <Reveal>

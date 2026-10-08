@@ -639,6 +639,25 @@ export const en: Dictionary = {
 
     // Questions on the Madrid page (2026-10-04). Everything comes from what the
     // site already says: no new facts.
+    // Recent work in Madrid (2026-10-08). See es.ts for the reasoning.
+    madridDestacado: {
+      titulo: "Recent work in Madrid",
+      texto:
+        "Aerial drone shots for \u201cOne ball. Three cities.\u201d, HEAD Tennis's campaign, filmed in Madrid and made for a production company: the ball in flight. You can see them in HEAD Tennis's official videos on YouTube:",
+      videos: [
+        {
+          titulo: "Right on cue: Sinner takes Rome.",
+          momentos: "around 0:44, 0:53 and 0:58",
+          href: "https://www.youtube.com/watch?v=i4ypPkBcuQg",
+        },
+        {
+          titulo: "From Rome to Paris: The Final Chapter",
+          momentos: "around 0:22, 0:26 and 0:34",
+          href: "https://www.youtube.com/watch?v=OfoOpR1lGKs",
+        },
+      ],
+      enlace: "Watch on YouTube",
+    },
     madridFaqTitle: "Questions about drone filming in Madrid",
     madridFaq: [
       {
@@ -651,7 +670,7 @@ export const en: Dictionary = {
       },
       {
         q: "What have you shot with a drone in Madrid?",
-        a: "A single-shot flight with no cuts from outside the Metropolitano stadium down to the pitch; the MITT MOTORS advertising piece in the mountains near Madrid, combining drone and ground camera; and our own series of aerial postcards of the city, with the skyline, Torrespaña and the Cuatro Torres.",
+        a: "A single-shot flight with no cuts from outside the Metropolitano stadium down to the pitch; the MITT MOTORS advertising piece in the mountains near Madrid, combining drone and ground camera; aerial shots of the ball in flight for HEAD Tennis's \u201cOne ball. Three cities.\u201d campaign, made for a production company; and our own series of aerial postcards of the city, with the skyline, Torrespaña and the Cuatro Torres.",
       },
       {
         q: "How do I ask for a quote for a flight in Madrid?",
