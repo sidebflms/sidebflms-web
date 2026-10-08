@@ -5,6 +5,43 @@ reciente arriba.
 
 ---
 
+## 2026-10-08 (147) — Madrid: bloque «Trabajo reciente» con la campaña de HEAD Tennis
+
+Primer trabajo de PUBLICIDAD con una marca internacional en la web (hasta ahora sólo
+MITT MOTORS). Mario lo contó de viva voz el 2026-10-08, y lo confirmó viendo los vídeos:
+- Una productora contrató a SIDEBFLMS para los planos aéreos con drone de la
+  campaña «One ball. Three cities.» de HEAD Tennis (la pelota en vuelo), **rodados en
+  Madrid**.
+- Los vídeos son de HEAD Tennis en YouTube y **sólo se pueden usar los públicos**:
+  «Right on cue: Sinner takes Rome.» (1 min 19 s, planos de drone hacia 0:44, 0:53 y
+  0:58) y «From Rome to Paris: The Final Chapter» (1 min 10 s, hacia 0:22, 0:26 y 0:34).
+- Se nombra a **HEAD** (permiso de Mario); **la productora no se nombra** («realizados
+  para una productora»). Los momentos son aproximados («hacia»), de lo que dijo Mario.
+
+**Qué cambia** (sólo en la página de Madrid, `/es/grabacion-con-drone-madrid` y la
+inglesa; Barcelona y Mallorca no llevan nada):
+1. **Bloque «Trabajo reciente en Madrid»**
+   (`app/[locale]/ciudad-drone/[ciudad]/page.tsx`, textos en `drone.madridDestacado`
+   de `es.ts`/`en.ts`): el texto de arriba y dos tarjetas, cada una con el título del
+   vídeo, los momentos y un enlace «Ver en YouTube» a la página oficial. Los enlaces
+   son de 44 px de alto y abren en pestaña nueva con `noopener noreferrer`.
+2. **La respuesta «¿Qué habéis rodado con drone en Madrid?»** del FAQ de esa página
+   (y su dato estructurado `FAQPage`) menciona la campaña. Esas preguntas salen del
+   diccionario, no del panel, así que se ven en cuanto se despliega.
+
+**ENLAZADO, NO INCRUSTADO, a propósito.** Un `<iframe>` de YouTube cargaría cookies de
+terceros (la política de privacidad dice que no hay ninguna) y la política de seguridad
+de la web (`frame-src`) tampoco lo permite. Con un enlace no cambia nada de eso.
+
+**Nota sobre datos:** el 2026-10-08 se leyó mal la duración del vídeo de Roma (6 s, que
+era la del anuncio de YouTube que lo precede); en realidad dura 1:19. Los momentos
+dados por Mario ya la tienen en cuenta.
+
+**Qué hacer al actualizar:** nada. Si HEAD o la productora retiran el permiso, se quita
+el bloque `madridDestacado` de la página y la frase del FAQ.
+
+---
+
 ## 2026-10-06 (146) — `npm audit`: de 12 avisos (5 altos) a 5 moderados, sin bajar Payload
 
 Issue #8. Desde la 138 aparecieron avisos nuevos (el 3-oct eran 7; hoy 12, con 5 altos:

@@ -799,6 +799,29 @@ export const es = {
     // el propio sitio (alta en AESA desde 2022, el equipo vive en Madrid, el
     // vuelo del Metropolitano, MITT MOTORS y las postales aéreas): no se añade
     // ningún dato nuevo.
+    // Trabajo reciente en Madrid (2026-10-08). Los planos de drone son nuestros; los
+    // vídeos son de HEAD Tennis y sólo se ENLAZAN (no se incrustan: YouTube pondría
+    // cookies de terceros y la política de privacidad dice que no hay). HEAD se
+    // nombra por indicación de Mario; la productora que nos contrató, no. Los
+    // momentos son los que Mario dio de viva voz (aproximados: «hacia»).
+    madridDestacado: {
+      titulo: "Trabajo reciente en Madrid",
+      texto:
+        "Planos aéreos con drone para «One ball. Three cities.», la campaña de HEAD Tennis, rodados en Madrid y realizados para una productora: la pelota en vuelo. Se ven en los vídeos oficiales de HEAD Tennis en YouTube:",
+      videos: [
+        {
+          titulo: "Right on cue: Sinner takes Rome.",
+          momentos: "hacia 0:44, 0:53 y 0:58",
+          href: "https://www.youtube.com/watch?v=i4ypPkBcuQg",
+        },
+        {
+          titulo: "From Rome to Paris: The Final Chapter",
+          momentos: "hacia 0:22, 0:26 y 0:34",
+          href: "https://www.youtube.com/watch?v=OfoOpR1lGKs",
+        },
+      ],
+      enlace: "Ver en YouTube",
+    },
     madridFaqTitle: "Preguntas sobre drone en Madrid",
     madridFaq: [
       {
@@ -811,7 +834,7 @@ export const es = {
       },
       {
         q: "¿Qué habéis rodado con drone en Madrid?",
-        a: "Un vuelo en un solo plano, sin cortes, desde fuera del estadio Metropolitano hasta el césped; la pieza publicitaria de MITT MOTORS en la sierra de Madrid, combinando drone y cámara en tierra; y una serie propia de postales aéreas de la ciudad, con el skyline, Torrespaña y las Cuatro Torres.",
+        a: "Un vuelo en un solo plano, sin cortes, desde fuera del estadio Metropolitano hasta el césped; la pieza publicitaria de MITT MOTORS en la sierra de Madrid, combinando drone y cámara en tierra; planos aéreos de la pelota en vuelo para la campaña «One ball. Three cities.» de HEAD Tennis, realizados para una productora; y una serie propia de postales aéreas de la ciudad, con el skyline, Torrespaña y las Cuatro Torres.",
       },
       {
         q: "¿Cómo pido presupuesto para un vuelo en Madrid?",
